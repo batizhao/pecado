@@ -15,41 +15,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * 在 OAuth 开启的情况下，不再需要 @WithMockUser 来模拟用户
+ * 这里要注意一个问题，当使用 Spring Security regexMatchers 时，
+ * get("/user").param("username", "xx") 会存在匹配不到的情况，要使用 get("/user?username=xx") 来代替
+ * 具体可以看这个 Issues：https://github.com/spring-projects/spring-framework/issues/20040
+ *
  * @author batizhao
  * @since 2020-02-11
  */
 public class UserControllerIntegrationTest extends BaseControllerIntegrationTest {
 
     @Test
-    public void givenUserName_whenFindUser_thenUserJson() throws Exception {
-        mvc.perform(get("/user/username").param("username", "bob")
-                .header("Authorization", "Bearer " + access_token))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.email").value("bob@qq.com"));
-    }
-
-    /**
-     * Param 或者 PathVariable 校验失败的情况
-     *
-     * @throws Exception
-     */
-    @Test
-    public void givenInvalidUserName_whenFindUser_thenValidateFailed() throws Exception {
-        mvc.perform(get("/user/username").param("username", "xx")
-                .header("Authorization", "Bearer " + access_token))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
-                .andExpect(jsonPath("$.data[0]", containsString("个数必须在")));
-    }
-
-    @Test
     public void givenUserName_whenFindUser_thenSuccess() throws Exception {
-        mvc.perform(get("/user/userdetail").param("username", "admin")
+        mvc.perform(get("/user?username=admin")
                 .header(SecurityConstants.FROM, SecurityConstants.FROM_IN))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -59,14 +36,20 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
                 .andExpect(jsonPath("$.data.roleList", hasSize(2)));
     }
 
+    /**
+     * Param 或者 PathVariable 校验失败的情况
+     *
+     * @throws Exception
+     */
     @Test
-    public void givenUserName_whenFindUser_theNotFound() throws Exception {
-        mvc.perform(get("/user/userdetail").param("username", "xxxx")
+    public void givenInvalidUserName_whenFindUser_thenValidateFailed() throws Exception {
+        mvc.perform(get("/user?username=xx")
                 .header(SecurityConstants.FROM, SecurityConstants.FROM_IN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.RESOURCE_NOT_FOUND.getCode()));
+                .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
+                .andExpect(jsonPath("$.data[0]", containsString("个数必须在")));
     }
 
     /**
@@ -76,13 +59,23 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
      */
     @Test
     public void givenUserNameButInvalidInnerHeader_whenFindUser_then401() throws Exception {
-        mvc.perform(get("/user/userdetail").param("username", "xx")
+        mvc.perform(get("/user?username=xx")
                 .header(SecurityConstants.FROM, "No"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Full authentication is required")));
+    }
+
+    @Test
+    public void givenUserName_whenFindUser_theNotFound() throws Exception {
+        mvc.perform(get("/user?username=xxxx")
+                .header(SecurityConstants.FROM, SecurityConstants.FROM_IN))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.RESOURCE_NOT_FOUND.getCode()));
     }
 
     /**
@@ -92,7 +85,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
      */
     @Test
     public void givenUserNameButNoInnerHeader_whenFindUser_thenNull() throws Exception {
-        mvc.perform(get("/user/userdetail").param("username", "bob"))
+        mvc.perform(get("/user?username=bob"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -100,25 +93,9 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
                 .andExpect(jsonPath("$.data", containsString("from header")));
     }
 
-    /**
-     * Param 丢失的情况
-     *
-     * @throws Exception
-     */
-    @Test
-    public void givenNoUserName_whenFindUser_thenValidateFailed() throws Exception {
-        mvc.perform(get("/user/username")
-                .header("Authorization", "Bearer " + access_token))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
-                .andExpect(jsonPath("$.data", containsString("Required String parameter")));
-    }
-
     @Test
     public void givenName_whenFindUser_thenUserListJson() throws Exception {
-        mvc.perform(get("/user/name").param("name", "孙波波")
+        mvc.perform(get("/user").param("name", "孙波波")
                 .header("Authorization", "Bearer " + access_token))
                 .andDo(print())
                 .andExpect(status().isOk())

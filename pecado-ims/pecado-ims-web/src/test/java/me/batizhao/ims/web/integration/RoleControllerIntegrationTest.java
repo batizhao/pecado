@@ -1,6 +1,5 @@
 package me.batizhao.ims.web.integration;
 
-import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResultEnum;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -9,7 +8,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
  * @author batizhao
@@ -38,4 +36,5 @@ public class RoleControllerIntegrationTest extends BaseControllerIntegrationTest
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data", hasSize(0)));
     }
+
 }

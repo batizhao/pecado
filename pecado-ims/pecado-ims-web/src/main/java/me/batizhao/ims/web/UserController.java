@@ -46,27 +46,13 @@ public class UserController {
 
     /**
      * 根据用户名查询用户
-     * 用户名不重复，返回单个用户详情
+     * 用户名不重复，返回单个用户详情（包括其角色）
      *
      * @param username 用户名
      * @return 用户详情
      */
     @ApiOperation(value = "根据用户名查询用户")
-    @GetMapping("username")
-    public ResponseInfo<UserVO> findByUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
-        UserVO user = userService.findByUsername(username);
-        return ResponseInfo.ok(user);
-    }
-
-    /**
-     * 根据用户名查询用户及其角色
-     * 用户名不重复，返回单个用户详情
-     *
-     * @param username 用户名
-     * @return 用户详情
-     */
-    @ApiOperation(value = "根据用户名查询用户及其角色")
-    @GetMapping("/userdetail")
+    @GetMapping(params = "username")
     @Inner
     public ResponseInfo<UserVO> loadUserByUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
         UserVO user = userService.findByUsername(username);
@@ -85,7 +71,7 @@ public class UserController {
      * @return 返回用户列表
      */
     @ApiOperation(value = "根据姓名查询用户")
-    @GetMapping("name")
+    @GetMapping(params = "name")
     public ResponseInfo<List<UserVO>> findByName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
         List<UserVO> users = userService.findByName(name);
         return ResponseInfo.ok(users);

@@ -79,23 +79,6 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     public void givenUserName_whenFindUser_thenUserJson() throws Exception {
         String username = "zhangsan";
 
-        when(userService.findByUsername(username)).thenReturn(userList.get(0));
-
-        mvc.perform(get("/user/username").param("username", username))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.email").value("zhangsan@gmail.com"));
-
-        verify(userService).findByUsername(any());
-    }
-
-    @Test
-    @WithMockUser
-    public void givenUserName_whenFindUser_thenUserDetailJson() throws Exception {
-        String username = "zhangsan";
-
         List<RoleVO> roleList = new ArrayList<>();
         roleList.add(new RoleVO().setId(1L).setName("admin"));
         roleList.add(new RoleVO().setId(2L).setName("common"));
@@ -106,7 +89,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         userVO.setRoleList(roleList);
         when(roleService.findRolesByUserId(userVO.getId())).thenReturn(roleList);
 
-        mvc.perform(get("/user/userdetail").param("username", username))
+        mvc.perform(get("/user").param("username", username))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -133,7 +116,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
             return userList;
         }).when(userService).findByName(name);
 
-        mvc.perform(get("/user/name").param("name", name))
+        mvc.perform(get("/user").param("name", name))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

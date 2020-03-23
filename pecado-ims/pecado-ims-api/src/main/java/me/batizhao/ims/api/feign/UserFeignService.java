@@ -19,7 +19,7 @@ import java.util.List;
 @FeignClient(value = "ims", fallbackFactory = UserServiceFallbackFactory.class)
 public interface UserFeignService {
 
-    @GetMapping(value = "/user/userdetail")
+    @GetMapping(value = "/user", params = "username")
     ResponseInfo<UserVO> loadUserByUsername(@RequestParam("username") String username,
                                             @RequestHeader(SecurityConstants.FROM) String from);
 

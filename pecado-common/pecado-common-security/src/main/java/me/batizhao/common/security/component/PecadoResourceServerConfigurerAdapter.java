@@ -16,9 +16,9 @@
 
 package me.batizhao.common.security.component;
 
-import me.batizhao.common.security.exception.MyAuthenticationEntryPoint;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.security.exception.MyAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -38,14 +38,10 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public class PecadoResourceServerConfigurerAdapter extends ResourceServerConfigurerAdapter {
 	@Autowired
 	protected MyAuthenticationEntryPoint authenticationEntryPoint;
-//	@Autowired
-//	protected RemoteTokenServices remoteTokenServices;
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;
 	@Autowired
 	private PermitAllUrlConfiguration permitAllUrl;
-//	@Autowired
-//	private RestTemplate lbRestTemplate;
 
 	/**
 	 * 默认的配置，对外暴露
@@ -55,27 +51,21 @@ public class PecadoResourceServerConfigurerAdapter extends ResourceServerConfigu
 	@Override
 	@SneakyThrows
 	public void configure(HttpSecurity httpSecurity) {
-		//允许使用iframe 嵌套，避免swagger-ui 不被加载的问题
-//		httpSecurity.headers().frameOptions().disable();
 		ExpressionUrlAuthorizationConfigurer<HttpSecurity>
-			.ExpressionInterceptUrlRegistry registry = httpSecurity
-			.authorizeRequests();
-		permitAllUrl.getUrls()
-			.forEach(url -> registry.antMatchers(url).permitAll());
-		registry.anyRequest().authenticated()
-			.and().csrf().disable();
+			.ExpressionInterceptUrlRegistry registry = httpSecurity.authorizeRequests();
+
+		permitAllUrl.getAnt().getUrls()
+				.forEach(url -> registry.antMatchers(url).permitAll());
+
+		permitAllUrl.getRegex().getUrls()
+			.forEach(url -> registry.regexMatchers(url).permitAll());
+
+		registry.anyRequest().authenticated().and().csrf().disable();
+
 	}
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) {
-//		DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
-//		UserAuthenticationConverter userTokenConverter = new PaperUserAuthenticationConverter();
-//		accessTokenConverter.setUserTokenConverter(userTokenConverter);
-
-//		remoteTokenServices.setRestTemplate(lbRestTemplate);
-//		remoteTokenServices.setAccessTokenConverter(accessTokenConverter);
-		resources.authenticationEntryPoint(authenticationEntryPoint)
-			.accessDeniedHandler(accessDeniedHandler);
-//			.tokenServices(remoteTokenServices);
+		resources.authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler);
 	}
 }

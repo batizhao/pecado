@@ -34,8 +34,27 @@ import java.util.List;
 @RefreshScope
 @ConfigurationProperties(prefix = "ignore")
 public class PermitAllUrlConfiguration {
+
+	private Ant ant = new Ant();
+	private Regex regex = new Regex();
+
 	/**
 	 * 放行url,支持 ant 表达式
 	 */
-	private List<String> urls = new ArrayList<>();
+	@Data
+	public static class Ant {
+
+		private List<String> urls = new ArrayList<>();
+
+	}
+
+	/**
+	 * 放行url,支持 regex 表达式
+	 */
+	@Data
+	public static class Regex {
+
+		private List<String> urls = new ArrayList<>();
+
+	}
 }
