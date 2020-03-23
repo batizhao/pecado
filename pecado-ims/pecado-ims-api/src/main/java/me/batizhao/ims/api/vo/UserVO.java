@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -25,11 +26,9 @@ public class UserVO implements Serializable {
     @ApiModelProperty(value = "用户ID", example = "100")
     private Long id;
 
-    /**
-     * @mock @word(3,30)
-     */
     @ApiModelProperty(value = "用户名", example = "zhangsan")
     @NotBlank
+    @Size(min = 3, max = 30)
     private String username;
 
     @ApiModelProperty(value = "密码")
