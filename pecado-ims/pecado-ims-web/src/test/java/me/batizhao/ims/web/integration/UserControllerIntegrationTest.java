@@ -14,10 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * 在 OAuth 开启的情况下，不再需要 @WithMockUser 来模拟用户
- * 这里要注意一个问题，当使用 Spring Security regexMatchers 时，
+ * <p>
+ * 1. 在 OAuth 开启的情况下，不再需要 @WithMockUser 来模拟用户
+ * 2. 这里要注意一个问题，当使用 Spring Security regexMatchers 时，例如 /user?username=admin 这种情况
  * get("/user").param("username", "xx") 会存在匹配不到的情况，要使用 get("/user?username=xx") 来代替
  * 具体可以看这个 Issues：https://github.com/spring-projects/spring-framework/issues/20040
+ * </p>
  *
  * @author batizhao
  * @since 2020-02-11

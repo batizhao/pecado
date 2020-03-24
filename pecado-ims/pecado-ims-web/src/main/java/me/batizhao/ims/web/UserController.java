@@ -153,4 +153,5 @@ public class UserController {
         String username = authentication.getName();
         return ResponseInfo.ok(username);
     }
+
 }
