@@ -4,8 +4,11 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.feign.UserFeignService;
+import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author batizhao
@@ -24,9 +27,9 @@ public class UserServiceFallbackImpl implements UserFeignService {
         return null;
     }
 
-//    @Override
-//    public ResponseInfo<List<RoleVO>> getRolesByUserId(Long userId, String from) {
-//        log.error("feign 查询用户角色信息失败: {}", userId, cause);
-//        return null;
-//    }
+    @Override
+    public ResponseInfo<List<RoleVO>> findRolesByUserId(Long userId) {
+        log.error("feign 查询用户角色信息失败: {}", userId, cause);
+        return null;
+    }
 }

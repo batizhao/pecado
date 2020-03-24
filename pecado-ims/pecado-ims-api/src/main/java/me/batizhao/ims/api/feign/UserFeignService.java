@@ -23,8 +23,7 @@ public interface UserFeignService {
     ResponseInfo<UserVO> loadUserByUsername(@RequestParam("username") String username,
                                             @RequestHeader(SecurityConstants.FROM) String from);
 
-//    @GetMapping(value = "role")
-//    ResponseInfo<List<RoleVO>> getRolesByUserId(@RequestParam("userId") Long userId,
-//                                                @RequestHeader(SecurityConstants.FROM) String from);
+    @GetMapping(value = "/role", params = "userId")
+    ResponseInfo<List<RoleVO>> findRolesByUserId(@RequestParam("userId") Long userId);
 
 }

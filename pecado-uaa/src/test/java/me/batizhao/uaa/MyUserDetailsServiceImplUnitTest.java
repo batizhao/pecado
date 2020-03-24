@@ -100,7 +100,7 @@ public class MyUserDetailsServiceImplUnitTest {
     }
 
     @Test
-    public void givenUserName_whenFindUserRoles_thenFail() {
+    public void givenUserName_whenFindUserRoles_thenRoleIsEmpty() {
         String username = "zhangsan";
         UserVO user_test_data = new UserVO().setId(1L).setUsername(username).setPassword("123456");
 
