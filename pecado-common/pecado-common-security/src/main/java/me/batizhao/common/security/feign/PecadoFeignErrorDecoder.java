@@ -1,21 +1,18 @@
 package me.batizhao.common.security.feign;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.hystrix.exception.HystrixBadRequestException;
 import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.core.util.ResponseInfo;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
 
 /**
- * 业务异常
+ * 业务异常包装类，显示原始异常
  * 包装成 HystrixBadRequestException，不进入熔断逻辑
- * 包装成 RuntimeException，进入熔断逻辑
+ * 包装成 PecadoFeignException，进入熔断逻辑
  *
  * @author batizhao
  * @since 2020-03-25
