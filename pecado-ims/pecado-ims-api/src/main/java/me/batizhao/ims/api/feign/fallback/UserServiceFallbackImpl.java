@@ -1,6 +1,8 @@
 package me.batizhao.ims.api.feign.fallback;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.feign.UserFeignService;
@@ -27,9 +29,14 @@ public class UserServiceFallbackImpl implements UserFeignService {
         return null;
     }
 
+    @SneakyThrows
     @Override
-    public ResponseInfo<List<RoleVO>> findRolesByUserId(Long userId) {
+    public ResponseInfo findRolesByUserId(Long userId) {
         log.error("feign 查询用户角色信息失败: {}", userId, cause);
-        return null;
+
+        ResponseInfo result = new ObjectMapper().readValue(cause.getMessage(), ResponseInfo.class);
+        return new ResponseInfo().setCode(result.getCode())
+                .setMessage(result.getMessage())
+                .setData(result.getData());
     }
 }

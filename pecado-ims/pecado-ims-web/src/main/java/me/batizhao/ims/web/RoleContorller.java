@@ -8,6 +8,7 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,7 @@ public class RoleContorller {
      */
     @ApiOperation(value = "根据用户ID查询角色")
     @GetMapping(params = "userId")
+    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
     public ResponseInfo<List<RoleVO>> findRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         List<RoleVO> roles = roleService.findRolesByUserId(userId);
         return ResponseInfo.ok(roles);

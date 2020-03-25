@@ -64,7 +64,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
         mvc.perform(get("/user?username=xx")
                 .header(SecurityConstants.FROM, "No"))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Full authentication is required")));
@@ -123,7 +123,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     public void givenNoToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
         mvc.perform(get("/user/1"))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Full authentication is required")));
@@ -147,7 +147,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
         mvc.perform(get("/user")
                 .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Access token expired")));
@@ -159,7 +159,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
         mvc.perform(get("/user")
                 .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Cannot convert access token")));
@@ -294,7 +294,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
         mvc.perform(delete("/user/{id}", 3L)
                 .header("Authorization", "Bearer " + tom_access_token))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PERMISSION_FORBIDDEN_ERROR.getCode()))
                 .andExpect(jsonPath("$.data", containsString("不允许访问")));

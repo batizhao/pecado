@@ -30,7 +30,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         response.setContentType("application/json; charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
         ResponseInfo<String> message = new ResponseInfo<String>().setCode(ResultEnum.PERMISSION_FORBIDDEN_ERROR.getCode())
                 .setMessage(ResultEnum.PERMISSION_FORBIDDEN_ERROR.getMessage())

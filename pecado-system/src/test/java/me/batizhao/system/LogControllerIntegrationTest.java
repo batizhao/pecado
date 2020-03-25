@@ -42,8 +42,8 @@ public class LogControllerIntegrationTest {
 
     public static final String USERNAME = "admin";
     public static final String PASSWORD = "123456";
-    public static final String CLIENT_ID = "client_app";
-    public static final String CLIENT_SECRET = "123456";
+    public static final String CLIENT_ID = "client_app2";
+    public static final String CLIENT_SECRET = "12345678";
     public static final String GRANT_TYPE = "password";
     static String access_token;
 

@@ -29,7 +29,7 @@ public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoi
         response.addHeader("WWW-Authenticate", "Basic realm=\"" + getRealmName() + "\"");
 
         response.setContentType("application/json; charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         ResponseInfo<String> message = new ResponseInfo<String>().setCode(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getCode())
                 .setMessage(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getMessage())
