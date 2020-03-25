@@ -23,6 +23,7 @@
         <module>pecado-uaa</module>
 		<module>pecado-common</module>
 		<module>pecado-gateway</module>
+		<module>pecado-system</module>
 	</modules>
 
 	<properties>

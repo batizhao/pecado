@@ -9,7 +9,7 @@ info:
 
 spring:
   application:
-    name: log
+    name: system
   cloud:
     nacos:
       discovery:

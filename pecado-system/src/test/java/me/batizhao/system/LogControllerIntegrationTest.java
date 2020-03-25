@@ -1,8 +1,10 @@
-package me.batizhao.ims.web.integration;
+package me.batizhao.system;
 
+import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.WebExceptionHandler;
-import me.batizhao.ims.PecadoImsApplication;
+import me.batizhao.common.core.util.ResultEnum;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
@@ -11,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
@@ -19,23 +22,23 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-/**
- * 在集成测试中，不再需要 Mock Bean 和 Stub，
- * 但是需要实例化整个上下文，再对返回数据进行判断
- * 参数校验相关的测试可以放在集成测试中，因为不需要 Stub Data
- * Import WebExceptionHandler 是因为 mvn test 不能加载应用外的 resource
- *
- * @author batizhao
- * @since 2020-02-07
- */
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * @author batizhao
+ * @since 2020-02-29
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = PecadoImsApplication.class)
+        classes = PecadoSystemApplication.class)
 @AutoConfigureMockMvc
 @Import(WebExceptionHandler.class)
-public abstract class BaseControllerIntegrationTest {
+@Slf4j
+public class LogControllerIntegrationTest {
 
     public static final String USERNAME = "admin";
     public static final String PASSWORD = "123456";
@@ -67,5 +70,16 @@ public abstract class BaseControllerIntegrationTest {
 
         JacksonJsonParser jsonParser = new JacksonJsonParser();
         return jsonParser.parseMap(result).get("access_token").toString();
+    }
+
+    @Test
+    public void givenUserId_whenFindRoles_thenSuccess() throws Exception {
+        mvc.perform(get("/log")
+                .header("Authorization", "Bearer " + access_token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data", hasSize(2)));
     }
 }
