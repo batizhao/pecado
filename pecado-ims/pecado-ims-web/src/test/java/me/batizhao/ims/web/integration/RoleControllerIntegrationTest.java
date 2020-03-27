@@ -18,7 +18,7 @@ public class RoleControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenUserId_whenFindRoles_thenSuccess() throws Exception {
         mvc.perform(get("/role").param("userId", "1")
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -29,7 +29,7 @@ public class RoleControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenUserId_whenFindRoles_thenZero() throws Exception {
         mvc.perform(get("/role").param("userId", "3")
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

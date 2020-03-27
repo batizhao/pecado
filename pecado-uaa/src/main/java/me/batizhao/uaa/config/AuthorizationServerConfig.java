@@ -68,11 +68,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
                 .and()
 
-                .withClient("client_app2")
-                .secret(passwordEncoder.encode("12345678"))
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(864000)
-                .scopes("write")
+                .withClient("test")
+                .secret(passwordEncoder.encode("passw0rd"))
+                .accessTokenValiditySeconds(3600*1000)
+                .refreshTokenValiditySeconds(864000*1000)
+                .scopes("read", "write")
                 .authorizedGrantTypes("authorization_code", "password", "refresh_token");
     }
 

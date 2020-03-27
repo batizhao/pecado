@@ -98,7 +98,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenName_whenFindUser_thenUserListJson() throws Exception {
         mvc.perform(get("/user").param("name", "孙波波")
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -111,7 +111,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenId_whenFindUser_thenUserJson() throws Exception {
         mvc.perform(get("/user/{id}", 1L)
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -132,7 +132,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenNothing_whenFindAllUser_thenUserListJson() throws Exception {
         mvc.perform(get("/user")
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -143,9 +143,9 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
 
     @Test
     public void givenExpiredToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
-        String accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE1ODMwNDQwNzMsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiI1MzUyODEwYi1iNDhjLTQ4ZmQtYTJmZi1jYTM3OGM2OGUyNGMiLCJjbGllbnRfaWQiOiJjbGllbnRfYXBwIiwidXNlcm5hbWUiOiJhZG1pbiJ9.Go8txRMeNhD9Z6ZPBQjaCmIzjoHLv4fb2ACeOB_M1rc";
+        String accessToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE1ODMwNDQwNzMsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiI1MzUyODEwYi1iNDhjLTQ4ZmQtYTJmZi1jYTM3OGM2OGUyNGMiLCJjbGllbnRfaWQiOiJjbGllbnRfYXBwIiwidXNlcm5hbWUiOiJhZG1pbiJ9.Go8txRMeNhD9Z6ZPBQjaCmIzjoHLv4fb2ACeOB_M1rc";
         mvc.perform(get("/user")
-                .header("Authorization", "Bearer " + accessToken))
+                .header("Authorization", accessToken))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -155,9 +155,9 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
 
     @Test
     public void givenInvalidToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
-        String accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+        String accessToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
         mvc.perform(get("/user")
-                .header("Authorization", "Bearer " + accessToken))
+                .header("Authorization", accessToken))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -180,7 +180,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
         mvc.perform(post("/user")
                 .content(new ObjectMapper().writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -201,7 +201,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
         mvc.perform(post("/user")
                 .content(new ObjectMapper().writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -218,7 +218,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     public void givenNoJson_whenSaveUser_thenValidateFailed() throws Exception {
         mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -236,7 +236,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
         mvc.perform(post("/user")
                 .content(new ObjectMapper().writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -248,7 +248,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     @Transactional
     public void givenId_whenDeleteUser_thenSucceed() throws Exception {
         mvc.perform(delete("/user/{id}", 1L)
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -264,7 +264,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenInValidId_whenDeleteUser_thenValidateFail() throws Exception {
         mvc.perform(delete("/user/{id}", -1000L)
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -280,7 +280,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenStringId_whenDeleteUser_thenValidateFail() throws Exception {
         mvc.perform(delete("/user/{id}", "xxxx")
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -290,9 +290,8 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
 
     @Test
     public void givenInvalidRole_whenGetSecureRequest_thenForbidden() throws Exception {
-        String tom_access_token = obtainAccessToken("tom", "123456");
         mvc.perform(delete("/user/{id}", 3L)
-                .header("Authorization", "Bearer " + tom_access_token))
+                .header("Authorization", userAccessToken))
                 .andDo(print())
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -303,7 +302,7 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenId_whenPutUser_thenMethodNotSupported() throws Exception {
         mvc.perform(put("/user/{id}", 3L)
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -314,11 +313,11 @@ public class UserControllerIntegrationTest extends BaseControllerIntegrationTest
     @Test
     public void givenAuthentication_whenGetCurrentUser_thenMe() throws Exception {
         mvc.perform(get("/user/whoiam")
-                .header("Authorization", "Bearer " + access_token))
+                .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data").value(USERNAME));
+                .andExpect(jsonPath("$.data").value("admin"));
     }
 }

@@ -2,22 +2,15 @@ package me.batizhao.ims.web.integration;
 
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import me.batizhao.ims.PecadoImsApplication;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 /**
  * 在集成测试中，不再需要 Mock Bean 和 Stub，
@@ -35,37 +28,19 @@ import java.util.Map;
         classes = PecadoImsApplication.class)
 @AutoConfigureMockMvc
 @Import(WebExceptionHandler.class)
+@RefreshScope
 public abstract class BaseControllerIntegrationTest {
 
-    public static final String USERNAME = "admin";
-    public static final String PASSWORD = "123456";
-    public static final String CLIENT_ID = "client_app";
-    public static final String CLIENT_SECRET = "123456";
-    public static final String GRANT_TYPE = "password";
-    static String access_token;
+    /**
+     * 使用一个超长时间的 token，隔离获取 token 的操作。避免测试 token 过期！
+     * curl -X POST --user 'test:passw0rd' -d 'grant_type=password&username=admin&password=123456' http://localhost:4000/oauth/token
+     * curl -X POST --user 'test:passw0rd' -d 'grant_type=password&username=tom&password=123456' http://localhost:4000/oauth/token
+     */
+    @Value("${pecado.token.admin}")
+    String adminAccessToken;
+    @Value("${pecado.token.user}")
+    String userAccessToken;
 
     @Autowired
     MockMvc mvc;
-
-    @BeforeClass
-    public static void setUp() {
-        access_token = obtainAccessToken(USERNAME, PASSWORD);
-    }
-
-    static String obtainAccessToken(String username, String password) {
-        String url = "http://localhost:4000/oauth/token";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(CLIENT_ID, CLIENT_SECRET);
-
-        MultiValueMap<String, Object> parammap = new LinkedMultiValueMap<>();
-        parammap.add("grant_type", GRANT_TYPE);
-        parammap.add("username", username);
-        parammap.add("password", password);
-        HttpEntity<Map> entity = new HttpEntity<>(parammap, headers);
-
-        String result = new RestTemplate().postForObject(url, entity, String.class);
-
-        JacksonJsonParser jsonParser = new JacksonJsonParser();
-        return jsonParser.parseMap(result).get("access_token").toString();
-    }
 }
