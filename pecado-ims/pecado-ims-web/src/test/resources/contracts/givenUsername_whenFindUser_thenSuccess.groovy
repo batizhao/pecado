@@ -3,15 +3,15 @@ package contracts
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'givenUserId_whenFindRoles_thenSuccess'
+    name 'givenUsername_whenFindUser_thenSuccess'
     request {
         method GET()
-        url('/role') {
+        url('/user') {
             queryParameters {
-                parameter('userId', $(consumer(number()), producer(1L)))
+                parameter('username', 'admin')
             }
             headers {
-                header('Authorization', $(consumer(nonBlank()), producer(execute('adminAccessToken'))))
+                header('from', 'Y')
             }
         }
     }
@@ -20,6 +20,6 @@ Contract.make {
         headers {
             contentType(applicationJson())
         }
-        body(file("roleResponse.json"))
+        body(file("userResponse.json"))
     }
 }

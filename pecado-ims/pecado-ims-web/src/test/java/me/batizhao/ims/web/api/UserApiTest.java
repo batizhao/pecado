@@ -1,4 +1,4 @@
-package me.batizhao.ims.web.integration;
+package me.batizhao.ims.web.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.SecurityConstants;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author batizhao
  * @since 2020-02-11
  */
-public class UserControllerIntegrationTest extends BaseControllerIntegrationTest {
+public class UserApiTest extends BaseApiTest {
 
     @Test
     public void givenUserName_whenFindUser_thenSuccess() throws Exception {

@@ -1,4 +1,4 @@
-package me.batizhao.system.contract;
+package me.batizhao.system.web.contract;
 
 import me.batizhao.common.core.util.ResultEnum;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * @author batizhao
- * @since 2020-02-29
+ * @since 2020-03-26
  */
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc

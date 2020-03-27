@@ -1,4 +1,4 @@
-package me.batizhao.ims.web.integration;
+package me.batizhao.ims.web.api;
 
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import me.batizhao.ims.PecadoImsApplication;
@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @Import(WebExceptionHandler.class)
 @RefreshScope
-public abstract class BaseControllerIntegrationTest {
+public abstract class BaseApiTest {
 
     /**
      * 使用一个超长时间的 token，隔离获取 token 的操作。避免测试 token 过期！

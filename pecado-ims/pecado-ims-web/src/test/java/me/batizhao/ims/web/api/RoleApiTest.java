@@ -1,4 +1,4 @@
-package me.batizhao.ims.web.integration;
+package me.batizhao.ims.web.api;
 
 import me.batizhao.common.core.util.ResultEnum;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author batizhao
  * @since 2020-03-18
  **/
-public class RoleControllerIntegrationTest extends BaseControllerIntegrationTest {
+public class RoleApiTest extends BaseApiTest {
 
     @Test
     public void givenUserId_whenFindRoles_thenSuccess() throws Exception {
