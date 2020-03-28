@@ -1,7 +1,6 @@
 package me.batizhao.ims.web.contract;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import lombok.Getter;
 import me.batizhao.ims.PecadoImsApplication;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -20,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = PecadoImsApplication.class)
+@ActiveProfiles("test")
 @RefreshScope
 public abstract class BaseContractTest {
 

@@ -2,6 +2,7 @@ package me.batizhao.uaa;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.WebExceptionHandler;
+import me.batizhao.common.security.feign.PecadoFeignErrorDecoder;
 import me.batizhao.ims.api.feign.UserFeignService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.annotation.IfProfileValue;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collection;
@@ -25,15 +28,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 /**
+ * Will work only when you set spring.profiles.active as a JVM property, as: -Dspring.profiles.active="test"
+ * @IfProfileValue just ignores spring.profiles.active from application.properties/yml.
+ *
  * @author batizhao
  * @since 2020-02-29
  */
+@ActiveProfiles("test")
+@IfProfileValue(name = "spring.profiles.active", value = "test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = PecadoUaaApplication.class)
 @AutoConfigureMockMvc
-@Import(WebExceptionHandler.class)
+@Import({WebExceptionHandler.class, PecadoFeignErrorDecoder.class})
 @Slf4j
 public class MyUserDetailsServiceImplIntegrationTest {
 
