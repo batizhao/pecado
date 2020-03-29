@@ -1,12 +1,12 @@
 package me.batizhao.uaa;
 
+import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.uaa.security.MyUserDetailsServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
