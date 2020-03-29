@@ -3,7 +3,7 @@ package me.batizhao.ims.mapper;
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.domain.RolePermission;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

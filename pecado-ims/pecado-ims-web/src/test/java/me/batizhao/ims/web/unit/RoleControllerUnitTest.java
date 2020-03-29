@@ -4,8 +4,8 @@ import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.web.RoleContorller;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -53,7 +53,7 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
     /**
      * Prepare test data.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         roleList = new ArrayList<>();
         roleList.add(new RoleVO().setId(1L).setName("admin"));

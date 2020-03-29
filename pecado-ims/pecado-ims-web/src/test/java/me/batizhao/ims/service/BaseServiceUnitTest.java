@@ -1,8 +1,8 @@
 package me.batizhao.ims.service;
 
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  *
@@ -10,6 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @since 2020-02-07
  */
 @ActiveProfiles("test")
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public abstract class BaseServiceUnitTest {
 }

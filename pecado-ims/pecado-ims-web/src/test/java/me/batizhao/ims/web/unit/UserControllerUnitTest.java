@@ -8,8 +8,8 @@ import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.web.UserController;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,7 +66,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     /**
      * Prepare test data.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         userList = new ArrayList<>();
         userList.add(new UserVO().setId(1L).setEmail("zhangsan@gmail.com").setUsername("zhangsan").setName("张三"));

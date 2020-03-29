@@ -4,8 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import me.batizhao.common.security.feign.PecadoFeignErrorDecoder;
 import me.batizhao.ims.api.feign.UserFeignService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,9 +15,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.annotation.IfProfileValue;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.EnabledIf;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,19 +24,13 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 
 /**
- * Will work only when you set spring.profiles.active as a JVM property, as: -Dspring.profiles.active="test"
- * @IfProfileValue just ignores spring.profiles.active from application.properties/yml.
- *
  * @author batizhao
  * @since 2020-02-29
  */
-@ActiveProfiles("test")
-@IfProfileValue(name = "spring.profiles.active", value = "test")
-@RunWith(SpringRunner.class)
+@EnabledIf(expression = "#{environment['spring.profiles.active'] == 'test'}", loadContext = true)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = PecadoUaaApplication.class)
@@ -66,9 +60,8 @@ public class MyUserDetailsServiceImplIntegrationTest {
         assertThat(list, hasItems("ROLE_ADMIN", "ROLE_USER"));
     }
 
-    @Test(expected = UsernameNotFoundException.class)
+    @Test
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
-        userDetailsService.loadUserByUsername("xxxx");
-        verify(userFeignService).loadUserByUsername(any(), any());
+        Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
     }
 }

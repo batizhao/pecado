@@ -1,7 +1,7 @@
 package me.batizhao.ims.web.api;
 
 import me.batizhao.common.core.util.ResultEnum;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static org.hamcrest.Matchers.hasSize;

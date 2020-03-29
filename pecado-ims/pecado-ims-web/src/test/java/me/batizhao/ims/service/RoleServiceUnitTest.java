@@ -5,8 +5,8 @@ import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.mapper.RoleMapper;
 import me.batizhao.ims.service.iml.RoleServiceIml;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,7 +49,7 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
     /**
      * Prepare test data.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         roleList = new ArrayList<>();
         roleList.add(new Role().setId(1L).setName("admin"));

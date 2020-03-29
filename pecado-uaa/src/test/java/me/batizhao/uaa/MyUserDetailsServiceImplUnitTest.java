@@ -7,9 +7,10 @@ import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.uaa.security.MyUserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ import static org.mockito.Mockito.*;
  * @author batizhao
  * @since 2020-02-29
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @Slf4j
 public class MyUserDetailsServiceImplUnitTest {
 
@@ -57,7 +59,7 @@ public class MyUserDetailsServiceImplUnitTest {
     /**
      * Prepare test data.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         roleList = new ArrayList<>();
         roleList.add(new RoleVO().setId(1L).setName("admin"));
@@ -88,13 +90,13 @@ public class MyUserDetailsServiceImplUnitTest {
         assertThat(list, hasItems("admin", "common"));
     }
 
-    @Test(expected = UsernameNotFoundException.class)
+    @Test
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
         ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok();
 
         doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(any(), any());
 
-        userDetailsService.loadUserByUsername("xxxx");
+        Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
 
         verify(userFeignService).loadUserByUsername(any(), any());
     }

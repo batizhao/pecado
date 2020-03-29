@@ -2,7 +2,7 @@ package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import me.batizhao.ims.domain.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

@@ -6,8 +6,9 @@ import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
 import me.batizhao.ims.service.iml.UserServiceIml;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -52,7 +53,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     /**
      * Prepare test data.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         userList = new ArrayList<>();
         userList.add(new User().setId(1L).setEmail("zhangsan@gmail.com").setUsername("zhangsan").setName("张三").setPassword("123456"));
@@ -73,14 +74,14 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         assertThat(user.getEmail(), equalTo("zhangsan@gmail.com"));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void givenUserName_whenFindUser_thenNull() {
         String username = "zhangsan";
 
         when(userMapper.selectOne(any()))
                 .thenReturn(null);
 
-        userService.findByUsername(username);
+        Assertions.assertThrows(NotFoundException.class, () -> userService.findByUsername(username));
 
         verify(userMapper).selectOne(any());
     }
@@ -147,14 +148,16 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         assertThat(user.getEmail(), equalTo("zhangsan@gmail.com"));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void givenUserId_whenFindUser_thenNull() {
         when(userMapper.selectById(anyLong()))
                 .thenReturn(null);
 
-        userService.findById(1L);
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            userService.findById(1L);
+        });
 
-        verify(userService).findById(anyLong());
+        verify(userMapper).selectById(anyLong());
     }
 
     @Test
