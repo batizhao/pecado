@@ -8,7 +8,9 @@
 
 ### 测试金字塔
 
-![](https://upload-images.jianshu.io/upload_images/12636540-7d491b1dc36c744e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+<img src="https://upload-images.jianshu.io/upload_images/12636540-7d491b1dc36c744e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" style="zoom: 50%;" />
+
+
 
 
 和传统的单例应用不同，微服务在集成测试这块，细分为：
