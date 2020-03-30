@@ -8,8 +8,7 @@
 
 ### 测试金字塔
 
-<img src="https://upload-images.jianshu.io/upload_images/12636540-7d491b1dc36c744e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" style="zoom: 50%;" />
-
+![](https://upload-images.jianshu.io/upload_images/12636540-7d491b1dc36c744e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/600)
 
 
 
