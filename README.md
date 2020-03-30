@@ -1,8 +1,30 @@
 # Pecado  ![](https://img.shields.io/badge/build-passing-brightgreen) ![](https://img.shields.io/badge/coverage-100%25-green)
 
-这个项目从 [paper](https://github.com/batizhao/paper) 演进而来。
+这个项目从 Spirng Boot 单例应用 [paper](https://github.com/batizhao/paper) 演进而来。主要演示在微服务架构下，如何做自动化测试。
+
+在启动之前，需要运行 Nacos 配置中心和服务发现，并加载相应的配置文件。
+
+![截屏2020-03-30下午4.47.20](/Users/batizhao/Desktop/截屏2020-03-30下午4.47.20.png)
+
+
 
 ## 微服务自动化测试
+
+### 测试金字塔
+
+
+
+![](/Users/batizhao/Downloads/images.jpeg)
+
+
+
+和传统的单例应用不同，微服务在集成测试这块，细分为：
+
+* API 测试（服务内）
+* 契约测试（服务之间，不需要任何 Provider Online）
+* E2E（服务之间，所有服务 Online）
+
+在前后端分离的架构中，还可以增加一层 Mock server 自动化测试。
 
 ### 单元测试
 
@@ -14,7 +36,7 @@
 
 方法：Mock 相关依赖方法，构造预期行为，调用比对。
 
-工具：[Hamcrest](http://hamcrest.org/JavaHamcrest/tutorial)、Mockito
+工具：[Junit5](https://junit.org/junit5/docs/current/user-guide/)、[Hamcrest](http://hamcrest.org/JavaHamcrest/tutorial)、Mockito
 
 启动：`mvn clean test`
 
@@ -263,7 +285,7 @@ public class LogControllerContractTest {
 
 目标：微服务之间接口调用测试。
 
-面向：@FeignClient @RestTemplate，有些场景之前的方法覆盖不到。
+面向：@FeignClient @RestTemplate，有些场景之前的方法覆盖不到（超时、宕机、熔断、限流等）。
 
 特点：代价大，所有微服务、数据库都要 Online
 
@@ -301,6 +323,16 @@ public class LogControllerContractTest {
 工具：[YApi](https://github.com/YMFE/yapi)、[EasyYapi](https://easyyapi.com)
 
 ### UI 测试
+
+没研究过，列举一些工具
+
+**Selenium**：开源的自动化测试工具，它主要是用于Web 应用程序的自动化测试，不只局限于此，同时支持所有基于web 的管理任务自动化。
+
+**Karma**：为前端自动化测试提供了跨浏览器测试的能力，可以在浏览器中执行测试用例
+
+**Mocha**：前端自动化测试框架，需要配合其他库一起使用，像chai、sinon...
+
+**Jest**：Facebook推出的一款测试框架，集成了 Mocha,chai,jsdom,sinon等功能。
 
 ...
 
