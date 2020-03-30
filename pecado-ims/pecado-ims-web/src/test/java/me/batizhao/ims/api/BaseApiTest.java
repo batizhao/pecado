@@ -1,7 +1,8 @@
-package me.batizhao.ims.web.api;
+package me.batizhao.ims.api;
 
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import me.batizhao.ims.PecadoImsApplication;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(WebExceptionHandler.class)
 @ActiveProfiles("test")
 @RefreshScope
+@Tag("api")
 public abstract class BaseApiTest {
 
     /**

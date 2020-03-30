@@ -1,6 +1,7 @@
-package me.batizhao.ims.mapper;
+package me.batizhao.ims.unit.mapper;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -22,11 +23,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ImportAutoConfiguration(MybatisPlusAutoConfiguration.class)
+@Tag("unit")
 public abstract class BaseMapperUnitTest {
 
     /**
      * 控制扫描范围，否则会加载额外的包
      */
-    @SpringBootApplication(scanBasePackages = {"me.batizhao.ims.mapper"})
+    @SpringBootApplication(scanBasePackages = {"me.batizhao.ims.unit.mapper"})
     static class InnerConfig {}
 }

@@ -1,4 +1,4 @@
-package me.batizhao.ims.web.unit;
+package me.batizhao.ims.unit.web;
 
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.vo.RoleVO;

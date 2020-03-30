@@ -1,6 +1,7 @@
-package me.batizhao.system.web.contract;
+package me.batizhao.system.contract;
 
 import me.batizhao.common.core.util.ResultEnum;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureStubRunner(
         stubsMode = StubRunnerProperties.StubsMode.LOCAL,
         ids = "me.batizhao:pecado-ims-web:+:stubs:10000")
+@Tag("contract")
 public class LogControllerContractTest {
 
     @Autowired

@@ -1,4 +1,4 @@
-package me.batizhao.system.web;
+package me.batizhao.system;
 
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.feign.UserFeignService;

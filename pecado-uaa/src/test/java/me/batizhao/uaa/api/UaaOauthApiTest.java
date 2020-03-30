@@ -1,7 +1,9 @@
-package me.batizhao.uaa;
+package me.batizhao.uaa.api;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResultEnum;
+import me.batizhao.uaa.PecadoUaaApplication;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = PecadoUaaApplication.class)
 @AutoConfigureMockMvc
-//@SpringBootTest(classes = PecadoApplication.class)
-//@ContextConfiguration
-//@WebAppConfiguration
-public class UaaOauthIntegrationTest {
+@Tag("api")
+public class UaaOauthApiTest {
 
     public static final String USERNAME = "admin";
     public static final String PASSWORD = "123456";
@@ -44,19 +44,6 @@ public class UaaOauthIntegrationTest {
 
     @Autowired
     MockMvc mvc;
-
-//    @Autowired
-//    private WebApplicationContext context;
-//
-//    private MockMvc mvc;
-//
-//    @BeforeEach
-//    public void setUp() {
-//        mvc = MockMvcBuilders
-//                .webAppContextSetup(context)
-//                .apply(springSecurity())
-//                .build();
-//    }
 
     /**
      * MockMvc 不是一个真正的 servlet server，所以，有时会出现和实际运行不一致的情况。

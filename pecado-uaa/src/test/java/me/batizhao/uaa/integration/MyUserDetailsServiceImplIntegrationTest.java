@@ -1,10 +1,11 @@
-package me.batizhao.uaa;
+package me.batizhao.uaa.integration;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import me.batizhao.common.security.feign.PecadoFeignErrorDecoder;
-import me.batizhao.ims.api.feign.UserFeignService;
+import me.batizhao.uaa.PecadoUaaApplication;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.*;
  * @author batizhao
  * @since 2020-02-29
  */
-@EnabledIf(expression = "#{environment['spring.profiles.active'] == 'test'}", loadContext = true)
+//@EnabledIf(expression = "#{environment['spring.profiles.active'] == 'integration'}", loadContext = true)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
@@ -37,10 +37,9 @@ import static org.hamcrest.Matchers.*;
 @AutoConfigureMockMvc
 @Import({WebExceptionHandler.class, PecadoFeignErrorDecoder.class})
 @Slf4j
+@Tag("integration")
 public class MyUserDetailsServiceImplIntegrationTest {
 
-    @Autowired
-    private UserFeignService userFeignService;
     @Autowired
     private UserDetailsService userDetailsService;
 

@@ -1,4 +1,4 @@
-package me.batizhao.ims.web.api;
+package me.batizhao.ims.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.SecurityConstants;

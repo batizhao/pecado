@@ -3,7 +3,7 @@ package me.batizhao.ims.service.iml;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Role;
-import me.batizhao.ims.mapper.RoleMapper;
+import me.batizhao.ims.unit.mapper.RoleMapper;
 import me.batizhao.ims.service.RoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

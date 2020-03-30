@@ -1,4 +1,4 @@
-package me.batizhao.ims.mapper;
+package me.batizhao.ims.unit.mapper;
 
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.domain.RolePermission;

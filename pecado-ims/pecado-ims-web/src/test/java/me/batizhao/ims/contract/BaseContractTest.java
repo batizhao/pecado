@@ -1,7 +1,6 @@
-package me.batizhao.ims.web.contract;
+package me.batizhao.ims.contract;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import me.batizhao.ims.PecadoImsApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
  * @since 2020-03-27
  **/
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = PecadoImsApplication.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @ActiveProfiles("test")
 @RefreshScope
 public abstract class BaseContractTest {

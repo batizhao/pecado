@@ -1,4 +1,4 @@
-package me.batizhao.ims.web.api;
+package me.batizhao.ims.api;
 
 import me.batizhao.common.core.util.ResultEnum;
 import org.junit.jupiter.api.Test;

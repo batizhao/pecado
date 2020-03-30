@@ -1,4 +1,4 @@
-package me.batizhao.uaa;
+package me.batizhao.uaa.unit;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
@@ -9,6 +9,7 @@ import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.uaa.security.MyUserDetailsServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith(SpringExtension.class)
 @Slf4j
+@Tag("unit")
 public class MyUserDetailsServiceImplUnitTest {
 
     @MockBean
@@ -113,8 +115,15 @@ public class MyUserDetailsServiceImplUnitTest {
         when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);
 
-        userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         verify(userFeignService).loadUserByUsername(any(), any());
+
+        log.debug("userDetails: {}", userDetails);
+        assertThat(userDetails.getUsername(), equalTo(username));
+
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        log.debug("authorities: {}", authorities);
+        assertThat(authorities, hasSize(0));
     }
 }

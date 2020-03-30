@@ -234,6 +234,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<groups>${test-group}</groups>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -243,6 +246,7 @@
 			<id>dev</id>
 			<properties>
 				<profiles.active>dev</profiles.active>
+				<test-group>unit</test-group>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -252,6 +256,14 @@
 			<id>test</id>
 			<properties>
 				<profiles.active>test</profiles.active>
+				<test-group>unit | api | contract</test-group>
+			</properties>
+		</profile>
+		<profile>
+			<id>integration</id>
+			<properties>
+				<profiles.active>integration</profiles.active>
+				<test-group>integration</test-group>
 			</properties>
 		</profile>
 	</profiles>
