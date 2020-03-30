@@ -4,18 +4,11 @@
 
 在启动之前，需要运行 Nacos 配置中心和服务发现，并加载相应的配置文件。
 
-![截屏2020-03-30下午4.47.20](/Users/batizhao/Desktop/截屏2020-03-30下午4.47.20.png)
-
-
-
 ## 微服务自动化测试
 
 ### 测试金字塔
 
-
-
-![](/Users/batizhao/Downloads/images.jpeg)
-
+![](https://upload-images.jianshu.io/upload_images/12636540-7d491b1dc36c744e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 和传统的单例应用不同，微服务在集成测试这块，细分为：
