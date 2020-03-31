@@ -1,13 +1,13 @@
 package me.baitzhao.gateway;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author batizhao
  * @since 2020/3/20
  */
-@SpringCloudApplication
+@SpringBootApplication
 public class PecadoGatewayApplication {
 
     public static void main(String[] args) {
