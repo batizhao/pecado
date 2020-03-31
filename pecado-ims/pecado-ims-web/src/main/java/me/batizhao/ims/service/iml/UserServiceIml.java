@@ -6,7 +6,7 @@ import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
-import me.batizhao.ims.unit.mapper.UserMapper;
+import me.batizhao.ims.mapper.UserMapper;
 import me.batizhao.ims.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

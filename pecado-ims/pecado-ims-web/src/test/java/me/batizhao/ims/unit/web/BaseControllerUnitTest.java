@@ -2,6 +2,7 @@ package me.batizhao.ims.unit.web;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -14,4 +15,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @Tag("unit")
 public abstract class BaseControllerUnitTest {
+
+    /**
+     * 控制扫描范围，否则会加载 Security Config，导致 UserDetailsService 实例化
+     */
+    @SpringBootApplication(scanBasePackages = {"me.batizhao.ims.web"})
+    static class InnerConfig {}
+
 }

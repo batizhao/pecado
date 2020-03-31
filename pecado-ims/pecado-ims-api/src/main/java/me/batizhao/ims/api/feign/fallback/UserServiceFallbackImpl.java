@@ -31,6 +31,7 @@ public class UserServiceFallbackImpl implements UserFeignService {
 
     @SneakyThrows
     @Override
+    @SuppressWarnings("rawtypes")
     public ResponseInfo findRolesByUserId(Long userId) {
         log.error("feign 查询用户角色信息失败: {}", userId, cause);
 

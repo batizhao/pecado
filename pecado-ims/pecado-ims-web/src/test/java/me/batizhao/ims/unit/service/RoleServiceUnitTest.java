@@ -3,7 +3,7 @@ package me.batizhao.ims.unit.service;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.unit.mapper.RoleMapper;
+import me.batizhao.ims.mapper.RoleMapper;
 import me.batizhao.ims.service.iml.RoleServiceIml;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

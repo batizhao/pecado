@@ -1,8 +1,9 @@
 package me.batizhao.ims.unit.mapper;
 
+import lombok.extern.slf4j.Slf4j;
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.domain.RolePermission;
-import lombok.extern.slf4j.Slf4j;
+import me.batizhao.ims.mapper.RoleMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

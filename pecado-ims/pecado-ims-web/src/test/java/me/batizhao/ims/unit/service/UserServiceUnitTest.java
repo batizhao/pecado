@@ -5,7 +5,7 @@ import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.UserService;
-import me.batizhao.ims.unit.mapper.UserMapper;
+import me.batizhao.ims.mapper.UserMapper;
 import me.batizhao.ims.service.iml.UserServiceIml;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

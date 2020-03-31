@@ -27,6 +27,7 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableAuthorizationServer
+@SuppressWarnings("unchecked")
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired

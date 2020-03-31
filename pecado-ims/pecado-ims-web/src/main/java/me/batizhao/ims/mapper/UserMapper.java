@@ -1,4 +1,4 @@
-package me.batizhao.ims.unit.mapper;
+package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import me.batizhao.ims.domain.User;

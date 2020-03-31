@@ -44,12 +44,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UserController.class)
 public class UserControllerUnitTest extends BaseControllerUnitTest {
 
-    /**
-     * 控制扫描范围，否则会加载 Security Config，导致 UserDetailsService 实例化
-     */
-    @SpringBootApplication(scanBasePackages = {"me.batizhao.ims.web"})
-    static class InnerConfig {}
-
     @Autowired
     private MockMvc mvc;
 
