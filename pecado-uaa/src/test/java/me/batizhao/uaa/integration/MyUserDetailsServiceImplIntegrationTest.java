@@ -29,16 +29,8 @@ import static org.hamcrest.Matchers.*;
  * @author batizhao
  * @since 2020-02-29
  */
-//@EnabledIf(expression = "#{environment['spring.profiles.active'] == 'integration'}", loadContext = true)
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = PecadoUaaApplication.class)
-@AutoConfigureMockMvc
-@Import({WebExceptionHandler.class, PecadoFeignErrorDecoder.class})
 @Slf4j
-@Tag("integration")
-public class MyUserDetailsServiceImplIntegrationTest {
+public class MyUserDetailsServiceImplIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private UserDetailsService userDetailsService;
