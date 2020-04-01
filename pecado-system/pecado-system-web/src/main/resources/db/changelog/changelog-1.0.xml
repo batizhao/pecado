@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="batizhao" id="CreateTableLog-20200401-001">
+        <createTable tableName="log" remarks="日志表">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="日志ID,主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="method" type="VARCHAR(255)" remarks="操作方法">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)" remarks="操作描述">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parameter" type="VARCHAR(255)" remarks="操作参数"/>
+            <column name="result" type="VARCHAR(255)" remarks="操作结果"/>
+            <column name="spendTime" type="INT" remarks="操作时长">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)" remarks="操作用户">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(255)" remarks="操作URL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" type="VARCHAR(255)" remarks="操作IP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="datetime" remarks="操作时间">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="log"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

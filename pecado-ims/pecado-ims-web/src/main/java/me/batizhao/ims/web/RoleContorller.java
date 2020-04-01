@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.service.RoleService;
+import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -47,6 +48,7 @@ public class RoleContorller {
     @ApiOperation(value = "根据用户ID查询角色")
     @GetMapping(params = "userId")
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @SystemLog("abc")
     public ResponseInfo<List<RoleVO>> findRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         List<RoleVO> roles = roleService.findRolesByUserId(userId);
         return ResponseInfo.ok(roles);

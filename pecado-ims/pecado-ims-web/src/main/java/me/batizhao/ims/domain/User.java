@@ -33,9 +33,6 @@ public class User implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    /**
-     * @mock @word(3,30)
-     */
     @ApiModelProperty(value = "用户名", example = "zhangsan")
     @NotBlank(message = "username is not blank")
     @Size(min = 3, max = 30)
@@ -63,8 +60,4 @@ public class User implements Serializable {
      */
     @ApiModelProperty(value = "创建时间")
     private Date time;
-
-//    @TableField(exist = false)
-//    @ApiModelProperty(value = "权限")
-//    private List<Role> authorities;
 }
