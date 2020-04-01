@@ -4,17 +4,16 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.core.constant.SecurityConstants;
-import me.batizhao.common.core.util.SpringContextHolder;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.api.event.SystemLogEvent;
-import me.batizhao.system.api.feign.SystemLogFeignService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -36,11 +35,12 @@ import java.util.*;
  **/
 @Slf4j
 @Aspect
-//@Component
+@Component
 @AllArgsConstructor
 public class SystemLogAspect {
 
-    private final SystemLogFeignService systemLogFeignService;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Around("@annotation(systemLog)")
     @SneakyThrows
@@ -69,10 +69,7 @@ public class SystemLogAspect {
         log.setSpendTime((int) (endTime - startTime));
         log.setUrl(request.getRequestURL().toString());
 
-        systemLogFeignService.saveLog(log, SecurityConstants.FROM_IN);
-
-
-//        SpringContextHolder.publishEvent(new SystemLogEvent(log));
+        applicationContext.publishEvent(new SystemLogEvent(log));
         return result;
     }
 
