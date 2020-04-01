@@ -23,13 +23,13 @@ public class LogAutoConfiguration {
 
     private final SystemLogFeignService systemLogFeignService;
 
-	@Bean
-	public SystemLogListener systemLogListener() {
-		return new SystemLogListener(systemLogFeignService);
-	}
+//	@Bean
+//	public SystemLogListener systemLogListener() {
+//		return new SystemLogListener(systemLogFeignService);
+//	}
 
 	@Bean
 	public SystemLogAspect logAspect() {
-		return new SystemLogAspect();
+		return new SystemLogAspect(systemLogFeignService);
 	}
 }
