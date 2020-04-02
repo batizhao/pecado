@@ -21,14 +21,12 @@
             <column name="description" type="VARCHAR(255)" remarks="操作描述">
                 <constraints nullable="false"/>
             </column>
-            <column name="parameter" type="VARCHAR(255)" remarks="操作参数"/>
-            <column name="result" type="VARCHAR(1000)" remarks="操作结果"/>
+            <column name="parameter" type="VARCHAR(1000)" remarks="操作参数"/>
+            <column name="result" type="CLOB" remarks="操作结果"/>
             <column name="spend" type="INT" remarks="操作时长">
                 <constraints nullable="false"/>
             </column>
-            <column name="clientId" type="VARCHAR(255)" remarks="OAuth客户端">
-                <constraints nullable="false"/>
-            </column>
+            <column name="clientId" type="VARCHAR(255)" remarks="OAuth客户端"/>
             <column name="username" type="VARCHAR(255)" remarks="操作用户">
                 <constraints nullable="false"/>
             </column>

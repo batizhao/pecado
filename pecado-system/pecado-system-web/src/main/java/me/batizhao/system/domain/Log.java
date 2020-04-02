@@ -61,7 +61,6 @@ public class Log implements Serializable {
     private Integer spend;
 
     @ApiModelProperty(value = "OAuth客户端", example = "client_app")
-    @NotBlank(message = "Oauth clientId is not blank")
     private String clientId;
 
     @ApiModelProperty(value = "操作用户", example = "admin")

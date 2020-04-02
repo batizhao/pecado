@@ -11,6 +11,7 @@ import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserService;
+import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,6 +55,7 @@ public class UserController {
     @ApiOperation(value = "根据用户名查询用户")
     @GetMapping(params = "username")
     @Inner
+    @SystemLog
     public ResponseInfo<UserVO> loadUserByUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
         UserVO user = userService.findByUsername(username);
 
@@ -72,6 +74,7 @@ public class UserController {
      */
     @ApiOperation(value = "根据姓名查询用户")
     @GetMapping(params = "name")
+    @SystemLog
     public ResponseInfo<List<UserVO>> findByName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
         List<UserVO> users = userService.findByName(name);
         return ResponseInfo.ok(users);
@@ -86,6 +89,7 @@ public class UserController {
      */
     @ApiOperation(value = "根据ID查询用户")
     @GetMapping("{id}")
+    @SystemLog
     public ResponseInfo<UserVO> findById(@ApiParam(value = "用户ID", required = true) @PathVariable("id") @Min(1) Long id) {
         UserVO user = userService.findById(id);
         return ResponseInfo.ok(user);
@@ -100,6 +104,7 @@ public class UserController {
     @ApiOperation(value = "查询所有用户")
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<List<UserVO>> findAll() {
         List<UserVO> users = userService.findAll();
         return ResponseInfo.ok(users);
@@ -115,6 +120,7 @@ public class UserController {
     @ApiOperation(value = "添加或修改用户")
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<UserVO> doSaveOrUpdate(@Valid @ApiParam(value = "用户", required = true) @RequestBody User request_user) {
         UserVO user = userService.saveOrUpdate4me(request_user);
         return ResponseInfo.ok(user);
@@ -130,6 +136,7 @@ public class UserController {
     @ApiOperation(value = "删除用户")
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<Boolean> doDelete(@ApiParam(value = "用户ID", required = true) @Min(1) @PathVariable Long id) {
         Boolean b = userService.removeById(id);
         return ResponseInfo.ok(b);
@@ -144,6 +151,7 @@ public class UserController {
      */
     @ApiOperation(value = "我是谁")
     @GetMapping("/whoiam")
+    @SystemLog
     public ResponseInfo<String> getCurrentUser(Authentication authentication,
                                                @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authHeader) {
         log.info("authHeader: {}", authHeader);
