@@ -6,8 +6,6 @@ import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.api.feign.SystemLogFeignService;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 

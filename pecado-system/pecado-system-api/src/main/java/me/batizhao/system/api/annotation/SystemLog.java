@@ -12,6 +12,6 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 public @interface SystemLog {
 
-    String value();
+    String value() default "";
 
 }

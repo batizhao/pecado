@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.api.event.SystemLogEvent;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -45,32 +47,56 @@ public class SystemLogAspect {
     @Around("@annotation(systemLog)")
     @SneakyThrows
     public Object around(ProceedingJoinPoint point, SystemLog systemLog) {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-
-        LogDTO log = new LogDTO();
         long startTime = System.currentTimeMillis();
         Object result = point.proceed();
         long endTime = System.currentTimeMillis();
+
+        LogDTO logDTO = getLogDTO(point, systemLog);
+        logDTO.setResult(result.toString());
+        logDTO.setSpend((int) (endTime - startTime));
+
+        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+        return result;
+    }
+
+    @AfterThrowing(value = "@annotation(systemLog)", throwing = "throwable")
+    public void afterThrowing(JoinPoint point, SystemLog systemLog, Throwable throwable) {
+        LogDTO logDTO = getLogDTO(point, systemLog);
+        logDTO.setResult(throwable.getMessage());
+        logDTO.setSpend(0);
+        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+    }
+
+    private LogDTO getLogDTO(JoinPoint point, SystemLog systemLog) {
         Signature signature = point.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
-        if (method.isAnnotationPresent(ApiOperation.class)) {
+
+        LogDTO logDTO = new LogDTO();
+
+        if (!StringUtils.isEmpty(systemLog.value())) {
+            logDTO.setDescription(systemLog.value());
+        } else if (method.isAnnotationPresent(ApiOperation.class)) {
             ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
-            log.setDescription(apiOperation.value());
+            logDTO.setDescription(apiOperation.value());
+        } else {
+            logDTO.setDescription("请使用 @ApiOperation 或者 @SystemLog 的 value 属性。");
         }
 
-        log.setTime(new Date());
-        log.setIp(request.getRemoteUser());
-        log.setMethod(request.getMethod());
-        log.setParameter(getParameter(method, point.getArgs()).toString());
-        log.setUsername(getUsername());
-        log.setResult(result.toString());
-        log.setSpendTime((int) (endTime - startTime));
-        log.setUrl(request.getRequestURL().toString());
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        assert attributes != null;
+        HttpServletRequest request = attributes.getRequest();
 
-        applicationContext.publishEvent(new SystemLogEvent(log));
-        return result;
+        logDTO.setIp(request.getRemoteAddr());
+        logDTO.setHttpRequestMethod(request.getMethod());
+        logDTO.setClassName(method.getDeclaringClass().getName());
+        logDTO.setClassMethod(method.getName());
+        logDTO.setParameter(getParameter(method, point.getArgs()));
+        logDTO.setClientId(getClientId());
+        logDTO.setUsername(getUsername());
+        logDTO.setUrl(request.getRequestURL().toString());
+        logDTO.setTime(new Date());
+        return logDTO;
     }
 
     /**
@@ -107,7 +133,7 @@ public class SystemLogAspect {
      * @param args
      * @return
      */
-    private Object getParameter(Method method, Object[] args) {
+    private String getParameter(Method method, Object[] args) {
         List<Object> argList = new ArrayList<>();
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
@@ -128,12 +154,12 @@ public class SystemLogAspect {
                 argList.add(map);
             }
         }
-        if (argList.size() == 0) {
+        if (argList.isEmpty()) {
             return null;
         } else if (argList.size() == 1) {
-            return argList.get(0);
+            return argList.get(0).toString();
         } else {
-            return argList;
+            return argList.toString();
         }
     }
 

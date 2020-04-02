@@ -3,11 +3,10 @@ package me.batizhao.ims.unit.web;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.web.RoleContorller;
+import me.batizhao.ims.web.RoleController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -30,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author batizhao
  * @since 2020-02-10
  */
-@WebMvcTest(RoleContorller.class)
+@WebMvcTest(RoleController.class)
 public class RoleControllerUnitTest extends BaseControllerUnitTest {
 
     @Autowired

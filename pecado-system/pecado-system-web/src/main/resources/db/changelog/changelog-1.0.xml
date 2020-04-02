@@ -9,15 +9,24 @@
             <column autoIncrement="true" name="id" type="BIGINT" remarks="日志ID,主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="method" type="VARCHAR(255)" remarks="操作方法">
+            <column name="httpRequestMethod" type="VARCHAR(255)" remarks="HTTP方法">
+                <constraints nullable="false"/>
+            </column>
+            <column name="className" type="VARCHAR(255)" remarks="类名">
+                <constraints nullable="false"/>
+            </column>
+            <column name="classMethod" type="VARCHAR(255)" remarks="类方法">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="VARCHAR(255)" remarks="操作描述">
                 <constraints nullable="false"/>
             </column>
             <column name="parameter" type="VARCHAR(255)" remarks="操作参数"/>
-            <column name="result" type="VARCHAR(255)" remarks="操作结果"/>
-            <column name="spendTime" type="INT" remarks="操作时长">
+            <column name="result" type="VARCHAR(1000)" remarks="操作结果"/>
+            <column name="spend" type="INT" remarks="操作时长">
+                <constraints nullable="false"/>
+            </column>
+            <column name="clientId" type="VARCHAR(255)" remarks="OAuth客户端">
                 <constraints nullable="false"/>
             </column>
             <column name="username" type="VARCHAR(255)" remarks="操作用户">

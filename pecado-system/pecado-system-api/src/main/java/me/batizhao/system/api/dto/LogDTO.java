@@ -29,11 +29,19 @@ public class LogDTO implements Serializable {
     @ApiModelProperty(value = "日志ID", example = "100")
     private Long id;
 
-    @ApiModelProperty(value = "操作方法", example = "findRolesByUserId()")
-    @NotBlank(message = "method is not blank")
-    private String method;
+    @ApiModelProperty(value = "HTTP方法", example = "GET")
+    @NotBlank(message = "httpRequestMethod is not blank")
+    private String httpRequestMethod;
 
-    @ApiModelProperty(value = "操作描述", example = "删除用户")
+    @ApiModelProperty(value = "类名", example = "me.batizhao.ims.web.RoleController")
+    @NotBlank(message = "className is not blank")
+    private String className;
+
+    @ApiModelProperty(value = "类方法", example = "findRolesByUserId")
+    @NotBlank(message = "classMethod is not blank")
+    private String classMethod;
+
+    @ApiModelProperty(value = "操作描述", example = "根据用户ID查询角色")
     @NotBlank(message = "description is not blank")
     @Size(min = 1, max = 100)
     private String description;
@@ -45,7 +53,11 @@ public class LogDTO implements Serializable {
     private String result;
 
     @ApiModelProperty(value = "操作时长", example = "100")
-    private Integer spendTime;
+    private Integer spend;
+
+    @ApiModelProperty(value = "OAuth客户端", example = "client_app")
+    @NotBlank(message = "Oauth clientId is not blank")
+    private String clientId;
 
     @ApiModelProperty(value = "操作用户", example = "admin")
     @NotBlank(message = "username is not blank")

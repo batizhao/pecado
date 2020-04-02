@@ -33,7 +33,7 @@ import java.util.List;
 @RequestMapping("role")
 @Slf4j
 @Validated
-public class RoleContorller {
+public class RoleController {
 
     @Autowired
     private RoleService roleService;
@@ -48,7 +48,7 @@ public class RoleContorller {
     @ApiOperation(value = "根据用户ID查询角色")
     @GetMapping(params = "userId")
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
-    @SystemLog("abc")
+    @SystemLog
     public ResponseInfo<List<RoleVO>> findRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         List<RoleVO> roles = roleService.findRolesByUserId(userId);
         return ResponseInfo.ok(roles);
