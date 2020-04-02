@@ -11,7 +11,6 @@ import me.batizhao.ims.web.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -92,7 +91,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.roleList", hasSize(2)))
                 .andExpect(jsonPath("$.data.roleList[1].id").value("2"));
 
-        verify(userService).findByUsername(any());
+        verify(userService).findByUsername(anyString());
     }
 
     @Test
@@ -135,7 +134,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.email").value("zhangsan@gmail.com"));
 
-        verify(userService).findById(any());
+        verify(userService).findById(anyLong());
     }
 
     @Test
@@ -160,7 +159,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     public void givenJson_whenSaveUser_thenSucceedJson() throws Exception {
         User requestBody = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
 
-        when(userService.saveOrUpdate4me(any()))
+        when(userService.saveOrUpdate4me(any(User.class)))
                 .thenReturn(userList.get(0));
 
         mvc.perform(post("/user").with(csrf())
@@ -172,7 +171,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.id", equalTo(1)));
 
-        verify(userService).saveOrUpdate4me(any());
+        verify(userService).saveOrUpdate4me(any(User.class));
     }
 
     @Test
@@ -180,7 +179,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     public void givenJson_whenUpdateUser_thenSucceedJson() throws Exception {
         User requestBody = new User().setId(2L).setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
 
-        when(userService.saveOrUpdate4me(any()))
+        when(userService.saveOrUpdate4me(any(User.class)))
                 .thenReturn(userList.get(1));
 
         mvc.perform(post("/user").with(csrf())
@@ -193,7 +192,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.id", equalTo(2)))
                 .andExpect(jsonPath("$.data.username", equalTo("lisi")));
 
-        verify(userService).saveOrUpdate4me(any());
+        verify(userService).saveOrUpdate4me(any(User.class));
     }
 
 

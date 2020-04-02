@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -59,7 +60,7 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenUserId_whenFindRoles_thenSuccess() {
-        when(roleMapper.findRolesByUserId(any()))
+        when(roleMapper.findRolesByUserId(anyLong()))
                 .thenReturn(roleList);
 
         List<RoleVO> roles = roleService.findRolesByUserId(1L);

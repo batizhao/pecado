@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -95,11 +94,11 @@ public class MyUserDetailsServiceImplUnitTest {
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
         ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok();
 
-        doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(any(), any());
+        doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(anyString(), anyString());
 
         Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
 
-        verify(userFeignService).loadUserByUsername(any(), any());
+        verify(userFeignService).loadUserByUsername(anyString(), anyString());
     }
 
     @Test
@@ -117,7 +116,7 @@ public class MyUserDetailsServiceImplUnitTest {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        verify(userFeignService).loadUserByUsername(any(), any());
+        verify(userFeignService).loadUserByUsername(anyString(), anyString());
 
         log.debug("userDetails: {}", userDetails);
         assertThat(userDetails.getUsername(), equalTo(username));

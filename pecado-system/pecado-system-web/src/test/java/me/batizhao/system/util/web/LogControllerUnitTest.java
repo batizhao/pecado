@@ -3,12 +3,10 @@ package me.batizhao.system.util.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.feign.UserFeignService;
-import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.dto.LogDTO;
+import me.batizhao.system.domain.Log;
 import me.batizhao.system.service.LogService;
 import me.batizhao.system.web.LogController;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,12 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -56,7 +51,7 @@ public class LogControllerUnitTest extends BaseControllerUnitTest {
                 .setClassName("me.batizhao.ims.web.RoleController").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setTime(new Date()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        when(logService.save(any())).thenReturn(true);
+        when(logService.save(any(Log.class))).thenReturn(true);
 
         mvc.perform(post("/log").with(csrf())
                 .content(new ObjectMapper().writeValueAsString(logDTO))
@@ -67,6 +62,6 @@ public class LogControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data", equalTo(true)));
 
-        verify(logService).save(any());
+        verify(logService).save(any(Log.class));
     }
 }

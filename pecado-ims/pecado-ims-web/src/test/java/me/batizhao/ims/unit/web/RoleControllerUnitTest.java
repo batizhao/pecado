@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -56,7 +56,7 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenUserId_whenFindRole_thenRoleJsonArray() throws Exception {
-        when(roleService.findRolesByUserId(any())).thenReturn(roleList);
+        when(roleService.findRolesByUserId(anyLong())).thenReturn(roleList);
 
         mvc.perform(get("/role").param("userId", "1"))
                 .andDo(print())
@@ -66,14 +66,14 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data", hasSize(2)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("admin")));
 
-        verify(roleService).findRolesByUserId(any());
+        verify(roleService).findRolesByUserId(anyLong());
     }
 
     @Test
     @WithMockUser
     public void givenUserId_whenFindRole_thenFail() throws Exception {
         roleList.clear();
-        when(roleService.findRolesByUserId(any())).thenReturn(roleList);
+        when(roleService.findRolesByUserId(anyLong())).thenReturn(roleList);
 
         mvc.perform(get("/role").param("userId", "1"))
                 .andDo(print())
@@ -82,6 +82,6 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data", hasSize(0)));
 
-        verify(roleService).findRolesByUserId(any());
+        verify(roleService).findRolesByUserId(anyLong());
     }
 }
