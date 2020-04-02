@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
@@ -56,7 +57,7 @@ public class Log implements Serializable {
     private String result;
 
     @ApiModelProperty(value = "操作时长", example = "100")
-    @NotBlank(message = "spend is not blank")
+    @NotNull(message = "spend is not blank")
     private Integer spend;
 
     @ApiModelProperty(value = "OAuth客户端", example = "client_app")
@@ -84,6 +85,6 @@ public class Log implements Serializable {
      * @mock @datetime
      */
     @ApiModelProperty(value = "操作时间")
-    @NotBlank(message = "time is not blank")
+    @NotNull(message = "time is not blank")
     private Date time;
 }

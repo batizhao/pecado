@@ -1,0 +1,45 @@
+package me.batizhao.system.api;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import me.batizhao.common.core.constant.SecurityConstants;
+import me.batizhao.common.core.util.ResultEnum;
+import me.batizhao.system.api.dto.LogDTO;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+/**
+ * @author batizhao
+ * @since 2020-03-18
+ **/
+public class LogApiTest extends BaseApiTest {
+
+    @Test
+    @Transactional
+    public void givenLogDTO_whenPostLog_thenSuccess() throws Exception {
+        LogDTO logDTO = new LogDTO().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
+                .setClassName("me.batizhao.ims.web.RoleController").setClientId("client_app").setHttpRequestMethod("POST")
+                .setIp("127.0.0.1").setTime(new Date()).setUrl("http://localhost:5000/role").setUsername("test");
+
+        mvc.perform(post("/log")
+                .header(SecurityConstants.FROM, SecurityConstants.FROM_IN)
+                .content(new ObjectMapper().writeValueAsString(logDTO))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data", equalTo(true)));
+    }
+
+}

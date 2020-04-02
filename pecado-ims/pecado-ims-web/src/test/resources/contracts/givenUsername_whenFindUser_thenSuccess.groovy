@@ -10,9 +10,9 @@ Contract.make {
             queryParameters {
                 parameter('username', 'admin')
             }
-            headers {
-                header('from', 'Y')
-            }
+        }
+        headers {
+            header('from', 'Y')
         }
     }
     response {

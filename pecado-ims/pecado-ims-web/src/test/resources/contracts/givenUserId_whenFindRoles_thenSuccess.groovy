@@ -10,9 +10,9 @@ Contract.make {
             queryParameters {
                 parameter('userId', $(consumer(number()), producer(1L)))
             }
-            headers {
-                header('Authorization', $(consumer(nonBlank()), producer(execute('adminAccessToken'))))
-            }
+        }
+        headers {
+            header('Authorization', $(consumer(nonBlank()), producer(execute('adminAccessToken'))))
         }
     }
     response {
