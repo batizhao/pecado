@@ -23,7 +23,7 @@ import java.util.List;
  * 角色管理
  * 这里是角色管理接口的描述
  *
- * @module Pecado
+ * @module pecado-ims
  *
  * @author batizhao
  * @since 2020-03-14

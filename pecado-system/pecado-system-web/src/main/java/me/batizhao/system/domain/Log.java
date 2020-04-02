@@ -32,7 +32,7 @@ public class Log implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "操作方法", example = "GET")
+    @ApiModelProperty(value = "HTTP方法", example = "GET")
     @NotBlank(message = "httpRequestMethod is not blank")
     private String httpRequestMethod;
 
@@ -56,6 +56,7 @@ public class Log implements Serializable {
     private String result;
 
     @ApiModelProperty(value = "操作时长", example = "100")
+    @NotBlank(message = "spend is not blank")
     private Integer spend;
 
     @ApiModelProperty(value = "OAuth客户端", example = "client_app")
@@ -72,6 +73,9 @@ public class Log implements Serializable {
     @URL
     private String url;
 
+    /**
+     * @mock @ip
+     */
     @ApiModelProperty(value = "操作IP", example = "192.168.1.1")
     @NotBlank(message = "ip is not blank")
     private String ip;
@@ -80,5 +84,6 @@ public class Log implements Serializable {
      * @mock @datetime
      */
     @ApiModelProperty(value = "操作时间")
+    @NotBlank(message = "time is not blank")
     private Date time;
 }

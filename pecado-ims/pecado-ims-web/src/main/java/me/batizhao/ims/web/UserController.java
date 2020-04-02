@@ -27,7 +27,7 @@ import java.util.List;
  * 用户管理
  * 这里是用户管理接口的描述
  *
- * @module Pecado
+ * @module pecado-ims
  *
  * @author batizhao
  * @since 2016/9/28
