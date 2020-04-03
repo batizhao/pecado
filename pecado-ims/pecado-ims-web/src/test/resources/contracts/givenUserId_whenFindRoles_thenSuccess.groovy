@@ -8,11 +8,11 @@ Contract.make {
         method GET()
         url('/role') {
             queryParameters {
-                parameter('userId', $(consumer(number()), producer(1L)))
+                parameter('userId', 1L)
             }
         }
         headers {
-            header('Authorization', $(consumer(nonBlank()), producer(execute('adminAccessToken'))))
+            header('Authorization', execute('adminAccessToken'))
         }
     }
     response {

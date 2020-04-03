@@ -5,9 +5,7 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.api.feign.factory.SystemLogServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author batizhao
@@ -17,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface SystemLogFeignService {
 
     @PostMapping(value = "/log")
-    ResponseInfo<Boolean> saveLog(@RequestBody LogDTO log,
+    ResponseInfo<Boolean> saveLog(LogDTO logDTO,
                                   @RequestHeader(SecurityConstants.FROM) String from);
 
 }

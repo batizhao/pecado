@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         stubsMode = StubRunnerProperties.StubsMode.LOCAL,
         ids = "me.batizhao:pecado-ims-web:+:stubs:10000")
 @Tag("contract")
-public class LogControllerContractTest {
+public abstract class SystemContractTest {
 
     @Autowired
     MockMvc mvc;
@@ -40,14 +40,26 @@ public class LogControllerContractTest {
     @Value("${pecado.token.admin}")
     String adminAccessToken;
 
-    @Test
-    public void givenUserId_whenFindRoles_thenSuccess() throws Exception {
-        mvc.perform(get("/log")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", hasSize(2)));
-    }
+//    @Test
+//    public void givenUserId_whenFindRoles_thenSuccess() throws Exception {
+//        mvc.perform(get("/role?userId=1")
+//                .header("Authorization", adminAccessToken))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data", hasSize(2)));
+//    }
+//
+//    @Test
+//    public void givenUsername_whenFindUser_thenSuccess() throws Exception {
+//        mvc.perform(get("/user?username=admin")
+//                .header("from", "Y"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data.email").value("admin@qq.com"))
+//                .andExpect(jsonPath("$.data.roleList", hasSize(2)));
+//    }
 }

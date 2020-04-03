@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.api.feign.SystemLogFeignService;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -16,15 +16,17 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @AllArgsConstructor
 @Component
-public class SystemLogListener implements ApplicationListener<SystemLogEvent> {
+public class SystemLogListener {
 
     private final SystemLogFeignService systemLogFeignService;
 
-    @Override
     @Async
-    public void onApplicationEvent(SystemLogEvent systemLogEvent) {
-        LogDTO log = (LogDTO) systemLogEvent.getSource();
-        systemLogFeignService.saveLog(log, SecurityConstants.FROM_IN);
+    @EventListener
+    public void saveLog(SystemLogEvent event) {
+        LogDTO logDTO = (LogDTO) event.getSource();
+        log.info("Feign async invoke start: {}", logDTO);
+        systemLogFeignService.saveLog(logDTO, SecurityConstants.FROM_IN);
+        log.info("Feign async invoke end.");
     }
 
 }

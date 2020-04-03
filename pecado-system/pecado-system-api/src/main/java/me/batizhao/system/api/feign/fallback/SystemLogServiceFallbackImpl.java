@@ -21,6 +21,6 @@ public class SystemLogServiceFallbackImpl implements SystemLogFeignService {
     @Override
     public ResponseInfo<Boolean> saveLog(LogDTO logDTO, String from) {
         log.error("feign 写日志失败: {}", logDTO, cause);
-        return null;
+        return ResponseInfo.failed(false);
     }
 }

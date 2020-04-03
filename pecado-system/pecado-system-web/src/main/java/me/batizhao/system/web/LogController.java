@@ -4,18 +4,18 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.annotation.Inner;
-import me.batizhao.ims.api.feign.UserFeignService;
-import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.domain.Log;
 import me.batizhao.system.service.LogService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 日志管理
@@ -33,15 +33,7 @@ import java.util.List;
 public class LogController {
 
     @Autowired
-    private UserFeignService userFeignService;
-    @Autowired
     private LogService logService;
-
-    @GetMapping
-    public ResponseInfo<List<RoleVO>> findRolesByUserId() {
-        ResponseInfo<List<RoleVO>> roles = userFeignService.findRolesByUserId(1L);
-        return roles;
-    }
 
     /**
      * 插入日志
