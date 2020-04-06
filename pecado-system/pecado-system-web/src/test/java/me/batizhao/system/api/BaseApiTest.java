@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
  * @author batizhao
  * @since 2020-02-07
  */
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,

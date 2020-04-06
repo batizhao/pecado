@@ -1,4 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    me.batizhao.system.api.LogAutoConfiguration,\
-    me.batizhao.system.api.feign.fallback.SystemLogServiceFallbackImpl,\
-    me.batizhao.system.api.feign.factory.SystemLogServiceFallbackFactory
+    me.batizhao.system.api.SystemLogAutoConfiguration,\
+    me.batizhao.system.api.feign.fallback.SystemLogServiceFallback

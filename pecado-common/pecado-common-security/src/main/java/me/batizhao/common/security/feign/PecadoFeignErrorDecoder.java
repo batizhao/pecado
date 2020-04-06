@@ -11,7 +11,6 @@ import java.nio.charset.Charset;
 
 /**
  * 业务异常包装类，显示原始异常，非 200 响应进入这里
- * 包装成 HystrixBadRequestException，不进入熔断逻辑
  * 包装成 PecadoFeignException，进入熔断逻辑
  *
  * @author batizhao

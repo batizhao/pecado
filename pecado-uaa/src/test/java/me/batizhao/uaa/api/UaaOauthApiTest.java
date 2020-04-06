@@ -76,25 +76,6 @@ public class UaaOauthApiTest {
                 .andExpect(jsonPath("$.data", containsString("Missing grant type")));
     }
 
-    /**
-     * 这里需要设置 spring.mvc.locale: zh_CN，否则会调用 spring security core 中的 messages.properties
-     * 返回国际化消息 Bad credentials
-     * 在 postman、curl 等方式中自动会返回中文消息
-     *
-     * @throws Exception
-     */
-    @Test
-    public void givenNoPassword_whenGetAccessToken_thenOAuthException() throws Exception {
-        mvc.perform(post("/oauth/token")
-                .param("grant_type", GRANT_TYPE).param("username", USERNAME)
-                .with(httpBasic(CLIENT_ID, CLIENT_SECRET)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_ERROR.getCode()))
-                .andExpect(jsonPath("$.data", containsString("用户名或密码错误")));
-    }
-
     @Test
     public void givenInvalidRefreshToken_whenGetAccessToken_thenOAuthException() throws Exception {
         String invalidRefreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6";

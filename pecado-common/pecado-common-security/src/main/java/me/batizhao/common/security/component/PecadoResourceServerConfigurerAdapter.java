@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2019-2020, 冷冷 (wangiegie@gmail.com).
- *  <p>
- *  Licensed under the GNU Lesser General Public License 3.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *  <p>
- * https://www.gnu.org/licenses/lgpl.html
- *  <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package me.batizhao.common.security.component;
 
 import lombok.SneakyThrows;
@@ -27,12 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
- * @author lengleng
- * @date 2019/03/08
- *
- * <p>
- * 1. 支持remoteTokenServices 负载均衡
- * 2. 支持 获取用户全部信息
+ * @author batizhao
+ * @since 2020-03-20
  */
 @Slf4j
 public class PecadoResourceServerConfigurerAdapter extends ResourceServerConfigurerAdapter {
@@ -41,10 +21,10 @@ public class PecadoResourceServerConfigurerAdapter extends ResourceServerConfigu
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;
 	@Autowired
-	private PermitAllUrlConfiguration permitAllUrl;
+	private PermitAllUrlProperties permitAllUrl;
 
 	/**
-	 * 默认的配置，对外暴露
+	 * 配置不需要鉴权的接口
 	 *
 	 * @param httpSecurity
 	 */

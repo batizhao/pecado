@@ -14,7 +14,6 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +40,6 @@ import java.util.*;
 @AllArgsConstructor
 public class SystemLogAspect {
 
-    @Autowired
     private ApplicationContext applicationContext;
 
     @Around("@annotation(systemLog)")

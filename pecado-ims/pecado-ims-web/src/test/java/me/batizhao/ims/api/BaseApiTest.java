@@ -1,7 +1,9 @@
 package me.batizhao.ims.api;
 
+import lombok.SneakyThrows;
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import me.batizhao.ims.PecadoImsApplication;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +47,14 @@ public abstract class BaseApiTest {
 
     @Autowired
     MockMvc mvc;
+
+    /**
+     * 阻止测试主线程提前退出，导致 @SystemLog 异步线程失败
+     * 这个可以放在集成测试中
+     */
+    @SneakyThrows
+    @AfterEach
+    public void sleep() {
+        Thread.sleep(10000L);
+    }
 }

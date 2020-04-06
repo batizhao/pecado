@@ -1,7 +1,6 @@
 package me.batizhao.uaa.integration;
 
 import me.batizhao.common.core.exception.WebExceptionHandler;
-import me.batizhao.common.security.feign.PecadoFeignErrorDecoder;
 import me.batizhao.uaa.PecadoUaaApplication;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = PecadoUaaApplication.class)
 @AutoConfigureMockMvc
-@Import({WebExceptionHandler.class, PecadoFeignErrorDecoder.class})
+@Import(WebExceptionHandler.class)
 @Tag("integration")
 public abstract class BaseIntegrationTest {
 

@@ -20,8 +20,8 @@ public class SystemLogListener {
 
     private final SystemLogFeignService systemLogFeignService;
 
-    @Async
     @EventListener
+    @Async
     public void saveLog(SystemLogEvent event) {
         LogDTO logDTO = (LogDTO) event.getSource();
         log.info("Feign async invoke start: {}", logDTO);
