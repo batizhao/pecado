@@ -289,6 +289,45 @@ public class LogControllerContractTest {
 
 启动：`mvn clean test -Pintegration` 或者 `mvn clean test -Dtest-group=integration`
 
+这里要注意，如果在 @Async 中使用了 Feign 调用（@SystemLog），在集成测试时会产生一个问题。
+
+* 这个问题只在 JUnit 测试时才会出现
+
+* 如果测试运行时间很短，有可能在主线程退出时，Ribbon 调度任务还未完成；
+
+* 因为 Feign 会使用 Ribbon 调用 PollingServerListUpdater，启动定时任务 ScheduledThreadPoolExecutor 去 Nacos 注册中心拿配置（默认延时 1S）
+
+* 如果不阻塞主线程，就会导致 Ribbon 拿不到 ServerList；
+
+* 常规的使用 WaitForTasksToCompleteOnShutdown 和 AwaitTerminationSeconds 实现优雅关闭线程方法对 Ribbon 的 ScheduledThreadPoolExecutor 不起作用，只对 Spring 自己的 ThreadPoolTaskScheduler 起作用
+
+* 阻止测试主线程提前退出，要在 JUnit 中使用下边的方法，在每个测试方法主线程结束后阻塞一段时间
+
+  ```java
+  @SneakyThrows
+  @AfterEach
+  public void sleep() {
+     Thread.sleep(5000L);
+  }
+  ```
+
+Spring Boot 常规的配置线程池的方法：
+
+```yaml
+spring:  
+  task:
+    execution:
+      threadNamePrefix: pecadoTask-
+      shutdown:
+        awaitTermination: true
+        awaitTerminationPeriod: PT1M
+    scheduling:
+      threadNamePrefix: pecadoScheduling-
+      shutdown:
+        awaitTermination: true
+        awaitTerminationPeriod: PT1M 
+```
+
 ### Mock Server 测试（可选）
 
 目标：前端接口调用测试。

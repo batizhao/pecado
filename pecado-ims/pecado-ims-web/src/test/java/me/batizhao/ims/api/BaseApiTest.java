@@ -49,12 +49,20 @@ public abstract class BaseApiTest {
     MockMvc mvc;
 
     /**
-     * 阻止测试主线程提前退出，导致 @SystemLog 异步线程失败
-     * 这个可以放在集成测试中
+     * 这个可以放在集成测试中。针对在 @Async 异步线程中调用 Feign API 的情况。
+     * 如果测试线程运行时间够长，这段不需要也可以。
+     * 但是如果运行时间很短，有可能在主线程退出时，Ribbon 调度任务还未完成。
+     *
+     * 阻止测试主线程提前退出，因为 Feign 会使用 Ribbon 调用 PollingServerListUpdater
+     * 启动定时任务 ScheduledThreadPoolExecutor 去 Nacos 注册中心拿配置（默认延时 1S）
+     * 如果不阻塞主线程，就会导致 Ribbon 拿不到 ServerList
+     *
+     * 常规的使用 WaitForTasksToCompleteOnShutdown 和 AwaitTerminationSeconds 实现优雅关闭线程方法对 ScheduledThreadPoolExecutor 不起作用
+     * 只对 Spring 自己的 ThreadPoolTaskScheduler 起作用
      */
-    @SneakyThrows
-    @AfterEach
-    public void sleep() {
-        Thread.sleep(10000L);
-    }
+//    @SneakyThrows
+//    @AfterEach
+//    public void sleep() {
+//        Thread.sleep(300000L);
+//    }
 }
