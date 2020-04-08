@@ -23,7 +23,7 @@ Contract.make {
             username: $(consumer(anyOf('admin', 'tom')), producer('admin')),
             url: $(consumer(anyUrl()), producer('http://localhost:5000/role')),
             ip: $(consumer(anyIpAddress()), producer('127.0.0.1')),
-            time: $(consumer(anyDateTime()), producer('2020-04-02 12:32:10'))
+            time: $(consumer(anyDateTime()), producer('2020-04-02T12:32:10'))
         )
     }
     response {

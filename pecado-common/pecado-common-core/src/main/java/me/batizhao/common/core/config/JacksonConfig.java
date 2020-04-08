@@ -1,11 +1,19 @@
 package me.batizhao.common.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import me.batizhao.common.core.jackson.PecadoJavaTimeModule;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+
+import java.time.ZoneId;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import static me.batizhao.common.core.constant.PecadoConstants.NORM_DATETIME_PATTERN;
 
 /**
  * 处理 Java8 时间序列化
@@ -13,12 +21,17 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
  * @since 2020-04-08
  **/
 @Configuration
+@ConditionalOnClass(ObjectMapper.class)
+@AutoConfigureBefore(JacksonAutoConfiguration.class)
 public class JacksonConfig {
+
     @Bean
-    @Primary
-    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
-        ObjectMapper objectMapper = builder.build();
-        objectMapper.registerModule(new JavaTimeModule());
-        return objectMapper;
+    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+        return builder -> {
+            builder.locale(Locale.CHINA);
+            builder.timeZone(TimeZone.getTimeZone(ZoneId.systemDefault()));
+            builder.simpleDateFormat(NORM_DATETIME_PATTERN);
+            builder.modules(new PecadoJavaTimeModule());
+        };
     }
 }

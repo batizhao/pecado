@@ -67,7 +67,7 @@
             <column name="name" type="VARCHAR(100)" remarks="用户姓名">
                 <constraints nullable="false"/>
             </column>
-            <column name="time" type="datetime" remarks="创建时间">
+            <column name="createdTime" type="datetime" remarks="创建时间">
                 <constraints nullable="false"/>
             </column>
         </createTable>

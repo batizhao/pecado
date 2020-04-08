@@ -7,7 +7,7 @@
     "password" : "$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu",
     "email" : "admin@qq.com",
     "name" : "系统管理员",
-    "time" : "2016-09-29 10:00:00",
+    "createdTime" : "2016-09-29 10:00:00",
     "roleList" : [ {
       "id" : 1,
       "name" : "ROLE_USER"

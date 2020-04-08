@@ -185,7 +185,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         assertThat(bool, equalTo(true));
 
         user_test_data.setPassword(hashPass);
-        user_test_data.setTime(LocalDateTime.now());
+        user_test_data.setCreatedTime(LocalDateTime.now());
         log.info("user_test_data: {}", user_test_data);
 
         //这里注意 saveOrUpdate 是第三方的方法，所以用了 spy 对 UserService 做了个 mock

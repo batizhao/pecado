@@ -94,7 +94,7 @@ public class SystemLogAspect {
         logDTO.setClientId(getClientId());
         logDTO.setUsername(getUsername());
         logDTO.setUrl(request.getRequestURL().toString());
-        logDTO.setTime(LocalDateTime.now());
+        logDTO.setCreatedTime(LocalDateTime.now());
         return logDTO;
     }
 

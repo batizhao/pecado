@@ -48,7 +48,7 @@ public class LogControllerUnitTest extends BaseControllerUnitTest {
     public void givenUserId_whenFindRole_thenRoleJsonArray() throws Exception {
         LogDTO logDTO = new LogDTO().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
                 .setClassName("me.batizhao.ims.web.RoleController").setClientId("client_app").setHttpRequestMethod("POST")
-                .setIp("127.0.0.1").setTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
+                .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
         when(logService.save(any(Log.class))).thenReturn(true);
 

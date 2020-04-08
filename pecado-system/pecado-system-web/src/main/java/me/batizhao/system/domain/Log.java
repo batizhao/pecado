@@ -80,10 +80,7 @@ public class Log implements Serializable {
     @NotBlank(message = "ip is not blank")
     private String ip;
 
-    /**
-     * @mock @datetime
-     */
     @ApiModelProperty(value = "操作时间")
-    @NotNull(message = "time is not blank")
-    private LocalDateTime time;
+    @NotNull(message = "createdTime is not blank")
+    private LocalDateTime createdTime;
 }

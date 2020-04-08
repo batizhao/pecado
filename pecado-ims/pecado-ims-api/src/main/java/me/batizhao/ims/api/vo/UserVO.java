@@ -47,11 +47,8 @@ public class UserVO implements Serializable {
     @NotBlank
     private String name;
 
-    /**
-     * @mock @datetime
-     */
     @ApiModelProperty(value = "创建时间")
-    private LocalDateTime time;
+    private LocalDateTime createdTime;
 
     /**
      * 角色列表

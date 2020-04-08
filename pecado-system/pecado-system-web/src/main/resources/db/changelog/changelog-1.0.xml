@@ -36,7 +36,7 @@
             <column name="ip" type="VARCHAR(255)" remarks="操作IP">
                 <constraints nullable="false"/>
             </column>
-            <column name="time" type="datetime" remarks="操作时间">
+            <column name="createdTime" type="datetime" remarks="操作时间">
                 <constraints nullable="false"/>
             </column>
         </createTable>

@@ -55,9 +55,6 @@ public class User implements Serializable {
     @NotBlank(message = "name is not blank")
     private String name;
 
-    /**
-     * @mock @datetime
-     */
     @ApiModelProperty(value = "创建时间")
-    private LocalDateTime time;
+    private LocalDateTime createdTime;
 }
