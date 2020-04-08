@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.core.util.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,9 @@ import java.io.IOException;
 @Slf4j
 public class MyAccessDeniedHandler implements AccessDeniedHandler {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         response.setContentType("application/json; charset=utf-8");
@@ -37,6 +41,6 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
                 .setData(accessDeniedException.getMessage());
 
         log.error("Access Denied Handler for 403.", accessDeniedException);
-        response.getWriter().write(new ObjectMapper().writeValueAsString(message));
+        response.getWriter().write(objectMapper.writeValueAsString(message));
     }
 }

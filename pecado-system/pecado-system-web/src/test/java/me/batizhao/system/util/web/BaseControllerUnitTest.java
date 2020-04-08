@@ -1,8 +1,10 @@
 package me.batizhao.system.util.web;
 
+import me.batizhao.common.core.exception.WebExceptionHandler;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -13,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @Tag("unit")
+@Import(WebExceptionHandler.class)
 public abstract class BaseControllerUnitTest {
 
     /**

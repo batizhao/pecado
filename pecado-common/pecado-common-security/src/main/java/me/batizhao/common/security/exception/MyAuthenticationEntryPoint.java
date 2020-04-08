@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.core.util.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -33,6 +34,9 @@ import java.io.IOException;
 @Slf4j
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json; charset=utf-8");
@@ -49,6 +53,6 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
         }
 
         log.error("Authentication Exception Handler for 401.", authException);
-        response.getWriter().write(new ObjectMapper().writeValueAsString(message));
+        response.getWriter().write(objectMapper.writeValueAsString(message));
     }
 }

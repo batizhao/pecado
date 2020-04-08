@@ -5,6 +5,7 @@ import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.domain.User;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 2020-02-11
  */
 public class UserApiTest extends BaseApiTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     public void givenUserName_whenFindUser_thenSuccess() throws Exception {
@@ -178,7 +182,7 @@ public class UserApiTest extends BaseApiTest {
                 .setPassword("123456");
 
         mvc.perform(post("/user")
-                .content(new ObjectMapper().writeValueAsString(requestBody))
+                .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
@@ -199,7 +203,7 @@ public class UserApiTest extends BaseApiTest {
         User requestBody = new User().setName("daxia").setEmail("daxia@gmail.com");
 
         mvc.perform(post("/user")
-                .content(new ObjectMapper().writeValueAsString(requestBody))
+                .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
@@ -234,7 +238,7 @@ public class UserApiTest extends BaseApiTest {
                 .setPassword("123456");
 
         mvc.perform(post("/user")
-                .content(new ObjectMapper().writeValueAsString(requestBody))
+                .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())

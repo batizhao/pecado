@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author batizhao
@@ -82,5 +82,5 @@ public class LogDTO implements Serializable {
      */
     @ApiModelProperty(value = "操作时间")
     @NotNull(message = "time is not blank")
-    private Date time;
+    private LocalDateTime time;
 }

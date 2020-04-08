@@ -9,7 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -51,7 +51,7 @@ public class UserVO implements Serializable {
      * @mock @datetime
      */
     @ApiModelProperty(value = "创建时间")
-    private Date time;
+    private LocalDateTime time;
 
     /**
      * 角色列表

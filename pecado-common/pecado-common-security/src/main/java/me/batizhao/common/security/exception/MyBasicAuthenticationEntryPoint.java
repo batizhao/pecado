@@ -5,6 +5,7 @@ import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.core.util.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,9 @@ import java.io.IOException;
 @Slf4j
 public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.addHeader("WWW-Authenticate", "Basic realm=\"" + getRealmName() + "\"");
@@ -36,7 +40,7 @@ public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoi
                 .setData(authException.getMessage());
 
         log.error("Basic Authentication Exception Handler for 401.", authException);
-        response.getWriter().write(new ObjectMapper().writeValueAsString(message));
+        response.getWriter().write(objectMapper.writeValueAsString(message));
     }
 
     @Override

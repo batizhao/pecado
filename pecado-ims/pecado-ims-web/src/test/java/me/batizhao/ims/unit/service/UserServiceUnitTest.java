@@ -16,8 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -185,7 +185,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         assertThat(bool, equalTo(true));
 
         user_test_data.setPassword(hashPass);
-        user_test_data.setTime(new Date());
+        user_test_data.setTime(LocalDateTime.now());
         log.info("user_test_data: {}", user_test_data);
 
         //这里注意 saveOrUpdate 是第三方的方法，所以用了 spy 对 UserService 做了个 mock

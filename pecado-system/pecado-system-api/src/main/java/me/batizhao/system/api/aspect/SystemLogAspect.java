@@ -28,6 +28,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -93,7 +94,7 @@ public class SystemLogAspect {
         logDTO.setClientId(getClientId());
         logDTO.setUsername(getUsername());
         logDTO.setUrl(request.getRequestURL().toString());
-        logDTO.setTime(new Date());
+        logDTO.setTime(LocalDateTime.now());
         return logDTO;
     }
 

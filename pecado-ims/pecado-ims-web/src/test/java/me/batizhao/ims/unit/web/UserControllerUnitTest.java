@@ -44,6 +44,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerUnitTest extends BaseControllerUnitTest {
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private MockMvc mvc;
 
     /**
@@ -163,7 +166,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .thenReturn(userList.get(0));
 
         mvc.perform(post("/user").with(csrf())
-                .content(new ObjectMapper().writeValueAsString(requestBody))
+                .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -183,7 +186,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .thenReturn(userList.get(1));
 
         mvc.perform(post("/user").with(csrf())
-                .content(new ObjectMapper().writeValueAsString(requestBody))
+                .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

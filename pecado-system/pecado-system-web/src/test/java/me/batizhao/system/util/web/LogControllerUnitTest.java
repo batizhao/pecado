@@ -2,7 +2,6 @@ package me.batizhao.system.util.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.domain.Log;
 import me.batizhao.system.service.LogService;
@@ -15,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,26 +34,26 @@ public class LogControllerUnitTest extends BaseControllerUnitTest {
 
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * 所有实现的接口都要 Mock
      */
     @MockBean
     private LogService logService;
-    @MockBean
-    private UserFeignService userFeignService;
 
     @Test
     @WithMockUser
     public void givenUserId_whenFindRole_thenRoleJsonArray() throws Exception {
         LogDTO logDTO = new LogDTO().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
                 .setClassName("me.batizhao.ims.web.RoleController").setClientId("client_app").setHttpRequestMethod("POST")
-                .setIp("127.0.0.1").setTime(new Date()).setUrl("http://localhost:5000/role").setUsername("test");
+                .setIp("127.0.0.1").setTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
         when(logService.save(any(Log.class))).thenReturn(true);
 
         mvc.perform(post("/log").with(csrf())
-                .content(new ObjectMapper().writeValueAsString(logDTO))
+                .content(objectMapper.writeValueAsString(logDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

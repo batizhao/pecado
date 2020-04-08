@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -74,7 +74,7 @@ public class UserServiceIml extends ServiceImpl<UserMapper, User> implements Use
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         String hashPass = bcryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(hashPass);
-        user.setTime(new Date());
+        user.setTime(LocalDateTime.now());
 
         if (user.getId() == null) {
             userMapper.insert(user);
