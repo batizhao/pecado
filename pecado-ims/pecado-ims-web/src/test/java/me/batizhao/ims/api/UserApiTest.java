@@ -52,7 +52,7 @@ public class UserApiTest extends BaseApiTest {
         mvc.perform(get("/user?username=xx")
                 .header(SecurityConstants.FROM, SecurityConstants.FROM_IN))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data[0]", containsString("个数必须在")));
@@ -93,7 +93,7 @@ public class UserApiTest extends BaseApiTest {
     public void givenUserNameButNoInnerHeader_whenFindUser_thenNull() throws Exception {
         mvc.perform(get("/user?username=bob"))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isInternalServerError())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.UNKNOWN_ERROR.getCode()))
                 .andExpect(jsonPath("$.data", containsString("from header")));
@@ -207,7 +207,7 @@ public class UserApiTest extends BaseApiTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data[0]", containsString("is not blank")));
@@ -224,7 +224,7 @@ public class UserApiTest extends BaseApiTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Required request body is missing")));
@@ -270,7 +270,7 @@ public class UserApiTest extends BaseApiTest {
         mvc.perform(delete("/user/{id}", -1000L)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data[0]", containsString("最小不能小于")));
@@ -286,7 +286,7 @@ public class UserApiTest extends BaseApiTest {
         mvc.perform(delete("/user/{id}", "xxxx")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Failed to convert value of type")));
@@ -308,7 +308,7 @@ public class UserApiTest extends BaseApiTest {
         mvc.perform(put("/user/{id}", 3L)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isMethodNotAllowed())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Request method 'PUT' not supported")));

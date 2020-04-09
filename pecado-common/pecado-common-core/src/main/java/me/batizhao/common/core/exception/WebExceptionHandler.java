@@ -4,12 +4,18 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
@@ -21,39 +27,12 @@ import java.util.stream.Collectors;
  */
 @RestControllerAdvice
 @Slf4j
-//@ResponseStatus(HttpStatus.OK)
 public class WebExceptionHandler {
 
-    /**
-     * Request Body
-     * @param e HttpMessageNotReadableException
-     * @return ResponseInfo<String>
-     */
     @ExceptionHandler
-    public ResponseInfo<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        log.error("Http Message Not Readable Exception!", e);
-        return new ResponseInfo<String>().setCode(ResultEnum.PARAMETER_INVALID.getCode())
-                .setMessage(ResultEnum.PARAMETER_INVALID.getMessage())
-                .setData(e.getMessage());
-    }
-
-    @ExceptionHandler
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ResponseInfo<String> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("Http Request Method Not Supported Exception!", e);
-        return new ResponseInfo<String>().setCode(ResultEnum.PARAMETER_INVALID.getCode())
-                .setMessage(ResultEnum.PARAMETER_INVALID.getMessage())
-                .setData(e.getMessage());
-    }
-
-    /**
-     * RequestParam Exception
-     *
-     * @param e MissingServletRequestParameterException
-     * @return ResponseInfo<String>
-     */
-    @ExceptionHandler
-    public ResponseInfo<String> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
-        log.error("Missing Servlet Request Parameter Exception!", e);
         return new ResponseInfo<String>().setCode(ResultEnum.PARAMETER_INVALID.getCode())
                 .setMessage(ResultEnum.PARAMETER_INVALID.getMessage())
                 .setData(e.getMessage());
@@ -66,6 +45,7 @@ public class WebExceptionHandler {
      * @return ResponseInfo<List<String>>
      */
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseInfo<List<String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         //Get all errors
         List<String> errors = e.getBindingResult()
@@ -87,6 +67,7 @@ public class WebExceptionHandler {
      * @return ResponseInfo<List<String>>
      */
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseInfo<List<String>> handleConstraintViolationException(ConstraintViolationException e) {
         //Get all errors
         List<String> errors = e.getConstraintViolations()
@@ -100,14 +81,27 @@ public class WebExceptionHandler {
                 .setData(errors);
     }
 
-    @ExceptionHandler
-    public ResponseInfo<String> handleTypeMismatchException(TypeMismatchException e) {
-        log.error("TypeMismatchException!", e);
+    /**
+     * 处理 400 异常
+     * @param e
+     * @return ResponseInfo<String>
+     */
+    @ExceptionHandler({BindException.class, TypeMismatchException.class, HttpMessageNotWritableException.class,
+            MissingServletRequestPartException.class, HttpMessageNotReadableException.class, MissingServletRequestParameterException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseInfo<String> handleBadRequestException(Exception e) {
+        log.error("BadRequestException!", e);
         return new ResponseInfo<String>().setCode(ResultEnum.PARAMETER_INVALID.getCode())
                 .setMessage(ResultEnum.PARAMETER_INVALID.getMessage())
                 .setData(e.getMessage());
     }
 
+    /**
+     * 找不到记录异常。
+     * 和 404 共用一个返回消息，但返回状态码是 200。
+     * @param e NotFoundException
+     * @return ResponseInfo<String>
+     */
     @ExceptionHandler
     public ResponseInfo<String> handleNotFoundException(NotFoundException e) {
         log.error("NotFoundException!", e);
@@ -118,14 +112,17 @@ public class WebExceptionHandler {
 
     /**
      * 默认异常处理
-     * 这里注意没有捕获全部异常
-     * 因为 AccessDeniedException，这里会优先捕获，使自定义的 accessDeniedHandler 无效，造成返回错误消息
+     * 特殊处理，这里会优先捕获 AccessDeniedException，造成 accessDeniedHandler 无效，造成返回错误消息
      *
      * @param e Exception
      * @return ResponseInfo<String>
      */
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler
+    @ResponseStatus
     public ResponseInfo<String> handleDefault(Exception e) {
+        if (e instanceof AccessDeniedException) {
+            throw new AccessDeniedException(e.getMessage());
+        }
         log.error("Default Exception!", e);
         return ResponseInfo.failed(e.getMessage());
     }

@@ -31,7 +31,6 @@ public class ErrorHandler implements ErrorController {
     }
 
     @GetMapping(ERROR_PATH)
-//    @ResponseStatus(HttpStatus.OK)
     public ResponseInfo<String> handleError(HttpServletRequest request) {
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         String requestUri = (String) request.getAttribute("javax.servlet.error.request_uri");
