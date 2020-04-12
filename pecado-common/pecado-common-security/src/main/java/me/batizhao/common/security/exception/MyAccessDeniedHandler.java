@@ -5,6 +5,7 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.core.util.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        response.setContentType("application/json; charset=utf-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
         ResponseInfo<String> message = new ResponseInfo<String>().setCode(ResultEnum.PERMISSION_FORBIDDEN_ERROR.getCode())

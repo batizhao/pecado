@@ -5,6 +5,7 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.core.util.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -39,7 +40,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.setContentType("application/json; charset=utf-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         ResponseInfo<String> message = new ResponseInfo<String>().setCode(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getCode())
