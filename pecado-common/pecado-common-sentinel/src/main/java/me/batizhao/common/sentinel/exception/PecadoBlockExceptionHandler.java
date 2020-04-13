@@ -1,4 +1,4 @@
-package me.batizhao.common.core.exception;
+package me.batizhao.common.sentinel.exception;
 
 import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
@@ -7,9 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author batizhao
  * @since 2020-04-12
  **/
-@Component
 @Slf4j
 public class PecadoBlockExceptionHandler implements BlockExceptionHandler {
 
@@ -28,7 +28,6 @@ public class PecadoBlockExceptionHandler implements BlockExceptionHandler {
     private ObjectMapper objectMapper;
 
     @Override
-
     public void handle(HttpServletRequest request, HttpServletResponse response, BlockException e) throws Exception {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
