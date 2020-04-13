@@ -1,4 +1,4 @@
-package me.batizhao.common.security.exception;
+package me.batizhao.uaa.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.SecurityConstants;
