@@ -16,18 +16,17 @@
 
 package me.batizhao.common.security.component;
 
-import me.batizhao.common.core.constant.SecurityConstants;
-import me.batizhao.common.security.annotation.Inner;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.constant.SecurityConstants;
+import me.batizhao.common.security.annotation.Inner;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.Ordered;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,11 +47,11 @@ public class PecadoSecurityInnerAspect implements Ordered {
     @Around("@annotation(inner)")
     public Object around(ProceedingJoinPoint point, Inner inner) {
         String header = request.getHeader(SecurityConstants.FROM);
-        if (StringUtils.isEmpty(header)) {
-            log.error("访问接口 {} 需要 from header 参数", point.getSignature().getName());
-            throw new NullPointerException("缺少 from header 参数");
-        }
-        if (inner.value() && !header.equals(SecurityConstants.FROM_IN)) {
+//        if (StringUtils.isEmpty(header)) {
+//            log.error("访问接口 {} 需要 from header 参数", point.getSignature().getName());
+//            throw new NullPointerException("缺少 from header 参数");
+//        }
+        if (inner.value() && !(SecurityConstants.FROM_IN).equals(header)) {
             log.warn("访问接口 {} 没有权限", point.getSignature().getName());
             throw new AccessDeniedException("Access is denied");
         }

@@ -26,6 +26,7 @@ public enum ResultEnum {
     OAUTH2_TOKEN_INVALID(100003, "访问令牌不合法！"),
     PERMISSION_UNAUTHORIZED_ERROR(100004, "认证失败！"),
     PERMISSION_FORBIDDEN_ERROR(100005, "权限不足！"),
+    GATEWAY_ERROR(10008, "网关异常！"),
     TOO_MANY_REQUEST(10009, "您的请求被限流了！"),
     RESOURCE_NOT_FOUND(100010, "没有找到相关资源！"),
 
