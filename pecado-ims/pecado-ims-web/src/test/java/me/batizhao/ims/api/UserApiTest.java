@@ -93,10 +93,10 @@ public class UserApiTest extends BaseApiTest {
     public void givenUserNameButNoInnerHeader_whenFindUser_thenNull() throws Exception {
         mvc.perform(get("/user?username=bob"))
                 .andDo(print())
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.UNKNOWN_ERROR.getCode()))
-                .andExpect(jsonPath("$.data", containsString("from header")));
+                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
+                .andExpect(jsonPath("$.data", containsString("Full authentication is required")));
     }
 
     @Test
