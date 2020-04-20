@@ -28,6 +28,6 @@ public class PermitAllUrlTest extends BaseApiTest {
         List<String> ants = permitAllUrlProperties.getAnt().getUrls();
         log.info("ant path: {}", ants);
         assertThat(ants.size(), is(3));
-        assertThat(ants, hasItems("/log/**", "/v2/api-docs"));
+        assertThat(ants, hasItems("/log", "/actuator/**", "/v2/api-docs"));
     }
 }
