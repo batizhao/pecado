@@ -1,5 +1,7 @@
 package me.baitzhao.gateway.exception;
 
+import com.alibaba.csp.sentinel.slots.block.BlockException;
+import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
@@ -24,6 +26,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
  * @author batizhao
  * @since 2020-04-14
  **/
+@Slf4j
 public class GatewayExceptionHandler extends DefaultErrorWebExceptionHandler {
 
     public GatewayExceptionHandler(ErrorAttributes errorAttributes, ResourceProperties resourceProperties, ErrorProperties errorProperties, ApplicationContext applicationContext) {
@@ -48,15 +51,24 @@ public class GatewayExceptionHandler extends DefaultErrorWebExceptionHandler {
 
     @Override
     protected Map<String, Object> getErrorAttributes(ServerRequest request, boolean includeStackTrace) {
-        ResponseStatusException error = (ResponseStatusException) super.getError(request);
+        Throwable throwable = super.getError(request);
 
-        int data = error.getStatus().value();
+        //所有网关异常都返回这个 code
         Integer code = ResultEnum.GATEWAY_ERROR.getCode();
-        String message = error.getMessage();
+        //这里 data 是 HTTP 状态码
+        int data = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        String message = ResultEnum.GATEWAY_ERROR.getMessage();
 
-        if (data == HttpStatus.NOT_FOUND.value()) {
-            code = ResultEnum.RESOURCE_NOT_FOUND.getCode();
+        if(throwable instanceof BlockException) {
+            data = HttpStatus.TOO_MANY_REQUESTS.value();
+            message = ResultEnum.TOO_MANY_REQUEST.getMessage();
+        } else if (throwable instanceof ResponseStatusException) {
+            ResponseStatusException responseStatusException = (ResponseStatusException) throwable;
+            data = responseStatusException.getStatus().value();
+            message = responseStatusException.getMessage();
         }
+
+        log.error("Gateway Exception", throwable);
 
         Map<String, Object> errorAttributes = new LinkedHashMap<>();
         errorAttributes.put("code", code);

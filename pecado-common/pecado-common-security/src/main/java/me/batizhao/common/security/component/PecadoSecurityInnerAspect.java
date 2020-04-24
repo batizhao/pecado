@@ -47,10 +47,6 @@ public class PecadoSecurityInnerAspect implements Ordered {
     @Around("@annotation(inner)")
     public Object around(ProceedingJoinPoint point, Inner inner) {
         String header = request.getHeader(SecurityConstants.FROM);
-//        if (StringUtils.isEmpty(header)) {
-//            log.error("访问接口 {} 需要 from header 参数", point.getSignature().getName());
-//            throw new NullPointerException("缺少 from header 参数");
-//        }
         if (inner.value() && !(SecurityConstants.FROM_IN).equals(header)) {
             log.warn("访问接口 {} 没有权限", point.getSignature().getName());
             throw new AccessDeniedException("Access is denied");

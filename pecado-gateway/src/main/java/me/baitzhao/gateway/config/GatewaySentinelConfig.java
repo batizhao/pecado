@@ -14,12 +14,13 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 /**
  * 自定义 Sentinel 限流异常
+ * 这个配置在 @code {GatewayExceptionHandler} 打开情况下无效
  *
  * @author batizhao
  * @since 2020-04-13
  **/
-@Configuration
-@ConditionalOnProperty("spring.cloud.sentinel.transport.dashboard")
+//@Configuration
+//@ConditionalOnProperty("spring.cloud.sentinel.transport.dashboard")
 @Slf4j
 public class GatewaySentinelConfig {
 
