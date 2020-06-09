@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.annotation.Inner;
+import me.batizhao.common.security.util.SecurityUtils;
+import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
@@ -13,9 +15,7 @@ import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -143,23 +143,17 @@ public class UserController {
     }
 
     /**
-     * 我是谁
-     * 从认证信息中提取当前用户
+     * 我的信息
      *
-     * @param authentication Spring Security Authentication
-     * @return 用户名
+     * @return 当前用户基本信息、角色、权限清单
      */
-    @ApiOperation(value = "我是谁")
-    @GetMapping("/whoiam")
+    @ApiOperation(value = "我的信息")
+    @GetMapping("/info")
     @SystemLog
-    public ResponseInfo<String> getCurrentUser(Authentication authentication,
-                                               @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authHeader) {
-        log.info("authHeader: {}", authHeader);
-        String access_token = authHeader.substring("Bearer ".length());
-        log.info("access token: {}", access_token);
-
-        String username = authentication.getName();
-        return ResponseInfo.ok(username);
+    public ResponseInfo<UserInfoVO> getUserInfo() {
+        String username = SecurityUtils.getUser().getUsername();
+        UserInfoVO userInfoVO = userService.getUserInfo(username);
+        return ResponseInfo.ok(userInfoVO);
     }
 
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
+import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
@@ -86,5 +87,10 @@ public class UserServiceIml extends ServiceImpl<UserMapper, User> implements Use
         BeanUtils.copyProperties(user, userVO);
 
         return userVO;
+    }
+
+    @Override
+    public UserInfoVO getUserInfo(String username) {
+        return null;
     }
 }

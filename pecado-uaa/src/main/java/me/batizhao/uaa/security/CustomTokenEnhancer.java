@@ -1,5 +1,6 @@
 package me.batizhao.uaa.security;
 
+import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -21,6 +22,8 @@ public class CustomTokenEnhancer implements TokenEnhancer {
         Map<String, Object> additionalInfo = new HashMap<>();
         User user = (User) authentication.getUserAuthentication().getPrincipal();
         additionalInfo.put("username", user.getUsername());
+        additionalInfo.put("code", ResultEnum.SUCCESS.getCode());
+        additionalInfo.put("message", ResultEnum.SUCCESS.getMessage());
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
         return accessToken;
     }

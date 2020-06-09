@@ -1,6 +1,7 @@
 package me.batizhao.ims.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 
@@ -23,4 +24,6 @@ public interface UserService extends IService<User> {
 	int deleteByUsername(String username);
 
 	UserVO saveOrUpdate4me(User user);
+
+    UserInfoVO getUserInfo(String username);
 }
