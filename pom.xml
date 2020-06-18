@@ -32,10 +32,10 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+		<spring-boot.version>2.3.0.RELEASE</spring-boot.version>
 		<spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
-		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
-		<spring-cloud-contract.version>2.2.2.RELEASE</spring-cloud-contract.version>
+		<spring-cloud.version>Hoxton.SR5</spring-cloud.version>
+		<spring-cloud-contract.version>2.2.3.RELEASE</spring-cloud-contract.version>
 
 		<swagger.version>2.9.2</swagger.version>
 		<mybatis-plus.version>3.3.1</mybatis-plus.version>
