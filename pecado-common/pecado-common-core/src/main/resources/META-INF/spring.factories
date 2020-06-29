@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  me.batizhao.common.core.PecadoCoreAutoConfiguration
+  me.batizhao.common.core.config.JacksonConfiguration
