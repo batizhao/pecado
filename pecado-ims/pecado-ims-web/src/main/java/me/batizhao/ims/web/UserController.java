@@ -151,7 +151,7 @@ public class UserController {
     @GetMapping("/info")
     @SystemLog
     public ResponseInfo<UserInfoVO> getUserInfo() {
-        String username = SecurityUtils.getUser().getUsername();
+        String username = SecurityUtils.getUser();
         UserInfoVO userInfoVO = userService.getUserInfo(username);
         return ResponseInfo.ok(userInfoVO);
     }

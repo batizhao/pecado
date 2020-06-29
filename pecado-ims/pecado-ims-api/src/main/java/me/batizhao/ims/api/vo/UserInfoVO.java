@@ -1,7 +1,9 @@
 package me.batizhao.ims.api.vo;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -10,6 +12,8 @@ import java.io.Serializable;
  * @since 2020-05-09
  **/
 @Data
+@Accessors(chain = true)
+@ApiModel(description = "用户信息")
 public class UserInfoVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

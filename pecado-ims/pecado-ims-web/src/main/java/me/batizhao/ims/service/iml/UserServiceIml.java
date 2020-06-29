@@ -91,6 +91,14 @@ public class UserServiceIml extends ServiceImpl<UserMapper, User> implements Use
 
     @Override
     public UserInfoVO getUserInfo(String username) {
-        return null;
+        User user = userMapper.selectOne(Wrappers.<User>query().lambda().eq(User::getUsername, username));
+
+        if(user == null) {
+            throw new NotFoundException(String.format("没有该用户 '%s'。", username));
+        }
+
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return new UserInfoVO().setUserVO(userVO);
     }
 }

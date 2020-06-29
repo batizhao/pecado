@@ -41,18 +41,15 @@ public class SecurityUtils {
 	/**
 	 * 获取用户
 	 */
-	public User getUser(Authentication authentication) {
+	public String getUser(Authentication authentication) {
 		Object principal = authentication.getPrincipal();
-		if (principal instanceof User) {
-			return (User) principal;
-		}
-		return null;
+		return principal.toString();
 	}
 
 	/**
 	 * 获取用户
 	 */
-	public User getUser() {
+	public String getUser() {
 		Authentication authentication = getAuthentication();
 		if (authentication == null) {
 			return null;
