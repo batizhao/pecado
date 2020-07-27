@@ -99,6 +99,9 @@ public class UserServiceIml extends ServiceImpl<UserMapper, User> implements Use
 
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
-        return new UserInfoVO().setUserVO(userVO);
+
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setUserVO(userVO);
+        return userInfoVO;
     }
 }

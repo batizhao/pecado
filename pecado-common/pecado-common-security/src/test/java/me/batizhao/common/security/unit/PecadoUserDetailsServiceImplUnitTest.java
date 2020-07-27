@@ -1,4 +1,4 @@
-package me.batizhao.uaa.unit;
+package me.batizhao.common.security.unit;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
@@ -6,12 +6,16 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.uaa.security.MyUserDetailsServiceImpl;
+import me.batizhao.common.security.component.PecadoUserDetailsServiceImpl;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,10 +31,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
-
 /**
  * @author batizhao
  * @since 2020-02-29
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @Slf4j
 @Tag("unit")
-public class MyUserDetailsServiceImplUnitTest {
+public class PecadoUserDetailsServiceImplUnitTest {
 
     @MockBean
     private UserFeignService userFeignService;
@@ -47,7 +47,7 @@ public class MyUserDetailsServiceImplUnitTest {
     static class TestContextConfiguration {
         @Bean
         public UserDetailsService userDetailsService() {
-            return new MyUserDetailsServiceImpl();
+            return new PecadoUserDetailsServiceImpl();
         }
     }
 
@@ -74,31 +74,31 @@ public class MyUserDetailsServiceImplUnitTest {
 
         ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok(user_test_data);
 
-        when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
+        Mockito.when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         log.debug("userDetails: {}", userDetails);
-        assertThat(userDetails.getUsername(), equalTo(username));
+        MatcherAssert.assertThat(userDetails.getUsername(), Matchers.equalTo(username));
 
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         log.debug("authorities: {}", authorities);
-        assertThat(authorities, hasSize(2));
+        MatcherAssert.assertThat(authorities, Matchers.hasSize(2));
 
         List<String> list = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        assertThat(list, hasItems("admin", "common"));
+        MatcherAssert.assertThat(list, Matchers.hasItems("admin", "common"));
     }
 
     @Test
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
         ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok();
 
-        doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(anyString(), anyString());
+        Mockito.doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
 
         Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
 
-        verify(userFeignService).loadUserByUsername(anyString(), anyString());
+        Mockito.verify(userFeignService).loadUserByUsername(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
     }
 
     @Test
@@ -111,18 +111,18 @@ public class MyUserDetailsServiceImplUnitTest {
 
         ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok(user_test_data);
 
-        when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
+        Mockito.when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        verify(userFeignService).loadUserByUsername(anyString(), anyString());
+        Mockito.verify(userFeignService).loadUserByUsername(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
 
         log.debug("userDetails: {}", userDetails);
-        assertThat(userDetails.getUsername(), equalTo(username));
+        MatcherAssert.assertThat(userDetails.getUsername(), Matchers.equalTo(username));
 
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         log.debug("authorities: {}", authorities);
-        assertThat(authorities, hasSize(0));
+        MatcherAssert.assertThat(authorities, Matchers.hasSize(0));
     }
 }

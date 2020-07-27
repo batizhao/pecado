@@ -4,24 +4,53 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet author="batizhao" id="InsertTablePermission-20200225-001">
-        <insert tableName="permission">
+    <changeSet author="batizhao" id="InsertTableMenu-20200225-001">
+        <insert tableName="menu">
             <column name="id" valueNumeric="1"/>
-            <column name="url" value="/user/common"/>
-            <column name="name" value="common"/>
+            <column name="path" value="/dashboard"/>
+            <column name="name" value="工作台"/>
+            <column name="permission" value="user_dashboard"/>
             <column name="description"/>
             <column name="pid" valueNumeric="0"/>
         </insert>
-        <insert tableName="permission">
-            <column name="id" valueNumeric="2"/>
-            <column name="url" value="/user/admin"/>
-            <column name="name" value="admin"/>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1000"/>
+            <column name="path" value="/ims"/>
+            <column name="name" value="权限管理"/>
+            <column name="permission" value="ims_root"/>
             <column name="description"/>
             <column name="pid" valueNumeric="0"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1100"/>
+            <column name="path" value="/ims/user"/>
+            <column name="name" value="用户管理"/>
+            <column name="permission" value="ims_user_admin"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="1000"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1101"/>
+            <column name="path" value="/ims/user/add"/>
+            <column name="name" value="添加用户"/>
+            <column name="permission" value="ims_user_add"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="1100"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1102"/>
+            <column name="path" value="/ims/user/edit"/>
+            <column name="name" value="编辑用户"/>
+            <column name="permission" value="ims_user_edit"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="1100"/>
         </insert>
         <rollback>
-            delete from permission where id = 1;
-            delete from permission where id = 2;
+            delete from menu where id = 1;
+            delete from menu where id = 1000;
+            delete from menu where id = 1100;
+            delete from menu where id = 1101;
+            delete from menu where id = 1102;
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableRole-20200225-002">
@@ -38,23 +67,38 @@
             delete from role where id = 2;
         </rollback>
     </changeSet>
-    <changeSet author="batizhao" id="InsertTableRolePermission-20200225-003">
-        <insert tableName="role_permission">
+    <changeSet author="batizhao" id="InsertTableRoleMenu-20200225-003">
+        <insert tableName="role_menu">
             <column name="role_id" valueNumeric="1"/>
-            <column name="permission_id" valueNumeric="1"/>
+            <column name="menu_id" valueNumeric="1"/>
         </insert>
-        <insert tableName="role_permission">
+        <insert tableName="role_menu">
             <column name="role_id" valueNumeric="2"/>
-            <column name="permission_id" valueNumeric="1"/>
+            <column name="menu_id" valueNumeric="1"/>
         </insert>
-        <insert tableName="role_permission">
+        <insert tableName="role_menu">
             <column name="role_id" valueNumeric="2"/>
-            <column name="permission_id" valueNumeric="2"/>
+            <column name="menu_id" valueNumeric="1000"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="role_id" valueNumeric="2"/>
+            <column name="menu_id" valueNumeric="1100"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="role_id" valueNumeric="2"/>
+            <column name="menu_id" valueNumeric="1101"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="role_id" valueNumeric="2"/>
+            <column name="menu_id" valueNumeric="1102"/>
         </insert>
         <rollback>
-            delete from role_permission where role_id = 1 and permission_id = 1;
-            delete from role_permission where role_id = 2 and permission_id = 1;
-            delete from role_permission where role_id = 2 and permission_id = 2;
+            delete from role_menu where role_id = 1 and menu_id = 1;
+            delete from role_menu where role_id = 2 and menu_id = 1;
+            delete from role_menu where role_id = 2 and menu_id = 1000;
+            delete from role_menu where role_id = 2 and menu_id = 1100;
+            delete from role_menu where role_id = 2 and menu_id = 1101;
+            delete from role_menu where role_id = 2 and menu_id = 1102;
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableUser-20200225-004">

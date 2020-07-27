@@ -1,10 +1,10 @@
-package me.batizhao.uaa.security;
+package me.batizhao.common.security.component;
 
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.api.feign.UserFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +23,7 @@ import java.util.Set;
  * @since 2020-02-29
  */
 @Component
-public class MyUserDetailsServiceImpl implements UserDetailsService {
+public class PecadoUserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserFeignService userFeignService;
@@ -41,8 +41,8 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
         Set<GrantedAuthority> authorities = new HashSet<>();
         roles.forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getName())));
 
-        return new org.springframework.security.core.userdetails.User(
-                username, user.getPassword(),
+        //TODO: The second param to user.getDeptId
+        return new PecadoUser(user.getId(), user.getId(), user.getUsername(), user.getPassword(),
                 true,
                 true,
                 true,

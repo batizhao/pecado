@@ -4,16 +4,26 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet author="batizhao" id="CreateTablePermission-20200225-001">
-        <createTable tableName="permission" remarks="权限表">
+    <changeSet author="batizhao" id="CreateTableMenu-20200225-001">
+        <createTable tableName="menu" remarks="权限表">
             <column autoIncrement="true" name="id" type="BIGINT" remarks="权限ID,主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="url" type="VARCHAR(255)" remarks="权限URL">
+            <column name="path" type="VARCHAR(255)" remarks="路径">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(255)" remarks="权限名">
+            <column name="name" type="VARCHAR(255)" remarks="菜单名">
                 <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="permission" type="VARCHAR(255)" remarks="权限名">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="icon" type="VARCHAR(32)" remarks="图标"/>
+            <column name="type" type="CHAR(1)" defaultValue="0" remarks="类型（0菜单 1按钮）">
+                <constraints nullable="false" />
+            </column>
+            <column name="sort" type="INT" defaultValue="1" remarks="排序">
+                <constraints nullable="false" />
             </column>
             <column name="description" type="VARCHAR(255)" remarks="权限描述"/>
             <column name="pid" type="BIGINT" remarks="权限父ID">
@@ -21,7 +31,7 @@
             </column>
         </createTable>
         <rollback>
-            <dropTable tableName="permission"/>
+            <dropTable tableName="menu"/>
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="CreateTableRole-20200225-002">
@@ -37,17 +47,17 @@
             <dropTable tableName="role"/>
         </rollback>
     </changeSet>
-    <changeSet author="batizhao" id="CreateTableRolePermission-20200225-003">
-        <createTable tableName="role_permission" remarks="角色权限关联表">
+    <changeSet author="batizhao" id="CreateTableRoleMenu-20200225-003">
+        <createTable tableName="role_menu" remarks="角色权限关联表">
             <column name="role_id" type="BIGINT" remarks="角色ID">
                 <constraints nullable="false"/>
             </column>
-            <column name="permission_id" type="BIGINT" remarks="权限ID">
+            <column name="menu_id" type="BIGINT" remarks="权限ID">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <rollback>
-            <dropTable tableName="role_permission"/>
+            <dropTable tableName="role_menu"/>
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="CreateTableUser-20200225-004">

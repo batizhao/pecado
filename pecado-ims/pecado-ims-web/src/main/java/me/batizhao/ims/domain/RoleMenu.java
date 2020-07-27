@@ -11,17 +11,17 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-public class RolePermission {
+public class RoleMenu {
 
     private Long roleId;
 
-    private Long permissionId;
+    private Long menuId;
 
-    private String url;
+    private String path;
     private String roleName;
 
-    public RolePermission(String url, String roleName) {
-        this.url = url;
+    public RoleMenu(String path, String roleName) {
+        this.path = path;
         this.roleName = roleName;
     }
 }

@@ -1,11 +1,11 @@
 package me.batizhao.uaa.config;
 
+import me.batizhao.common.security.component.PecadoUserDetailsServiceImpl;
 import me.batizhao.uaa.security.CustomTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private PecadoUserDetailsServiceImpl userDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -45,8 +45,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         tokenEnhancerChain.setTokenEnhancers(
                 Arrays.asList(tokenEnhancer(), jwtAccessTokenConverter()));
 
-        endpoints.tokenEnhancer(tokenEnhancerChain)
+        endpoints
                 .authenticationManager(authenticationManager)
+                .tokenEnhancer(tokenEnhancerChain)
+                .accessTokenConverter(jwtAccessTokenConverter())
                 .tokenStore(tokenStore())
                 .userDetailsService(userDetailsService)
                 .exceptionTranslator(webResponseExceptionTranslator);
@@ -86,7 +88,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     public TokenStore tokenStore() {
-//        return new ManageableJwtTokenStore(jwtAccessTokenConverter());
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
@@ -94,9 +95,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
         accessTokenConverter.setSigningKey("123");
-//        KeyPair keyPair = new KeyStoreKeyFactory(new ClassPathResource("keystore.jks"), "poseidon".toCharArray())
-//                .getKeyPair("isoftone");
-//        accessTokenConverter.setKeyPair(keyPair);
+//        accessTokenConverter.setAccessTokenConverter(authExtractor());
         return accessTokenConverter;
     }
 
@@ -104,4 +103,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public TokenEnhancer tokenEnhancer() {
         return new CustomTokenEnhancer();
     }
+
+//    @Bean
+//    public DefaultAccessTokenConverter authExtractor() {
+//        return new DefaultAccessTokenConverter() {
+//            @Override
+//            public OAuth2Authentication extractAuthentication(Map<String, ?> claims) {
+//                OAuth2Authentication authentication = super.extractAuthentication(claims);
+//                authentication.setDetails(claims);
+//                return authentication;
+//            }
+//        };
+//    }
 }

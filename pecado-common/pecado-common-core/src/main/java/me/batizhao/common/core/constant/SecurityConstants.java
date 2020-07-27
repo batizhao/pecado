@@ -41,4 +41,19 @@ public class SecurityConstants {
 	 * 资源服务器默认bean名称
 	 */
 	public static final String RESOURCE_SERVER_CONFIGURER = "resourceServerConfigurerAdapter";
+
+	/**
+	 * 用户ID字段
+	 */
+	public static final String DETAILS_USER_ID = "user_id";
+
+	/**
+	 * 用户名字段
+	 */
+	public static final String DETAILS_USERNAME = "username";
+
+	/**
+	 * 用户部门字段
+	 */
+	public static final String DETAILS_DEPT_ID = "dept_id";
 }

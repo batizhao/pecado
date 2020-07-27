@@ -19,24 +19,38 @@ import javax.validation.constraints.NotBlank;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "权限类")
-public class Permission {
+@ApiModel(description = "菜单类")
+public class Menu {
 
-    @ApiModelProperty(value = "权限ID", example = "100")
+    @ApiModelProperty(value = "菜单ID", example = "100")
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "权限URL", example = "/user/common")
-    @NotBlank(message = "url is not blank")
-    private String url;
+    @ApiModelProperty(value = "路径", example = "/user/common")
+    @NotBlank(message = "path is not blank")
+    private String path;
 
-    @ApiModelProperty(value = "权限名", example = "common")
+    @ApiModelProperty(value = "菜单名", example = "权限管理")
     @NotBlank(message = "name is not blank")
     private String name;
+
+    @ApiModelProperty(value = "权限名", example = "ims_root")
+    @NotBlank(message = "permission is not blank")
+    private String permission;
 
     @ApiModelProperty(value = "权限说明", example = "This is admin permission")
     private String description;
 
     @ApiModelProperty(value = "权限父ID", example = "100")
+    @NotBlank(message = "pid is not blank")
     private Long pid;
+
+    @ApiModelProperty(value = "图标", example = "icon-web")
+    private String icon;
+
+    @ApiModelProperty(value = "类型（0菜单 1按钮）", example = "0")
+    private String type;
+
+    @ApiModelProperty(value = "排序", example = "1")
+    private Integer sort;
 }

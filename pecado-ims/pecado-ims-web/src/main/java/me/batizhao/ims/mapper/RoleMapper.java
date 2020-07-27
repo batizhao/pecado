@@ -2,7 +2,7 @@ package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import me.batizhao.ims.domain.Role;
-import me.batizhao.ims.domain.RolePermission;
+import me.batizhao.ims.domain.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -29,6 +29,6 @@ public interface RoleMapper extends BaseMapper<Role> {
      *
      * @return
      */
-    @Select("SELECT A.NAME AS roleName,C.url FROM role AS A LEFT JOIN role_permission B ON A.id=B.role_id LEFT JOIN permission AS C ON B.permission_id=C.id")
-    List<RolePermission> findRolePermissions();
+    @Select("SELECT A.NAME AS roleName,C.path FROM role AS A LEFT JOIN role_menu B ON A.id=B.role_id LEFT JOIN menu AS C ON B.menu_id=C.id")
+    List<RoleMenu> findRoleMenus();
 }

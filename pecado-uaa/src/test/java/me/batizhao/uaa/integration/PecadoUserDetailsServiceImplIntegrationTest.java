@@ -1,11 +1,11 @@
 package me.batizhao.uaa.integration;
 
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.security.component.PecadoUser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
  * @since 2020-02-29
  */
 @Slf4j
-public class MyUserDetailsServiceImplIntegrationTest extends BaseIntegrationTest {
+public class PecadoUserDetailsServiceImplIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -29,13 +29,13 @@ public class MyUserDetailsServiceImplIntegrationTest extends BaseIntegrationTest
     @Test
     public void givenUserName_whenFindUser_thenSuccess() {
         String username = "admin";
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        PecadoUser user = (PecadoUser) userDetailsService.loadUserByUsername(username);
 
-        log.debug("userDetails: {}", userDetails);
-        assertThat(userDetails.getUsername(), equalTo(username));
+        log.info("user: {}", user);
+        assertThat(user.getUsername(), equalTo(username));
 
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        log.debug("authorities: {}", authorities);
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+        log.info("authorities: {}", authorities);
         assertThat(authorities, hasSize(2));
 
         List<String> list = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());

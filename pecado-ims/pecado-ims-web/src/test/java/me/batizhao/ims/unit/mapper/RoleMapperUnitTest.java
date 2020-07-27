@@ -2,7 +2,7 @@ package me.batizhao.ims.unit.mapper;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.ims.domain.Role;
-import me.batizhao.ims.domain.RolePermission;
+import me.batizhao.ims.domain.RoleMenu;
 import me.batizhao.ims.mapper.RoleMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +31,16 @@ public class RoleMapperUnitTest extends BaseMapperUnitTest {
     }
 
     @Test
-    public void testFindRolePermissions() {
-        List<RolePermission> rolePermissions = roleMapper.findRolePermissions();
+    public void testFindRoleMenus() {
+        List<RoleMenu> roleMenus = roleMapper.findRoleMenus();
 
-        log.info("rolePermissions: {}", rolePermissions);
+        log.info("rolePermissions: {}", roleMenus);
 
-        assertThat(rolePermissions, hasItem(allOf(hasProperty("roleName", is("ROLE_USER")),
-                hasProperty("url", is("/user/common")))));
+        assertThat(roleMenus, hasItem(allOf(hasProperty("roleName", is("ROLE_USER")),
+                hasProperty("path", is("/dashboard")))));
 
-        assertThat(rolePermissions, hasItem(allOf(hasProperty("roleName", is("ROLE_ADMIN")),
-                hasProperty("url", is("/user/admin")))));
+        assertThat(roleMenus, hasItem(allOf(hasProperty("roleName", is("ROLE_ADMIN")),
+                hasProperty("path", is("/ims")))));
     }
 
 }
