@@ -6,7 +6,7 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.common.security.component.PecadoUserDetailsServiceImpl;
+import me.batizhao.common.security.component.PecadoUserDetailsService;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @ExtendWith(SpringExtension.class)
 @Slf4j
 @Tag("unit")
-public class PecadoUserDetailsServiceImplUnitTest {
+public class PecadoUserDetailsServiceUnitTest {
 
     @MockBean
     private UserFeignService userFeignService;
@@ -47,7 +47,7 @@ public class PecadoUserDetailsServiceImplUnitTest {
     static class TestContextConfiguration {
         @Bean
         public UserDetailsService userDetailsService() {
-            return new PecadoUserDetailsServiceImpl();
+            return new PecadoUserDetailsService();
         }
     }
 

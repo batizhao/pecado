@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
  * @since 2020-02-29
  */
 @Slf4j
-public class PecadoUserDetailsServiceImplIntegrationTest extends BaseIntegrationTest {
+public class PecadoUserDetailsServiceIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private UserDetailsService userDetailsService;

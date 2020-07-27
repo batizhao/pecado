@@ -6,10 +6,9 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.annotation.Inner;
-import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
-import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.RoleService;
@@ -17,24 +16,13 @@ import me.batizhao.ims.service.UserService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-import java.util.Collections;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 用户管理
@@ -163,7 +151,7 @@ public class UserController {
     @GetMapping("/info")
     @SystemLog
     public ResponseInfo<UserInfoVO> getUserInfo() {
-        String username = SecurityUtils.getUser();
+        String username = SecurityUtils.getUser().getUsername();
         UserInfoVO userInfoVO = userService.getUserInfo(username);
         return ResponseInfo.ok(userInfoVO);
     }

@@ -19,11 +19,9 @@
 package me.batizhao.common.security.util;
 
 import lombok.experimental.UtilityClass;
+import me.batizhao.common.security.component.PecadoUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-
-import java.util.Map;
 
 /**
  * 安全工具类
@@ -32,16 +30,6 @@ import java.util.Map;
  */
 @UtilityClass
 public class SecurityUtils {
-
-    //TODO：使用下边的方式，不用注入 TokenStore，但是目前获取信息为 null，后边再研究
-	public Map<String, Object> getAdditionalInfo() {
-		Authentication authentication = getAuthentication();
-		if (authentication == null) {
-			return null;
-		}
-		OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
-		return (Map<String, Object>) details.getDecodedDetails();
-	}
 
 	/**
 	 * 获取Authentication
@@ -53,15 +41,18 @@ public class SecurityUtils {
 	/**
 	 * 获取用户
 	 */
-	public String getUser(Authentication authentication) {
+	public PecadoUser getUser(Authentication authentication) {
 		Object principal = authentication.getPrincipal();
-		return principal.toString();
+		if (principal instanceof PecadoUser) {
+			return (PecadoUser) principal;
+		}
+		return null;
 	}
 
 	/**
 	 * 获取用户
 	 */
-	public String getUser() {
+	public PecadoUser getUser() {
 		Authentication authentication = getAuthentication();
 		if (authentication == null) {
 			return null;

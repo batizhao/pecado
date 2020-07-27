@@ -1,12 +1,15 @@
 package me.batizhao.uaa.config;
 
-import me.batizhao.common.security.component.PecadoUserDetailsServiceImpl;
-import me.batizhao.uaa.security.CustomTokenEnhancer;
+import me.batizhao.common.core.constant.SecurityConstants;
+import me.batizhao.common.core.util.ResultEnum;
+import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.security.component.PecadoUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -20,6 +23,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author batizhao
@@ -31,7 +36,7 @@ import java.util.Arrays;
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
-    private PecadoUserDetailsServiceImpl userDetailsService;
+    private PecadoUserDetailsService userDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -95,24 +100,21 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
         accessTokenConverter.setSigningKey("123");
-//        accessTokenConverter.setAccessTokenConverter(authExtractor());
         return accessTokenConverter;
     }
 
     @Bean
     public TokenEnhancer tokenEnhancer() {
-        return new CustomTokenEnhancer();
+        return (accessToken, authentication) -> {
+            final Map<String, Object> additionalInfo = new HashMap<>(5);
+            PecadoUser user = (PecadoUser) authentication.getUserAuthentication().getPrincipal();
+            additionalInfo.put(SecurityConstants.DETAILS_USER_ID, user.getUserId());
+            additionalInfo.put(SecurityConstants.DETAILS_USERNAME, user.getUsername());
+            additionalInfo.put(SecurityConstants.DETAILS_DEPT_ID, user.getDeptId());
+            additionalInfo.put("code", ResultEnum.SUCCESS.getCode());
+            additionalInfo.put("message", ResultEnum.SUCCESS.getMessage());
+            ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
+            return accessToken;
+        };
     }
-
-//    @Bean
-//    public DefaultAccessTokenConverter authExtractor() {
-//        return new DefaultAccessTokenConverter() {
-//            @Override
-//            public OAuth2Authentication extractAuthentication(Map<String, ?> claims) {
-//                OAuth2Authentication authentication = super.extractAuthentication(claims);
-//                authentication.setDetails(claims);
-//                return authentication;
-//            }
-//        };
-//    }
 }

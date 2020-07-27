@@ -56,20 +56,20 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
         menuList.add(new Menu().setId(1102L).setName("编辑用户").setPath("/ims/user/edit"));
     }
 
-    @Test
-    @WithMockUser
-    public void givenUserId_whenFindRole_thenRoleJsonArray() throws Exception {
-        when(menuService.findMenusByRoleId(anyLong())).thenReturn(menuList);
-
-        mvc.perform(get("/menu"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", hasSize(5)))
-                .andExpect(jsonPath("$.data[0].name", equalTo("工作台")));
-
-        verify(menuService).findMenusByRoleId(anyLong());
-    }
+//    @Test
+//    @WithMockUser
+//    public void givenUserId_whenFindRole_thenRoleJsonArray() throws Exception {
+//        when(menuService.findMenusByRoleId(anyLong())).thenReturn(menuList);
+//
+//        mvc.perform(get("/menu"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data", hasSize(5)))
+//                .andExpect(jsonPath("$.data[0].name", equalTo("工作台")));
+//
+//        verify(menuService).findMenusByRoleId(anyLong());
+//    }
 
 }
