@@ -9,6 +9,7 @@ import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
+import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
@@ -60,12 +61,12 @@ public class MenuController {
     @ApiOperation(value = "查询用户菜单")
     @SystemLog
     @GetMapping
-    public ResponseInfo<Set<Menu>> getUserMenus() {
+    public ResponseInfo<List<MenuVO>> getUserMenus() {
         Long userId = SecurityUtils.getUser().getUserId();
 
-        Set<Menu> all = new HashSet<>();
+        Set<MenuVO> all = new HashSet<>();
         roleService.findRolesByUserId(userId).forEach(roleVO -> all.addAll(menuService.findMenusByRoleId(roleVO.getId())));
-        return ResponseInfo.ok(all);
+        return ResponseInfo.ok(menuService.filterMenu(all, null));
     }
 
 }

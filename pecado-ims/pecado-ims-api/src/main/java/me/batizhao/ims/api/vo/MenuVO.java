@@ -1,4 +1,4 @@
-package me.batizhao.ims.domain;
+package me.batizhao.ims.api.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,11 +16,10 @@ import java.io.Serializable;
  * @since 2020-02-26
  */
 @Data
-@Accessors(chain = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@ApiModel(description = "菜单类")
-public class Menu extends TreeNode implements Serializable {
+@ApiModel(description = "菜单")
+public class MenuVO extends TreeNode implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "路径", example = "/user/common")
     @NotBlank(message = "path is not blank")
@@ -45,4 +44,24 @@ public class Menu extends TreeNode implements Serializable {
 
     @ApiModelProperty(value = "排序", example = "1")
     private Integer sort;
+
+    public MenuVO() {
+    }
+
+    public MenuVO(int id, String name, String path) {
+        this.id = id;
+        this.name = name;
+        this.path = path;
+    }
+
+    public MenuVO(MenuVO menuVO) {
+        this.id = menuVO.getId();
+        this.pid = menuVO.getPid();
+        this.icon = menuVO.getIcon();
+        this.name = menuVO.getName();
+        this.path = menuVO.getPath();
+        this.type = menuVO.getType();
+        this.permission = menuVO.getPermission();
+        this.sort = menuVO.getSort();
+    }
 }

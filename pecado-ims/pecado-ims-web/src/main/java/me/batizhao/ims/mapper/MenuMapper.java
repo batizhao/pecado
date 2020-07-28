@@ -2,10 +2,7 @@ package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import me.batizhao.ims.domain.Menu;
-import me.batizhao.ims.domain.Role;
-import me.batizhao.ims.domain.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;

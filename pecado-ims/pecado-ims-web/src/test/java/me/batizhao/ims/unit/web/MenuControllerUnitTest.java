@@ -1,8 +1,14 @@
 package me.batizhao.ims.unit.web;
 
 import me.batizhao.common.core.util.ResultEnum;
+import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.security.util.SecurityUtils;
+import me.batizhao.ims.api.vo.MenuVO;
+import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Menu;
+import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.MenuService;
+import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.web.MenuController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -40,8 +47,12 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
      */
     @MockBean
     private MenuService menuService;
+    @MockBean
+    private RoleService roleService;
 
-    private List<Menu> menuList;
+    private List<MenuVO> menuList;
+    private List<RoleVO> roleList;
+    private PecadoUser user;
 
     /**
      * Prepare test data.
@@ -49,17 +60,26 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @BeforeEach
     public void setUp() {
         menuList = new ArrayList<>();
-        menuList.add(new Menu().setId(1L).setName("工作台").setPath("/dashboard"));
-        menuList.add(new Menu().setId(1000L).setName("权限管理").setPath("/ims"));
-        menuList.add(new Menu().setId(1100L).setName("用户管理").setPath("/ims/user"));
-        menuList.add(new Menu().setId(1101L).setName("添加用户").setPath("/ims/user/add"));
-        menuList.add(new Menu().setId(1102L).setName("编辑用户").setPath("/ims/user/edit"));
+        menuList.add(new MenuVO(1, "工作台","/dashboard"));
+        menuList.add(new MenuVO(1000, "权限管理", "/ims"));
+        menuList.add(new MenuVO(1100, "用户管理", "/ims/user"));
+        menuList.add(new MenuVO(1101, "添加用户", "/ims/user/add"));
+        menuList.add(new MenuVO(1102, "编辑用户", "/ims/user/edit"));
+
+        roleList = new ArrayList<>();
+        roleList.add(new RoleVO().setId(1L));
+        roleList.add(new RoleVO().setId(2L));
+
+        user = new PecadoUser(1L, 2L, "admin", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
 
 //    @Test
 //    @WithMockUser
 //    public void givenUserId_whenFindRole_thenRoleJsonArray() throws Exception {
+//        when(SecurityUtils.getUser()).thenReturn(user);
+//        when(roleService.findRolesByUserId(anyLong())).thenReturn(roleList);
 //        when(menuService.findMenusByRoleId(anyLong())).thenReturn(menuList);
+//        when(menuService.filterMenu(menuList, null))
 //
 //        mvc.perform(get("/menu"))
 //                .andDo(print())
