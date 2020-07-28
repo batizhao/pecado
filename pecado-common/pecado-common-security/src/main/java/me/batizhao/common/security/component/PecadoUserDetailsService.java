@@ -2,7 +2,6 @@ package me.batizhao.common.security.component;
 
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
-import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
