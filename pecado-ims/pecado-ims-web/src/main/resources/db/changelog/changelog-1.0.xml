@@ -79,6 +79,7 @@
             </column>
             <column name="avatar" type="VARCHAR(255)" remarks="用户头像"
                     defaultValue="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"/>
+            <column name="unreadCount" type="INT" remarks="未读消息数量" defaultValue="0"/>
             <column name="createdTime" type="datetime" remarks="创建时间">
                 <constraints nullable="false"/>
             </column>

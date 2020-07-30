@@ -53,6 +53,9 @@ public class UserVO implements Serializable {
     @ApiModelProperty(value = "用户头像", example = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png")
     private String avatar;
 
+    @ApiModelProperty(value = "未读消息数量", example = "99")
+    private Integer unreadCount;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createdTime;
 
