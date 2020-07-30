@@ -55,6 +55,12 @@ public class User implements Serializable {
     @NotBlank(message = "name is not blank")
     private String name;
 
+    /**
+     * @mock @url
+     */
+    @ApiModelProperty(value = "用户头像", example = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png")
+    private String avatar;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createdTime;
 }
