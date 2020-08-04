@@ -207,16 +207,16 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenId_whenDeleteUser_thenSucceed() throws Exception {
-        when(userService.removeById(anyLong())).thenReturn(true);
+        when(userService.removeByIds(anyList())).thenReturn(true);
 
-        mvc.perform(delete("/user/{id}", 1L).with(csrf()))
+        mvc.perform(delete("/user").param("ids", "1,2").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data").value(true));
 
-        verify(userService).removeById(1L);
+        verify(userService).removeByIds(anyList());
     }
 
 }

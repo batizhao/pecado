@@ -28,11 +28,11 @@ public class MenuMapperUnitTest extends BaseMapperUnitTest {
     public void testFindMenusByRoleId() {
         List<Menu> menus = menuMapper.findMenusByRoleId(1L);
 
-        assertThat(menus, hasItem(allOf(hasProperty("id", is(1L)),
+        assertThat(menus, hasItem(allOf(hasProperty("id", is(1)),
                 hasProperty("permission", is("user_dashboard")))));
 
         menus = menuMapper.findMenusByRoleId(2L);
-        assertThat(menus.size(), is(5));
+        assertThat(menus.size(), is(9));
     }
 
 }
