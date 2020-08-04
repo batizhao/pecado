@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -121,7 +122,7 @@ public class UserController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<UserVO> doSaveOrUpdate(@Valid @ApiParam(value = "用户", required = true) @RequestBody User request_user) {
+    public ResponseInfo<UserVO> handleSaveOrUpdate(@Valid @ApiParam(value = "用户", required = true) @RequestBody User request_user) {
         UserVO user = userService.saveOrUpdate4me(request_user);
         return ResponseInfo.ok(user);
     }
@@ -130,15 +131,14 @@ public class UserController {
      * 删除用户
      * 根据用户ID删除用户
      *
-     * @param id 用户id
      * @return 成功或者失败
      */
     @ApiOperation(value = "删除用户")
-    @DeleteMapping("{id}")
+    @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<Boolean> doDelete(@ApiParam(value = "用户ID", required = true) @Min(1) @PathVariable Long id) {
-        Boolean b = userService.removeById(id);
+    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "用户ID串", required = true) @RequestParam List<Long> ids) {
+        Boolean b = userService.removeByIds(ids);
         return ResponseInfo.ok(b);
     }
 
