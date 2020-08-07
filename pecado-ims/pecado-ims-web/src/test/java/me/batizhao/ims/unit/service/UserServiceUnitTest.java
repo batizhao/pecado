@@ -1,7 +1,10 @@
 package me.batizhao.ims.unit.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
+import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.UserService;
@@ -50,6 +53,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     private UserService userService;
 
     private List<User> userList;
+    private IPage<UserVO> userPageList;
 
     /**
      * Prepare test data.
@@ -60,6 +64,10 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         userList.add(new User().setId(1L).setEmail("zhangsan@gmail.com").setUsername("zhangsan").setName("张三").setPassword("123456"));
         userList.add(new User().setId(2L).setEmail("lisi@gmail.com").setUsername("lisi").setName("李四").setPassword("123456"));
         userList.add(new User().setId(3L).setEmail("wangwu@gmail.com").setUsername("wangwu").setName("王五").setPassword("123456"));
+
+        List<UserVO> userVOList = BeanCopyUtil.copyListProperties(userList, UserVO::new);
+        userPageList = new Page<>();
+        userPageList.setRecords(userVOList);
     }
 
     @Test
@@ -119,17 +127,17 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenNothing_whenFindAllUser_thenSuccess() {
-        when(userMapper.selectList(null))
-                .thenReturn(userList);
+        when(userMapper.selectUserPage(any(Page.class), any(User.class)))
+                .thenReturn(userPageList);
 
-        List<UserVO> users = userService.findAll();
+        IPage<UserVO> users = userService.findUsers(new Page<>(), new User().setUsername("tom"));
 
-        assertThat(users, iterableWithSize(3));
-        assertThat(users, hasItems(hasProperty("username", is("zhangsan")),
+        assertThat(users.getRecords(), iterableWithSize(3));
+        assertThat(users.getRecords(), hasItems(hasProperty("username", is("zhangsan")),
                                       hasProperty("email", is("lisi@gmail.com")),
                                       hasProperty("email", is("wangwu@gmail.com"))));
 
-        assertThat(users, containsInAnyOrder(allOf(hasProperty("email", is("zhangsan@gmail.com")),
+        assertThat(users.getRecords(), containsInAnyOrder(allOf(hasProperty("email", is("zhangsan@gmail.com")),
                                                       hasProperty("username", is("zhangsan"))),
                                                 allOf(hasProperty("email", is("lisi@gmail.com")),
                                                       hasProperty("username", is("lisi"))),

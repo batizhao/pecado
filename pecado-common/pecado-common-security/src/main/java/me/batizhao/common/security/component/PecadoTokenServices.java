@@ -28,11 +28,25 @@ public class PecadoTokenServices implements ResourceServerTokenServices {
     private JwtAccessTokenConverter jwtAccessTokenConverter;
 
     @Override
-    public OAuth2Authentication loadAuthentication(String accessToken) throws AuthenticationException, InvalidTokenException {
+    public OAuth2Authentication loadAuthentication(String accessTokenValue) throws AuthenticationException, InvalidTokenException {
+        OAuth2AccessToken accessToken = tokenStore.readAccessToken(accessTokenValue);
+        if (accessToken == null) {
+            throw new InvalidTokenException("Invalid access token: " + accessTokenValue);
+        }
+        else if (accessToken.isExpired()) {
+            tokenStore.removeAccessToken(accessToken);
+            throw new InvalidTokenException("Access token expired: " + accessTokenValue);
+        }
+
         OAuth2Authentication oAuth2Authentication = tokenStore.readAuthentication(accessToken);
+        if (oAuth2Authentication == null) {
+            // in case of race condition
+            throw new InvalidTokenException("Invalid access token: " + accessTokenValue);
+        }
+
         UserAuthenticationConverter userTokenConverter = new PecadoUserAuthenticationConverter();
         defaultAccessTokenConverter.setUserTokenConverter(userTokenConverter);
-        Map<String, ?> map = jwtAccessTokenConverter.convertAccessToken(readAccessToken(accessToken), oAuth2Authentication);
+        Map<String, ?> map = jwtAccessTokenConverter.convertAccessToken(readAccessToken(accessTokenValue), oAuth2Authentication);
         return defaultAccessTokenConverter.extractAuthentication(map);
     }
 

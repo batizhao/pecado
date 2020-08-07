@@ -1,5 +1,7 @@
 package me.batizhao.ims.web;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -36,7 +37,6 @@ import java.util.List;
  */
 @Api(tags = "用户管理")
 @RestController
-@RequestMapping("user")
 @Slf4j
 @Validated
 public class UserController {
@@ -54,10 +54,10 @@ public class UserController {
      * @return 用户详情
      */
     @ApiOperation(value = "根据用户名查询用户")
-    @GetMapping(params = "username")
+    @GetMapping(value = "user", params = "username")
     @Inner
     @SystemLog
-    public ResponseInfo<UserVO> loadUserByUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
+    public ResponseInfo<UserVO> handleUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
         UserVO user = userService.findByUsername(username);
 
         List<RoleVO> roles = roleService.findRolesByUserId(user.getId());
@@ -74,9 +74,9 @@ public class UserController {
      * @return 返回用户列表
      */
     @ApiOperation(value = "根据姓名查询用户")
-    @GetMapping(params = "name")
+    @GetMapping(value = "user", params = "name")
     @SystemLog
-    public ResponseInfo<List<UserVO>> findByName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
+    public ResponseInfo<List<UserVO>> handleName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
         List<UserVO> users = userService.findByName(name);
         return ResponseInfo.ok(users);
     }
@@ -89,9 +89,9 @@ public class UserController {
      * @return 用户详情
      */
     @ApiOperation(value = "根据ID查询用户")
-    @GetMapping("{id}")
+    @GetMapping("/user/{id}")
     @SystemLog
-    public ResponseInfo<UserVO> findById(@ApiParam(value = "用户ID", required = true) @PathVariable("id") @Min(1) Long id) {
+    public ResponseInfo<UserVO> handleId(@ApiParam(value = "用户ID", required = true) @PathVariable("id") @Min(1) Long id) {
         UserVO user = userService.findById(id);
         return ResponseInfo.ok(user);
     }
@@ -103,11 +103,11 @@ public class UserController {
      * @return 所有用户列表
      */
     @ApiOperation(value = "查询所有用户")
-    @GetMapping
+    @GetMapping("users")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<List<UserVO>> findAll() {
-        List<UserVO> users = userService.findAll();
+    public ResponseInfo<IPage<UserVO>> handleUsers(Page<UserVO> page, User user) {
+        IPage<UserVO> users = userService.findUsers(page, user);
         return ResponseInfo.ok(users);
     }
 
@@ -119,7 +119,7 @@ public class UserController {
      * @return 用户对象
      */
     @ApiOperation(value = "添加或修改用户")
-    @PostMapping
+    @PostMapping("user")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
     public ResponseInfo<UserVO> handleSaveOrUpdate(@Valid @ApiParam(value = "用户", required = true) @RequestBody User request_user) {
@@ -134,7 +134,7 @@ public class UserController {
      * @return 成功或者失败
      */
     @ApiOperation(value = "删除用户")
-    @DeleteMapping
+    @DeleteMapping("user")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "用户ID串", required = true) @RequestParam List<Long> ids) {
@@ -148,9 +148,9 @@ public class UserController {
      * @return 当前用户基本信息、角色、权限清单
      */
     @ApiOperation(value = "我的信息")
-    @GetMapping("/info")
+    @GetMapping("/user/me")
     @SystemLog
-    public ResponseInfo<UserInfoVO> getUserInfo() {
+    public ResponseInfo<UserInfoVO> handleUserInfo() {
         String username = SecurityUtils.getUser().getUsername();
         UserInfoVO userInfoVO = userService.getUserInfo(username);
         return ResponseInfo.ok(userInfoVO);

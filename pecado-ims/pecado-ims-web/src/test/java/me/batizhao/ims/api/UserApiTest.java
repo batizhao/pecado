@@ -135,20 +135,20 @@ public class UserApiTest extends BaseApiTest {
 
     @Test
     public void givenNothing_whenFindAllUser_thenUserListJson() throws Exception {
-        mvc.perform(get("/user")
+        mvc.perform(get("/users")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", hasSize(6)))
-                .andExpect(jsonPath("$.data[0].username", equalTo("admin")));
+                .andExpect(jsonPath("$.data.records", hasSize(6)))
+                .andExpect(jsonPath("$.data.records[0].username", equalTo("admin")));
     }
 
     @Test
     public void givenExpiredToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
-        String accessToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE1ODMwNDQwNzMsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiI1MzUyODEwYi1iNDhjLTQ4ZmQtYTJmZi1jYTM3OGM2OGUyNGMiLCJjbGllbnRfaWQiOiJjbGllbnRfYXBwIiwidXNlcm5hbWUiOiJhZG1pbiJ9.Go8txRMeNhD9Z6ZPBQjaCmIzjoHLv4fb2ACeOB_M1rc";
-        mvc.perform(get("/user")
+        String accessToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlIjowLCJ1c2VyX2lkIjoxLCJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1OTY3ODU2NDAsImRlcHRfaWQiOjEsIm1lc3NhZ2UiOiJvayIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwianRpIjoiNTJkYTA2YzktMWRiMi00NzdmLWJkZjItY2VhOTY1ZTJjNTM1IiwiY2xpZW50X2lkIjoiY2xpZW50X2FwcCIsInVzZXJuYW1lIjoiYWRtaW4ifQ.wVqtJm7__YO8pnh79JMKt1YO5GuIryDj7mCqkLPMSvA";
+        mvc.perform(get("/users")
                 .header("Authorization", accessToken))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
@@ -251,7 +251,7 @@ public class UserApiTest extends BaseApiTest {
     @Test
     @Transactional
     public void givenId_whenDeleteUser_thenSucceed() throws Exception {
-        mvc.perform(delete("/user/{id}", 1L)
+        mvc.perform(delete("/user").param("ids", "1,2")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -267,13 +267,13 @@ public class UserApiTest extends BaseApiTest {
      */
     @Test
     public void givenInValidId_whenDeleteUser_thenValidateFail() throws Exception {
-        mvc.perform(delete("/user/{id}", -1000L)
+        mvc.perform(delete("/user").param("ids", "-1")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
-                .andExpect(jsonPath("$.data[0]", containsString("最小不能小于")));
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(false));
     }
 
     /**
@@ -283,7 +283,7 @@ public class UserApiTest extends BaseApiTest {
      */
     @Test
     public void givenStringId_whenDeleteUser_thenValidateFail() throws Exception {
-        mvc.perform(delete("/user/{id}", "xxxx")
+        mvc.perform(delete("/user").param("ids", "xxxx")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -294,7 +294,7 @@ public class UserApiTest extends BaseApiTest {
 
     @Test
     public void givenInvalidRole_whenGetSecureRequest_thenForbidden() throws Exception {
-        mvc.perform(delete("/user/{id}", 3L)
+        mvc.perform(delete("/user").param("ids", "1,2")
                 .header("Authorization", userAccessToken))
                 .andDo(print())
                 .andExpect(status().isForbidden())
@@ -316,7 +316,7 @@ public class UserApiTest extends BaseApiTest {
 
     @Test
     public void givenAuthentication_whenGetCurrentUser_thenMe() throws Exception {
-        mvc.perform(get("/user/info")
+        mvc.perform(get("/user/me")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())

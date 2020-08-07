@@ -1,5 +1,7 @@
 package me.batizhao.ims.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
@@ -17,7 +19,7 @@ public interface UserService extends IService<User> {
 
 	List<UserVO> findByName(String name);
 
-	List<UserVO> findAll();
+	IPage<UserVO> findUsers(Page<UserVO> page, User user);
 
 	UserVO findById(Long id);
 

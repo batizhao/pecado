@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  me.batizhao.common.core.config.JacksonConfiguration
+  me.batizhao.common.core.config.JacksonConfig, \
+  me.batizhao.common.core.config.MybatisPlusConfig

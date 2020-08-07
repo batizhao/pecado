@@ -49,7 +49,7 @@ public class RoleController {
     @GetMapping(params = "userId")
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
     @SystemLog
-    public ResponseInfo<List<RoleVO>> findRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
+    public ResponseInfo<List<RoleVO>> handleUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         List<RoleVO> roles = roleService.findRolesByUserId(userId);
         return ResponseInfo.ok(roles);
     }

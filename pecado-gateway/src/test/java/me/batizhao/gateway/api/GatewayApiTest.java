@@ -25,7 +25,7 @@ public class GatewayApiTest extends BaseApiTest {
 
     @Test
     void givenExistServiceUrl_whenCallGateway_then503() {
-        webClient.get().uri("/api/ims/user").exchange().expectStatus().is5xxServerError()
+        webClient.get().uri("/api/ims/users").exchange().expectStatus().is5xxServerError()
                 .expectHeader()
                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 .expectBody()

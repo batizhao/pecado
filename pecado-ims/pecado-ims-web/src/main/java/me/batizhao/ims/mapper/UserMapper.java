@@ -1,11 +1,11 @@
 package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @author batizhao
@@ -26,4 +26,5 @@ public interface UserMapper extends BaseMapper<User> {
     @Delete("delete from user where username= #{username}")
     int deleteUserByUsername(@Param("username") String username);
 
+    IPage<UserVO> selectUserPage(Page<UserVO> page, @Param("user") User user);
 }

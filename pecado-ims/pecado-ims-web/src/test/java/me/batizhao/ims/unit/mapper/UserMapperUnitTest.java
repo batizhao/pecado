@@ -1,6 +1,9 @@
 package me.batizhao.ims.unit.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
@@ -76,5 +79,14 @@ public class UserMapperUnitTest extends BaseMapperUnitTest {
 
         //确认删除成功
         assertThat(result, is(1));
+    }
+
+    @Test
+    void testSelectUserPage() {
+        IPage<UserVO> users = userMapper.selectUserPage(new Page<>(), new User().setUsername("tom"));
+        assertThat(users.getRecords(), hasSize(1));
+
+        users = userMapper.selectUserPage(new Page<>(), new User().setUsername("bob"));
+        assertThat(users.getRecords(), hasSize(2));
     }
 }

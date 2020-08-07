@@ -61,7 +61,7 @@ public class MenuController {
     @ApiOperation(value = "查询用户菜单")
     @SystemLog
     @GetMapping
-    public ResponseInfo<List<MenuVO>> getUserMenus() {
+    public ResponseInfo<List<MenuVO>> handleMenus() {
         Long userId = SecurityUtils.getUser().getUserId();
 
         Set<MenuVO> all = new HashSet<>();

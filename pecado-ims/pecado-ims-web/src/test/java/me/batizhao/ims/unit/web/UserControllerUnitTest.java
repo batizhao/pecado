@@ -1,5 +1,7 @@
 package me.batizhao.ims.unit.web;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.vo.RoleVO;
@@ -58,6 +60,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     private RoleService roleService;
 
     private List<UserVO> userList;
+    private IPage<UserVO> userPageList;
 
     /**
      * Prepare test data.
@@ -68,6 +71,9 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         userList.add(new UserVO().setId(1L).setEmail("zhangsan@gmail.com").setUsername("zhangsan").setName("张三"));
         userList.add(new UserVO().setId(2L).setEmail("lisi@gmail.com").setUsername("lisi").setName("李四"));
         userList.add(new UserVO().setId(3L).setEmail("wangwu@gmail.com").setUsername("wangwu").setName("王五"));
+
+        userPageList = new Page<>();
+        userPageList.setRecords(userList);
     }
 
     @Test
@@ -143,18 +149,18 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenNothing_whenFindAllUser_thenUserListJson() throws Exception {
-        when(userService.findAll()).thenReturn(userList);
+        when(userService.findUsers(any(Page.class), any(User.class))).thenReturn(userPageList);
 
-        mvc.perform(get("/user"))
+        mvc.perform(get("/users"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
-                .andExpect(jsonPath("$.data", hasSize(3)))
-                .andExpect(jsonPath("$.data[0].username", equalTo("zhangsan")));
+                .andExpect(jsonPath("$.data.records", hasSize(3)))
+                .andExpect(jsonPath("$.data.records[0].username", equalTo("zhangsan")));
 
-        verify(userService).findAll();
+        verify(userService).findUsers(any(Page.class), any(User.class));
     }
 
     @Test

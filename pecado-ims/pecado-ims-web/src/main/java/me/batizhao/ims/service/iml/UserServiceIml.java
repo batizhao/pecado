@@ -1,6 +1,8 @@
 package me.batizhao.ims.service.iml;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
@@ -47,9 +49,9 @@ public class UserServiceIml extends ServiceImpl<UserMapper, User> implements Use
     }
 
     @Override
-    public List<UserVO> findAll() {
-        List<User> userList = userMapper.selectList(null);
-        return BeanCopyUtil.copyListProperties(userList, UserVO::new);
+    public IPage<UserVO> findUsers(Page<UserVO> page, User user) {
+        IPage<UserVO> userList = userMapper.selectUserPage(page, user);
+        return userList;
     }
 
     @Override
