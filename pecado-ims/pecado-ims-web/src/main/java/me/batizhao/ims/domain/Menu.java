@@ -2,11 +2,9 @@ package me.batizhao.ims.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import me.batizhao.ims.api.dto.TreeNode;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -18,9 +16,15 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@AllArgsConstructor
 @ApiModel(description = "菜单类")
-public class Menu extends TreeNode implements Serializable {
+public class Menu implements Serializable {
+
+    @ApiModelProperty(value = "ID", example = "100")
+    private int id;
+
+    @ApiModelProperty(value = "父ID", example = "100")
+    @NotBlank(message = "pid is not blank")
+    private int pid;
 
     @ApiModelProperty(value = "路径", example = "/user/common")
     @NotBlank(message = "path is not blank")

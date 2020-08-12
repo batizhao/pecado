@@ -42,6 +42,7 @@ public class TreeUtil {
 						treeNode.setChildren(new ArrayList<>());
 					}
 					treeNode.add(it);
+					treeNode.setIsLeaf(false);
 				}
 			}
 		}

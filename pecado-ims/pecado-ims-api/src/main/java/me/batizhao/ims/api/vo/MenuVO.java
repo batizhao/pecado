@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
+ * 构建菜单和路由数据
  * @author batizhao
  * @since 2020-02-26
  */
