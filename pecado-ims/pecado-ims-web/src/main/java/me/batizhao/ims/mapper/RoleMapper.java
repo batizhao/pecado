@@ -21,7 +21,7 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @param id
      * @return
      */
-    @Select("SELECT A.id, A.name FROM role A LEFT JOIN user_role B ON A.id = B.role_id WHERE B.user_id = #{id}")
+    @Select("SELECT A.id, A.name, A.code FROM role A LEFT JOIN user_role B ON A.id = B.role_id WHERE B.user_id = #{id}")
     List<Role> findRolesByUserId(@Param("id") Long id);
 
     /**
@@ -29,6 +29,6 @@ public interface RoleMapper extends BaseMapper<Role> {
      *
      * @return
      */
-    @Select("SELECT A.NAME AS roleName,C.path FROM role AS A LEFT JOIN role_menu B ON A.id=B.role_id LEFT JOIN menu AS C ON B.menu_id=C.id")
+    @Select("SELECT A.code AS roleCode,C.path FROM role AS A LEFT JOIN role_menu B ON A.id=B.role_id LEFT JOIN menu AS C ON B.menu_id=C.id")
     List<RoleMenu> findRoleMenus();
 }

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -12,6 +11,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author batizhao
@@ -20,7 +20,6 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@AllArgsConstructor
 @ApiModel(description = "角色")
 public class Role implements Serializable {
 
@@ -30,12 +29,22 @@ public class Role implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    /**
-     * @mock ROLE_@string("upper", 3, 20)
-     */
-    @ApiModelProperty(value = "角色名", example = "管理员")
+    @ApiModelProperty(value = "名称", example = "管理员")
     @NotBlank(message = "name is not blank")
     @Size(min = 3, max = 30)
     private String name;
 
+    /**
+     * @mock ROLE_@string("upper", 3, 20)
+     */
+    @ApiModelProperty(value = "代码", example = "ROLE_USER")
+    @NotBlank(message = "code is not blank")
+    @Size(min = 3, max = 30)
+    private String code;
+
+    @ApiModelProperty(value = "说明", example = "This is admin")
+    private String description;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createdTime;
 }

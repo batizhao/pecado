@@ -62,8 +62,8 @@ public class PecadoUserDetailsServiceUnitTest {
     @BeforeEach
     public void setUp() {
         roleList = new ArrayList<>();
-        roleList.add(new RoleVO().setId(1L).setName("admin"));
-        roleList.add(new RoleVO().setId(2L).setName("common"));
+        roleList.add(new RoleVO().setId(1L).setCode("admin"));
+        roleList.add(new RoleVO().setId(2L).setCode("common"));
     }
 
     @Test

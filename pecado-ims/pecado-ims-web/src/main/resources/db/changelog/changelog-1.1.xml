@@ -103,11 +103,15 @@
     <changeSet author="batizhao" id="InsertTableRole-20200225-002">
         <insert tableName="role">
             <column name="id" valueNumeric="1"/>
-            <column name="name" value="ROLE_USER"/>
+            <column name="name" value="普通用户"/>
+            <column name="code" value="ROLE_USER"/>
+            <column name="createdTime" value="2020-07-29 10:00:00"/>
         </insert>
         <insert tableName="role">
             <column name="id" valueNumeric="2"/>
-            <column name="name" value="ROLE_ADMIN"/>
+            <column name="name" value="系统管理员"/>
+            <column name="code" value="ROLE_ADMIN"/>
+            <column name="createdTime" value="2020-07-29 10:00:05"/>
         </insert>
         <rollback>
             delete from role where id = 1;

@@ -30,7 +30,6 @@ import java.util.List;
  **/
 @Api(tags = "角色管理")
 @RestController
-@RequestMapping("role")
 @Slf4j
 @Validated
 public class RoleController {
@@ -46,11 +45,25 @@ public class RoleController {
      * @return 角色集合
      */
     @ApiOperation(value = "根据用户ID查询角色")
-    @GetMapping(params = "userId")
+    @GetMapping(value = "role", params = "userId")
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
     @SystemLog
-    public ResponseInfo<List<RoleVO>> handleUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
+    public ResponseInfo<List<RoleVO>> handleRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         List<RoleVO> roles = roleService.findRolesByUserId(userId);
         return ResponseInfo.ok(roles);
+    }
+
+    /**
+     * 查询所有角色
+     * 返回角色集合
+     *
+     * @return 角色集合
+     */
+    @ApiOperation(value = "查询所有角色")
+    @GetMapping(value = "roles")
+    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @SystemLog
+    public ResponseInfo<List<RoleVO>> handleRoles() {
+        return ResponseInfo.ok(roleService.findRoles());
     }
 }

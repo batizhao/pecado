@@ -27,7 +27,7 @@ public class RoleMapperUnitTest extends BaseMapperUnitTest {
         List<Role> roles = roleMapper.findRolesByUserId(1L);
 
         assertThat(roles, hasItem(allOf(hasProperty("id", is(1L)),
-                hasProperty("name", is("ROLE_USER")))));
+                hasProperty("name", is("普通用户")))));
     }
 
     @Test
@@ -36,10 +36,10 @@ public class RoleMapperUnitTest extends BaseMapperUnitTest {
 
         log.info("rolePermissions: {}", roleMenus);
 
-        assertThat(roleMenus, hasItem(allOf(hasProperty("roleName", is("ROLE_USER")),
+        assertThat(roleMenus, hasItem(allOf(hasProperty("roleCode", is("ROLE_USER")),
                 hasProperty("path", is("/dashboard")))));
 
-        assertThat(roleMenus, hasItem(allOf(hasProperty("roleName", is("ROLE_ADMIN")),
+        assertThat(roleMenus, hasItem(allOf(hasProperty("roleCode", is("ROLE_ADMIN")),
                 hasProperty("path", is("/ims")))));
     }
 

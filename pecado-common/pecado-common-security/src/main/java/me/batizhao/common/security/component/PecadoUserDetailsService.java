@@ -39,7 +39,7 @@ public class PecadoUserDetailsService implements UserDetailsService {
         UserVO user = userData.getData();
         List<RoleVO> roles = user.getRoleList();
         Set<GrantedAuthority> authorities = new HashSet<>();
-        roles.forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getName())));
+        roles.forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getCode())));
 
         //TODO: The second param to user.getDeptId
         return new PecadoUser(user.getId(), user.getId(), user.getUsername(), user.getPassword(),

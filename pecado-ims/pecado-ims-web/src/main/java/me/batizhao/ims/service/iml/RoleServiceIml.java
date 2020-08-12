@@ -26,4 +26,10 @@ public class RoleServiceIml extends ServiceImpl<RoleMapper, Role> implements Rol
         List<Role> roleList = roleMapper.findRolesByUserId(userId);
         return BeanCopyUtil.copyListProperties(roleList, RoleVO::new);
     }
+
+    @Override
+    public List<RoleVO> findRoles() {
+        List<Role> roles = baseMapper.selectList(null);
+        return BeanCopyUtil.copyListProperties(roles, RoleVO::new);
+    }
 }

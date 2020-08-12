@@ -18,10 +18,10 @@ public class RoleMenu {
     private Long menuId;
 
     private String path;
-    private String roleName;
+    private String roleCode;
 
-    public RoleMenu(String path, String roleName) {
+    public RoleMenu(String path, String roleCode) {
         this.path = path;
-        this.roleName = roleName;
+        this.roleCode = roleCode;
     }
 }

@@ -14,4 +14,6 @@ public interface RoleService extends IService<Role> {
 
     List<RoleVO> findRolesByUserId(Long userId);
 
+    List<RoleVO> findRoles();
+
 }
