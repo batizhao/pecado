@@ -1,5 +1,7 @@
 package me.batizhao.system.web;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.batizhao.common.core.util.ResponseInfo;
@@ -10,9 +12,9 @@ import me.batizhao.system.service.LogService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -28,7 +30,6 @@ import javax.validation.Valid;
  **/
 @Api(tags = "日志管理")
 @RestController
-@RequestMapping("log")
 @Validated
 public class LogController {
 
@@ -42,11 +43,17 @@ public class LogController {
      * @return true/false
      */
     @ApiOperation(value = "插入日志")
-    @PostMapping
+    @PostMapping("log")
     @Inner
-    public ResponseInfo<Boolean> save(@Valid @RequestBody LogDTO logDto) {
+    public ResponseInfo<Boolean> handleSave(@Valid @RequestBody LogDTO logDto) {
         Log log = new Log();
         BeanUtils.copyProperties(logDto, log);
         return ResponseInfo.ok(logService.save(log));
+    }
+
+    @ApiOperation(value = "日志列表")
+    @GetMapping("logs")
+    public ResponseInfo<IPage<Log>> handleLogs(Page<Log> page, Log log) {
+        return ResponseInfo.ok(logService.findLogs(page, log));
     }
 }

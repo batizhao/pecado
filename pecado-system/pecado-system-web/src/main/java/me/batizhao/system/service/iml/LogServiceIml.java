@@ -1,5 +1,7 @@
 package me.batizhao.system.service.iml;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.system.domain.Log;
 import me.batizhao.system.mapper.LogMapper;
@@ -17,5 +19,8 @@ public class LogServiceIml extends ServiceImpl<LogMapper, Log> implements LogSer
     @Autowired
     private LogMapper logMapper;
 
-
+    @Override
+    public IPage<Log> findLogs(Page<Log> page, Log log) {
+        return logMapper.selectLogPage(page, log);
+    }
 }
