@@ -32,7 +32,8 @@
             l.username,
             l.url,
             l.ip,
-            l.createdTime
+            l.createdTime,
+            l.result
         FROM
         log AS l
         <where>
@@ -40,7 +41,7 @@
                 and l.classMethod LIKE CONCAT('%',#{log.classMethod},'%')
             </if>
         </where>
-        ORDER BY l.createdTime DESC
+        ORDER BY l.id DESC
     </select>
 
 

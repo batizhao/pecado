@@ -1,5 +1,7 @@
 package me.batizhao.system.api.aspect;
 
+import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,8 +22,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Objects;
 
 /**
  * @author batizhao
@@ -43,14 +43,17 @@ public class SystemLogAspect {
 
     private ApplicationContext applicationContext;
 
+    private ObjectMapper objectMapper;
+
     @Around("@annotation(systemLog)")
     @SneakyThrows
     public Object around(ProceedingJoinPoint point, SystemLog systemLog) {
+        LogDTO logDTO = getLogDTO(point, systemLog);
+
         long startTime = System.currentTimeMillis();
         Object result = point.proceed();
         long endTime = System.currentTimeMillis();
 
-        LogDTO logDTO = getLogDTO(point, systemLog);
         logDTO.setResult(result.toString());
         logDTO.setSpend((int) (endTime - startTime));
 
@@ -82,15 +85,14 @@ public class SystemLogAspect {
             logDTO.setDescription("请使用 @ApiOperation 或者 @SystemLog 的 value 属性。");
         }
 
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert attributes != null;
-        HttpServletRequest request = attributes.getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects
+                .requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 
         logDTO.setIp(request.getRemoteAddr());
         logDTO.setHttpRequestMethod(request.getMethod());
         logDTO.setClassName(method.getDeclaringClass().getName());
         logDTO.setClassMethod(method.getName());
-        logDTO.setParameter(getParameter(method, point.getArgs()));
+        logDTO.setParameter(getParameter(method.getParameters(), point.getArgs()));
         logDTO.setClientId(getClientId());
         logDTO.setUsername(getUsername());
         logDTO.setUrl(request.getRequestURL().toString());
@@ -128,38 +130,59 @@ public class SystemLogAspect {
     /**
      * 获取方法参数
      *
-     * @param method
-     * @param args
+     * @param parameters 参数名
+     * @param args 参数值
      * @return
      */
-    private String getParameter(Method method, Object[] args) {
-        List<Object> argList = new ArrayList<>();
-        Parameter[] parameters = method.getParameters();
-        for (int i = 0; i < parameters.length; i++) {
-            //将RequestBody注解修饰的参数作为请求参数
-            RequestBody requestBody = parameters[i].getAnnotation(RequestBody.class);
-            if (requestBody != null) {
-                argList.add(args[i]);
+    @SneakyThrows
+    private String getParameter(Parameter[] parameters, Object[] args) {
+//        List<Object> argList = new ArrayList<>();
+//        for (int i = 0; i < parameters.length; i++) {
+//            //将RequestBody注解修饰的参数作为请求参数
+//            RequestBody requestBody = parameters[i].getAnnotation(RequestBody.class);
+//            if (requestBody != null) {
+//                argList.add(args[i]);
+//            }
+//            //将RequestParam注解修饰的参数作为请求参数
+//            RequestParam requestParam = parameters[i].getAnnotation(RequestParam.class);
+//            if (requestParam != null) {
+//                Map<String, Object> map = new HashMap<>();
+//                String key = parameters[i].getName();
+//                if (!StringUtils.isEmpty(requestParam.value())) {
+//                    key = requestParam.value();
+//                }
+//                map.put(key, args[i]);
+//                argList.add(map);
+//            }
+//        }
+//        if (argList.isEmpty()) {
+//            return null;
+//        } else if (argList.size() == 1) {
+//            return argList.get(0).toString();
+//        } else {
+//            return argList.toString();
+//        }
+        if (ArrayUtils.isEmpty(parameters) || ArrayUtils.isEmpty(args)) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < args.length; i++) {
+            //参数名
+            String name = parameters[i].getName();
+            //参数值
+            Object value = args[i];
+            builder.append(name).append("=");
+            if (value instanceof String) {
+                builder.append(value);
+            } else {
+                builder.append(objectMapper.writeValueAsString(value));
             }
-            //将RequestParam注解修饰的参数作为请求参数
-            RequestParam requestParam = parameters[i].getAnnotation(RequestParam.class);
-            if (requestParam != null) {
-                Map<String, Object> map = new HashMap<>();
-                String key = parameters[i].getName();
-                if (!StringUtils.isEmpty(requestParam.value())) {
-                    key = requestParam.value();
-                }
-                map.put(key, args[i]);
-                argList.add(map);
+            if (i < args.length -1) {
+                builder.append(", ");
             }
         }
-        if (argList.isEmpty()) {
-            return null;
-        } else if (argList.size() == 1) {
-            return argList.get(0).toString();
-        } else {
-            return argList.toString();
-        }
+
+        return builder.toString();
     }
 
 }
