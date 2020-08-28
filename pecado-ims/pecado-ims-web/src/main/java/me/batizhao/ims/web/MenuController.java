@@ -2,6 +2,7 @@ package me.batizhao.ims.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.util.SecurityUtils;
@@ -13,8 +14,11 @@ import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,12 +44,12 @@ public class MenuController {
     private RoleService roleService;
 
     /**
-     * 查询用户菜单
+     * 查询当前用户菜单
      * 返回菜单树
      *
      * @return 菜单树
      */
-    @ApiOperation(value = "查询用户菜单")
+    @ApiOperation(value = "查询当前用户菜单")
     @SystemLog
     @GetMapping("/menu/me")
     public ResponseInfo<List<MenuVO>> handleMenuTree4Me() {
@@ -54,6 +58,19 @@ public class MenuController {
         Set<MenuVO> all = new HashSet<>();
         roleService.findRolesByUserId(userId).forEach(roleVO -> all.addAll(menuService.findMenusByRoleId(roleVO.getId())));
         return ResponseInfo.ok(menuService.filterMenu(all, null));
+    }
+
+    /**
+     * 查询角色菜单
+     * 返回菜单树
+     *
+     * @return 菜单树
+     */
+    @ApiOperation(value = "查询角色菜单")
+    @SystemLog
+    @GetMapping(value = "menu", params = "roleId")
+    public ResponseInfo<List<MenuVO>> handleMenusByRoleId(@ApiParam(value = "角色ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
+        return ResponseInfo.ok(menuService.findMenusByRoleId(roleId));
     }
 
     /**
