@@ -19,8 +19,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -83,5 +82,19 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data", hasSize(0)));
 
         verify(roleService).findRolesByUserId(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    void givenNothing_whenFindRoles_thenSuccess() throws Exception {
+        doReturn(roleList).when(roleService).findRoles();
+
+        mvc.perform(get("/roles"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data", hasSize(2)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("admin")));
     }
 }

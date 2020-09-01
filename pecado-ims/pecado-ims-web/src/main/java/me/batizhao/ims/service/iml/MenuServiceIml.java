@@ -37,7 +37,7 @@ public class MenuServiceIml extends ServiceImpl<MenuMapper, Menu> implements Men
 
     @Override
     public List<MenuTree> findMenuTree() {
-        List<Menu> menus = baseMapper.selectList(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getSort));
+        List<Menu> menus = menuMapper.selectList(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getSort));
         List<MenuTree> menuTrees = new ArrayList<>();
         MenuTree menuTree = null;
         for (Menu menu : menus) {
@@ -53,8 +53,12 @@ public class MenuServiceIml extends ServiceImpl<MenuMapper, Menu> implements Men
 
     @Override
     public List<MenuVO> filterMenu(Set<MenuVO> all, Integer parentId) {
-        List<MenuVO> menuTreeList = all.stream().filter(vo -> MenuTypeEnum.LEFT_MENU.getType().equals(vo.getType()))
-                .map(MenuVO::new).sorted(Comparator.comparingInt(MenuVO::getSort)).collect(Collectors.toList());
+        List<MenuVO> menuTreeList = all.stream()
+                .filter(vo -> MenuTypeEnum.LEFT_MENU.getType().equals(vo.getType()))
+                .map(MenuVO::new)
+                .sorted(Comparator.comparingInt(MenuVO::getSort))
+                .collect(Collectors.toList());
+
         Integer parent = parentId == null ? 0 : parentId;
         return TreeUtil.build(menuTreeList, parent);
     }

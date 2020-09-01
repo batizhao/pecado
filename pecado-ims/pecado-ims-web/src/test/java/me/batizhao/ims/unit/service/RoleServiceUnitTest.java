@@ -1,11 +1,11 @@
 package me.batizhao.ims.unit.service;
 
+import lombok.extern.slf4j.Slf4j;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Role;
-import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.mapper.RoleMapper;
+import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.iml.RoleServiceIml;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 /**
@@ -35,7 +34,7 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
     @TestConfiguration
     static class TestContextConfiguration {
         @Bean
-        public RoleService userService() {
+        public RoleService roleService() {
             return new RoleServiceIml();
         }
     }
@@ -69,5 +68,17 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
 
         assertThat(roles, hasSize(2));
         assertThat(roles, hasItems(hasProperty("name", is("admin"))));
+    }
+
+    @Test
+    void givenNothing_whenFindAllRole_thenSuccess() {
+        when(roleMapper.selectList(null))
+                .thenReturn(roleList);
+
+        List<RoleVO> roles = roleService.findRoles();
+
+        assertThat(roles, hasSize(2));
+        assertThat(roles, hasItems(hasProperty("name", is("admin")),
+                hasProperty("name", is("common"))));
     }
 }

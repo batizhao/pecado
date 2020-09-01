@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
+import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.RoleService;
@@ -12,10 +15,13 @@ import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.web.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -223,6 +229,37 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data").value(true));
 
         verify(userService).removeByIds(anyList());
+    }
+
+    /**
+     * Mock Static Method
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser
+    public void givenNothing_whenGetUserInfo_thenSucceed() throws Exception {
+        PecadoUser pecadoUser = new PecadoUser(1L, 2L, "zhangsan", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+
+        try (MockedStatic<SecurityUtils> dummyStatic = mockStatic(SecurityUtils.class)) {
+            dummyStatic.when(SecurityUtils::getUser).thenReturn(pecadoUser);
+            SecurityUtils.getUser();
+            dummyStatic.verify(times(1), SecurityUtils::getUser);
+
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(userList.get(0), userVO);
+
+            UserInfoVO userInfoVO = new UserInfoVO();
+            userInfoVO.setUserVO(userVO);
+
+            doReturn(userInfoVO).when(userService).getUserInfo("zhangsan");
+
+            mvc.perform(get("/user/me"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                    .andExpect(jsonPath("$.data.userVO.username").value("zhangsan"));
+        }
     }
 
 }

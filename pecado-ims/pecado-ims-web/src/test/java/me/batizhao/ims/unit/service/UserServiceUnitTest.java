@@ -1,10 +1,12 @@
 package me.batizhao.ims.unit.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
+import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.UserService;
@@ -218,4 +220,19 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         verify(userMapper).updateById(any());
     }
 
+    @Test
+    void givenUsername_whenGetUserInfo_thenSucceed() {
+        doReturn(userList.get(0)).when(userMapper).selectOne(any());
+
+        UserInfoVO uiv = userService.getUserInfo("xxx");
+
+        assertThat(uiv.getUserVO().getEmail(), equalTo("zhangsan@gmail.com"));
+    }
+
+    @Test
+    void givenUsername_whenGetUserInfo_thenNotFound() {
+        doReturn(null).when(userMapper).selectOne(any());
+
+        Assertions.assertThrows(NotFoundException.class, () -> userService.getUserInfo("xxxx"));
+    }
 }

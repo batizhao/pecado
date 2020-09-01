@@ -14,8 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.mockito.Mockito.*;
 
 /**
  * @author batizhao
@@ -74,7 +74,7 @@ public class PecadoUserDetailsServiceUnitTest {
 
         ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok(user_test_data);
 
-        Mockito.when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
+        when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -94,13 +94,12 @@ public class PecadoUserDetailsServiceUnitTest {
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
         ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok();
 
-        Mockito.doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
+        doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(anyString(), anyString());
 
         Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
 
-        Mockito.verify(userFeignService).loadUserByUsername(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
+        verify(userFeignService).loadUserByUsername(anyString(), anyString());
     }
-
     @Test
     public void givenUserName_whenFindUserRoles_thenRoleIsEmpty() {
         String username = "zhangsan";
@@ -111,12 +110,12 @@ public class PecadoUserDetailsServiceUnitTest {
 
         ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok(user_test_data);
 
-        Mockito.when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
+        when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        Mockito.verify(userFeignService).loadUserByUsername(ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
+        verify(userFeignService).loadUserByUsername(anyString(), anyString());
 
         log.debug("userDetails: {}", userDetails);
         MatcherAssert.assertThat(userDetails.getUsername(), Matchers.equalTo(username));
