@@ -39,7 +39,7 @@ public class MenuServiceIml extends ServiceImpl<MenuMapper, Menu> implements Men
     public List<MenuTree> findMenuTree() {
         List<Menu> menus = menuMapper.selectList(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getSort));
         List<MenuTree> menuTrees = new ArrayList<>();
-        MenuTree menuTree = null;
+        MenuTree menuTree;
         for (Menu menu : menus) {
             menuTree = new MenuTree();
             menuTree.setTitle(menu.getName());

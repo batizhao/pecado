@@ -1,7 +1,6 @@
 package me.batizhao.ims.unit.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
@@ -9,8 +8,8 @@ import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
-import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.mapper.UserMapper;
+import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.service.iml.UserServiceIml;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

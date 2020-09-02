@@ -240,10 +240,10 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     public void givenNothing_whenGetUserInfo_thenSucceed() throws Exception {
         PecadoUser pecadoUser = new PecadoUser(1L, 2L, "zhangsan", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 
-        try (MockedStatic<SecurityUtils> dummyStatic = mockStatic(SecurityUtils.class)) {
-            dummyStatic.when(SecurityUtils::getUser).thenReturn(pecadoUser);
+        try (MockedStatic<SecurityUtils> mockStatic = mockStatic(SecurityUtils.class)) {
+            mockStatic.when(SecurityUtils::getUser).thenReturn(pecadoUser);
             SecurityUtils.getUser();
-            dummyStatic.verify(times(1), SecurityUtils::getUser);
+            mockStatic.verify(times(1), SecurityUtils::getUser);
 
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(userList.get(0), userVO);
