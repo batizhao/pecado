@@ -10,6 +10,7 @@ import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,5 +62,13 @@ public class MenuServiceIml extends ServiceImpl<MenuMapper, Menu> implements Men
 
         Integer parent = parentId == null ? 0 : parentId;
         return TreeUtil.build(menuTreeList, parent);
+    }
+
+    @Override
+    public MenuVO findMenuById(int menuId) {
+        Menu menu = menuMapper.selectById(menuId);
+        MenuVO menuVO = new MenuVO();
+        BeanUtils.copyProperties(menu, menuVO);
+        return menuVO;
     }
 }

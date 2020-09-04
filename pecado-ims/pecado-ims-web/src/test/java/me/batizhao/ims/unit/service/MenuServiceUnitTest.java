@@ -27,7 +27,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -96,7 +96,7 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
 
         assertThat(menuTree, hasSize(1));
         assertThat(menuTree, hasItems(hasProperty("title", is("工作台")),
-                hasProperty("children", isA(ArrayList.class))));
+                hasProperty("children", hasSize(1))));
 
         List<TreeNode> treeNodes = menuTree.get(0).getChildren().get(0).getChildren();
         assertThat(treeNodes, hasSize(2));
@@ -107,7 +107,7 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
         List<MenuVO> menus = menuService.filterMenu((new HashSet<>(menuVOList)), null);
         assertThat(menus, hasSize(1));
         assertThat(menus, hasItems(hasProperty("name", is("工作台")),
-                hasProperty("children", isA(ArrayList.class))));
+                hasProperty("children", hasSize(1))));
 
         List<TreeNode> treeNodes = menus.get(0).getChildren().get(0).getChildren();
         assertThat(treeNodes, hasSize(2));
@@ -122,7 +122,7 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
         List<MenuVO> menus = menuService.filterMenu((new HashSet<>(menuVOList)), 1);
         assertThat(menus, hasSize(1));
         assertThat(menus, hasItems(hasProperty("name", is("权限管理")),
-                hasProperty("children", isA(ArrayList.class))));
+                hasProperty("children", hasSize(1))));
 
         List<TreeNode> treeNodes = menus.get(0).getChildren();
         assertThat(treeNodes, hasSize(2));
@@ -130,5 +130,14 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
                 hasProperty("permission", is("ims_role_admin"))),
                 allOf(hasProperty("name", is("用户管理")),
                         hasProperty("permission", is("ims_user_admin")))));
+    }
+
+    @Test
+    public void givenId_whenFindMenu_thenSuccess() {
+        doReturn(menuList.get(0)).when(menuMapper).selectById(anyInt());
+
+        MenuVO menuVO = menuService.findMenuById(1);
+
+        assertThat(menuVO, hasProperty("name", equalTo("工作台")));
     }
 }

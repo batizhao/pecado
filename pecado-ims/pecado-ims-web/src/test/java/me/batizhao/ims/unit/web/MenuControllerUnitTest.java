@@ -154,4 +154,17 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].children[0].key", equalTo("ims_root")));
     }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenFindMenu_thenSuccess() throws Exception {
+        doReturn(menuVOList.get(0)).when(menuService).findMenuById(anyInt());
+
+        mvc.perform(get("/menu/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.name").value("工作台"));
+    }
 }

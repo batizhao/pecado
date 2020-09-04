@@ -8,12 +8,14 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
+import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -84,6 +86,18 @@ public class MenuController {
     @GetMapping("/menus")
     public ResponseInfo<List<MenuTree>> handleMenuTree() {
         return ResponseInfo.ok(menuService.findMenuTree());
+    }
+
+    /**
+     * 根据菜单 ID 查询
+     * @param id 菜单 ID
+     * @return 菜单对象
+     */
+    @ApiOperation(value = "根据菜单 ID 查询")
+    @SystemLog
+    @GetMapping("/menu/{id}")
+    public ResponseInfo<MenuVO> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) int id) {
+        return ResponseInfo.ok(menuService.findMenuById(id));
     }
 
 }

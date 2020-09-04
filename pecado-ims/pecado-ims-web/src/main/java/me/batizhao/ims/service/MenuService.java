@@ -23,16 +23,23 @@ public interface MenuService extends IService<Menu> {
 
     /**
      * 查询所有菜单
-     * @return
+     * @return 菜单树
      */
     List<MenuTree> findMenuTree();
 
     /**
-     * 查询菜单
+     * 构造菜单树
      * @param all 全部菜单
      * @param parentId 父节点ID
-     * @return
+     * @return 菜单树
      */
     List<MenuVO> filterMenu(Set<MenuVO> all, Integer parentId);
+
+    /**
+     * 查询菜单
+     * @param menuId
+     * @return 菜单对象
+     */
+    MenuVO findMenuById(int menuId);
 
 }
