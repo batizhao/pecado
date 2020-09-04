@@ -1,5 +1,6 @@
 package me.batizhao.ims.unit.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.common.core.util.ResultEnum;
@@ -32,7 +33,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -42,6 +45,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @WebMvcTest(MenuController.class)
 public class MenuControllerUnitTest extends BaseControllerUnitTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mvc;
@@ -64,7 +70,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @BeforeEach
     public void setUp() {
         menuList = new ArrayList<>();
-        menuList.add(new Menu().setId(1).setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
+        menuList.add(new Menu().setId(1).setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()).setPath("/aaa"));
         menuList.add(new Menu().setId(2).setName("权限管理").setPermission("ims_root").setPid(1).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
         menuList.add(new Menu().setId(3).setName("用户管理").setPermission("ims_user_admin").setPid(2).setSort(2).setType(MenuTypeEnum.LEFT_MENU.getType()));
         menuList.add(new Menu().setId(4).setName("角色管理").setPermission("ims_role_admin").setPid(2).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
@@ -166,5 +172,42 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.name").value("工作台"));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenMenu_whenSaveMenu_thenSuccess() throws Exception {
+        Menu menu = menuList.get(0);
+        menu.setId(null);
+
+        doReturn(menuVOList.get(1)).when(menuService).saveOrUpdateMenu(any(Menu.class));
+
+        mvc.perform(post("/menu").with(csrf())
+                .content(objectMapper.writeValueAsString(menu))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.name").value("权限管理"));
+
+        verify(menuService).saveOrUpdateMenu(any(Menu.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenMenu_whenUpdateMenu_thenSuccess() throws Exception {
+        doReturn(menuVOList.get(0)).when(menuService).saveOrUpdateMenu(any(Menu.class));
+
+        mvc.perform(post("/menu").with(csrf())
+                .content(objectMapper.writeValueAsString(menuList.get(0)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.name").value("工作台"));
+
+        verify(menuService).saveOrUpdateMenu(any(Menu.class));
     }
 }

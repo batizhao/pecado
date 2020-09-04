@@ -8,17 +8,18 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
+import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.Menu;
+import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -96,8 +97,24 @@ public class MenuController {
     @ApiOperation(value = "根据菜单 ID 查询")
     @SystemLog
     @GetMapping("/menu/{id}")
-    public ResponseInfo<MenuVO> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) int id) {
+    public ResponseInfo<MenuVO> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) Integer id) {
         return ResponseInfo.ok(menuService.findMenuById(id));
+    }
+
+    /**
+     * 添加或修改菜单
+     * 根据是否有ID判断是添加还是修改
+     *
+     * @param menu 菜单属性
+     * @return 菜单对象
+     */
+    @ApiOperation(value = "添加或修改菜单")
+    @PostMapping("menu")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<MenuVO> handleSaveOrUpdate(@Valid @ApiParam(value = "菜单", required = true) @RequestBody Menu menu) {
+        MenuVO menuVO = menuService.saveOrUpdateMenu(menu);
+        return ResponseInfo.ok(menuVO);
     }
 
 }

@@ -71,4 +71,18 @@ public class MenuServiceIml extends ServiceImpl<MenuMapper, Menu> implements Men
         BeanUtils.copyProperties(menu, menuVO);
         return menuVO;
     }
+
+    @Override
+    public MenuVO saveOrUpdateMenu(Menu menu) {
+        if (menu.getId() == null) {
+            menuMapper.insert(menu);
+        } else {
+            menuMapper.updateById(menu);
+        }
+
+        MenuVO menuVO = new MenuVO();
+        BeanUtils.copyProperties(menu, menuVO);
+
+        return menuVO;
+    }
 }

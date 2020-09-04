@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
@@ -20,11 +21,11 @@ import java.io.Serializable;
 public class Menu implements Serializable {
 
     @ApiModelProperty(value = "ID", example = "100")
-    private int id;
+    private Integer id;
 
     @ApiModelProperty(value = "父ID", example = "100")
-    @NotBlank(message = "pid is not blank")
-    private int pid;
+    @Min(0)
+    private Integer pid;
 
     @ApiModelProperty(value = "路径", example = "/user/common")
     @NotBlank(message = "path is not blank")

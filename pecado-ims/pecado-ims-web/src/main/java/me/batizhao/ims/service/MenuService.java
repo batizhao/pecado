@@ -42,4 +42,10 @@ public interface MenuService extends IService<Menu> {
      */
     MenuVO findMenuById(int menuId);
 
+    /**
+     * 添加或者更新菜单
+     * @param menu
+     * @return
+     */
+    MenuVO saveOrUpdateMenu(Menu menu);
 }

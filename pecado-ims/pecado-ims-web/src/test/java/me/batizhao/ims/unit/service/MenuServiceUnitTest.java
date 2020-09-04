@@ -28,8 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author batizhao
@@ -122,7 +121,7 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
         List<MenuVO> menus = menuService.filterMenu((new HashSet<>(menuVOList)), 1);
         assertThat(menus, hasSize(1));
         assertThat(menus, hasItems(hasProperty("name", is("权限管理")),
-                hasProperty("children", hasSize(1))));
+                hasProperty("children", hasSize(2))));
 
         List<TreeNode> treeNodes = menus.get(0).getChildren();
         assertThat(treeNodes, hasSize(2));
@@ -139,5 +138,26 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
         MenuVO menuVO = menuService.findMenuById(1);
 
         assertThat(menuVO, hasProperty("name", equalTo("工作台")));
+    }
+
+    @Test
+    public void givenMenu_whenSaveOrUpdate_thenSuccess() {
+        Menu menu = new Menu().setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType());
+
+        // insert 不带 id
+        doReturn(1).when(menuMapper).insert(any(Menu.class));
+
+        MenuVO menuVO = menuService.saveOrUpdateMenu(menu);
+        log.info("menuVO: {}", menuVO);
+
+        verify(menuMapper).insert(any());
+
+        // update 需要带 id
+        doReturn(1).when(menuMapper).updateById(any(Menu.class));
+
+        menuVO = menuService.saveOrUpdateMenu(menuList.get(0));
+        log.info("menuVO: {}", menuVO);
+
+        verify(menuMapper).updateById(any());
     }
 }

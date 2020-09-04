@@ -8,7 +8,7 @@ package me.batizhao.ims.api.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +20,11 @@ import java.util.List;
 public class TreeNode {
 
 	@ApiModelProperty(value = "ID", example = "100")
-	protected int id;
+	protected Integer id;
 
 	@ApiModelProperty(value = "父ID", example = "100")
-	@NotBlank(message = "pid is not blank")
-	protected int pid;
+	@Min(0)
+	protected Integer pid;
 
 	protected List<TreeNode> children = new ArrayList<>();;
 
@@ -34,19 +34,19 @@ public class TreeNode {
 		children.add(node);
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getPid() {
+	public Integer getPid() {
 		return pid;
 	}
 
-	public void setPid(int pid) {
+	public void setPid(Integer pid) {
 		this.pid = pid;
 	}
 
