@@ -37,7 +37,7 @@ public class TreeUtil {
 			}
 
 			for (T it : treeNodes) {
-				if (it.getPid() == treeNode.getId()) {
+				if (it.getPid().equals(treeNode.getId())) {
 					if (treeNode.getChildren() == null) {
 						treeNode.setChildren(new ArrayList<>());
 					}
