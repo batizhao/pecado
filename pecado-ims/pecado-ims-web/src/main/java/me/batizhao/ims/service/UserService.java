@@ -25,7 +25,9 @@ public interface UserService extends IService<User> {
 
 	int deleteByUsername(String username);
 
-	UserVO saveOrUpdate4me(User user);
+	UserVO saveOrUpdateUser(User user);
 
     UserInfoVO getUserInfo(String username);
+
+	Boolean updateUserStatusById(Long id, Integer locked);
 }

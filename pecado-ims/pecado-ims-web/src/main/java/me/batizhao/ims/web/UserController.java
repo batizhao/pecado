@@ -123,7 +123,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
     public ResponseInfo<UserVO> handleSaveOrUpdate(@Valid @ApiParam(value = "用户", required = true) @RequestBody User request_user) {
-        UserVO user = userService.saveOrUpdate4me(request_user);
+        UserVO user = userService.saveOrUpdateUser(request_user);
         return ResponseInfo.ok(user);
     }
 
@@ -143,6 +143,36 @@ public class UserController {
     }
 
     /**
+     * 禁用
+     *
+     * @param id 用户ID
+     * @return
+     */
+    @ApiOperation(value = "禁用")
+    @PostMapping("/user/lock")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<Boolean> handleLockUser(@ApiParam(value = "用户ID串", required = true) @RequestParam Long id) {
+        Boolean b = userService.updateUserStatusById(id, 1);
+        return ResponseInfo.ok(b);
+    }
+
+    /**
+     * 启用
+     *
+     * @param id 用户ID
+     * @return
+     */
+    @ApiOperation(value = "启用")
+    @PostMapping("/user/unlock")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<Boolean> handleUnLockUser(@ApiParam(value = "用户ID串", required = true) @RequestParam Long id) {
+        Boolean b = userService.updateUserStatusById(id, 0);
+        return ResponseInfo.ok(b);
+    }
+
+    /**
      * 我的信息
      *
      * @return 当前用户基本信息、角色、权限清单
@@ -155,6 +185,5 @@ public class UserController {
         UserInfoVO userInfoVO = userService.getUserInfo(username);
         return ResponseInfo.ok(userInfoVO);
     }
-
 
 }

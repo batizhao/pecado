@@ -89,4 +89,9 @@ public class UserMapperUnitTest extends BaseMapperUnitTest {
         users = userMapper.selectUserPage(new Page<>(), new User().setUsername("bob"));
         assertThat(users.getRecords(), hasSize(2));
     }
+
+    @Test
+    public void testUpdateUserStatusById() {
+        assertThat(userMapper.updateUserStatusById(3L, 1), is(1));
+    }
 }

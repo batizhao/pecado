@@ -171,10 +171,10 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void givenJson_whenSaveUser_thenSucceedJson() throws Exception {
+    public void givenJson_whenSaveUser_thenSuccessJson() throws Exception {
         User requestBody = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
 
-        when(userService.saveOrUpdate4me(any(User.class)))
+        when(userService.saveOrUpdateUser(any(User.class)))
                 .thenReturn(userList.get(0));
 
         mvc.perform(post("/user").with(csrf())
@@ -186,15 +186,15 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.id", equalTo(1)));
 
-        verify(userService).saveOrUpdate4me(any(User.class));
+        verify(userService).saveOrUpdateUser(any(User.class));
     }
 
     @Test
     @WithMockUser
-    public void givenJson_whenUpdateUser_thenSucceedJson() throws Exception {
+    public void givenJson_whenUpdateUser_thenSuccessJson() throws Exception {
         User requestBody = new User().setId(2L).setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
 
-        when(userService.saveOrUpdate4me(any(User.class)))
+        when(userService.saveOrUpdateUser(any(User.class)))
                 .thenReturn(userList.get(1));
 
         mvc.perform(post("/user").with(csrf())
@@ -207,7 +207,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.id", equalTo(2)))
                 .andExpect(jsonPath("$.data.username", equalTo("lisi")));
 
-        verify(userService).saveOrUpdate4me(any(User.class));
+        verify(userService).saveOrUpdateUser(any(User.class));
     }
 
 
@@ -218,7 +218,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
      */
     @Test
     @WithMockUser
-    public void givenId_whenDeleteUser_thenSucceed() throws Exception {
+    public void givenId_whenDeleteUser_thenSuccess() throws Exception {
         when(userService.removeByIds(anyList())).thenReturn(true);
 
         mvc.perform(delete("/user").param("ids", "1,2").with(csrf()))
@@ -232,12 +232,43 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     }
 
     /**
+     * 更新用户状态
+     *
+     * @throws Exception
+     */
+    @Test
+    @WithMockUser
+    public void givenId_whenUpdateUserStatus_thenSuccess() throws Exception {
+        when(userService.updateUserStatusById(1L, 1)).thenReturn(true);
+
+        mvc.perform(post("/user/lock").param("id", "1").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(userService).updateUserStatusById(1L, 1);
+
+        when(userService.updateUserStatusById(1L, 0)).thenReturn(true);
+
+        mvc.perform(post("/user/unlock").param("id", "1").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(userService).updateUserStatusById(1L, 0);
+    }
+
+    /**
      * Mock Static Method
      * @throws Exception
      */
     @Test
     @WithMockUser
-    public void givenNothing_whenGetUserInfo_thenSucceed() throws Exception {
+    public void givenNothing_whenGetUserInfo_thenSuccess() throws Exception {
         PecadoUser pecadoUser = new PecadoUser(1L, 2L, "zhangsan", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 
         try (MockedStatic<SecurityUtils> mockStatic = mockStatic(SecurityUtils.class)) {

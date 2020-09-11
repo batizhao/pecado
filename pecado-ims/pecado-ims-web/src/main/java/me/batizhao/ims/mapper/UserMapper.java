@@ -27,4 +27,7 @@ public interface UserMapper extends BaseMapper<User> {
     int deleteUserByUsername(@Param("username") String username);
 
     IPage<UserVO> selectUserPage(Page<UserVO> page, @Param("user") User user);
+
+    @Update("update user set locked = #{locked} where id= #{id}")
+    int updateUserStatusById(@Param("id") Long id, @Param("locked") Integer locked);
 }

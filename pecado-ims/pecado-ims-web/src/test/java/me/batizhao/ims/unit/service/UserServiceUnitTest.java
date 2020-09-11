@@ -171,7 +171,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     }
 
     @Test
-    public void givenUserName_whenDeleteUser_thenSucceed() {
+    public void givenUserName_whenDeleteUser_thenSuccess() {
         String username = "zhangsan";
 
         when(userMapper.delete(any()))
@@ -183,7 +183,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     }
 
     @Test
-    public void givenUserJson_whenSaveOrUpdateUser_thenSucceed() {
+    public void givenUserJson_whenSaveOrUpdateUser_thenSuccess() {
         User user_test_data = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");;
 
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -205,7 +205,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         // insert 不带 id
         doReturn(1).when(userMapper).insert(any());
 
-        UserVO user = userService.saveOrUpdate4me(user_test_data);
+        UserVO user = userService.saveOrUpdateUser(user_test_data);
         log.info("user: {}", user);
 
         verify(userMapper).insert(any());
@@ -213,14 +213,14 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         // update 需要带 id
         doReturn(1).when(userMapper).updateById(any());
 
-        user = userService.saveOrUpdate4me(userList.get(0));
+        user = userService.saveOrUpdateUser(userList.get(0));
         log.info("user: {}", user);
 
         verify(userMapper).updateById(any());
     }
 
     @Test
-    void givenUsername_whenGetUserInfo_thenSucceed() {
+    public void givenUsername_whenGetUserInfo_thenSuccess() {
         doReturn(userList.get(0)).when(userMapper).selectOne(any());
 
         UserInfoVO uiv = userService.getUserInfo("xxx");
@@ -229,9 +229,17 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     }
 
     @Test
-    void givenUsername_whenGetUserInfo_thenNotFound() {
+    public void givenUsername_whenGetUserInfo_thenNotFound() {
         doReturn(null).when(userMapper).selectOne(any());
 
         Assertions.assertThrows(NotFoundException.class, () -> userService.getUserInfo("xxxx"));
+    }
+
+    @Test
+    public void givenUserId_whenUpdateUserStatus_thenSuccess() {
+        when(userMapper.updateUserStatusById(1L, 1))
+                .thenReturn(1);
+
+        assertThat(userService.updateUserStatusById(1L, 1), equalTo(true));
     }
 }

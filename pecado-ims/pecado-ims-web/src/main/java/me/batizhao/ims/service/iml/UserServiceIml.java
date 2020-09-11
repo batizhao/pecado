@@ -73,7 +73,7 @@ public class UserServiceIml extends ServiceImpl<UserMapper, User> implements Use
     }
 
     @Override
-    public UserVO saveOrUpdate4me(User user) {
+    public UserVO saveOrUpdateUser(User user) {
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         String hashPass = bcryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(hashPass);
@@ -105,5 +105,10 @@ public class UserServiceIml extends ServiceImpl<UserMapper, User> implements Use
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setUserVO(userVO);
         return userInfoVO;
+    }
+
+    @Override
+    public Boolean updateUserStatusById(Long id, Integer locked) {
+        return userMapper.updateUserStatusById(id, locked) == 1;
     }
 }
