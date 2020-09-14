@@ -33,16 +33,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<spring-boot.version>2.3.3.RELEASE</spring-boot.version>
-		<spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
+		<spring-cloud-alibaba.version>2.2.2.RELEASE</spring-cloud-alibaba.version>
 		<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
 		<spring-cloud-contract.version>2.2.3.RELEASE</spring-cloud-contract.version>
 
-		<swagger.version>2.9.2</swagger.version>
-		<mybatis-plus.version>3.3.2</mybatis-plus.version>
+		<swagger.version>2.10.5</swagger.version>
+		<mybatis-plus.version>3.4.0</mybatis-plus.version>
 		<mybatis-spring-boot.version>2.1.3</mybatis-spring-boot.version>
 		<mockito.version>3.5.7</mockito.version>
-<!--		<spring-security-oauth2.version>2.2.4.RELEASE</spring-security-oauth2.version>-->
-<!--		<spring-security-jwt.version>1.1.0.RELEASE</spring-security-jwt.version>-->
 
 		<jacoco-maven-plugin.verison>0.8.5</jacoco-maven-plugin.verison>
 		<git-commit-id-plugin.version>4.0.0</git-commit-id-plugin.version>

@@ -241,5 +241,10 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
                 .thenReturn(1);
 
         assertThat(userService.updateUserStatusById(1L, 1), equalTo(true));
+
+        when(userMapper.updateUserStatusById(1L, 1))
+                .thenReturn(0);
+
+        assertThat(userService.updateUserStatusById(1L, 1), equalTo(false));
     }
 }
