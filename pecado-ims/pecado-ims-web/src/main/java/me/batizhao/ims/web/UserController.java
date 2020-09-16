@@ -13,7 +13,9 @@ import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
+import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.service.RoleService;
+import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private UserRoleService userRoleService;
 
     /**
      * 根据用户名查询用户
@@ -184,6 +188,21 @@ public class UserController {
         String username = SecurityUtils.getUser().getUsername();
         UserInfoVO userInfoVO = userService.getUserInfo(username);
         return ResponseInfo.ok(userInfoVO);
+    }
+
+    /**
+     * 分配用户角色
+     * 返回 true or false
+     *
+     * @return true or false
+     */
+    @ApiOperation(value = "分配用户角色")
+    @PostMapping(value = "/user/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "用户ID", required = true) @RequestParam @Min(1) Long id,
+                                                    @ApiParam(value = "关联角色ID串", required = true) @RequestParam List<String> roles) {
+        return ResponseInfo.ok(userRoleService.updateUserRoles(id, roles));
     }
 
 }

@@ -56,10 +56,10 @@
     </changeSet>
     <changeSet author="batizhao" id="CreateTableRoleMenu-20200225-003">
         <createTable tableName="role_menu" remarks="角色权限关联表">
-            <column name="role_id" type="BIGINT" remarks="角色ID">
+            <column name="roleId" type="BIGINT" remarks="角色ID">
                 <constraints nullable="false"/>
             </column>
-            <column name="menu_id" type="BIGINT" remarks="权限ID">
+            <column name="menuId" type="BIGINT" remarks="权限ID">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -98,10 +98,10 @@
     </changeSet>
     <changeSet author="batizhao" id="CreateTableUserRole-20200225-005">
         <createTable tableName="user_role" remarks="用户角色关联表">
-            <column name="user_id" type="BIGINT" remarks="用户ID">
+            <column name="userId" type="BIGINT" remarks="用户ID">
                 <constraints nullable="false"/>
             </column>
-            <column name="role_id" type="BIGINT" remarks="角色ID">
+            <column name="roleId" type="BIGINT" remarks="角色ID">
                 <constraints nullable="false"/>
             </column>
         </createTable>

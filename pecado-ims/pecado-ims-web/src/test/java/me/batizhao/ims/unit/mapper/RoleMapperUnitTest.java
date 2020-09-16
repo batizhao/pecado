@@ -30,17 +30,17 @@ public class RoleMapperUnitTest extends BaseMapperUnitTest {
                 hasProperty("name", is("普通用户")))));
     }
 
-    @Test
-    public void testFindRoleMenus() {
-        List<RoleMenu> roleMenus = roleMapper.findRoleMenus();
-
-        log.info("rolePermissions: {}", roleMenus);
-
-        assertThat(roleMenus, hasItem(allOf(hasProperty("roleCode", is("ROLE_USER")),
-                hasProperty("path", is("/dashboard")))));
-
-        assertThat(roleMenus, hasItem(allOf(hasProperty("roleCode", is("ROLE_ADMIN")),
-                hasProperty("path", is("/ims")))));
-    }
+//    @Test
+//    public void testFindRoleMenus() {
+//        List<RoleMenu> roleMenus = roleMapper.findRoleMenus();
+//
+//        log.info("rolePermissions: {}", roleMenus);
+//
+//        assertThat(roleMenus, hasItem(allOf(hasProperty("roleCode", is("ROLE_USER")),
+//                hasProperty("path", is("/dashboard")))));
+//
+//        assertThat(roleMenus, hasItem(allOf(hasProperty("roleCode", is("ROLE_ADMIN")),
+//                hasProperty("path", is("/ims")))));
+//    }
 
 }

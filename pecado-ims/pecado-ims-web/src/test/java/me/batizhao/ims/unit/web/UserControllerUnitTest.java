@@ -11,6 +11,7 @@ import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.RoleService;
+import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.web.UserController;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,6 +65,8 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     private UserService userService;
     @MockBean
     private RoleService roleService;
+    @MockBean
+    private UserRoleService userRoleService;
 
     private List<UserVO> userList;
     private IPage<UserVO> userPageList;
@@ -293,4 +296,16 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         }
     }
 
+    @Test
+    @WithMockUser
+    public void givenRoles_whenAddUserRoles_thenSuccess() throws Exception {
+        doReturn(true).when(userRoleService).updateUserRoles(anyLong(), anyList());
+
+        mvc.perform(post("/user/role").param("id", "1").param("roles", "2,3,4").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+    }
 }

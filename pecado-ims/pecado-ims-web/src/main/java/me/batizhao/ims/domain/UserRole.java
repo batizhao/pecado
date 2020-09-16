@@ -10,27 +10,20 @@ import java.io.Serializable;
 
 /**
  * @author batizhao
- * @since 2020-02-26
+ * @since 2020-09-14
  */
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@ApiModel(description = "角色菜单关联")
-public class RoleMenu implements Serializable {
+@ApiModel(description = "用户角色关联")
+public class UserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "用户ID")
+    private Long userId;
 
     @ApiModelProperty(value = "角色ID")
     private Long roleId;
 
-    @ApiModelProperty(value = "菜单ID")
-    private Long menuId;
-
-//    private String path;
-//    private String roleCode;
-//
-//    public RoleMenu(String path, String roleCode) {
-//        this.path = path;
-//        this.roleCode = roleCode;
-//    }
 }

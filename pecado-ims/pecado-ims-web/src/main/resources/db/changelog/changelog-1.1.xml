@@ -120,56 +120,56 @@
     </changeSet>
     <changeSet author="batizhao" id="InsertTableRoleMenu-20200225-003">
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="1"/>
-            <column name="menu_id" valueNumeric="1"/>
+            <column name="roleId" valueNumeric="1"/>
+            <column name="menuId" valueNumeric="1"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="1"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="1000"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1000"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="1100"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1100"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="1101"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1101"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="1102"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1102"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="1200"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1200"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="1300"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1300"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="2000"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2000"/>
         </insert>
         <insert tableName="role_menu">
-            <column name="role_id" valueNumeric="2"/>
-            <column name="menu_id" valueNumeric="2100"/>
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2100"/>
         </insert>
         <rollback>
-            delete from role_menu where role_id = 1 and menu_id = 1;
-            delete from role_menu where role_id = 2 and menu_id = 1;
-            delete from role_menu where role_id = 2 and menu_id = 1000;
-            delete from role_menu where role_id = 2 and menu_id = 1100;
-            delete from role_menu where role_id = 2 and menu_id = 1101;
-            delete from role_menu where role_id = 2 and menu_id = 1102;
-            delete from role_menu where role_id = 2 and menu_id = 1200;
-            delete from role_menu where role_id = 2 and menu_id = 1300;
-            delete from role_menu where role_id = 2 and menu_id = 2000;
-            delete from role_menu where role_id = 2 and menu_id = 2100;
+            delete from role_menu where roleId = 1 and menuId = 1;
+            delete from role_menu where roleId = 2 and menuId = 1;
+            delete from role_menu where roleId = 2 and menuId = 1000;
+            delete from role_menu where roleId = 2 and menuId = 1100;
+            delete from role_menu where roleId = 2 and menuId = 1101;
+            delete from role_menu where roleId = 2 and menuId = 1102;
+            delete from role_menu where roleId = 2 and menuId = 1200;
+            delete from role_menu where roleId = 2 and menuId = 1300;
+            delete from role_menu where roleId = 2 and menuId = 2000;
+            delete from role_menu where roleId = 2 and menuId = 2100;
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableUser-20200225-004">
@@ -232,21 +232,21 @@
     </changeSet>
     <changeSet author="batizhao" id="InsertTableUserRole-20200225-005">
         <insert tableName="user_role">
-            <column name="user_id" valueNumeric="1"/>
-            <column name="role_id" valueNumeric="1"/>
+            <column name="userId" valueNumeric="1"/>
+            <column name="roleId" valueNumeric="1"/>
         </insert>
         <insert tableName="user_role">
-            <column name="user_id" valueNumeric="1"/>
-            <column name="role_id" valueNumeric="2"/>
+            <column name="userId" valueNumeric="1"/>
+            <column name="roleId" valueNumeric="2"/>
         </insert>
         <insert tableName="user_role">
-            <column name="user_id" valueNumeric="2"/>
-            <column name="role_id" valueNumeric="1"/>
+            <column name="userId" valueNumeric="2"/>
+            <column name="roleId" valueNumeric="1"/>
         </insert>
         <rollback>
-            delete from user_role where role_id = 1 and user_id = 1;
-            delete from user_role where role_id = 2 and user_id = 1;
-            delete from user_role where role_id = 1 and user_id = 2;
+            delete from user_role where roleId = 1 and userId = 1;
+            delete from user_role where roleId = 2 and userId = 1;
+            delete from user_role where roleId = 1 and userId = 2;
         </rollback>
     </changeSet>
 

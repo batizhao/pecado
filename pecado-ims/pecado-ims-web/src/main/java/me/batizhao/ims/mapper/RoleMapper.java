@@ -21,14 +21,14 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @param id
      * @return
      */
-    @Select("SELECT A.id, A.name, A.code FROM role A LEFT JOIN user_role B ON A.id = B.role_id WHERE B.user_id = #{id}")
+    @Select("SELECT A.id, A.name, A.code FROM role A LEFT JOIN user_role B ON A.id = B.roleId WHERE B.userId = #{id}")
     List<Role> findRolesByUserId(@Param("id") Long id);
 
-    /**
-     * 查询角色权限关系
-     *
-     * @return
-     */
-    @Select("SELECT A.code AS roleCode,C.path FROM role AS A LEFT JOIN role_menu B ON A.id=B.role_id LEFT JOIN menu AS C ON B.menu_id=C.id")
-    List<RoleMenu> findRoleMenus();
+//    /**
+//     * 查询角色权限关系
+//     *
+//     * @return
+//     */
+//    @Select("SELECT A.code AS roleCode,C.path FROM role AS A LEFT JOIN role_menu B ON A.id=B.roleId LEFT JOIN menu AS C ON B.menuId=C.id")
+//    List<RoleMenu> findRoleMenus();
 }
