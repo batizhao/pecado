@@ -13,7 +13,6 @@ import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
-import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;

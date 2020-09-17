@@ -2,6 +2,8 @@ package me.batizhao.ims.unit.web;
 
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.mapper.RoleMenuMapper;
+import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.web.RoleController;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +22,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,6 +43,8 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
      */
     @MockBean
     private RoleService roleService;
+    @MockBean
+    private RoleMenuService roleMenuService;
 
     private List<RoleVO> roleList;
 
@@ -96,5 +102,18 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data", hasSize(2)))
                 .andExpect(jsonPath("$.data[0].name", equalTo("admin")));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenMenus_whenAddRoleMenus_thenSuccess() throws Exception {
+        doReturn(true).when(roleMenuService).updateRoleMenus(anyLong(), anyList());
+
+        mvc.perform(post("/role/menu").param("id", "1").param("menus", "2,3,4").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
     }
 }

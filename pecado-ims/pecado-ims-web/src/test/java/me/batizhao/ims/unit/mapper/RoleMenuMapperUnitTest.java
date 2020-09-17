@@ -1,6 +1,6 @@
 package me.batizhao.ims.unit.mapper;
 
-import me.batizhao.ims.mapper.UserRoleMapper;
+import me.batizhao.ims.mapper.RoleMenuMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,14 +11,14 @@ import static org.hamcrest.Matchers.is;
  * @author batizhao
  * @since 2020-02-07
  */
-public class UserRoleMapperUnitTest extends BaseMapperUnitTest {
+public class RoleMenuMapperUnitTest extends BaseMapperUnitTest {
 
     @Autowired
-    private UserRoleMapper userRoleMapper;
+    private RoleMenuMapper roleMenuMapper;
 
     @Test
-    public void testDeleteByUserId() {
-        assertThat(userRoleMapper.deleteByUserId(1L), is(2));
+    public void testDeleteByRoleId() {
+        assertThat(roleMenuMapper.deleteByRoleId(2L), is(9));
     }
 
 }

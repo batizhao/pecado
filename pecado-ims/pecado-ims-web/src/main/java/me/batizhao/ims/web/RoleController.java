@@ -6,15 +6,13 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -36,6 +34,8 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     /**
      * 根据用户ID查询角色
@@ -65,5 +65,22 @@ public class RoleController {
     @SystemLog
     public ResponseInfo<List<RoleVO>> handleRoles() {
         return ResponseInfo.ok(roleService.findRoles());
+    }
+
+    /**
+     * 分配角色权限
+     * 返回 true or false
+     *
+     * @param id 角色ID
+     * @param menus 关联权限ID串
+     * @return true or false
+     */
+    @ApiOperation(value = "分配角色权限")
+    @PostMapping(value = "/role/menu")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "角色ID", required = true) @RequestParam @Min(1) Long id,
+                                                    @ApiParam(value = "关联权限ID串", required = true) @RequestParam List<String> menus) {
+        return ResponseInfo.ok(roleMenuService.updateRoleMenus(id, menus));
     }
 }

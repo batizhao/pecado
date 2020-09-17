@@ -44,7 +44,7 @@ public class MenuServiceIml extends ServiceImpl<MenuMapper, Menu> implements Men
         for (Menu menu : menus) {
             menuTree = new MenuTree();
             menuTree.setTitle(menu.getName());
-            menuTree.setKey(menu.getPermission());
+            menuTree.setKey(menu.getId().toString());
             menuTree.setPid(menu.getPid());
             menuTree.setId(menu.getId());
             menuTrees.add(menuTree);
