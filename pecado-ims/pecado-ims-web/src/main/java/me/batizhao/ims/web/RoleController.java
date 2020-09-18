@@ -6,6 +6,9 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.api.vo.UserVO;
+import me.batizhao.ims.domain.Role;
+import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;
@@ -14,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -82,5 +86,21 @@ public class RoleController {
     public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "角色ID", required = true) @RequestParam @Min(1) Long id,
                                                     @ApiParam(value = "关联权限ID串", required = true) @RequestParam List<String> menus) {
         return ResponseInfo.ok(roleMenuService.updateRoleMenus(id, menus));
+    }
+
+    /**
+     * 添加或修改角色
+     * 根据是否有ID判断是添加还是修改
+     *
+     * @param request_role 角色属性
+     * @return 角色对象
+     */
+    @ApiOperation(value = "添加或修改角色")
+    @PostMapping("role")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<RoleVO> handleSaveOrUpdate(@Valid @ApiParam(value = "用户", required = true) @RequestBody Role request_role) {
+        RoleVO roleVO = roleService.saveOrUpdateUser(request_role);
+        return ResponseInfo.ok(roleVO);
     }
 }

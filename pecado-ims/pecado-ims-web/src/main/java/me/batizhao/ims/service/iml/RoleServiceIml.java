@@ -6,9 +6,11 @@ import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.mapper.RoleMapper;
 import me.batizhao.ims.service.RoleService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,5 +33,21 @@ public class RoleServiceIml extends ServiceImpl<RoleMapper, Role> implements Rol
     public List<RoleVO> findRoles() {
         List<Role> roles = baseMapper.selectList(null);
         return BeanCopyUtil.copyListProperties(roles, RoleVO::new);
+    }
+
+    @Override
+    public RoleVO saveOrUpdateUser(Role role) {
+        role.setCreatedTime(LocalDateTime.now());
+
+        if (role.getId() == null) {
+            roleMapper.insert(role);
+        } else {
+            roleMapper.updateById(role);
+        }
+
+        RoleVO roleVO = new RoleVO();
+        BeanUtils.copyProperties(role, roleVO);
+
+        return roleVO;
     }
 }
