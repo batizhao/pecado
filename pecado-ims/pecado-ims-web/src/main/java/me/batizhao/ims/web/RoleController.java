@@ -103,4 +103,19 @@ public class RoleController {
         RoleVO roleVO = roleService.saveOrUpdateUser(request_role);
         return ResponseInfo.ok(roleVO);
     }
+
+    /**
+     * 删除角色
+     * 根据角色ID删除角色
+     *
+     * @return 成功或者失败
+     */
+    @ApiOperation(value = "删除角色")
+    @DeleteMapping("role")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "角色ID串", required = true) @RequestParam List<Long> ids) {
+        Boolean b = roleService.removeByIds(ids);
+        return ResponseInfo.ok(b);
+    }
 }
