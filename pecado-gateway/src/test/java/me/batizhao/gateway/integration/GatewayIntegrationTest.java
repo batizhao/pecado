@@ -16,15 +16,15 @@ public class GatewayIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void givenExistServiceUrl_whenCallGateway_thenOk() {
-        webClient.get().uri("/api/ims/user")
+        webClient.get().uri("/api/ims/users")
                 .header("Authorization", adminAccessToken)
                 .exchange().expectStatus().isOk()
                 .expectHeader()
                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 .expectBody()
                 .jsonPath("$.code").isEqualTo(ResultEnum.SUCCESS.getCode())
-                .jsonPath("$.data").value(hasSize(6))
-                .jsonPath("$.data[0].username").isEqualTo("admin");
+                .jsonPath("$.data.records").value(hasSize(6))
+                .jsonPath("$.data.records[0].username").isEqualTo("admin");
     }
 
     @Test
