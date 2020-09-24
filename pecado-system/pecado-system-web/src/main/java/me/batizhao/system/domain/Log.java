@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@AllArgsConstructor
 @ApiModel(description = "日志")
 public class Log implements Serializable {
 

@@ -110,6 +110,15 @@ public class WebExceptionHandler {
                 .setData(e.getMessage());
     }
 
+    @ExceptionHandler(StorageException.class)
+    @ResponseStatus
+    public ResponseInfo<String> handleStorageException(StorageException e) {
+        log.error("StorageException!", e);
+        return new ResponseInfo<String>().setCode(ResultEnum.STORAGE_ERROR.getCode())
+                .setMessage(ResultEnum.STORAGE_ERROR.getMessage())
+                .setData(e.getMessage());
+    }
+
     /**
      * 默认异常处理
      * 特殊处理，这里会优先捕获 AccessDeniedException，造成 accessDeniedHandler 无效，造成返回错误消息

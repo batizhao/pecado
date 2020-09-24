@@ -31,9 +31,14 @@ public enum ResultEnum {
     RESOURCE_NOT_FOUND(100010, "没有找到相关资源！"),
 
     /**
-     * 用户模块错误
+     * IMS 01 模块错误
      */
-    USER_NOT_FOUND(100100, "用户不存在！");
+    USER_NOT_FOUND(100100, "用户不存在！"),
+
+    /**
+     * SYSTEM 02 模块错误
+     */
+    STORAGE_ERROR(100200, "存储异常！");
 
     private Integer code;
     private String message;

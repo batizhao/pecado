@@ -1,0 +1,31 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="batizhao" id="CreateTableFile-20200923-001">
+        <createTable tableName="file" remarks="附件表">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="附件ID,主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)" remarks="显示名">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fileName" type="VARCHAR(255)" remarks="文件名">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="BIGINT" remarks="大小"/>
+            <column name="url" type="VARCHAR(255)" remarks="url">
+                <constraints nullable="false"/>
+            </column>
+            <column name="thumbUrl" type="VARCHAR(255)" remarks="缩略图 url"/>
+            <column name="createdTime" type="datetime" remarks="操作时间">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="file"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
