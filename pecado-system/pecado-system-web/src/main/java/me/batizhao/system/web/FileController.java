@@ -4,35 +4,20 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.SneakyThrows;
-import me.batizhao.common.core.exception.StorageException;
 import me.batizhao.common.core.util.ResponseInfo;
-import me.batizhao.common.security.annotation.Inner;
-import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.system.api.annotation.SystemLog;
-import me.batizhao.system.api.dto.LogDTO;
-import me.batizhao.system.config.FileUploadProperties;
 import me.batizhao.system.domain.File;
-import me.batizhao.system.domain.Log;
 import me.batizhao.system.service.FileService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
 
 /**
  * 文件管理
@@ -71,8 +56,7 @@ public class FileController {
      */
     @SneakyThrows
     @ApiOperation(value = "根据文件名显示图片")
-    @GetMapping("/file/image/{name:.+}")
-    @SystemLog
+    @GetMapping("/file/image/{name:^.+\\.(?:jpeg|jpg|png|JPEG|JPG|PNG)$}")
     public ResponseEntity<Resource> handleImageByName(@ApiParam(value = "图片名", required = true) @PathVariable("name") String name) {
         Resource file = fileService.loadAsResource(name);
 

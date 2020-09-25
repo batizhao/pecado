@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * @author batizhao
@@ -44,20 +45,17 @@ public class FileServiceIml extends ServiceImpl<FileMapper, File> implements Fil
 
     @Override
     public File uploadAndSave(MultipartFile file) {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);
             }
             if (filename.contains("..")) {
                 // This is a security check
-                throw new StorageException(
-                        "Cannot store file with relative path outside current directory "
-                                + filename);
+                throw new StorageException("Cannot store file with relative path outside current directory " + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, this.rootLocation.resolve(filename),
-                        StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(inputStream, this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
             }
         }
         catch (IOException e) {
@@ -80,9 +78,7 @@ public class FileServiceIml extends ServiceImpl<FileMapper, File> implements Fil
                 return resource;
             }
             else {
-                throw new StorageException(
-                        "Could not read file: " + filename);
-
+                throw new StorageException("Could not read file: " + filename);
             }
         }
         catch (MalformedURLException e) {
