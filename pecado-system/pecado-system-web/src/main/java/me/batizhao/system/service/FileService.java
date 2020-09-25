@@ -11,8 +11,24 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface FileService extends IService<File> {
 
-//    Boolean save(File file);
-    Resource loadAsResource(String filename);
+    /**
+     * 上传
+     * @param file
+     * @return
+     */
+    File upload(MultipartFile file);
 
+    /**
+     * 上传并保存
+     * @param file
+     * @return
+     */
     File uploadAndSave(MultipartFile file);
+
+    /**
+     * 加载资源
+     * @param filename 文件名
+     * @return
+     */
+    Resource loadAsResource(String filename);
 }

@@ -16,9 +16,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="size" type="BIGINT" remarks="大小"/>
-            <column name="url" type="VARCHAR(255)" remarks="url">
-                <constraints nullable="false"/>
-            </column>
+            <column name="url" type="VARCHAR(255)" remarks="url"/>
             <column name="thumbUrl" type="VARCHAR(255)" remarks="缩略图 url"/>
             <column name="createdTime" type="datetime" remarks="操作时间">
                 <constraints nullable="false"/>

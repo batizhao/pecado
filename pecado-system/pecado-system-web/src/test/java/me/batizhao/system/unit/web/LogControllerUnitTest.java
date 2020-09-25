@@ -1,4 +1,4 @@
-package me.batizhao.system.util.web;
+package me.batizhao.system.unit.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;

@@ -42,7 +42,6 @@ public class File implements Serializable {
     private Long size;
 
     @ApiModelProperty(value = "url", example = "/path/xxx.jpg")
-    @NotBlank(message = "url is not blank")
     private String url;
 
     @ApiModelProperty(value = "缩略图 url", example = "/path/xxx.jpg")

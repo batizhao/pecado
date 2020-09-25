@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.SneakyThrows;
 import me.batizhao.common.core.util.ResponseInfo;
-import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.domain.File;
 import me.batizhao.system.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class FileController {
     @ApiOperation(value = "插入文件")
     @PostMapping("/file/upload")
     public ResponseInfo<File> handleSave(@RequestParam("file") MultipartFile file) {
-        return ResponseInfo.ok(fileService.uploadAndSave(file));
+        return ResponseInfo.ok(fileService.upload(file));
     }
 
     /**

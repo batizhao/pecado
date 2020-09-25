@@ -2,10 +2,12 @@ package me.batizhao.system.service.iml;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.StorageException;
+import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.system.config.FileUploadProperties;
 import me.batizhao.system.domain.File;
 import me.batizhao.system.mapper.FileMapper;
 import me.batizhao.system.service.FileService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,7 +23,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * @author batizhao
@@ -29,12 +30,6 @@ import java.util.Objects;
  */
 @Service
 public class FileServiceIml extends ServiceImpl<FileMapper, File> implements FileService {
-
-//    @Override
-//    public Boolean save(File file) {
-//        file.setCreatedTime(LocalDateTime.now());
-//        return save(file);
-//    }
 
     private final Path rootLocation;
 
@@ -44,8 +39,13 @@ public class FileServiceIml extends ServiceImpl<FileMapper, File> implements Fil
     }
 
     @Override
-    public File uploadAndSave(MultipartFile file) {
-        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+    public File upload(MultipartFile file) {
+        if (file == null) {
+            throw new StorageException("Failed to store empty file.");
+        }
+
+        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String hexFileName = fileNameEncode(filename);
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);
@@ -55,16 +55,23 @@ public class FileServiceIml extends ServiceImpl<FileMapper, File> implements Fil
                 throw new StorageException("Cannot store file with relative path outside current directory " + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+                Path target = this.rootLocation.resolve(pathEncode(hexFileName));
+                Files.createDirectories(target.getParent());
+                Files.copy(inputStream, target, StandardCopyOption.REPLACE_EXISTING);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
 
-        File f = new File().setFileName(filename).setName(filename)
+        //只返回文件名给前端，不包括路径
+        return new File().setFileName(hexFileName).setName(filename)
                 .setSize(file.getSize()).setUrl(this.rootLocation.toString())
                 .setCreatedTime(LocalDateTime.now());
+    }
+
+    @Override
+    public File uploadAndSave(MultipartFile file) {
+        File f = upload(file);
         save(f);
         return f;
     }
@@ -72,17 +79,42 @@ public class FileServiceIml extends ServiceImpl<FileMapper, File> implements Fil
     @Override
     public Resource loadAsResource(String filename) {
         try {
-            Path file = rootLocation.resolve(filename);
+            Path file = rootLocation.resolve(pathEncode(filename));
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
-            }
-            else {
+            } else {
                 throw new StorageException("Could not read file: " + filename);
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             throw new StorageException("Could not read file: " + filename, e);
         }
+    }
+
+    /**
+     * 对文件名进行 md5
+     * @param fileName 文件名
+     * @return
+     */
+    private String fileNameEncode(String fileName) {
+        String username = SecurityUtils.getUser().getUsername();
+        return DigestUtils.md5Hex(username + fileName) + fileName.substring(fileName.lastIndexOf("."));
+    }
+
+    /**
+     * 根据 fileNameEncode 生成的文件名，生成 hash 目录结构
+     * @param hexFileName hash 以后的文件名
+     * @return
+     */
+    private String pathEncode(String hexFileName) {
+        String secondMD5 = DigestUtils.md5Hex(hexFileName);
+        String p1 = secondMD5.substring(0, 2);
+        String p2 = secondMD5.substring(2, 4);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(p1)
+            .append("/").append(p2)
+            .append("/").append(hexFileName);
+        return sb.toString();
     }
 }

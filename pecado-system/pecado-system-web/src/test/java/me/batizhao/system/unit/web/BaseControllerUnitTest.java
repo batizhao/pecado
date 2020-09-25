@@ -1,4 +1,4 @@
-package me.batizhao.system.util.web;
+package me.batizhao.system.unit.web;
 
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import org.junit.jupiter.api.Tag;
