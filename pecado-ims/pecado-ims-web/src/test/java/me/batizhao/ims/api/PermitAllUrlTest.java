@@ -1,19 +1,12 @@
 package me.batizhao.ims.api;
 
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.security.annotation.Inner;
 import me.batizhao.common.security.component.PermitAllUrlProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.*;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
