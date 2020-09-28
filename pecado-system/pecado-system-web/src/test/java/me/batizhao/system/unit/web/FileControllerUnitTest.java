@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -83,6 +83,20 @@ public class FileControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
+    public void givenPngFileName_whenLoadResource_thenFail() throws Exception {
+        Resource file = new ClassPathResource("test.png");
+        when(fileService.loadAsResource(anyString())).thenReturn(file);
+
+        mvc.perform(get("/file/image/test.png"))
+                .andDo(print())
+                .andExpect(status().is5xxServerError())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.UNKNOWN_ERROR.getCode()))
+                .andExpect(jsonPath("$.data", containsString("class path resource [test.png] cannot be resolved")));
+    }
+
+    @Test
+    @WithMockUser
     public void givenTxtFileName_whenLoadResource_thenFail() throws Exception {
         Resource file = new ClassPathResource("test.txt");
         when(fileService.loadAsResource(anyString())).thenReturn(file);
@@ -90,4 +104,5 @@ public class FileControllerUnitTest extends BaseControllerUnitTest {
         mvc.perform(get("/file/image/test.txt"))
                 .andExpect(status().isNotFound());
     }
+
 }
