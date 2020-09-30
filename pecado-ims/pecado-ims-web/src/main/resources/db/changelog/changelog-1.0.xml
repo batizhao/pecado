@@ -57,10 +57,10 @@
     <changeSet author="batizhao" id="CreateTableRoleMenu-20200225-003">
         <createTable tableName="role_menu" remarks="角色权限关联表">
             <column name="roleId" type="BIGINT" remarks="角色ID">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ROLE_MENU"/>
             </column>
             <column name="menuId" type="BIGINT" remarks="权限ID">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ROLE_MENU"/>
             </column>
         </createTable>
         <rollback>
@@ -99,10 +99,10 @@
     <changeSet author="batizhao" id="CreateTableUserRole-20200225-005">
         <createTable tableName="user_role" remarks="用户角色关联表">
             <column name="userId" type="BIGINT" remarks="用户ID">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_USER_ROLE"/>
             </column>
             <column name="roleId" type="BIGINT" remarks="角色ID">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_USER_ROLE"/>
             </column>
         </createTable>
         <rollback>
