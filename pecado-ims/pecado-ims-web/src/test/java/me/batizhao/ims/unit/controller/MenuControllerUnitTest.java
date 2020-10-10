@@ -1,4 +1,4 @@
-package me.batizhao.ims.unit.web;
+package me.batizhao.ims.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.MenuTypeEnum;
@@ -13,7 +13,7 @@ import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.web.MenuController;
+import me.batizhao.ims.controller.MenuController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

@@ -24,7 +24,8 @@
 		<module>pecado-common</module>
 		<module>pecado-gateway</module>
 		<module>pecado-system</module>
-	</modules>
+        <module>pecado-codegen</module>
+    </modules>
 
 	<properties>
 		<java.version>1.8</java.version>

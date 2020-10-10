@@ -1,9 +1,9 @@
-package me.batizhao.system.unit.web;
+package me.batizhao.system.unit.controller;
 
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.system.domain.File;
 import me.batizhao.system.service.FileService;
-import me.batizhao.system.web.FileController;
+import me.batizhao.system.controller.FileController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

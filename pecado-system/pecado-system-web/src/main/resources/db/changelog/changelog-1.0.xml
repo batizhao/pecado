@@ -6,7 +6,7 @@
 
     <changeSet author="batizhao" id="CreateTableLog-20200401-001">
         <createTable tableName="log" remarks="日志表">
-            <column autoIncrement="true" name="id" type="BIGINT" remarks="日志ID,主键">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="httpRequestMethod" type="VARCHAR(255)" remarks="HTTP方法">

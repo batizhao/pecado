@@ -6,7 +6,7 @@
 
     <changeSet author="batizhao" id="CreateTableFile-20200923-001">
         <createTable tableName="file" remarks="附件表">
-            <column autoIncrement="true" name="id" type="BIGINT" remarks="附件ID,主键">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="name" type="VARCHAR(255)" remarks="显示名">

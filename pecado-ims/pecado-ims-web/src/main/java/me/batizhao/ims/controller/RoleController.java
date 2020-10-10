@@ -1,4 +1,4 @@
-package me.batizhao.ims.web;
+package me.batizhao.ims.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -6,9 +6,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.Role;
-import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;

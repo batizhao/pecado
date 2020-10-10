@@ -82,7 +82,7 @@ public class UserMapperUnitTest extends BaseMapperUnitTest {
     }
 
     @Test
-    void testSelectUserPage() {
+    public void testSelectUserPage() {
         IPage<UserVO> users = userMapper.selectUserPage(new Page<>(), new User().setUsername("tom"));
         assertThat(users.getRecords(), hasSize(1));
 

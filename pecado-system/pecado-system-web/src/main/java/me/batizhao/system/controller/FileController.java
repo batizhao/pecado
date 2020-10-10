@@ -1,4 +1,4 @@
-package me.batizhao.system.web;
+package me.batizhao.system.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

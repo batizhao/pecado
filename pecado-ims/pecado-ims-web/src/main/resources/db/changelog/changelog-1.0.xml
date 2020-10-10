@@ -6,7 +6,7 @@
 
     <changeSet author="batizhao" id="CreateTableMenu-20200225-001">
         <createTable tableName="menu" remarks="权限表">
-            <column autoIncrement="true" name="id" type="BIGINT" remarks="权限ID,主键">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="path" type="VARCHAR(255)" remarks="路径">

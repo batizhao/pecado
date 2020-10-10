@@ -1,11 +1,10 @@
-package me.batizhao.ims.unit.web;
+package me.batizhao.ims.unit.controller;
 
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.ims.mapper.RoleMenuMapper;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.web.RoleController;
+import me.batizhao.ims.controller.RoleController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

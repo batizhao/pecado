@@ -1,4 +1,4 @@
-package me.batizhao.system.unit.web;
+package me.batizhao.system.unit.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,7 +7,7 @@ import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.domain.Log;
 import me.batizhao.system.service.LogService;
-import me.batizhao.system.web.LogController;
+import me.batizhao.system.controller.LogController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

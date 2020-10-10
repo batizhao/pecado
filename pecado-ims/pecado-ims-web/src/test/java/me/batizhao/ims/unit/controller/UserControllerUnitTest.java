@@ -1,4 +1,4 @@
-package me.batizhao.ims.unit.web;
+package me.batizhao.ims.unit.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,7 +13,7 @@ import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
-import me.batizhao.ims.web.UserController;
+import me.batizhao.ims.controller.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

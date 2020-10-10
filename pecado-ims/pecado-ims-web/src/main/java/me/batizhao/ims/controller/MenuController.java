@@ -1,4 +1,4 @@
-package me.batizhao.ims.web;
+package me.batizhao.ims.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,9 +8,7 @@ import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
-import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.Menu;
-import me.batizhao.ims.domain.User;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
