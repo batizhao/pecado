@@ -1,0 +1,46 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="batizhao" id="InsertTableMenu-20201013-001">
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3000"/>
+            <column name="path" value="/dp"/>
+            <column name="name" value="开发平台"/>
+            <column name="permission" value="dp_root"/>
+            <column name="description"/>
+            <column name="icon" value="codepen"/>
+            <column name="pid" valueNumeric="0"/>
+            <column name="sort" valueNumeric="4"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3100"/>
+            <column name="path" value="/dp/code"/>
+            <column name="name" value="代码生成"/>
+            <column name="permission" value="dp_code"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="3000"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <rollback>
+            delete from menu where id = 3000;
+            delete from menu where id = 3100;
+        </rollback>
+    </changeSet>
+    <changeSet author="batizhao" id="InsertTableRoleMenu-20201013-003">
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3000"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3100"/>
+        </insert>
+        <rollback>
+            delete from role_menu where roleId = 2 and menuId = 3000;
+            delete from role_menu where roleId = 2 and menuId = 3100;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

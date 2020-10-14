@@ -18,7 +18,7 @@ public class RoleMenuMapperUnitTest extends BaseMapperUnitTest {
 
     @Test
     public void testDeleteByRoleId() {
-        assertThat(roleMenuMapper.deleteByRoleId(2L), is(9));
+        assertThat(roleMenuMapper.deleteByRoleId(2L), is(11));
     }
 
 }

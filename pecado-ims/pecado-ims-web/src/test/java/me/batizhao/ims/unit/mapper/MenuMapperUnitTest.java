@@ -32,7 +32,7 @@ public class MenuMapperUnitTest extends BaseMapperUnitTest {
                 hasProperty("permission", is("user_dashboard")))));
 
         menus = menuMapper.findMenusByRoleId(2L);
-        assertThat(menus.size(), is(9));
+        assertThat(menus.size(), is(11));
     }
 
 }
