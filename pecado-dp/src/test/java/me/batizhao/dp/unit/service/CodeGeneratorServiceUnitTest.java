@@ -1,10 +1,10 @@
-package me.batizhao.codegen.unit.service;
+package me.batizhao.dp.unit.service;
 
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.codegen.domain.GenConfig;
-import me.batizhao.codegen.mapper.CodeGeneratorMapper;
-import me.batizhao.codegen.service.CodeGeneratorService;
-import me.batizhao.codegen.service.iml.CodeGeneratorServiceIml;
+import me.batizhao.dp.domain.GenConfig;
+import me.batizhao.dp.mapper.CodeGeneratorMapper;
+import me.batizhao.dp.service.CodeGeneratorService;
+import me.batizhao.dp.service.impl.CodeGeneratorServiceIml;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

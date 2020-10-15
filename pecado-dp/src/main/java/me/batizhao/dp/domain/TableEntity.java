@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.batizhao.codegen.domain;
+package me.batizhao.dp.domain;
 
 import lombok.Data;
 

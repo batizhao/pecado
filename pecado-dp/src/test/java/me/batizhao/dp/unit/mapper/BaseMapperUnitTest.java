@@ -1,4 +1,4 @@
-package me.batizhao.codegen.unit.mapper;
+package me.batizhao.dp.unit.mapper;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import org.junit.jupiter.api.Tag;
@@ -28,8 +28,8 @@ public abstract class BaseMapperUnitTest {
      * @SpringBootApplication 控制扫描范围，否则会加载额外的包
      * 如果测试包和源码包不一致，这里多了个 unit，还要加上 @MapperScan
      */
-    @SpringBootApplication(scanBasePackages = {"me.batizhao.codegen.mapper"})
-    @MapperScan("me.batizhao.codegen.mapper")
+    @SpringBootApplication(scanBasePackages = {"me.batizhao.dp.mapper"})
+    @MapperScan("me.batizhao.dp.mapper")
     static class InnerConfig {}
 
 }

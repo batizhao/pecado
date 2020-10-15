@@ -1,0 +1,56 @@
+package ${package}.service.impl;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import me.batizhao.common.core.exception.NotFoundException;
+import ${package}.domain.${className};
+import ${package}.mapper.${className}Mapper;
+import ${package}.service.${className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}> implements ${className}Service {
+
+    @Autowired
+    private ${className}Mapper ${classname}Mapper;
+
+    @Override
+    public IPage<${className}> find${className}s(Page<${className}> page, ${className} ${classname}) {
+        return ${classname}Mapper.select${className}Page(page, ${classname});
+    }
+
+    @Override
+    public ${className} findById(Long id) {
+        ${className} ${classname} = ${classname}Mapper.selectById(id);
+
+        if(${classname} == null) {
+            throw new NotFoundException(String.format("没有该记录 '%s'。", id));
+        }
+
+        return ${classname};
+    }
+
+    @Override
+    public ${className} saveOrUpdate${className}(${className} ${classname}) {
+        ${classname}.setCreatedTime(LocalDateTime.now());
+
+        if (${classname}.getId() == null) {
+            ${classname}Mapper.insert(${classname});
+        } else {
+            ${classname}Mapper.updateById(${classname});
+        }
+
+        return ${classname};
+    }
+
+}

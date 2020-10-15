@@ -1,6 +1,6 @@
-package me.batizhao.codegen.service;
+package me.batizhao.dp.service;
 
-import me.batizhao.codegen.domain.GenConfig;
+import me.batizhao.dp.domain.GenConfig;
 
 /**
  * @author batizhao

@@ -1,4 +1,4 @@
-package me.batizhao.codegen.unit.service;
+package me.batizhao.dp.unit.service;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,10 +1,10 @@
-package me.batizhao.codegen.service.iml;
+package me.batizhao.dp.service.impl;
 
 import cn.hutool.core.io.IoUtil;
-import me.batizhao.codegen.domain.GenConfig;
-import me.batizhao.codegen.mapper.CodeGeneratorMapper;
-import me.batizhao.codegen.service.CodeGeneratorService;
-import me.batizhao.codegen.util.CodeGenUtils;
+import me.batizhao.dp.domain.GenConfig;
+import me.batizhao.dp.mapper.CodeGeneratorMapper;
+import me.batizhao.dp.service.CodeGeneratorService;
+import me.batizhao.dp.util.CodeGenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

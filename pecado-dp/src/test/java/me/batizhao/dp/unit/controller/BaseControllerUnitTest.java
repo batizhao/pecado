@@ -1,4 +1,4 @@
-package me.batizhao.codegen.unit.controller;
+package me.batizhao.dp.unit.controller;
 
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import org.junit.jupiter.api.Tag;
@@ -22,7 +22,7 @@ public abstract class BaseControllerUnitTest {
     /**
      * 控制扫描范围，否则会加载 Security Config，导致 UserDetailsService 实例化
      */
-    @SpringBootApplication(scanBasePackages = {"me.batizhao.codegen.controller"})
+    @SpringBootApplication(scanBasePackages = {"me.batizhao.dp.controller"})
     static class InnerConfig {}
 
 }

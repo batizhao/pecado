@@ -1,11 +1,11 @@
-package me.batizhao.codegen.controller;
+package me.batizhao.dp.controller;
 
 import cn.hutool.core.io.IoUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.SneakyThrows;
-import me.batizhao.codegen.domain.GenConfig;
-import me.batizhao.codegen.service.CodeGeneratorService;
+import me.batizhao.dp.domain.GenConfig;
+import me.batizhao.dp.service.CodeGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;

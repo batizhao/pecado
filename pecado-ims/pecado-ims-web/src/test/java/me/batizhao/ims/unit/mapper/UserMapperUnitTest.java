@@ -49,38 +49,6 @@ public class UserMapperUnitTest extends BaseMapperUnitTest {
 
     }
 
-    /**
-     * 这里如果不想影响数据，就要使用 @Transactional，默认 rollback
-     */
-    @Test
-    public void testUpdateUserById() {
-        //先确定记录存在
-        User user = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, "tom"));
-        assertThat(user, notNullValue());
-        assertThat(user.getEmail(), equalTo("tom@qq.com"));
-
-        //修改
-        int result = userMapper.updateUserNameById(2L, "tom22");
-
-        //确认修改成功
-        assertThat(result, is(1));
-    }
-
-    @Test
-    public void testDeleteUserById() {
-        String username = "tom";
-
-        //先确定记录存在
-        User user = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
-        assertThat(user, notNullValue());
-
-        //删除
-        int result = userMapper.deleteUserByUsername(username);
-
-        //确认删除成功
-        assertThat(result, is(1));
-    }
-
     @Test
     public void testSelectUserPage() {
         IPage<UserVO> users = userMapper.selectUserPage(new Page<>(), new User().setUsername("tom"));

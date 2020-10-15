@@ -1,7 +1,7 @@
-package me.batizhao.codegen.unit.mapper;
+package me.batizhao.dp.unit.mapper;
 
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.codegen.mapper.CodeGeneratorMapper;
+import me.batizhao.dp.mapper.CodeGeneratorMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

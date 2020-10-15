@@ -1,9 +1,9 @@
-package me.batizhao.codegen.unit.controller;
+package me.batizhao.dp.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.batizhao.codegen.controller.CodeGeneratorController;
-import me.batizhao.codegen.domain.GenConfig;
-import me.batizhao.codegen.service.CodeGeneratorService;
+import me.batizhao.dp.controller.CodeGeneratorController;
+import me.batizhao.dp.domain.GenConfig;
+import me.batizhao.dp.service.CodeGeneratorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

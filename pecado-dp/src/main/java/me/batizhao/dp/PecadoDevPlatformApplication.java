@@ -1,4 +1,4 @@
-package me.batizhao.codegen;
+package me.batizhao.dp;
 
 import me.batizhao.common.security.annotation.EnablePecadoResourceServer;
 import org.springframework.boot.SpringApplication;

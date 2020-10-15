@@ -14,18 +14,6 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
-    /**
-     * 这里演示一个事务型的接口
-     */
-    @Update("update user set name = #{name} where id= #{id}")
-    int updateUserNameById(@Param("id") Long id, @Param("name") String name);
-
-    /**
-     * 这里演示一个事务型的接口
-     */
-    @Delete("delete from user where username= #{username}")
-    int deleteUserByUsername(@Param("username") String username);
-
     IPage<UserVO> selectUserPage(Page<UserVO> page, @Param("user") User user);
 
     @Update("update user set locked = #{locked} where id= #{id}")

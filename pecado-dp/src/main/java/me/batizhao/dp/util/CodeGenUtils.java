@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.batizhao.codegen.util;
+package me.batizhao.dp.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
@@ -22,9 +22,9 @@ import cn.hutool.core.util.CharsetUtil;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.codegen.domain.ColumnEntity;
-import me.batizhao.codegen.domain.GenConfig;
-import me.batizhao.codegen.domain.TableEntity;
+import me.batizhao.dp.domain.ColumnEntity;
+import me.batizhao.dp.domain.GenConfig;
+import me.batizhao.dp.domain.TableEntity;
 import me.batizhao.common.core.constant.PecadoConstants;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -82,12 +82,12 @@ public class CodeGenUtils {
 	 */
 	private List<String> getTemplates() {
 		List<String> templates = new ArrayList<>();
-//		templates.add("templates/Entity.java.vm");
+		templates.add("templates/Entity.java.vm");
 		templates.add("templates/Mapper.java.vm");
-//		templates.add("templates/Mapper.xml.vm");
-//		templates.add("templates/Service.java.vm");
-//		templates.add("templates/ServiceImpl.java.vm");
-//		templates.add("templates/Controller.java.vm");
+		templates.add("templates/Mapper.xml.vm");
+		templates.add("templates/Service.java.vm");
+		templates.add("templates/ServiceImpl.java.vm");
+		templates.add("templates/Controller.java.vm");
 //		templates.add("templates/menu.sql.vm");
 //		templates.add("template/avue/api.js.vm");
 //		templates.add("template/avue/index.vue.vm");
@@ -140,7 +140,7 @@ public class CodeGenUtils {
 			columnEntity.setColumnType(column.get("columnType"));
 			columnEntity.setHidden(Boolean.FALSE);
 			// 列名转换成Java属性名
-			String attrName = columnToJava(columnEntity.getColumnName());
+			String attrName = columnEntity.getColumnName();
 			columnEntity.setCaseAttrName(attrName);
 			columnEntity.setLowerAttrName(StringUtils.uncapitalize(attrName));
 
@@ -177,7 +177,7 @@ public class CodeGenUtils {
 		map.put("pathName", tableEntity.getLowerClassName().toLowerCase());
 		map.put("columns", tableEntity.getColumns());
 		map.put("hasBigDecimal", hasBigDecimal);
-		map.put("datetime", DateUtil.now());
+		map.put("date", DateUtil.today());
 
 		if (StringUtils.isNotBlank(genConfig.getComments())) {
 			map.put("comments", genConfig.getComments());
@@ -274,11 +274,12 @@ public class CodeGenUtils {
 				+ File.separator + "java" + File.separator;
 
 		if (StringUtils.isNotBlank(packageName)) {
-			packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
+//			packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
+			packagePath += packageName.replace(".", File.separator) + File.separator + File.separator;
 		}
 
 		if (template.contains(ENTITY_JAVA_VM)) {
-			return packagePath + "entity" + File.separator + className + ".java";
+			return packagePath + "domain" + File.separator + className + ".java";
 		}
 
 		if (template.contains(MAPPER_JAVA_VM)) {

@@ -14,57 +14,65 @@
  * limitations under the License.
  */
 
-package me.batizhao.codegen.domain;
+package me.batizhao.dp.domain;
 
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * @author lengleng
- * @date 2018/8/2 生成配置
+ * @date 2018/07/29 列属性： https://blog.csdn.net/lkforce/article/details/79557482
  */
 @Data
-@Accessors(chain = true)
-public class GenConfig {
+public class ColumnEntity {
 
 	/**
-	 * 数据源name
+	 * 列表
 	 */
-	private String dsName;
+	private String columnName;
 
 	/**
-	 * 包名
+	 * 数据类型
 	 */
-	private String packageName;
+	private String dataType;
 
 	/**
-	 * 作者
-	 */
-	private String author;
-
-	/**
-	 * 模块名称
-	 */
-	private String moduleName;
-
-	/**
-	 * 表前缀
-	 */
-	private String tablePrefix;
-
-	/**
-	 * 表名称
-	 */
-	private String tableName;
-
-	/**
-	 * 表备注
+	 * 备注
 	 */
 	private String comments;
 
 	/**
-	 * 代码风格 0 - avue 1 - element
+	 * 驼峰属性
 	 */
-	private String style;
+	private String caseAttrName;
+
+	/**
+	 * 普通属性
+	 */
+	private String lowerAttrName;
+
+	/**
+	 * 属性类型
+	 */
+	private String attrType;
+
+	/**
+	 * 其他信息
+	 */
+	private String extra;
+
+	/**
+	 * 字段类型
+	 */
+	private String columnType;
+
+	/**
+	 * 是否可以为空
+	 */
+	private Boolean nullable;
+
+	/**
+	 * 是否隐藏
+	 */
+	private Boolean hidden;
 
 }

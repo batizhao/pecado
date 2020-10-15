@@ -1,4 +1,4 @@
-package me.batizhao.codegen.mapper;
+package me.batizhao.dp.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
