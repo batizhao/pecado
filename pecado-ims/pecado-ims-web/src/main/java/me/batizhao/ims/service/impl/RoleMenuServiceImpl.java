@@ -1,4 +1,4 @@
-package me.batizhao.ims.service.iml;
+package me.batizhao.ims.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.ims.domain.RoleMenu;
@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2020-09-14
  **/
 @Service
-public class RoleMenuServiceIml extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
+public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
 
     @Autowired
     private RoleMenuMapper roleMenuMapper;

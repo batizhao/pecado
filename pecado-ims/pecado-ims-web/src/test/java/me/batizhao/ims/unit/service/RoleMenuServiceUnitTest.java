@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.ims.mapper.RoleMenuMapper;
 import me.batizhao.ims.service.RoleMenuService;
-import me.batizhao.ims.service.iml.RoleMenuServiceIml;
+import me.batizhao.ims.service.impl.RoleMenuServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class RoleMenuServiceUnitTest extends BaseServiceUnitTest {
     static class TestContextConfiguration {
         @Bean
         public RoleMenuService roleMenuService() {
-            return new RoleMenuServiceIml();
+            return new RoleMenuServiceImpl();
         }
     }
 

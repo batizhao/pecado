@@ -1,4 +1,4 @@
-package me.batizhao.ims.service.iml;
+package me.batizhao.ims.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2016/9/28
  */
 @Service
-public class UserServiceIml extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
     private UserMapper userMapper;

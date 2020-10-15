@@ -10,7 +10,7 @@ import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
 import me.batizhao.ims.service.UserService;
-import me.batizhao.ims.service.iml.UserServiceIml;
+import me.batizhao.ims.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     static class TestContextConfiguration {
         @Bean
         public UserService userService() {
-            return new UserServiceIml();
+            return new UserServiceImpl();
         }
     }
 

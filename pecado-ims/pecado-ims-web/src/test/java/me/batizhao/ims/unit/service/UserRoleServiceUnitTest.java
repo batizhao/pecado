@@ -1,12 +1,10 @@
 package me.batizhao.ims.unit.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.mapper.UserRoleMapper;
 import me.batizhao.ims.service.UserRoleService;
-import me.batizhao.ims.service.iml.UserRoleServiceIml;
+import me.batizhao.ims.service.impl.UserRoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -40,7 +36,7 @@ public class UserRoleServiceUnitTest extends BaseServiceUnitTest {
     static class TestContextConfiguration {
         @Bean
         public UserRoleService userRoleService() {
-            return new UserRoleServiceIml();
+            return new UserRoleServiceImpl();
         }
     }
 

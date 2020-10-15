@@ -5,7 +5,7 @@ import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.mapper.RoleMapper;
 import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.service.iml.RoleServiceIml;
+import me.batizhao.ims.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
     static class TestContextConfiguration {
         @Bean
         public RoleService roleService() {
-            return new RoleServiceIml();
+            return new RoleServiceImpl();
         }
     }
 

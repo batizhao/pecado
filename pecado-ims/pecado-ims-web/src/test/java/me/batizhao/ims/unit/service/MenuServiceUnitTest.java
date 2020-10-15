@@ -11,7 +11,7 @@ import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
-import me.batizhao.ims.service.iml.MenuServiceIml;
+import me.batizhao.ims.service.impl.MenuServiceImpl;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
     static class TestContextConfiguration {
         @Bean
         public MenuService menuService() {
-            return new MenuServiceIml();
+            return new MenuServiceImpl();
         }
     }
 

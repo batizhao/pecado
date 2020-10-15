@@ -7,7 +7,7 @@ import me.batizhao.system.config.FileUploadProperties;
 import me.batizhao.system.domain.File;
 import me.batizhao.system.mapper.FileMapper;
 import me.batizhao.system.service.FileService;
-import me.batizhao.system.service.iml.FileServiceIml;
+import me.batizhao.system.service.impl.FileServiceImpl;
 import me.batizhao.system.util.FileNameAndPathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ public class FileServiceUnitTest extends BaseServiceUnitTest {
 
         @Bean
         public FileService fileService() {
-            return new FileServiceIml(fileUploadProperties);
+            return new FileServiceImpl(fileUploadProperties);
         }
     }
 

@@ -1,4 +1,4 @@
-package me.batizhao.system.service.iml;
+package me.batizhao.system.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @since 2020-03-14
  **/
 @Service
-public class LogServiceIml extends ServiceImpl<LogMapper, Log> implements LogService {
+public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogService {
 
     @Autowired
     private LogMapper logMapper;

@@ -1,4 +1,4 @@
-package me.batizhao.ims.service.iml;
+package me.batizhao.ims.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.ims.domain.UserRole;
@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2020-09-14
  **/
 @Service
-public class UserRoleServiceIml extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
+public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 
     @Autowired
     private UserRoleMapper userRoleMapper;

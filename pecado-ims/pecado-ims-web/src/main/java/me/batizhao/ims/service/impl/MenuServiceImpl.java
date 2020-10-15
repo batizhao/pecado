@@ -1,4 +1,4 @@
-package me.batizhao.ims.service.iml;
+package me.batizhao.ims.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @since 2020-03-14
  **/
 @Service
-public class MenuServiceIml extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     @Autowired
     private MenuMapper menuMapper;

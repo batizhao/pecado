@@ -1,4 +1,4 @@
-package me.batizhao.system.service.iml;
+package me.batizhao.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.SneakyThrows;
@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,12 +27,12 @@ import java.time.LocalDateTime;
  * @date 2020/9/23
  */
 @Service
-public class FileServiceIml extends ServiceImpl<FileMapper, File> implements FileService {
+public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements FileService {
 
     private final Path rootLocation;
 
     @Autowired
-    public FileServiceIml(FileUploadProperties properties) {
+    public FileServiceImpl(FileUploadProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 

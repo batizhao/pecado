@@ -202,11 +202,11 @@ public class CodeGenUtils {
 
 		if (StringUtils.isNotBlank(genConfig.getPackageName())) {
 			map.put("package", genConfig.getPackageName());
-			map.put("mainPath", genConfig.getPackageName());
+//			map.put("mainPath", genConfig.getPackageName());
 		}
 		else {
 			map.put("package", config.getString("package"));
-			map.put("mainPath", config.getString("mainPath"));
+//			map.put("mainPath", config.getString("mainPath"));
 		}
 		VelocityContext context = new VelocityContext(map);
 
