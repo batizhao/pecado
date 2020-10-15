@@ -18,7 +18,7 @@ import java.util.zip.ZipOutputStream;
  * @date 2020/10/10
  */
 @Service
-public class CodeGeneratorServiceIml implements CodeGeneratorService {
+public class CodeGeneratorServiceImpl implements CodeGeneratorService {
 
     @Autowired
     CodeGeneratorMapper codeGeneratorMapper;

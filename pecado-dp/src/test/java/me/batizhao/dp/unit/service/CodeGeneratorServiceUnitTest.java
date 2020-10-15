@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.dp.domain.GenConfig;
 import me.batizhao.dp.mapper.CodeGeneratorMapper;
 import me.batizhao.dp.service.CodeGeneratorService;
-import me.batizhao.dp.service.impl.CodeGeneratorServiceIml;
+import me.batizhao.dp.service.impl.CodeGeneratorServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class CodeGeneratorServiceUnitTest extends BaseServiceUnitTest {
     static class TestContextConfiguration {
         @Bean
         public CodeGeneratorService generatorService() {
-            return new CodeGeneratorServiceIml();
+            return new CodeGeneratorServiceImpl();
         }
     }
 
