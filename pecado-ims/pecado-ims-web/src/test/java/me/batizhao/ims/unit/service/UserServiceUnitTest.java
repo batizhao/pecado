@@ -184,7 +184,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenUserJson_whenSaveOrUpdateUser_thenSuccess() {
-        User user_test_data = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");;
+        User user_test_data = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
 
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         String hashPass = bcryptPasswordEncoder.encode(user_test_data.getPassword());

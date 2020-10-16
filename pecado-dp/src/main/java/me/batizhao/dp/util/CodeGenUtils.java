@@ -68,6 +68,12 @@ public class CodeGenUtils {
 
 	private final String MAPPER_XML_VM = "Mapper.xml.vm";
 
+	private final String CONTROLLER_UNIT_TEST_JAVA_VM = "ControllerUnitTest.java.vm";
+
+	private final String SERVICE_UNIT_TEST_JAVA_VM = "ServiceUnitTest.java.vm";
+
+	private final String MAPPER_UNIT_TEST_JAVA_VM = "MapperUnitTest.java.vm";
+
 	private final String MENU_SQL_VM = "menu.sql.vm";
 
 	private final String AVUE_INDEX_VUE_VM = "avue/index.vue.vm";
@@ -84,9 +90,11 @@ public class CodeGenUtils {
 		List<String> templates = new ArrayList<>();
 		templates.add("templates/Entity.java.vm");
 		templates.add("templates/Mapper.java.vm");
+		templates.add("templates/MapperUnitTest.java.vm");
 		templates.add("templates/Mapper.xml.vm");
 		templates.add("templates/Service.java.vm");
 		templates.add("templates/ServiceImpl.java.vm");
+		templates.add("templates/ServiceUnitTest.java.vm");
 		templates.add("templates/Controller.java.vm");
 //		templates.add("templates/menu.sql.vm");
 //		templates.add("template/avue/api.js.vm");
@@ -270,32 +278,44 @@ public class CodeGenUtils {
 	 * 获取文件名
 	 */
 	private String getFileName(String template, String className, String packageName, String moduleName) {
-		String packagePath = PecadoConstants.BACK_END_PROJECT + File.separator + "src" + File.separator + "main"
-				+ File.separator + "java" + File.separator;
+		String packageRootPath = PecadoConstants.BACK_END_PROJECT + File.separator + "src" + File.separator;
+
+		String packageSrcPath = packageRootPath + "main" + File.separator + "java" + File.separator;
+
+		String packageTestPath = packageRootPath + "test" + File.separator + "java" + File.separator;
 
 		if (StringUtils.isNotBlank(packageName)) {
 //			packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
-			packagePath += packageName.replace(".", File.separator) + File.separator + File.separator;
+			packageSrcPath += packageName.replace(".", File.separator) + File.separator + File.separator;
+			packageTestPath += packageName.replace(".", File.separator) + File.separator + File.separator;
 		}
 
 		if (template.contains(ENTITY_JAVA_VM)) {
-			return packagePath + "domain" + File.separator + className + ".java";
+			return packageSrcPath + "domain" + File.separator + className + ".java";
 		}
 
 		if (template.contains(MAPPER_JAVA_VM)) {
-			return packagePath + "mapper" + File.separator + className + "Mapper.java";
+			return packageSrcPath + "mapper" + File.separator + className + "Mapper.java";
+		}
+
+		if (template.contains(MAPPER_UNIT_TEST_JAVA_VM)) {
+			return packageTestPath + "unit" + File.separator + "mapper" + File.separator + className + "MapperUnitTest.java";
 		}
 
 		if (template.contains(SERVICE_JAVA_VM)) {
-			return packagePath + "service" + File.separator + className + "Service.java";
+			return packageSrcPath + "service" + File.separator + className + "Service.java";
 		}
 
 		if (template.contains(SERVICE_IMPL_JAVA_VM)) {
-			return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+			return packageSrcPath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+		}
+
+		if (template.contains(SERVICE_UNIT_TEST_JAVA_VM)) {
+			return packageTestPath + "unit" + File.separator + "service" + File.separator + className + "ServiceUnitTest.java";
 		}
 
 		if (template.contains(CONTROLLER_JAVA_VM)) {
-			return packagePath + "controller" + File.separator + className + "Controller.java";
+			return packageSrcPath + "controller" + File.separator + className + "Controller.java";
 		}
 
 		if (template.contains(MAPPER_XML_VM)) {

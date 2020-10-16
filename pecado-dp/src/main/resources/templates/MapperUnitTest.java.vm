@@ -1,0 +1,30 @@
+package ${package}.unit.mapper;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${package}.domain.${className};
+import ${package}.mapper.${className}Mapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public class ${className}MapperUnitTest extends BaseMapperUnitTest {
+
+    @Autowired
+    ${className}Mapper ${classname}Mapper;
+
+    @Test
+    public void testSelect${className}Page() {
+        IPage<${className}> ${classname}s = ${classname}Mapper.select${className}Page(new Page<>(), new ${className}());
+        assertThat(${classname}s.getRecords(), hasSize(1));
+    }
+
+}
