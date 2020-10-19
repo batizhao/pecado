@@ -74,6 +74,8 @@ public class CodeGenUtils {
 
 	private final String MAPPER_UNIT_TEST_JAVA_VM = "MapperUnitTest.java.vm";
 
+	private final String API_TEST_JAVA_VM = "ApiTest.java.vm";
+
 	private final String MENU_SQL_VM = "menu.sql.vm";
 
 	private final String AVUE_INDEX_VUE_VM = "avue/index.vue.vm";
@@ -97,6 +99,7 @@ public class CodeGenUtils {
 		templates.add("templates/ServiceUnitTest.java.vm");
 		templates.add("templates/Controller.java.vm");
 		templates.add("templates/ControllerUnitTest.java.vm");
+		templates.add("templates/ApiTest.java.vm");
 //		templates.add("templates/menu.sql.vm");
 //		templates.add("template/avue/api.js.vm");
 //		templates.add("template/avue/index.vue.vm");
@@ -321,6 +324,10 @@ public class CodeGenUtils {
 
 		if (template.contains(CONTROLLER_UNIT_TEST_JAVA_VM)) {
 			return packageTestPath + "unit" + File.separator + "controller" + File.separator + className + "ControllerUnitTest.java";
+		}
+
+		if (template.contains(API_TEST_JAVA_VM)) {
+			return packageTestPath + "api" + File.separator + className + "ApiTest.java";
 		}
 
 		if (template.contains(MAPPER_XML_VM)) {
