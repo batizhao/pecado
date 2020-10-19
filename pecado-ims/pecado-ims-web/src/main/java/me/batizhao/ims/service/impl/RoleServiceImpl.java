@@ -36,7 +36,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public RoleVO saveOrUpdateUser(Role role) {
+    public RoleVO saveOrUpdateRole(Role role) {
         role.setCreatedTime(LocalDateTime.now());
 
         if (role.getId() == null) {

@@ -97,8 +97,8 @@ public class RoleController {
     @PostMapping("role")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<RoleVO> handleSaveOrUpdate(@Valid @ApiParam(value = "用户", required = true) @RequestBody Role request_role) {
-        RoleVO roleVO = roleService.saveOrUpdateUser(request_role);
+    public ResponseInfo<RoleVO> handleSaveOrUpdate(@Valid @ApiParam(value = "角色", required = true) @RequestBody Role request_role) {
+        RoleVO roleVO = roleService.saveOrUpdateRole(request_role);
         return ResponseInfo.ok(roleVO);
     }
 

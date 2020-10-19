@@ -16,5 +16,5 @@ public interface RoleService extends IService<Role> {
 
     List<RoleVO> findRoles();
 
-    RoleVO saveOrUpdateUser(Role role);
+    RoleVO saveOrUpdateRole(Role role);
 }
