@@ -1,0 +1,36 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="batizhao" id="CreateTableDS-20201019-001">
+        <createTable tableName="ds" remarks="数据源">
+            <column autoIncrement="true" name="id" type="INT" remarks="主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(64)" remarks="名称">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="url" type="VARCHAR(255)" remarks="url">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="username" type="VARCHAR(64)" remarks="用户名">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(64)" remarks="密码">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="INT" remarks="是否可用" defaultValue="0"/>
+            <column name="createdTime" type="datetime" remarks="创建时间">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedTime" type="datetime" remarks="修改时间">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="ds"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

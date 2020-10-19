@@ -26,7 +26,7 @@ public interface ${className}Service extends IService<${className}> {
      * @param ${pk.lowerAttrName} id
      * @return ${className}
      */
-    ${className} findById(Long id);
+    ${className} findById(${pk.attrType} id);
 
     /**
      * 添加或修改${comments}

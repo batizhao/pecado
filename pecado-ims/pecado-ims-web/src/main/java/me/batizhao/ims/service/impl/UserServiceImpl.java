@@ -77,9 +77,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         String hashPass = bcryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(hashPass);
-        user.setCreatedTime(LocalDateTime.now());
 
         if (user.getId() == null) {
+            user.setCreatedTime(LocalDateTime.now());
             userMapper.insert(user);
         } else {
             userMapper.updateById(user);

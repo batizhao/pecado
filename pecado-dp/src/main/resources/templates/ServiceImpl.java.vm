@@ -30,7 +30,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     }
 
     @Override
-    public ${className} findById(Long id) {
+    public ${className} findById(${pk.attrType} id) {
         ${className} ${classname} = ${classname}Mapper.selectById(id);
 
         if(${classname} == null) {
@@ -42,11 +42,12 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
 
     @Override
     public ${className} saveOrUpdate${className}(${className} ${classname}) {
-        ${classname}.setCreatedTime(LocalDateTime.now());
-
         if (${classname}.getId() == null) {
+            ${classname}.setCreatedTime(LocalDateTime.now());
+            ${classname}.setUpdatedTime(LocalDateTime.now());
             ${classname}Mapper.insert(${classname});
         } else {
+            ${classname}.setUpdatedTime(LocalDateTime.now());
             ${classname}Mapper.updateById(${classname});
         }
 

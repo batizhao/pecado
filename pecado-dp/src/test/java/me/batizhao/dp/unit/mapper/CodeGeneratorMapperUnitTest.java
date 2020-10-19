@@ -23,7 +23,7 @@ public class CodeGeneratorMapperUnitTest extends BaseMapperUnitTest {
 
     @Test
     public void testSelectColumns() {
-        List<Map<String, String>> result = codeGeneratorMapper.selectColumns("log");
+        List<Map<String, String>> result = codeGeneratorMapper.selectColumns("ds");
 
         log.info("table: {}", result);
 
@@ -32,10 +32,10 @@ public class CodeGeneratorMapperUnitTest extends BaseMapperUnitTest {
 
     @Test
     public void testSelectTable() {
-        Map<String, String> result = codeGeneratorMapper.selectTable("log");
+        Map<String, String> result = codeGeneratorMapper.selectTable("ds");
 
         log.info("table: {}", result);
 
-        assertThat(result.get("tableComment"), equalTo("日志表"));
+        assertThat(result.get("tableComment"), equalTo("数据源"));
     }
 }
