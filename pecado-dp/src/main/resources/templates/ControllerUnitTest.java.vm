@@ -1,0 +1,141 @@
+package ${package}.unit.controller;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import me.batizhao.common.core.util.ResultEnum;
+import ${package}.controller.${className}Controller;
+import ${package}.domain.${className};
+import ${package}.service.${className}Service;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.text.StringContainsInOrder.stringContainsInOrder;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@WebMvcTest(${className}Controller.class)
+public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
+    ${className}Service ${classname}Service;
+
+    private List<${className}> ${classname}List;
+    private IPage<${className}> ${classname}PageList;
+
+    /**
+     * Prepare test data.
+     */
+    @BeforeEach
+    public void setUp() {
+        ${classname}List = new ArrayList<>();
+        ${classname}List.add(new ${className}().setId(1L).setUsername("zhangsan"));
+        ${classname}List.add(new ${className}().setId(2L).setUsername("lisi"));
+        ${classname}List.add(new ${className}().setId(3L).setUsername("wangwu"));
+
+        ${classname}PageList = new Page<>();
+        ${classname}PageList.setRecords(${classname}List);
+    }
+
+    @Test
+    @WithMockUser
+    public void givenNothing_whenFindAll${className}_thenSuccess() throws Exception {
+        when(${classname}Service.find${className}s(any(Page.class), any(${className}.class))).thenReturn(${classname}PageList);
+
+        mvc.perform(get("/${classname}s"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
+                .andExpect(jsonPath("$.data.records", hasSize(3)))
+                .andExpect(jsonPath("$.data.records[0].username", equalTo("zhangsan")));
+
+        verify(${classname}Service).find${className}s(any(Page.class), any(${className}.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenFind${className}_thenSuccess() throws Exception {
+        Long id = 1L;
+
+        when(${classname}Service.findById(id)).thenReturn(${classname}List.get(0));
+
+        mvc.perform(get("/${classname}/{id}", id))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.username").value("zhangsan"));
+
+        verify(${classname}Service).findById(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    public void givenJson_whenSave${className}_thenSuccess() throws Exception {
+        ${className} requestBody = new ${className}().setUsername("zhaoliu");
+
+        when(${classname}Service.saveOrUpdate${className}(any(${className}.class)))
+                .thenReturn(${classname}List.get(0));
+
+        mvc.perform(post("/${classname}").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.id", equalTo(1)));
+
+        verify(${classname}Service).saveOrUpdate${className}(any(${className}.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenJson_whenUpdate${className}_thenSuccess() throws Exception {
+        ${className} requestBody = new ${className}().setId(2L).setUsername("zhaoliu");
+
+        when(${classname}Service.saveOrUpdate${className}(any(${className}.class)))
+                .thenReturn(${classname}List.get(1));
+
+        mvc.perform(post("/${classname}").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.id", equalTo(2)));
+
+        verify(${classname}Service).saveOrUpdate${className}(any(${className}.class));
+    }
+}

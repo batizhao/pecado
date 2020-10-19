@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.Matchers.*;
 
 /**
  * ${comments}
@@ -24,7 +24,7 @@ public class ${className}MapperUnitTest extends BaseMapperUnitTest {
     @Test
     public void testSelect${className}Page() {
         IPage<${className}> ${classname}s = ${classname}Mapper.select${className}Page(new Page<>(), new ${className}());
-        assertThat(${classname}s.getRecords(), hasSize(1));
+        assertThat(${classname}s.getRecords().size(), greaterThan(0));
     }
 
 }

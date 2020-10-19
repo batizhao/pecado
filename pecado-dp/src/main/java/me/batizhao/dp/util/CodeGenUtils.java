@@ -96,6 +96,7 @@ public class CodeGenUtils {
 		templates.add("templates/ServiceImpl.java.vm");
 		templates.add("templates/ServiceUnitTest.java.vm");
 		templates.add("templates/Controller.java.vm");
+		templates.add("templates/ControllerUnitTest.java.vm");
 //		templates.add("templates/menu.sql.vm");
 //		templates.add("template/avue/api.js.vm");
 //		templates.add("template/avue/index.vue.vm");
@@ -316,6 +317,10 @@ public class CodeGenUtils {
 
 		if (template.contains(CONTROLLER_JAVA_VM)) {
 			return packageSrcPath + "controller" + File.separator + className + "Controller.java";
+		}
+
+		if (template.contains(CONTROLLER_UNIT_TEST_JAVA_VM)) {
+			return packageTestPath + "unit" + File.separator + "controller" + File.separator + className + "ControllerUnitTest.java";
 		}
 
 		if (template.contains(MAPPER_XML_VM)) {
