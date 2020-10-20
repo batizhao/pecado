@@ -28,7 +28,7 @@ public class Ds extends Model<Ds> {
      * 
      */
     @TableId
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value="id")
     private Integer id;
 
     /**

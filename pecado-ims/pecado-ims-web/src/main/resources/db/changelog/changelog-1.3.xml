@@ -22,11 +22,21 @@
             <column name="permission" value="dp_code"/>
             <column name="description"/>
             <column name="pid" valueNumeric="3000"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3200"/>
+            <column name="path" value="/dp/ds"/>
+            <column name="name" value="数据源"/>
+            <column name="permission" value="dp_ds"/>
+            <column name="description" value="动态数据源"/>
+            <column name="pid" valueNumeric="3000"/>
             <column name="sort" valueNumeric="1"/>
         </insert>
         <rollback>
             delete from menu where id = 3000;
             delete from menu where id = 3100;
+            delete from menu where id = 3200;
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableRoleMenu-20201013-003">
@@ -38,9 +48,14 @@
             <column name="roleId" valueNumeric="2"/>
             <column name="menuId" valueNumeric="3100"/>
         </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3200"/>
+        </insert>
         <rollback>
             delete from role_menu where roleId = 2 and menuId = 3000;
             delete from role_menu where roleId = 2 and menuId = 3100;
+            delete from role_menu where roleId = 2 and menuId = 3200;
         </rollback>
     </changeSet>
 </databaseChangeLog>

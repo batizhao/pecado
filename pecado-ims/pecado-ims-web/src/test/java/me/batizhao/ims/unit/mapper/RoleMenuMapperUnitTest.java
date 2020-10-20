@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.greaterThan;
 
 /**
  * @author batizhao
@@ -18,7 +18,7 @@ public class RoleMenuMapperUnitTest extends BaseMapperUnitTest {
 
     @Test
     public void testDeleteByRoleId() {
-        assertThat(roleMenuMapper.deleteByRoleId(2L), is(11));
+        assertThat(roleMenuMapper.deleteByRoleId(2L), greaterThan(0));
     }
 
 }
