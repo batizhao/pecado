@@ -33,12 +33,17 @@ public enum ResultEnum {
     /**
      * IMS 01 模块错误
      */
-    USER_NOT_FOUND(100100, "用户不存在！"),
+    IMS_USER_NOT_FOUND(100100, "用户不存在！"),
 
     /**
      * SYSTEM 02 模块错误
      */
-    STORAGE_ERROR(100200, "存储异常！");
+    SYSTEM_STORAGE_ERROR(100200, "存储异常！"),
+
+    /**
+     * DP 03 模块错误
+     */
+    DP_DS_ERROR(100300, "数据源参数异常！");
 
     private Integer code;
     private String message;

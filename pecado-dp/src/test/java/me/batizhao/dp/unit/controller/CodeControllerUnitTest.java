@@ -1,9 +1,9 @@
 package me.batizhao.dp.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.batizhao.dp.controller.CodeGeneratorController;
+import me.batizhao.dp.controller.CodeController;
 import me.batizhao.dp.domain.GenConfig;
-import me.batizhao.dp.service.CodeGeneratorService;
+import me.batizhao.dp.service.CodeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author batizhao
  * @date 2020/10/13
  */
-@WebMvcTest(CodeGeneratorController.class)
-public class CodeGeneratorControllerUnitTest extends BaseControllerUnitTest {
+@WebMvcTest(CodeController.class)
+public class CodeControllerUnitTest extends BaseControllerUnitTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -33,7 +33,7 @@ public class CodeGeneratorControllerUnitTest extends BaseControllerUnitTest {
     private MockMvc mvc;
 
     @MockBean
-    CodeGeneratorService codeGeneratorService;
+    CodeService codeService;
 
     @Test
     @WithMockUser
@@ -60,7 +60,7 @@ public class CodeGeneratorControllerUnitTest extends BaseControllerUnitTest {
 
         GenConfig requestBody = new GenConfig().setTableName("log");
 
-        doReturn(data).when(codeGeneratorService).generateCode(any(GenConfig.class));
+        doReturn(data).when(codeService).generateCode(any(GenConfig.class));
 
         mvc.perform(post("/code").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))

@@ -2,4 +2,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   me.batizhao.common.core.config.JacksonConfig, \
   me.batizhao.common.core.config.MybatisPlusConfig, \
   me.batizhao.common.core.exception.WebExceptionHandler, \
-  me.batizhao.common.core.exception.ErrorHandler
+  me.batizhao.common.core.exception.ErrorHandler, \
+  me.batizhao.common.core.util.SpringContextHolder

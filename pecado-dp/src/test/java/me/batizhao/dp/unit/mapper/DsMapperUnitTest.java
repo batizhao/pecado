@@ -2,6 +2,7 @@ package me.batizhao.dp.unit.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.mapper.DsMapper;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static org.hamcrest.Matchers.*;
  * @author batizhao
  * @since 2020-10-19
  */
+@Slf4j
 public class DsMapperUnitTest extends BaseMapperUnitTest {
 
     @Autowired
@@ -24,6 +26,9 @@ public class DsMapperUnitTest extends BaseMapperUnitTest {
     @Test
     public void testSelectDsPage() {
         IPage<Ds> dss = dsMapper.selectDsPage(new Page<>(), new Ds());
+
+        log.info("dss: {}", dss);
+
         assertThat(dss.getRecords().size(), greaterThan(0));
     }
 

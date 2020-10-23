@@ -2,9 +2,9 @@ package me.batizhao.dp.unit.service;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.dp.domain.GenConfig;
-import me.batizhao.dp.mapper.CodeGeneratorMapper;
-import me.batizhao.dp.service.CodeGeneratorService;
-import me.batizhao.dp.service.impl.CodeGeneratorServiceImpl;
+import me.batizhao.dp.mapper.CodeMapper;
+import me.batizhao.dp.service.CodeService;
+import me.batizhao.dp.service.impl.CodeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
  * @since 2020-02-08
  */
 @Slf4j
-public class CodeGeneratorServiceUnitTest extends BaseServiceUnitTest {
+public class CodeServiceUnitTest extends BaseServiceUnitTest {
 
     /**
      * Spring Boot 提供了 @TestConfiguration 注释，可用于 src/test/java 中的类，以指示不应通过扫描获取它们。
@@ -34,16 +34,16 @@ public class CodeGeneratorServiceUnitTest extends BaseServiceUnitTest {
     @TestConfiguration
     static class TestContextConfiguration {
         @Bean
-        public CodeGeneratorService generatorService() {
-            return new CodeGeneratorServiceImpl();
+        public CodeService generatorService() {
+            return new CodeServiceImpl();
         }
     }
 
     @MockBean
-    private CodeGeneratorMapper codeGeneratorMapper;
+    private CodeMapper codeMapper;
 
     @Autowired
-    private CodeGeneratorService codeGeneratorService;
+    private CodeService codeService;
 
     private List<Map<String, String>> result;
 
@@ -59,13 +59,13 @@ public class CodeGeneratorServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenTableName_whenSelectColumns_thenSuccess() {
-        when(codeGeneratorMapper.selectColumns(anyString()))
+        when(codeMapper.selectColumnsByTableName(anyString()))
                 .thenReturn(result);
 
-        when(codeGeneratorMapper.selectTable(anyString()))
+        when(codeMapper.selectMetaByTableName(anyString()))
                 .thenReturn(Map.of("tableComment", "日志表", "tableName", "log"));
 
-        byte[] result = codeGeneratorService.generateCode(new GenConfig().setTableName("log"));
+        byte[] result = codeService.generateCode(new GenConfig().setTableName("log"));
 
         log.info("result: {}", result);
 

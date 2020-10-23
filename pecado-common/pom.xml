@@ -14,6 +14,7 @@
 
     <modules>
         <module>pecado-common-core</module>
+        <module>pecado-common-datasource</module>
         <module>pecado-common-security</module>
         <module>pecado-common-sentinel</module>
     </modules>

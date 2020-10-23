@@ -114,8 +114,17 @@ public class WebExceptionHandler {
     @ResponseStatus
     public ResponseInfo<String> handleStorageException(StorageException e) {
         log.error("StorageException!", e);
-        return new ResponseInfo<String>().setCode(ResultEnum.STORAGE_ERROR.getCode())
-                .setMessage(ResultEnum.STORAGE_ERROR.getMessage())
+        return new ResponseInfo<String>().setCode(ResultEnum.SYSTEM_STORAGE_ERROR.getCode())
+                .setMessage(ResultEnum.SYSTEM_STORAGE_ERROR.getMessage())
+                .setData(e.getMessage());
+    }
+
+    @ExceptionHandler(DataSourceException.class)
+    @ResponseStatus
+    public ResponseInfo<String> handleDataSourceException(DataSourceException e) {
+        log.error("DataSourceException!", e);
+        return new ResponseInfo<String>().setCode(ResultEnum.DP_DS_ERROR.getCode())
+                .setMessage(ResultEnum.DP_DS_ERROR.getMessage())
                 .setData(e.getMessage());
     }
 

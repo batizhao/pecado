@@ -35,4 +35,17 @@ public interface DsService extends IService<Ds> {
      */
      Ds saveOrUpdateDs(Ds ds);
 
+    /**
+     * 添加动态数据源
+     * @param ds 数据源信息
+     */
+    void addDynamicDataSource(Ds ds);
+
+    /**
+     * 校验数据源配置是否有效
+     * @param ds 数据源信息
+     * @return 有效/无效
+     */
+    Boolean checkDataSource(Ds ds);
+
 }
