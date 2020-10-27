@@ -28,7 +28,7 @@ public class CodeServiceImpl implements CodeService {
 
     @Override
     @DS("#last")
-    public IPage<List<Map<String, Object>>> findTables(Page page, String tableName, String dsName) {
+    public IPage<List<Map<String, String>>> findTables(Page page, String tableName, String dsName) {
         return codeMapper.selectTableByDs(page, tableName);
     }
 

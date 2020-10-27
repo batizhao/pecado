@@ -1,9 +1,14 @@
 package me.batizhao.dp.unit.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.dp.controller.CodeController;
+import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.domain.GenConfig;
 import me.batizhao.dp.service.CodeService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,9 +17,18 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.text.StringContainsInOrder.stringContainsInOrder;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,6 +48,39 @@ public class CodeControllerUnitTest extends BaseControllerUnitTest {
 
     @MockBean
     CodeService codeService;
+
+    private List<Map<String, String>> result;
+    private IPage codePageList;
+
+    /**
+     * Prepare test data.
+     */
+    @BeforeEach
+    public void setUp() {
+        result = new ArrayList<>();
+        result.add(Map.of("tableName","user", "tableCollation", "utf8"));
+        result.add(Map.of("tableName","role", "tableCollation", "uft8mb4"));
+
+        codePageList = new Page<>();
+        codePageList.setRecords(result);
+    }
+
+    @Test
+    @WithMockUser
+    public void givenNothing_whenFindTables_thenSuccess() throws Exception {
+        when(codeService.findTables(any(Page.class), anyString(), anyString()))
+                .thenReturn(codePageList);
+
+        mvc.perform(get("/codes").param("tableName", "aaa").param("dsName", "bbb"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.records", hasSize(2)))
+                .andExpect(jsonPath("$.data.records[0].tableName", equalTo("user")));
+
+        verify(codeService).findTables(any(Page.class), anyString(), anyString());
+    }
 
     @Test
     @WithMockUser
@@ -58,7 +105,8 @@ public class CodeControllerUnitTest extends BaseControllerUnitTest {
                 101, 110, 101, 114, 97, 116, 111, 114, 47, 109, 97, 112, 112, 101, 114, 47, 76, 111, 103, 77, 97, 112,
                 112, 101, 114, 46, 106, 97, 118, 97, 80, 75, 5, 6, 0, 0, 0, 0, 1, 0, 1, 0, 110, 0, 0, 0, 71, 1, 0, 0, 0, 0};
 
-        GenConfig requestBody = new GenConfig().setTableName("log");
+        GenConfig requestBody = new GenConfig().setTableName("log").setAuthor("batizhao").setComments("comment")
+                .setModuleName("system").setPackageName("me.batizhao");
 
         doReturn(data).when(codeService).generateCode(any(GenConfig.class));
 

@@ -26,7 +26,7 @@ public class CodeMapperUnitTest extends BaseMapperUnitTest {
 
     @Test
     public void testSelectTableByDs() {
-        IPage<List<Map<String, Object>>> result = codeMapper.selectTableByDs(new Page<>(), "");
+        IPage<List<Map<String, String>>> result = codeMapper.selectTableByDs(new Page<>(), "");
 
         log.info("table: {}", result.getRecords());
 

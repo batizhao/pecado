@@ -21,7 +21,7 @@ public interface CodeMapper {
      * @param page
      * @return
      */
-    IPage<List<Map<String, Object>>> selectTableByDs(Page page, @Param("tableName") String tableName);
+    IPage<List<Map<String, String>>> selectTableByDs(Page page, @Param("tableName") String tableName);
 
     /**
      * 查询表元数据

@@ -1,25 +1,38 @@
 package me.batizhao.dp.unit.service;
 
+import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.creator.DataSourceCreator;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import me.batizhao.common.core.exception.DataSourceException;
+import me.batizhao.common.core.exception.NotFoundException;
+import me.batizhao.common.core.util.SpringContextHolder;
 import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.mapper.DsMapper;
 import me.batizhao.dp.service.DsService;
 import me.batizhao.dp.service.impl.DsServiceImpl;
 import org.jasypt.encryption.StringEncryptor;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
@@ -52,6 +65,10 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
     @Autowired
     private DsService dsService;
 
+    @Autowired
+    @SpyBean
+    private DsService dsService2;
+
     private List<Ds> dsList;
     private IPage<Ds> dsPageList;
 
@@ -61,7 +78,7 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
     @BeforeEach
     public void setUp() {
         dsList = new ArrayList<>();
-        dsList.add(new Ds().setId(1).setUsername("zhangsan"));
+        dsList.add(new Ds().setId(1).setUsername("zhangsan").setPassword("xxx").setUrl("aaa").setName("bbb"));
         dsList.add(new Ds().setId(2).setUsername("lisi"));
         dsList.add(new Ds().setId(3).setUsername("wangwu"));
 
@@ -92,26 +109,99 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
         assertThat(ds.getUsername(), equalTo("zhangsan"));
     }
 
-//    @Test
-//    public void givenDsJson_whenSaveOrUpdateDs_thenSuccess() {
-//        Ds ds_test_data = new Ds().setUsername("zhaoliu");
-//
-//        // insert 不带 id
-//        doReturn(true).when(dsService).checkDataSource(any(Ds.class));
-//        doReturn(1).when(dsMapper).insert(any(Ds.class));
-//        doReturn("vxth7ibr6hlxbE362qiQGYtiGWOotkYp").when(stringEncryptor).encrypt(anyString());
-//
-//        Ds ds = dsService.saveOrUpdateDs(ds_test_data);
-//
-//        verify(dsMapper).insert(any(Ds.class));
-//
-//        // update 需要带 id
-//        doReturn(1).when(dsMapper).updateById(any(Ds.class));
-//
-//        ds = dsService.saveOrUpdateDs(dsList.get(0));
-//
-//        verify(dsMapper).updateById(any(Ds.class));
-//    }
+    @Test
+    public void givenDsId_whenFindDs_thenFail() {
+        when(dsMapper.selectById(anyInt()))
+                .thenReturn(null);
 
+        Assertions.assertThrows(NotFoundException.class, () -> dsService.findById(1));
+
+        verify(dsMapper).selectById(anyInt());
+    }
+
+    /**
+     * 类方法内部调用 Mock
+     */
+    @Test
+    public void givenDsJson_whenSaveOrUpdateDs_thenSuccess() {
+        Ds ds_test_data = new Ds().setUsername("zhaoliu").setUrl("xxx").setPassword("xxx");
+
+        doReturn(true).when(dsService2).checkDataSource(any(Ds.class));
+        doNothing().when(dsService2).addDynamicDataSource(any(Ds.class));
+
+        // insert 不带 id
+        doReturn(1).when(dsMapper).insert(any(Ds.class));
+        doReturn("vxth7ibr6hlxbE362qiQGYtiGWOotkYp").when(stringEncryptor).encrypt(anyString());
+
+        dsService2.saveOrUpdateDs(ds_test_data);
+
+        verify(dsMapper).insert(any(Ds.class));
+
+        try (MockedStatic<SpringContextHolder> mockStatic = mockStatic(SpringContextHolder.class)) {
+            DynamicRoutingDataSource dataSource = spy(DynamicRoutingDataSource.class);
+            mockStatic.when(() -> {
+                SpringContextHolder.getBean(DynamicRoutingDataSource.class);
+            }).thenReturn(dataSource);
+
+            doReturn(dsList.get(0)).when(dsService2).findById(anyInt());
+            doNothing().when(dataSource).removeDataSource(dsList.get(0).getName());
+
+            // update 需要带 id
+            doReturn(1).when(dsMapper).updateById(any(Ds.class));
+
+            dsService2.saveOrUpdateDs(dsList.get(0));
+
+            verify(dsMapper).updateById(any(Ds.class));
+        }
+    }
+
+    @Test
+    public void givenDs_whenAddDynamicDataSource_thenSuccess() {
+        try (MockedStatic<SpringContextHolder> mockStatic = mockStatic(SpringContextHolder.class)) {
+            DataSource dataSource = spy(DataSource.class);
+            DynamicRoutingDataSource routingDataSource = spy(new DynamicRoutingDataSource());
+
+            mockStatic.when(() -> {
+                SpringContextHolder.getBean(DynamicRoutingDataSource.class);
+            }).thenReturn(routingDataSource);
+
+            when(dataSourceCreator.createDataSource(any(DataSourceProperty.class)))
+                    .thenReturn(dataSource);
+
+            doNothing().when(routingDataSource).addDataSource(anyString(), any(DataSource.class));
+
+            dsService.addDynamicDataSource(dsList.get(0));
+
+            verify(dataSourceCreator).createDataSource(any(DataSourceProperty.class));
+            verify(routingDataSource).addDataSource(anyString(), any(DataSource.class));
+        }
+    }
+
+    @Test
+    public void givenDs_whenCheckDataSource_thenSuccess() {
+        try (MockedStatic<DriverManager> mockStatic = mockStatic(DriverManager.class)) {
+            Connection connection = spy(Connection.class);
+            mockStatic.when(() -> {
+                DriverManager.getConnection(anyString(), anyString(), anyString());
+            }).thenReturn(connection);
+
+            dsService.checkDataSource(dsList.get(0));
+
+            mockStatic.verify(() -> {
+                DriverManager.getConnection(anyString(), anyString(), anyString());
+            });
+        }
+    }
+
+    @Test
+    public void givenDs_whenCheckDataSource_thenFail() {
+        try (MockedStatic<DriverManager> mockStatic = mockStatic(DriverManager.class)) {
+            mockStatic.when(() -> {
+                DriverManager.getConnection(anyString(), anyString(), anyString());
+            }).thenThrow(SQLException.class);
+
+            Assertions.assertThrows(DataSourceException.class, () -> dsService.checkDataSource(dsList.get(0)));
+        }
+    }
 
 }

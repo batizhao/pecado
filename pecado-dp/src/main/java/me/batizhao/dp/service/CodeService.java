@@ -19,7 +19,7 @@ public interface CodeService {
      * @param dsName 数据源
      * @return IPage<GenConfig>
      */
-    IPage<List<Map<String, Object>>> findTables(Page page, String tableName, String dsName);
+    IPage<List<Map<String, String>>> findTables(Page page, String tableName, String dsName);
 
     /**
      * 生成代码

@@ -1,6 +1,9 @@
 package me.batizhao.dp.unit.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.domain.GenConfig;
 import me.batizhao.dp.mapper.CodeMapper;
 import me.batizhao.dp.service.CodeService;
@@ -18,6 +21,7 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +50,7 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
     private CodeService codeService;
 
     private List<Map<String, String>> result;
+    private IPage codePageList;
 
     /**
      * Prepare test data.
@@ -55,6 +60,21 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
         result = new ArrayList<>();
         result.add(Map.of("columnName","id", "columnType", "bigint"));
         result.add(Map.of("columnName","httpRequestMethod", "columnType", "varchar(255)"));
+
+        codePageList = new Page<>();
+        codePageList.setRecords(result);
+    }
+
+    @Test
+    public void givenNothing_whenFindTables_thenSuccess() {
+        when(codeMapper.selectTableByDs(any(Page.class), anyString()))
+                .thenReturn(codePageList);
+
+        codeService.findTables(new Page<>(), "", "ims");
+
+        log.info("result: {}", result);
+
+        assertThat(result.size(), is(2));
     }
 
     @Test
@@ -65,7 +85,8 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
         when(codeMapper.selectMetaByTableName(anyString()))
                 .thenReturn(Map.of("tableComment", "日志表", "tableName", "log"));
 
-        byte[] result = codeService.generateCode(new GenConfig().setTableName("log"));
+        byte[] result = codeService.generateCode(new GenConfig().setTableName("log").setAuthor("batizhao").setComments("comment")
+                .setModuleName("system").setPackageName("me.batizhao").setTablePrefix("ims_"));
 
         log.info("result: {}", result);
 
