@@ -49,15 +49,14 @@ public class CodeControllerUnitTest extends BaseControllerUnitTest {
     @MockBean
     CodeService codeService;
 
-    private List<Map<String, String>> result;
-    private IPage codePageList;
+    private IPage<Map<String, String>> codePageList;
 
     /**
      * Prepare test data.
      */
     @BeforeEach
     public void setUp() {
-        result = new ArrayList<>();
+        List<Map<String, String>> result = new ArrayList<>();
         result.add(Map.of("tableName","user", "tableCollation", "utf8"));
         result.add(Map.of("tableName","role", "tableCollation", "uft8mb4"));
 

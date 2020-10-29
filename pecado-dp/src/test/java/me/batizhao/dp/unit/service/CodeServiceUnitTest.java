@@ -3,7 +3,6 @@ package me.batizhao.dp.unit.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.domain.GenConfig;
 import me.batizhao.dp.mapper.CodeMapper;
 import me.batizhao.dp.service.CodeService;
@@ -50,7 +49,7 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
     private CodeService codeService;
 
     private List<Map<String, String>> result;
-    private IPage codePageList;
+    private IPage<Map<String, String>> codePageList;
 
     /**
      * Prepare test data.
@@ -58,8 +57,8 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
     @BeforeEach
     public void setUp() {
         result = new ArrayList<>();
-        result.add(Map.of("columnName","id", "columnType", "bigint"));
-        result.add(Map.of("columnName","httpRequestMethod", "columnType", "varchar(255)"));
+        result.add(Map.of("tableName","user", "tableCollation", "utf8"));
+        result.add(Map.of("tableName","role", "tableCollation", "uft8mb4"));
 
         codePageList = new Page<>();
         codePageList.setRecords(result);
@@ -79,14 +78,14 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenTableName_whenSelectColumns_thenSuccess() {
-        when(codeMapper.selectColumnsByTableName(anyString()))
+        when(codeMapper.selectColumnsByTableName(anyString(), anyString()))
                 .thenReturn(result);
 
-        when(codeMapper.selectMetaByTableName(anyString()))
+        when(codeMapper.selectMetaByTableName(anyString(), anyString()))
                 .thenReturn(Map.of("tableComment", "日志表", "tableName", "log"));
 
         byte[] result = codeService.generateCode(new GenConfig().setTableName("log").setAuthor("batizhao").setComments("comment")
-                .setModuleName("system").setPackageName("me.batizhao").setTablePrefix("ims_"));
+                .setModuleName("system").setPackageName("me.batizhao").setTablePrefix("ims_").setDsName("ims"));
 
         log.info("result: {}", result);
 

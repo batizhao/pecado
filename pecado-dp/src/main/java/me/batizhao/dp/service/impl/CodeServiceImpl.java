@@ -28,7 +28,7 @@ public class CodeServiceImpl implements CodeService {
 
     @Override
     @DS("#last")
-    public IPage<List<Map<String, String>>> findTables(Page page, String tableName, String dsName) {
+    public IPage<Map<String, String>> findTables(Page<Map<String, String>> page, String tableName, String dsName) {
         return codeMapper.selectTableByDs(page, tableName);
     }
 
@@ -38,8 +38,8 @@ public class CodeServiceImpl implements CodeService {
         ZipOutputStream zip = new ZipOutputStream(outputStream);
 
         String tableName = genConfig.getTableName();
-        Map<String, String> table = codeMapper.selectMetaByTableName(tableName);
-        List<Map<String, String>> columns = codeMapper.selectColumnsByTableName(tableName);
+        Map<String, String> table = codeMapper.selectMetaByTableName(tableName, genConfig.getDsName());
+        List<Map<String, String>> columns = codeMapper.selectColumnsByTableName(tableName, genConfig.getDsName());
         CodeGenUtils.generatorCode(genConfig, table, columns, zip);
 
         IoUtil.close(zip);

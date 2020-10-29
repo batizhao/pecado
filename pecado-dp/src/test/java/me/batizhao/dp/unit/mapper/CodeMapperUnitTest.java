@@ -26,7 +26,7 @@ public class CodeMapperUnitTest extends BaseMapperUnitTest {
 
     @Test
     public void testSelectTableByDs() {
-        IPage<List<Map<String, String>>> result = codeMapper.selectTableByDs(new Page<>(), "");
+        IPage<Map<String, String>> result = codeMapper.selectTableByDs(new Page<>(), "");
 
         log.info("table: {}", result.getRecords());
 
@@ -35,16 +35,22 @@ public class CodeMapperUnitTest extends BaseMapperUnitTest {
 
     @Test
     public void testSelectColumnsByTableName() {
-        List<Map<String, String>> result = codeMapper.selectColumnsByTableName("ds");
+        List<Map<String, String>> result = codeMapper.selectColumnsByTableName("ds", "");
 
-        log.info("table: {}", result);
+        log.info("ds: {}", result);
 
         assertThat(result.get(0).get("columnName"), equalTo("id"));
+
+//        result = codeMapper.selectColumnsByTableName("role", "ims");
+
+//        log.info("role: {}", result);
+
+//        assertThat(result.get(0).get("columnName"), equalTo("id"));
     }
 
     @Test
     public void testSelectMetaByTableName() {
-        Map<String, String> result = codeMapper.selectMetaByTableName("ds");
+        Map<String, String> result = codeMapper.selectMetaByTableName("ds", "");
 
         log.info("table: {}", result);
 

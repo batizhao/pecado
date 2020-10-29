@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.batizhao.dp.domain.GenConfig;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,7 +18,7 @@ public interface CodeService {
      * @param dsName 数据源
      * @return IPage<GenConfig>
      */
-    IPage<List<Map<String, String>>> findTables(Page page, String tableName, String dsName);
+    IPage<Map<String, String>> findTables(Page<Map<String, String>> page, String tableName, String dsName);
 
     /**
      * 生成代码

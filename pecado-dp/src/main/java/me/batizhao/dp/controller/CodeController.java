@@ -1,6 +1,7 @@
 package me.batizhao.dp.controller;
 
 import cn.hutool.core.io.IoUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * 生成代码
@@ -39,7 +41,7 @@ public class CodeController {
      */
     @ApiOperation(value = "分页查询")
     @GetMapping("/codes")
-    public ResponseInfo handleCodes(Page page, String tableName, String dsName) {
+    public ResponseInfo<IPage<Map<String, String>>> handleCodes(Page<Map<String, String>> page, String tableName, String dsName) {
         return ResponseInfo.ok(codeService.findTables(page, tableName, dsName));
     }
 
