@@ -31,7 +31,7 @@ public class DsApiTest extends BaseApiTest {
 
     @Test
     public void givenId_whenFindDs_thenSuccess() throws Exception {
-        mvc.perform(get("/ds/{id}", 1L)
+        mvc.perform(get("/ds/{id}", 1)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -53,26 +53,10 @@ public class DsApiTest extends BaseApiTest {
     @Transactional
     public void givenJson_whenSaveDs_thenSuccess() throws Exception {
         Ds requestBody = new Ds()
-                .setName("daxia").setUrl("daxia").setUsername("daxia")
-                .setPassword("123456");
-
-        mvc.perform(post("/ds")
-                .content(objectMapper.writeValueAsString(requestBody))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.id", notNullValue()));
-    }
-
-    @Test
-    @Transactional
-    public void givenJson_whenUpdateDs_thenSuccess() throws Exception {
-        Ds requestBody = new Ds()
-                .setId(8).setName("daxia").setUrl("daxia").setUsername("daxia")
-                .setPassword("123456");
+                .setName("test")
+                .setUrl("jdbc:mysql://localhost:3306/pecado-test?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai")
+                .setUsername("root")
+                .setPassword("password");
 
         mvc.perform(post("/ds")
                 .content(objectMapper.writeValueAsString(requestBody))
@@ -82,6 +66,43 @@ public class DsApiTest extends BaseApiTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
+    }
+
+    @Test
+    @Transactional
+    public void givenJson_whenSaveDs_thenFail() throws Exception {
+        Ds requestBody = new Ds()
+                .setName("test")
+                .setUrl("xxx")
+                .setUsername("root")
+                .setPassword("xxx");
+
+        mvc.perform(post("/ds")
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", adminAccessToken))
+                .andDo(print())
+                .andExpect(status().is5xxServerError())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.DP_DS_ERROR.getCode()))
+                .andExpect(jsonPath("$.message", containsString("数据源参数异常")));
+    }
+
+    @Test
+    @Transactional
+    public void givenJson_whenUpdateDs_thenFail() throws Exception {
+        Ds requestBody = new Ds()
+                .setId(1).setName("daxia").setUrl("daxia").setUsername("daxia")
+                .setPassword("123456");
+
+        mvc.perform(post("/ds")
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", adminAccessToken))
+                .andDo(print())
+                .andExpect(status().is5xxServerError())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.DP_DS_ERROR.getCode()));
     }
 
     @Test
