@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -29,7 +28,19 @@ public class CodeServiceImpl implements CodeService {
     @Override
     @DS("#last")
     public IPage<Map<String, String>> findTables(Page<Map<String, String>> page, String tableName, String dsName) {
-        return codeMapper.selectTableByDs(page, tableName);
+        IPage<Map<String, String>> p = codeMapper.selectTableByDs(page, tableName);
+        List<Map<String, String>> l = p.getRecords();
+
+        List<Map<String, String>> newL = new ArrayList<>();
+        for (Map<String, String> m : l) {
+            Map<String, String> newM = new HashMap<>(m);
+            newM.put("dsName", dsName);
+            newL.add(newM);
+        }
+
+        p.setRecords(newL);
+
+        return p;
     }
 
     @Override

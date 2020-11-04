@@ -47,6 +47,15 @@ public class DsController {
         return ResponseInfo.ok(dsService.findDss(page, ds));
     }
 
+    /**
+     * 查询所有
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "查询所有")
+    @GetMapping("/ds")
+    public ResponseInfo<List<Ds>> handleDss() {
+        return ResponseInfo.ok(dsService.list());
+    }
 
     /**
      * 通过id查询数据源

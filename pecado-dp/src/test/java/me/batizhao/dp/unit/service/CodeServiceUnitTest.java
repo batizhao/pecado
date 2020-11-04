@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
     @Autowired
     private CodeService codeService;
 
-    private List<Map<String, String>> result;
+    private List<Map<String, String>> list;
     private IPage<Map<String, String>> codePageList;
 
     /**
@@ -56,12 +57,12 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
      */
     @BeforeEach
     public void setUp() {
-        result = new ArrayList<>();
-        result.add(Map.of("tableName","user", "tableCollation", "utf8"));
-        result.add(Map.of("tableName","role", "tableCollation", "uft8mb4"));
+        list = new ArrayList<>();
+        list.add(Map.of("tableName","user", "tableCollation", "utf8"));
+        list.add(Map.of("tableName","role", "tableCollation", "uft8mb4"));
 
         codePageList = new Page<>();
-        codePageList.setRecords(result);
+        codePageList.setRecords(list);
     }
 
     @Test
@@ -69,27 +70,28 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
         when(codeMapper.selectTableByDs(any(Page.class), anyString()))
                 .thenReturn(codePageList);
 
-        codeService.findTables(new Page<>(), "", "ims");
+        IPage<Map<String, String>> page = codeService.findTables(new Page<>(), "", "ims");
 
-        log.info("result: {}", result);
+        log.info("result: {}", page.getRecords());
 
-        assertThat(result.size(), is(2));
+        assertThat(page.getRecords().size(), is(2));
+        assertThat(page.getRecords().get(0).get("dsName"), equalTo("ims"));
     }
 
     @Test
     public void givenTableName_whenSelectColumns_thenSuccess() {
         when(codeMapper.selectColumnsByTableName(anyString(), anyString()))
-                .thenReturn(result);
+                .thenReturn(list);
 
         when(codeMapper.selectMetaByTableName(anyString(), anyString()))
                 .thenReturn(Map.of("tableComment", "日志表", "tableName", "log"));
 
-        byte[] result = codeService.generateCode(new GenConfig().setTableName("log").setAuthor("batizhao").setComments("comment")
+        byte[] data = codeService.generateCode(new GenConfig().setTableName("log").setAuthor("batizhao").setComments("comment")
                 .setModuleName("system").setPackageName("me.batizhao").setTablePrefix("ims_").setDsName("ims"));
 
-        log.info("result: {}", result);
+        log.info("data: {}", data);
 
-        assertThat(result.length, greaterThan(0));
+        assertThat(data.length, greaterThan(0));
     }
 
 }
