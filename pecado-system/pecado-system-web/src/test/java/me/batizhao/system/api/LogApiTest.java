@@ -7,6 +7,7 @@ import me.batizhao.system.api.dto.LogDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author batizhao
  * @since 2020-03-18
  **/
+@DirtiesContext
 public class LogApiTest extends BaseApiTest {
 
     @Autowired

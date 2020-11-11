@@ -6,9 +6,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.constant.MQConstants;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.dto.LogDTO;
-import me.batizhao.system.api.event.SystemLogEvent;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -16,7 +17,7 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -38,12 +39,16 @@ import java.util.Objects;
 @Slf4j
 @Aspect
 @Component
-@AllArgsConstructor
+//@AllArgsConstructor
 public class SystemLogAspect {
 
-    private ApplicationContext applicationContext;
+//    private ApplicationContext applicationContext;
 
+    @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     @Around("@annotation(systemLog)")
     @SneakyThrows
@@ -57,7 +62,8 @@ public class SystemLogAspect {
         logDTO.setResult(result.toString());
         logDTO.setSpend((int) (endTime - startTime));
 
-        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+//        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
         return result;
     }
 
@@ -66,7 +72,9 @@ public class SystemLogAspect {
         LogDTO logDTO = getLogDTO(point, systemLog);
         logDTO.setResult(throwable.getMessage());
         logDTO.setSpend(0);
-        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+
+        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
+//        applicationContext.publishEvent(new SystemLogEvent(logDTO));
     }
 
     private LogDTO getLogDTO(JoinPoint point, SystemLog systemLog) {

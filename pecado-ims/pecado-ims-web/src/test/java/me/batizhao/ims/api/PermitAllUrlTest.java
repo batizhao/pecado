@@ -5,6 +5,7 @@ import me.batizhao.common.security.component.PermitAllUrlProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import static org.hamcrest.Matchers.is;
  **/
 @EnableConfigurationProperties(value = PermitAllUrlProperties.class)
 @Slf4j
+@DirtiesContext
 public class PermitAllUrlTest extends BaseApiTest {
 
     @Autowired

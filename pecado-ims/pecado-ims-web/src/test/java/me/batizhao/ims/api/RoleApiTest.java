@@ -7,6 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author batizhao
  * @since 2020-03-18
  **/
+@DirtiesContext
 public class RoleApiTest extends BaseApiTest {
 
     @SpyBean
@@ -26,14 +28,6 @@ public class RoleApiTest extends BaseApiTest {
 
     @Test
     public void givenUserId_whenFindRoles_thenSuccess() throws Exception {
-//        assertTrue(AopUtils.isAopProxy(roleController));
-//        assertTrue(AopUtils.isCglibProxy(roleController));
-
-//        assertEquals(AopProxyUtils.ultimateTargetClass(fooService), FooServiceImpl.class);
-//
-//        assertEquals(AopTestUtils.getTargetObject(fooService).getClass(), FooServiceImpl.class);
-//        assertEquals(AopTestUtils.getUltimateTargetObject(fooService).getClass(), FooServiceImpl.class);
-
         mvc.perform(get("/role").param("userId", "1")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
