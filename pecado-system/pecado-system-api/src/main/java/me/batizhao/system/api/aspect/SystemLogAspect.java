@@ -33,13 +33,13 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
+ * 这里可以使用 Spring @Async 异步 或者 MQ 两种方法发送消息
  * @author batizhao
  * @since 2020-04-01
  **/
 @Slf4j
 @Aspect
 @Component
-//@AllArgsConstructor
 public class SystemLogAspect {
 
 //    private ApplicationContext applicationContext;
@@ -62,8 +62,11 @@ public class SystemLogAspect {
         logDTO.setResult(result.toString());
         logDTO.setSpend((int) (endTime - startTime));
 
-//        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+
+        log.info("@Around System Log is : {}", logDTO);
         rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
+//        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+
         return result;
     }
 
@@ -73,6 +76,7 @@ public class SystemLogAspect {
         logDTO.setResult(throwable.getMessage());
         logDTO.setSpend(0);
 
+        log.info("@AfterThrowing System Log is : {}", logDTO);
         rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
 //        applicationContext.publishEvent(new SystemLogEvent(logDTO));
     }

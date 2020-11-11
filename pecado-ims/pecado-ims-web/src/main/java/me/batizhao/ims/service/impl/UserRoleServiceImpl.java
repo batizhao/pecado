@@ -6,6 +6,7 @@ import me.batizhao.ims.mapper.UserRoleMapper;
 import me.batizhao.ims.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     private UserRoleMapper userRoleMapper;
 
     @Override
+    @Transactional
     public Boolean updateUserRoles(Long id, List<String> roles) {
         userRoleMapper.deleteByUserId(id);
 

@@ -13,6 +13,7 @@ import me.batizhao.ims.service.MenuService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -73,6 +74,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
+    @Transactional
     public MenuVO saveOrUpdateMenu(Menu menu) {
         if (menu.getId() == null) {
             menuMapper.insert(menu);

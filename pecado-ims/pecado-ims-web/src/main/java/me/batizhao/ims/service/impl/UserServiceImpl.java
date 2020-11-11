@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,8 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public IPage<UserVO> findUsers(Page<UserVO> page, User user) {
-        IPage<UserVO> userList = userMapper.selectUserPage(page, user);
-        return userList;
+        return userMapper.selectUserPage(page, user);
     }
 
     @Override
@@ -68,11 +68,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public int deleteByUsername(String username) {
         return userMapper.delete(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
     }
 
     @Override
+    @Transactional
     public UserVO saveOrUpdateUser(User user) {
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         String hashPass = bcryptPasswordEncoder.encode(user.getPassword());
@@ -108,6 +110,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public Boolean updateUserStatusById(Long id, Integer locked) {
         return userMapper.updateUserStatusById(id, locked) == 1;
     }

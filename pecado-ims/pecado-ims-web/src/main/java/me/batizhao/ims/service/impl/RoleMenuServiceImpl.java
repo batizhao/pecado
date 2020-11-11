@@ -6,6 +6,7 @@ import me.batizhao.ims.mapper.RoleMenuMapper;
 import me.batizhao.ims.service.RoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
     private RoleMenuMapper roleMenuMapper;
 
     @Override
+    @Transactional
     public Boolean updateRoleMenus(Long id, List<String> menus) {
         roleMenuMapper.deleteByRoleId(id);
 

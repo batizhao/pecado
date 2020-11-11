@@ -18,6 +18,7 @@ import me.batizhao.dp.service.DsService;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.DriverManager;
@@ -60,6 +61,7 @@ public class DsServiceImpl extends ServiceImpl<DsMapper, Ds> implements DsServic
     }
 
     @Override
+    @Transactional
     public Ds saveOrUpdateDs(Ds ds) {
         checkDataSource(ds);
 
