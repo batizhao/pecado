@@ -29,6 +29,7 @@ public enum ResultEnum {
     GATEWAY_ERROR(10008, "网关异常！"),
     TOO_MANY_REQUEST(10009, "您的请求被限流了！"),
     RESOURCE_NOT_FOUND(100010, "没有找到相关资源！"),
+    MQ_MESSAGE_ERROR(100011, "系统内部错误，请联系管理员！"),
 
     /**
      * IMS 01 模块错误

@@ -7,6 +7,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.messaging.MessagingException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -125,6 +126,15 @@ public class WebExceptionHandler {
         log.error("DataSourceException!", e);
         return new ResponseInfo<String>().setCode(ResultEnum.DP_DS_ERROR.getCode())
                 .setMessage(ResultEnum.DP_DS_ERROR.getMessage())
+                .setData(e.getMessage());
+    }
+
+    @ExceptionHandler(MessagingException.class)
+    @ResponseStatus
+    public ResponseInfo<String> handleMessagingException(MessagingException e) {
+        log.error("MessagingException!", e);
+        return new ResponseInfo<String>().setCode(ResultEnum.MQ_MESSAGE_ERROR.getCode())
+                .setMessage(ResultEnum.MQ_MESSAGE_ERROR.getMessage())
                 .setData(e.getMessage());
     }
 
