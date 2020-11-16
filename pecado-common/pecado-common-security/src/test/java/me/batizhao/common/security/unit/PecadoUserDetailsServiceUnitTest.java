@@ -3,13 +3,12 @@ package me.batizhao.common.security.unit;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.security.component.PecadoUserDetailsService;
 import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.common.security.component.PecadoUserDetailsService;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -29,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -96,7 +96,7 @@ public class PecadoUserDetailsServiceUnitTest {
 
         doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(anyString(), anyString());
 
-        Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
+        assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
 
         verify(userFeignService).loadUserByUsername(anyString(), anyString());
     }

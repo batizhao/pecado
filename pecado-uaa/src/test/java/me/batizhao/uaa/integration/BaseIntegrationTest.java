@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
  * @author batizhao
  * @since 2020-03-31
  **/
-//@EnabledIf(expression = "#{environment['spring.profiles.active'] == 'integration'}", loadContext = true)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,

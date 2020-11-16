@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
@@ -91,7 +92,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         when(userMapper.selectOne(any()))
                 .thenReturn(null);
 
-        Assertions.assertThrows(NotFoundException.class, () -> userService.findByUsername(username));
+        assertThrows(NotFoundException.class, () -> userService.findByUsername(username));
 
         verify(userMapper).selectOne(any());
     }
@@ -163,7 +164,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         when(userMapper.selectById(anyLong()))
                 .thenReturn(null);
 
-        Assertions.assertThrows(NotFoundException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             userService.findById(1L);
         });
 
@@ -232,7 +233,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     public void givenUsername_whenGetUserInfo_thenNotFound() {
         doReturn(null).when(userMapper).selectOne(any());
 
-        Assertions.assertThrows(NotFoundException.class, () -> userService.getUserInfo("xxxx"));
+        assertThrows(NotFoundException.class, () -> userService.getUserInfo("xxxx"));
     }
 
     @Test

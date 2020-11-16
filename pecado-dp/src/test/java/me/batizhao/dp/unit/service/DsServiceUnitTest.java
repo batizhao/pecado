@@ -13,7 +13,6 @@ import me.batizhao.dp.mapper.DsMapper;
 import me.batizhao.dp.service.DsService;
 import me.batizhao.dp.service.impl.DsServiceImpl;
 import org.jasypt.encryption.StringEncryptor;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -32,6 +31,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
@@ -114,7 +114,7 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
         when(dsMapper.selectById(anyInt()))
                 .thenReturn(null);
 
-        Assertions.assertThrows(NotFoundException.class, () -> dsService.findById(1));
+        assertThrows(NotFoundException.class, () -> dsService.findById(1));
 
         verify(dsMapper).selectById(anyInt());
     }
@@ -200,7 +200,7 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
                 DriverManager.getConnection(anyString(), anyString(), anyString());
             }).thenThrow(SQLException.class);
 
-            Assertions.assertThrows(DataSourceException.class, () -> dsService.checkDataSource(dsList.get(0)));
+            assertThrows(DataSourceException.class, () -> dsService.checkDataSource(dsList.get(0)));
         }
     }
 

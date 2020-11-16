@@ -2,7 +2,6 @@ package me.batizhao.uaa.integration;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.security.component.PecadoUser;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author batizhao
@@ -44,6 +44,6 @@ public class PecadoUserDetailsServiceIntegrationTest extends BaseIntegrationTest
 
     @Test
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
-        Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
+        assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
     }
 }

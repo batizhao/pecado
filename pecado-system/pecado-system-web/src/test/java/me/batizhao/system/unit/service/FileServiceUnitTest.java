@@ -9,7 +9,6 @@ import me.batizhao.system.mapper.FileMapper;
 import me.batizhao.system.service.FileService;
 import me.batizhao.system.service.impl.FileServiceImpl;
 import me.batizhao.system.util.FileNameAndPathUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -83,17 +83,17 @@ public class FileServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenNothing_whenUpload_thenException() {
-        Exception exception = Assertions.assertThrows(StorageException.class, () -> fileService.upload(null));
+        Exception exception = assertThrows(StorageException.class, () -> fileService.upload(null));
         assertThat(exception.getMessage(), containsString("Failed to store null file"));
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "..test.txt",
                 "text/plain", "test data".getBytes());
-        exception = Assertions.assertThrows(StorageException.class, () -> fileService.upload(mockMultipartFile));
+        exception = assertThrows(StorageException.class, () -> fileService.upload(mockMultipartFile));
         assertThat(exception.getMessage(), containsString("Cannot store file with relative path outside current directory"));
 
         MockMultipartFile mockMultipartFile2 = new MockMultipartFile("file", "test2.txt",
                 "text/plain", "".getBytes());
-        exception = Assertions.assertThrows(StorageException.class, () -> fileService.upload(mockMultipartFile2));
+        exception = assertThrows(StorageException.class, () -> fileService.upload(mockMultipartFile2));
         assertThat(exception.getMessage(), containsString("Failed to store empty file"));
     }
 
@@ -119,7 +119,7 @@ public class FileServiceUnitTest extends BaseServiceUnitTest {
                 FileNameAndPathUtils.pathEncode(any(String.class));
             }).thenReturn("xxx.txt");
 
-            Assertions.assertThrows(StorageException.class, () -> fileService.loadAsResource("xxx"));
+            assertThrows(StorageException.class, () -> fileService.loadAsResource("xxx"));
         }
     }
 
