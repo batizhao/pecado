@@ -10,7 +10,11 @@ import me.batizhao.system.service.LogService;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.SendStatus;
+import org.apache.rocketmq.client.producer.TransactionMQProducer;
+import org.apache.rocketmq.spring.annotation.RocketMQTransactionListener;
 import org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration;
+import org.apache.rocketmq.spring.core.RocketMQLocalTransactionListener;
+import org.apache.rocketmq.spring.core.RocketMQLocalTransactionState;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -18,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -109,4 +114,31 @@ public class MessageConsumerTest {
         assertThat(response, equalTo("hello"));
     }
 
+//    @Test
+//    void testSendTransactionMessage() {
+//        LogDTO logDTO = new LogDTO().setDescription("testSendTransactionMessage").setSpend(20).setClassMethod("testSendTransactionMessage")
+//                .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
+//                .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
+//
+//        rocketMQTemplate.sendMessageInTransaction(MQConstants.TOPIC_SYSTEM_LOG, logDTO, null);
+//    }
+
+    @Test
+    public void testTransactionListener() {
+        assertThat(((TransactionMQProducer) rocketMQTemplate.getProducer()).getTransactionListener(), notNullValue());
+    }
+
+}
+
+@RocketMQTransactionListener
+class TransactionListenerImpl implements RocketMQLocalTransactionListener {
+    @Override
+    public RocketMQLocalTransactionState executeLocalTransaction(Message msg, Object arg) {
+        return RocketMQLocalTransactionState.UNKNOWN;
+    }
+
+    @Override
+    public RocketMQLocalTransactionState checkLocalTransaction(Message msg) {
+        return RocketMQLocalTransactionState.COMMIT;
+    }
 }

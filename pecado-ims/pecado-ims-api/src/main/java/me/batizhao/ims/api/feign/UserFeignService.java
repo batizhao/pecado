@@ -3,7 +3,6 @@ package me.batizhao.ims.api.feign;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.feign.factory.UserServiceFallbackFactory;
-import me.batizhao.ims.api.feign.fallback.UserServiceFallbackImpl;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserVO;
 import org.springframework.cloud.openfeign.FeignClient;
