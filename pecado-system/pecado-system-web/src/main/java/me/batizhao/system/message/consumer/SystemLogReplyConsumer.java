@@ -1,11 +1,11 @@
-package me.batizhao.system.consumer;
+package me.batizhao.system.message.consumer;
 
 import me.batizhao.common.core.constant.MQConstants;
 import me.batizhao.system.api.dto.LogDTO;
 import me.batizhao.system.domain.Log;
 import me.batizhao.system.service.LogService;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
-import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.apache.rocketmq.spring.core.RocketMQReplyListener;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,17 +17,19 @@ import org.springframework.stereotype.Component;
 @Component
 @RocketMQMessageListener(
         topic = MQConstants.TOPIC_SYSTEM_LOG,
-        consumerGroup = "pecado-system-consumer-group"
+        consumerGroup = "pecado-system-reply-consumer-group",
+        selectorExpression = "reply"
 )
-public class SystemLogConsumer implements RocketMQListener<LogDTO> {
+public class SystemLogReplyConsumer implements RocketMQReplyListener<LogDTO, String> {
 
     @Autowired
     private LogService logService;
 
     @Override
-    public void onMessage(LogDTO logDto) {
+    public String onMessage(LogDTO logDto) {
         Log log = new Log();
         BeanUtils.copyProperties(logDto, log);
         logService.save(log);
+        return "hello";
     }
 }

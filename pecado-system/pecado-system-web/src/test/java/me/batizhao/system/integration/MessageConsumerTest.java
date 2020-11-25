@@ -11,11 +11,9 @@ import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
-import org.apache.rocketmq.spring.annotation.RocketMQTransactionListener;
 import org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration;
-import org.apache.rocketmq.spring.core.RocketMQLocalTransactionListener;
-import org.apache.rocketmq.spring.core.RocketMQLocalTransactionState;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.apache.rocketmq.spring.support.RocketMQHeaders;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +22,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -59,7 +58,7 @@ public class MessageConsumerTest {
                 .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        SendResult result = rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
+        SendResult result = rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG + ":common", logDTO);
 
         log.info("result: {}", result);
 
@@ -72,7 +71,7 @@ public class MessageConsumerTest {
                 .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        Exception exception = assertThrows(MessagingException.class, () -> rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO, 0));
+        Exception exception = assertThrows(MessagingException.class, () -> rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG + ":common", logDTO, 0));
         assertThat(exception.getMessage(), containsString("call timeout"));
 
         Log log1 = logService.getOne(Wrappers.<Log>lambdaQuery().eq(Log::getClassMethod, "testSyncSendMessageTimeout"));
@@ -85,7 +84,7 @@ public class MessageConsumerTest {
                 .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        rocketMQTemplate.asyncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO, new SendCallback() {
+        rocketMQTemplate.asyncSend(MQConstants.TOPIC_SYSTEM_LOG + ":common", logDTO, new SendCallback() {
 
             @Override
             public void onSuccess(SendResult sendResult) {
@@ -107,38 +106,64 @@ public class MessageConsumerTest {
                 .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        String response = rocketMQTemplate.sendAndReceive(MQConstants.TOPIC_SYSTEM_LOG, logDTO, String.class);
+        String response = rocketMQTemplate.sendAndReceive(MQConstants.TOPIC_SYSTEM_LOG + ":reply", logDTO, String.class);
 
         log.info("response: {}", response);
 
         assertThat(response, equalTo("hello"));
     }
 
-//    @Test
-//    void testSendTransactionMessage() {
-//        LogDTO logDTO = new LogDTO().setDescription("testSendTransactionMessage").setSpend(20).setClassMethod("testSendTransactionMessage")
-//                .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
-//                .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
-//
-//        rocketMQTemplate.sendMessageInTransaction(MQConstants.TOPIC_SYSTEM_LOG, logDTO, null);
-//    }
+    @Test
+    public void givenString_whenSendTransactionMessage_thenCommit() {
+        Message<String> msg = MessageBuilder.withPayload("这是一个 KEY_0 事务消息").
+                setHeader(RocketMQHeaders.TRANSACTION_ID, "KEY_0").build();
+
+        SendResult sendResult = rocketMQTemplate.sendMessageInTransaction(
+                MQConstants.TOPIC_SYSTEM_LOG + ":tagsA", msg, null);
+
+        log.info("sendResult = {}", sendResult);
+
+        assertThat(sendResult.getSendStatus(), equalTo(SendStatus.SEND_OK));
+
+        //TODO: 完成后续数据校验
+    }
+
+    @Test
+    public void givenString_whenSendTransactionMessage_thenRollback() {
+        Message<String> msg = MessageBuilder.withPayload("这是一个 KEY_1 事务消息").
+                setHeader(RocketMQHeaders.TRANSACTION_ID, "KEY_1").build();
+
+        SendResult sendResult = rocketMQTemplate.sendMessageInTransaction(
+                MQConstants.TOPIC_SYSTEM_LOG + ":tagsB", msg, null);
+
+        log.info("sendResult = {}", sendResult);
+
+        assertThat(sendResult.getSendStatus(), equalTo(SendStatus.SEND_OK));
+
+        //TODO: 完成后续数据校验
+    }
+
+    @Test
+    public void givenString_whenSendTransactionMessage_thenUnknown() throws InterruptedException {
+        Message<String> msg = MessageBuilder.withPayload("这是一个 KEY_2 事务消息").
+                setHeader(RocketMQHeaders.TRANSACTION_ID, "KEY_2").build();
+
+        SendResult sendResult = rocketMQTemplate.sendMessageInTransaction(
+                MQConstants.TOPIC_SYSTEM_LOG + ":tagsC", msg, null);
+
+        log.info("sendResult = {}", sendResult);
+
+        assertThat(sendResult.getSendStatus(), equalTo(SendStatus.SEND_OK));
+
+        //等 60 秒消息回查
+        Thread.sleep(70000L);
+
+        //TODO: 完成后续数据校验
+    }
 
     @Test
     public void testTransactionListener() {
         assertThat(((TransactionMQProducer) rocketMQTemplate.getProducer()).getTransactionListener(), notNullValue());
     }
 
-}
-
-@RocketMQTransactionListener
-class TransactionListenerImpl implements RocketMQLocalTransactionListener {
-    @Override
-    public RocketMQLocalTransactionState executeLocalTransaction(Message msg, Object arg) {
-        return RocketMQLocalTransactionState.UNKNOWN;
-    }
-
-    @Override
-    public RocketMQLocalTransactionState checkLocalTransaction(Message msg) {
-        return RocketMQLocalTransactionState.COMMIT;
-    }
 }
