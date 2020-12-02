@@ -1,14 +1,14 @@
 package me.batizhao.system.api.aspect;
 
-import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.MQConstants;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.dto.LogDTO;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,7 +17,6 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -40,15 +39,12 @@ import java.util.Objects;
 @Slf4j
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class SystemLogAspect {
 
-//    private ApplicationContext applicationContext;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private RocketMQTemplate rocketMQTemplate;
+    private final RocketMQTemplate rocketMQTemplate;
 
     @Around("@annotation(systemLog)")
     @SneakyThrows
@@ -65,7 +61,7 @@ public class SystemLogAspect {
 
         log.info("@Around System Log is : {}", logDTO);
         rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
-//        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+//        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
 
         return result;
     }
@@ -78,7 +74,7 @@ public class SystemLogAspect {
 
         log.info("@AfterThrowing System Log is : {}", logDTO);
         rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
-//        applicationContext.publishEvent(new SystemLogEvent(logDTO));
+//        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
     }
 
     private LogDTO getLogDTO(JoinPoint point, SystemLog systemLog) {

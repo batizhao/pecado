@@ -1,4 +1,4 @@
-package me.batizhao.common.core.config;
+package me.batizhao.common.mybatis.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author batizhao
- * @date 2020/8/6
- */
+ * @since 2020-12-01
+ **/
 @Configuration
-public class MybatisPlusConfig {
+public class PecadoMybatisAutoConfiguration {
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
@@ -19,4 +19,5 @@ public class MybatisPlusConfig {
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }
+
 }

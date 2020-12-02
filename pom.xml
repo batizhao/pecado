@@ -38,6 +38,7 @@
 		<mybatis-spring-boot.version>2.1.3</mybatis-spring-boot.version>
 		<mockito.version>3.5.7</mockito.version>
 		<rocketmq.version>2.1.1</rocketmq.version>
+		<seata.version>1.4.0</seata.version>
 		<swagger.version>2.9.2</swagger.version>
 		<velocity.version>1.7</velocity.version>
 
@@ -80,6 +81,23 @@
 				<groupId>io.springfox</groupId>
 				<artifactId>springfox-swagger-ui</artifactId>
 				<version>${swagger.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.seata</groupId>
+				<artifactId>seata-spring-boot-starter</artifactId>
+				<version>${seata.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba.cloud</groupId>
+				<artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+				<version>${spring-cloud-alibaba.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>io.seata</groupId>
+						<artifactId>seata-spring-boot-starter</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>

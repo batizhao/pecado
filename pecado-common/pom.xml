@@ -17,6 +17,7 @@
         <module>pecado-common-datasource</module>
         <module>pecado-common-security</module>
         <module>pecado-common-sentinel</module>
+        <module>pecado-common-mybatis</module>
     </modules>
 
 </project>
