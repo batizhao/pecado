@@ -60,7 +60,7 @@ public class SystemLogAspect {
 
 
         log.info("@Around System Log is : {}", logDTO);
-        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
+        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
 //        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
 
         return result;
@@ -73,7 +73,7 @@ public class SystemLogAspect {
         logDTO.setSpend(0);
 
         log.info("@AfterThrowing System Log is : {}", logDTO);
-        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG, logDTO);
+        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
 //        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
     }
 

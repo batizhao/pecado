@@ -58,7 +58,7 @@ public class MessageConsumerTest {
                 .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        SendResult result = rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG + ":common", logDTO);
+        SendResult result = rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
 
         log.info("result: {}", result);
 
@@ -71,7 +71,7 @@ public class MessageConsumerTest {
                 .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        Exception exception = assertThrows(MessagingException.class, () -> rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG + ":common", logDTO, 0));
+        Exception exception = assertThrows(MessagingException.class, () -> rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO, 0));
         assertThat(exception.getMessage(), containsString("call timeout"));
 
         Log log1 = logService.getOne(Wrappers.<Log>lambdaQuery().eq(Log::getClassMethod, "testSyncSendMessageTimeout"));
@@ -84,7 +84,7 @@ public class MessageConsumerTest {
                 .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        rocketMQTemplate.asyncSend(MQConstants.TOPIC_SYSTEM_LOG + ":common", logDTO, new SendCallback() {
+        rocketMQTemplate.asyncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO, new SendCallback() {
 
             @Override
             public void onSuccess(SendResult sendResult) {

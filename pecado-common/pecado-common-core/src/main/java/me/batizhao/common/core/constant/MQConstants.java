@@ -7,5 +7,6 @@ package me.batizhao.common.core.constant;
 public class MQConstants {
 
     public static final String TOPIC_SYSTEM_LOG = "SYSTEM_LOG";
+    public static final String TOPIC_SYSTEM_LOG_TAG_COMMON = TOPIC_SYSTEM_LOG + ":common";
 
 }
