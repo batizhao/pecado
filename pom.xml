@@ -5,7 +5,7 @@
 
 	<groupId>me.batizhao</groupId>
 	<artifactId>pecado</artifactId>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>pecado</name>
@@ -26,26 +26,26 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<spring-boot.version>2.3.5.RELEASE</spring-boot.version>
+		<spring-boot.version>2.3.6.RELEASE</spring-boot.version>
 		<spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
 		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
-		<spring-cloud-contract.version>2.2.4.RELEASE</spring-cloud-contract.version>
+		<spring-cloud-contract.version>2.2.5.RELEASE</spring-cloud-contract.version>
 
 		<dynamic-datasource.version>3.2.1</dynamic-datasource.version>
-		<hutool.version>5.4.3</hutool.version>
+		<hutool.version>5.5.2</hutool.version>
 		<jasypt.version>2.1.2</jasypt.version>
 		<mybatis-plus.version>3.4.1</mybatis-plus.version>
-		<mybatis-spring-boot.version>2.1.3</mybatis-spring-boot.version>
-		<mockito.version>3.5.7</mockito.version>
+		<mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
+		<mockito.version>3.6.28</mockito.version>
 		<rocketmq.version>2.1.1</rocketmq.version>
 		<seata.version>1.4.0</seata.version>
-		<swagger.version>2.9.2</swagger.version>
+		<swagger.version>3.0.0</swagger.version>
 		<velocity.version>1.7</velocity.version>
 
 		<jacoco-maven-plugin.verison>0.8.6</jacoco-maven-plugin.verison>
 		<git-commit-id-plugin.version>4.0.0</git-commit-id-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-		<liquibase-maven-plugin.version>4.1.1</liquibase-maven-plugin.version>
+		<liquibase-maven-plugin.version>4.2.0</liquibase-maven-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -74,12 +74,7 @@
 
 			<dependency>
 				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger2</artifactId>
-				<version>${swagger.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger-ui</artifactId>
+				<artifactId>springfox-boot-starter</artifactId>
 				<version>${swagger.version}</version>
 			</dependency>
 

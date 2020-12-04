@@ -5,7 +5,7 @@
     <parent>
         <artifactId>pecado</artifactId>
         <groupId>me.batizhao</groupId>
-        <version>1.0</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,22 +16,27 @@
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-common-datasource</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-common-mybatis</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-common-security</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-system-api</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
         </dependency>
 
         <dependency>
