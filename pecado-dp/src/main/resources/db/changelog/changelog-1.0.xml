@@ -4,33 +4,32 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet author="batizhao" id="CreateTableDS-20201019-001">
-        <createTable tableName="ds" remarks="数据源">
-            <column autoIncrement="true" name="id" type="INT" remarks="主键">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="name" type="VARCHAR(64)" remarks="名称">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="url" type="VARCHAR(255)" remarks="url">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="username" type="VARCHAR(64)" remarks="用户名">
+    <changeSet author="batizhao" id="CreateTableSeataUndoLog-20201203-001">
+        <createTable remarks="AT transaction mode undo table" tableName="undo_log">
+            <column name="branch_id" remarks="branch transaction id" type="BIGINT(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="password" type="VARCHAR(64)" remarks="密码">
+            <column name="xid" remarks="global transaction id" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="INT" remarks="是否可用" defaultValue="0"/>
-            <column name="createdTime" type="datetime" remarks="创建时间">
+            <column name="context" remarks="undo_log context,such as serialization" type="VARCHAR(128)">
                 <constraints nullable="false"/>
             </column>
-            <column name="updatedTime" type="datetime" remarks="修改时间">
+            <column name="rollback_info" remarks="rollback info" type="LONGBLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_status" remarks="0:normal status,1:defense status" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_created" remarks="create datetime" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_modified" remarks="modify datetime" type="DATETIME(6)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <rollback>
-            <dropTable tableName="ds"/>
-        </rollback>
+    </changeSet>
+    <changeSet author="batizhao" id="CreateTableSeataUndoLog-20201203-002">
+        <addUniqueConstraint columnNames="xid, branch_id" constraintName="ux_undo_log" tableName="undo_log"/>
     </changeSet>
 </databaseChangeLog>

@@ -106,7 +106,7 @@ public class MessageConsumerTest {
                 .setClassName("me.batizhao.system.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        String response = rocketMQTemplate.sendAndReceive(MQConstants.TOPIC_SYSTEM_LOG + ":reply", logDTO, String.class);
+        String response = rocketMQTemplate.sendAndReceive(MQConstants.TOPIC_SYSTEM_LOG + ":reply", logDTO, String.class, 10000L);
 
         log.info("response: {}", response);
 

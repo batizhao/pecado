@@ -5,7 +5,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet author="batizhao" id="CreateTableMenu-20200225-001">
-        <createTable tableName="menu" remarks="权限表">
+        <createTable tableName="menu" remarks="权限">
             <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -35,7 +35,7 @@
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="CreateTableRole-20200225-002">
-        <createTable tableName="role" remarks="角色表">
+        <createTable tableName="role" remarks="角色">
             <column autoIncrement="true" name="id" type="BIGINT" remarks="角色ID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -55,7 +55,7 @@
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="CreateTableRoleMenu-20200225-003">
-        <createTable tableName="role_menu" remarks="角色权限关联表">
+        <createTable tableName="role_menu" remarks="角色权限关联">
             <column name="roleId" type="BIGINT" remarks="角色ID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ROLE_MENU"/>
             </column>
@@ -68,7 +68,7 @@
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="CreateTableUser-20200225-004">
-        <createTable tableName="user" remarks="用户表">
+        <createTable tableName="user" remarks="用户">
             <column autoIncrement="true" name="id" type="BIGINT" remarks="用户ID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -97,7 +97,7 @@
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="CreateTableUserRole-20200225-005">
-        <createTable tableName="user_role" remarks="用户角色关联表">
+        <createTable tableName="user_role" remarks="用户角色关联">
             <column name="userId" type="BIGINT" remarks="用户ID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_USER_ROLE"/>
             </column>
@@ -108,5 +108,346 @@
         <rollback>
             <dropTable tableName="user_role"/>
         </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="InsertTableMenu-20200225-001">
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1"/>
+            <column name="path" value="/dashboard"/>
+            <column name="name" value="工作台"/>
+            <column name="permission" value="user_dashboard"/>
+            <column name="description"/>
+            <column name="icon" value="dashboard"/>
+            <column name="pid" valueNumeric="0"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1000"/>
+            <column name="path" value="/ims"/>
+            <column name="name" value="权限管理"/>
+            <column name="permission" value="ims_root"/>
+            <column name="description"/>
+            <column name="icon" value="user"/>
+            <column name="pid" valueNumeric="0"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1100"/>
+            <column name="path" value="/ims/user"/>
+            <column name="name" value="用户管理"/>
+            <column name="permission" value="ims_user_admin"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="1000"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1101"/>
+            <column name="path" value="/ims/user/add"/>
+            <column name="name" value="添加用户"/>
+            <column name="permission" value="ims_user_add"/>
+            <column name="type" value="1"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="1100"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1102"/>
+            <column name="path" value="/ims/user/edit"/>
+            <column name="name" value="编辑用户"/>
+            <column name="permission" value="ims_user_edit"/>
+            <column name="type" value="1"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="1100"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1200"/>
+            <column name="path" value="/ims/role"/>
+            <column name="name" value="角色管理"/>
+            <column name="permission" value="ims_role_admin"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="1000"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1300"/>
+            <column name="path" value="/ims/menu"/>
+            <column name="name" value="菜单管理"/>
+            <column name="permission" value="ims_menu_admin"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="1000"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="2000"/>
+            <column name="path" value="/system"/>
+            <column name="name" value="系统管理"/>
+            <column name="permission" value="system_root"/>
+            <column name="description"/>
+            <column name="icon" value="setting"/>
+            <column name="pid" valueNumeric="0"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="2100"/>
+            <column name="path" value="/system/log"/>
+            <column name="name" value="日志管理"/>
+            <column name="permission" value="system_log_admin"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="2000"/>
+        </insert>
+        <rollback>
+            delete from menu where id = 1;
+            delete from menu where id = 1000;
+            delete from menu where id = 1100;
+            delete from menu where id = 1101;
+            delete from menu where id = 1102;
+            delete from menu where id = 1200;
+            delete from menu where id = 1300;
+            delete from menu where id = 2000;
+            delete from menu where id = 2100;
+        </rollback>
+    </changeSet>
+    <changeSet author="batizhao" id="InsertTableRole-20200225-002">
+        <insert tableName="role">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="普通用户"/>
+            <column name="code" value="ROLE_USER"/>
+            <column name="createdTime" value="2020-07-29 10:00:00"/>
+        </insert>
+        <insert tableName="role">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="系统管理员"/>
+            <column name="code" value="ROLE_ADMIN"/>
+            <column name="createdTime" value="2020-07-29 10:00:05"/>
+        </insert>
+        <rollback>
+            delete from role where id = 1;
+            delete from role where id = 2;
+        </rollback>
+    </changeSet>
+    <changeSet author="batizhao" id="InsertTableRoleMenu-20200225-003">
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="1"/>
+            <column name="menuId" valueNumeric="1"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1000"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1100"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1101"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1102"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1200"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1300"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2000"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2100"/>
+        </insert>
+        <rollback>
+            delete from role_menu where roleId = 1 and menuId = 1;
+            delete from role_menu where roleId = 2 and menuId = 1;
+            delete from role_menu where roleId = 2 and menuId = 1000;
+            delete from role_menu where roleId = 2 and menuId = 1100;
+            delete from role_menu where roleId = 2 and menuId = 1101;
+            delete from role_menu where roleId = 2 and menuId = 1102;
+            delete from role_menu where roleId = 2 and menuId = 1200;
+            delete from role_menu where roleId = 2 and menuId = 1300;
+            delete from role_menu where roleId = 2 and menuId = 2000;
+            delete from role_menu where roleId = 2 and menuId = 2100;
+        </rollback>
+    </changeSet>
+    <changeSet author="batizhao" id="InsertTableUser-20200225-004">
+        <insert tableName="user">
+            <column name="id" valueNumeric="1"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
+            <column name="email" value="admin@qq.com"/>
+            <column name="name" value="系统管理员"/>
+            <column name="createdTime" value="2016-09-29 10:00:00"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="2"/>
+            <column name="username" value="tom"/>
+            <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
+            <column name="email" value="tom@qq.com"/>
+            <column name="name" value="张老师"/>
+            <column name="createdTime" value="2016-09-29 10:00:00"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="3"/>
+            <column name="username" value="jerry"/>
+            <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
+            <column name="email" value="jerry@qq.com"/>
+            <column name="name" value="李老师"/>
+            <column name="createdTime" value="2016-09-29 10:00:00"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="4"/>
+            <column name="username" value="john"/>
+            <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
+            <column name="email" value="john@qq.com"/>
+            <column name="name" value="王约翰"/>
+            <column name="createdTime" value="2016-09-29 10:00:00"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="5"/>
+            <column name="username" value="bob"/>
+            <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
+            <column name="email" value="bob@qq.com"/>
+            <column name="name" value="孙波波"/>
+            <column name="createdTime" value="2016-09-29 10:00:00"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" valueNumeric="6"/>
+            <column name="username" value="bob2"/>
+            <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
+            <column name="email" value="bob2@qq.com"/>
+            <column name="name" value="孙波波"/>
+            <column name="createdTime" value="2016-09-29 10:00:00"/>
+        </insert>
+        <rollback>
+            delete from user where id = 1;
+            delete from user where id = 2;
+            delete from user where id = 3;
+            delete from user where id = 4;
+            delete from user where id = 5;
+            delete from user where id = 6;
+        </rollback>
+    </changeSet>
+    <changeSet author="batizhao" id="InsertTableUserRole-20200225-005">
+        <insert tableName="user_role">
+            <column name="userId" valueNumeric="1"/>
+            <column name="roleId" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="userId" valueNumeric="1"/>
+            <column name="roleId" valueNumeric="2"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="userId" valueNumeric="2"/>
+            <column name="roleId" valueNumeric="1"/>
+        </insert>
+        <rollback>
+            delete from user_role where roleId = 1 and userId = 1;
+            delete from user_role where roleId = 2 and userId = 1;
+            delete from user_role where roleId = 1 and userId = 2;
+        </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="CreateTableOauthRefreshToken-20200305-001">
+        <createTable tableName="oauth_refresh_token" remarks="Refresh Token">
+            <column name="token_id" type="VARCHAR(255)" remarks="Token ID"/>
+            <column name="token" type="BLOB" remarks="Token"/>
+            <column name="authentication" type="BLOB" remarks="Token权限"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="oauth_refresh_token"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="InsertTableMenu-20201013-001">
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3000"/>
+            <column name="path" value="/dp"/>
+            <column name="name" value="开发平台"/>
+            <column name="permission" value="dp_root"/>
+            <column name="description"/>
+            <column name="icon" value="codepen"/>
+            <column name="pid" valueNumeric="0"/>
+            <column name="sort" valueNumeric="4"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3100"/>
+            <column name="path" value="/dp/code"/>
+            <column name="name" value="代码生成"/>
+            <column name="permission" value="dp_code"/>
+            <column name="description"/>
+            <column name="pid" valueNumeric="3000"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3200"/>
+            <column name="path" value="/dp/ds"/>
+            <column name="name" value="数据源"/>
+            <column name="permission" value="dp_ds"/>
+            <column name="description" value="动态数据源"/>
+            <column name="pid" valueNumeric="3000"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <rollback>
+            delete from menu where id = 3000;
+            delete from menu where id = 3100;
+            delete from menu where id = 3200;
+        </rollback>
+    </changeSet>
+    <changeSet author="batizhao" id="InsertTableRoleMenu-20201013-003">
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3000"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3100"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3200"/>
+        </insert>
+        <rollback>
+            delete from role_menu where roleId = 2 and menuId = 3000;
+            delete from role_menu where roleId = 2 and menuId = 3100;
+            delete from role_menu where roleId = 2 and menuId = 3200;
+        </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="CreateTableSeataUndoLog-20201203-001">
+        <createTable remarks="AT transaction mode undo table" tableName="undo_log">
+            <column name="branch_id" remarks="branch transaction id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="xid" remarks="global transaction id" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="context" remarks="undo_log context,such as serialization" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rollback_info" remarks="rollback info" type="LONGBLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_status" remarks="0:normal status,1:defense status" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_created" remarks="create datetime" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_modified" remarks="modify datetime" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="batizhao" id="CreateTableSeataUndoLog-20201203-002">
+        <addUniqueConstraint columnNames="xid, branch_id" constraintName="ux_undo_log" tableName="undo_log"/>
     </changeSet>
 </databaseChangeLog>

@@ -5,7 +5,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet author="batizhao" id="CreateTableLog-20200401-001">
-        <createTable tableName="log" remarks="日志表">
+        <createTable tableName="log" remarks="日志">
             <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -43,5 +43,57 @@
         <rollback>
             <dropTable tableName="log"/>
         </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="CreateTableFile-20200923-001">
+        <createTable tableName="file" remarks="附件">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)" remarks="显示名">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fileName" type="VARCHAR(255)" remarks="文件名">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="BIGINT" remarks="大小"/>
+            <column name="url" type="VARCHAR(255)" remarks="url"/>
+            <column name="thumbUrl" type="VARCHAR(255)" remarks="缩略图 url"/>
+            <column name="createdTime" type="datetime" remarks="操作时间">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="file"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="CreateTableSeataUndoLog-20201203-001">
+        <createTable remarks="AT transaction mode undo table" tableName="undo_log">
+            <column name="branch_id" remarks="branch transaction id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="xid" remarks="global transaction id" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="context" remarks="undo_log context,such as serialization" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rollback_info" remarks="rollback info" type="LONGBLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_status" remarks="0:normal status,1:defense status" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_created" remarks="create datetime" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_modified" remarks="modify datetime" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="batizhao" id="CreateTableSeataUndoLog-20201203-002">
+        <addUniqueConstraint columnNames="xid, branch_id" constraintName="ux_undo_log" tableName="undo_log"/>
     </changeSet>
 </databaseChangeLog>
