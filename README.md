@@ -18,10 +18,10 @@
 * JDK 11
 * MySQL8
 * Maven
-* Nacos
-* RocketMQ
-* Seata
-* Sentinel
+* Nacos 注册配置中心
+* RocketMQ 异步消息
+* Seata 分布式事务
+* Sentinel 限流降级
 
 ## 快速开始
 
