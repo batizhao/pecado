@@ -11,7 +11,7 @@
 一开始的主要目标是完成微服务框架下的自动化测试。
 
 * 衍生自 [Paper](https://github.com/batizhao/paper)
-* 关于测试的说明
+* 关于测试的[说明](https://github.com/batizhao/pecado/blob/master/docs/test.md)
 
 ## 环境
 
@@ -28,7 +28,9 @@
 * 顺序启动 Nacos、RocketMQ、Seata
 * 导入 Nacos 配置
 * 执行  db/db.sql
-* 
+* mvn clean install
+* 启动 5 个微服务
+* 启动  [pecado-ui](https://github.com/batizhao/pecado-ui)
 
 
 
