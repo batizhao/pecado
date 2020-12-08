@@ -39,7 +39,8 @@
 		<mockito.version>3.6.28</mockito.version>
 		<rocketmq.version>2.1.1</rocketmq.version>
 		<seata.version>1.4.0</seata.version>
-		<swagger.version>3.0.0</swagger.version>
+		<springfox.version>3.0.0</springfox.version>
+		<swagger-annotations.version>1.6.2</swagger-annotations.version>
 		<velocity.version>1.7</velocity.version>
 
 		<jacoco-maven-plugin.verison>0.8.6</jacoco-maven-plugin.verison>
@@ -75,7 +76,12 @@
 			<dependency>
 				<groupId>io.springfox</groupId>
 				<artifactId>springfox-boot-starter</artifactId>
-				<version>${swagger.version}</version>
+				<version>${springfox.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-annotations</artifactId>
+				<version>${swagger-annotations.version}</version>
 			</dependency>
 
 			<dependency>

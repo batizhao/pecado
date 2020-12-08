@@ -56,7 +56,7 @@ public class UserVO implements Serializable {
     @ApiModelProperty(value = "未读消息数量", example = "99")
     private Integer unreadCount;
 
-    @ApiModelProperty(value = "是否锁定", example = "0 or 1")
+    @ApiModelProperty(value = "是否锁定", example = "0")
     private Integer locked;
 
     @ApiModelProperty(value = "创建时间")

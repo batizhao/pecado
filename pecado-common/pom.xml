@@ -18,6 +18,7 @@
         <module>pecado-common-security</module>
         <module>pecado-common-sentinel</module>
         <module>pecado-common-mybatis</module>
+        <module>pecado-common-swagger</module>
     </modules>
 
 </project>
