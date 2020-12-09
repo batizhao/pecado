@@ -2,6 +2,7 @@ package me.batizhao.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.StorageException;
 import me.batizhao.system.config.FileUploadProperties;
 import me.batizhao.system.domain.File;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
  * @date 2020/9/23
  */
 @Service
+@Slf4j
 public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements FileService {
 
     private final Path rootLocation;
@@ -40,6 +42,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     @Override
     @SneakyThrows
     public File upload(MultipartFile file) {
+        log.info("rootLocation: {}", rootLocation);
+
         if (file == null) {
             throw new StorageException("Failed to store null file.");
         }

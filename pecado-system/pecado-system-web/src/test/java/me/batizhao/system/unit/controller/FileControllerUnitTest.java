@@ -45,7 +45,7 @@ public class FileControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void givenNothing_whenFindAllLogs_thenListJson() throws Exception {
+    public void givenFile_whenUpload_thenSuccess() throws Exception {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "test.txt",
                 "text/plain", "test data".getBytes());
 

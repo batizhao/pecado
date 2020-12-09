@@ -33,7 +33,7 @@
 
 		<dynamic-datasource.version>3.2.1</dynamic-datasource.version>
 		<hutool.version>5.5.2</hutool.version>
-		<jasypt.version>2.1.2</jasypt.version>
+		<jasypt.version>3.0.3</jasypt.version>
 		<mybatis-plus.version>3.4.1</mybatis-plus.version>
 		<mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
 		<mockito.version>3.6.28</mockito.version>
