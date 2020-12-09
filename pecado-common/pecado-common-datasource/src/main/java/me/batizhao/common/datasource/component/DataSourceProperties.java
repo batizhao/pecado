@@ -18,7 +18,6 @@ package me.batizhao.common.datasource.component;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 /**
  * @author lengleng
@@ -26,7 +25,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
  * <p>
  */
 @Data
-@RefreshScope
 @ConfigurationProperties("spring.datasource")
 public class DataSourceProperties {
 

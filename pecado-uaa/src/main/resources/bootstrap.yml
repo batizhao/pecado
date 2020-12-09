@@ -17,9 +17,12 @@ spring:
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yml
-        shared-configs:
-          - application.${spring.cloud.nacos.config.file-extension}
-          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+        shared-configs[0]:
+          data-id: application.${spring.cloud.nacos.config.file-extension}
+          refresh: true
+        shared-configs[1]:
+          data-id: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+          refresh: true
   profiles:
     active: @profiles.active@
 

@@ -6,7 +6,6 @@ import me.batizhao.common.security.annotation.Inner;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -29,7 +28,6 @@ import java.util.Set;
  */
 @Data
 @Slf4j
-@RefreshScope
 @ConfigurationProperties(prefix = "security.oauth2.ignore")
 public class PermitAllUrlProperties implements InitializingBean, ApplicationContextAware {
 
