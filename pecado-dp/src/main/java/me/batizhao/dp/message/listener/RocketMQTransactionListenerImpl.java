@@ -1,4 +1,4 @@
-package me.batizhao.system.message.listener;
+package me.batizhao.dp.message.listener;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQTransactionListener;

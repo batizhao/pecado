@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("integration")
 @Slf4j
 @DirtiesContext
-public class SeataApiTest {
+public class SeataIntegrationTest {
 
     @Value("${pecado.token.admin}")
     String adminAccessToken;
@@ -79,7 +79,7 @@ public class SeataApiTest {
      */
     @Test
     public void givenLog_whenTransaction_ThenSuccess() throws Exception {
-        mvc.perform(get("/seata/success")
+        mvc.perform(get("/seata/commit")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -94,7 +94,7 @@ public class SeataApiTest {
      */
     @Test
     public void givenLog_whenSeataTransaction_ThenFail() throws Exception {
-        mvc.perform(get("/seata/fail")
+        mvc.perform(get("/seata/rollback")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().is5xxServerError())
