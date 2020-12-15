@@ -91,19 +91,20 @@ public class SeataController {
 
     /**
      * 有分布式事务框架支持，提交全部回滚
+     * 这里如果要保证强一致性，需要使用事务消息实现
      * @return ResponseInfo
-     * TODO: 完成事务消息测试
+     * @link me.batizhao.dp.integration.MessageIntegrationTest#givenLog_whenSendTransactionMessage_thenSeeResult
      */
     @GetMapping("/seata/rollback")
     @GlobalTransactional
     public ResponseInfo<Boolean> handleTransactionThenFail() {
-        ResponseInfo<Boolean> b = systemLogFeignService.saveLog(logDTO, SecurityConstants.FROM_IN);
-        systemLogFeignService.saveLog(logDTO2, SecurityConstants.FROM_IN);
-        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO3);
+        systemLogFeignService.saveLog(logDTO, SecurityConstants.FROM_IN);
+        ResponseInfo<Boolean> b = systemLogFeignService.saveLog(logDTO2, SecurityConstants.FROM_IN);
 
         if(b.getData())
             throw new RuntimeException("handleSeataTransactionThenFail");
 
+        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO3);
         return ResponseInfo.ok(false);
     }
 

@@ -104,50 +104,28 @@ public class MessageIntegrationTest {
         assertThat(response, equalTo("hello"));
     }
 
+    /**
+     * 测试事务消息
+     * 一条通过 MQ 发送消息
+     * 一条通过 Feign 远程调用
+     *
+     * 这里可以分别启动、或者停止 System 进行测试
+     * 当启动时，异步消息和远程调用同时成功；
+     * 当停止时，同时失败。
+     */
     @Test
-    public void givenString_whenSendTransactionMessage_thenCommit() {
-        Message<String> msg = MessageBuilder.withPayload("这是一个 KEY_0 事务消息").
-                setHeader(RocketMQHeaders.TRANSACTION_ID, "KEY_0").build();
+    public void givenLog_whenSendTransactionMessage_thenSeeResult() {
+        LogDTO logDTO = new LogDTO().setDescription("givenLog_whenSendTransactionMessage_thenCommit").setSpend(20).setClassMethod("givenLog_whenSendTransactionMessage_thenCommit")
+                .setClassName("me.batizhao.dp.integration.MessageConsumerTest").setClientId("client_app").setHttpRequestMethod("POST")
+                .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
-        SendResult sendResult = rocketMQTemplate.sendMessageInTransaction(
-                MQConstants.TOPIC_SYSTEM_LOG + ":tagsA", msg, null);
+        Message<LogDTO> msg = MessageBuilder.withPayload(logDTO).build();
+
+        SendResult sendResult = rocketMQTemplate.sendMessageInTransaction(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, msg, null);
 
         log.info("sendResult = {}", sendResult);
 
         assertThat(sendResult.getSendStatus(), equalTo(SendStatus.SEND_OK));
-
-        //TODO: 完成后续数据校验
-    }
-
-    @Test
-    public void givenString_whenSendTransactionMessage_thenRollback() {
-        Message<String> msg = MessageBuilder.withPayload("这是一个 KEY_1 事务消息").
-                setHeader(RocketMQHeaders.TRANSACTION_ID, "KEY_1").build();
-
-        SendResult sendResult = rocketMQTemplate.sendMessageInTransaction(
-                MQConstants.TOPIC_SYSTEM_LOG + ":tagsB", msg, null);
-
-        log.info("sendResult = {}", sendResult);
-
-        assertThat(sendResult.getSendStatus(), equalTo(SendStatus.SEND_OK));
-
-        //TODO: 完成后续数据校验
-    }
-
-    @Test
-    public void givenString_whenSendTransactionMessage_thenUnknown() throws InterruptedException {
-        Message<String> msg = MessageBuilder.withPayload("这是一个 KEY_2 事务消息").
-                setHeader(RocketMQHeaders.TRANSACTION_ID, "KEY_2").build();
-
-        SendResult sendResult = rocketMQTemplate.sendMessageInTransaction(
-                MQConstants.TOPIC_SYSTEM_LOG + ":tagsC", msg, null);
-
-        log.info("sendResult = {}", sendResult);
-
-        assertThat(sendResult.getSendStatus(), equalTo(SendStatus.SEND_OK));
-
-        //等 60 秒消息回查
-        Thread.sleep(70000L);
 
         //TODO: 完成后续数据校验
     }
