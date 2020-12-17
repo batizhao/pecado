@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pecado-uaa
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: pecado-uaa
+  template:
+    metadata:
+      labels:
+        app: pecado-uaa
+    spec:
+      containers:
+        - image: harbor.pecado.com/pecado/uaa:1.1
+          name: pecado-uaa
