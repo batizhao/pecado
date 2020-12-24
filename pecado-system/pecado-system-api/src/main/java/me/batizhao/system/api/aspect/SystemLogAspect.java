@@ -5,11 +5,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.core.constant.MQConstants;
+import me.batizhao.common.core.util.SpringContextHolder;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.dto.LogDTO;
+import me.batizhao.system.api.event.SystemLogEvent;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -44,7 +44,7 @@ public class SystemLogAspect {
 
     private final ObjectMapper objectMapper;
 
-    private final RocketMQTemplate rocketMQTemplate;
+//    private final RocketMQTemplate rocketMQTemplate;
 
     @Around("@annotation(systemLog)")
     @SneakyThrows
@@ -60,8 +60,8 @@ public class SystemLogAspect {
 
 
         log.info("@Around System Log is : {}", logDTO);
-        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
-//        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
+//        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
+        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
 
         return result;
     }
@@ -73,8 +73,8 @@ public class SystemLogAspect {
         logDTO.setSpend(0);
 
         log.info("@AfterThrowing System Log is : {}", logDTO);
-        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
-//        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
+//        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
+        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
     }
 
     private LogDTO getLogDTO(JoinPoint point, SystemLog systemLog) {

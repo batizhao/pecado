@@ -25,7 +25,7 @@
 
 ## 快速开始
 
-* 顺序启动 Nacos、RocketMQ、Seata
+* 顺序启动 Nacos、~~RocketMQ~~、~~Seata~~
 * 导入 Nacos 配置
 * 执行  db/db.sql
 * mvn clean install
