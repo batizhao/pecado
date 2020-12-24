@@ -29,6 +29,7 @@
 * 导入 Nacos 配置
 * 执行  db/db.sql
 * mvn clean install
+* 加入 ```127.0.0.1  pecado-nacos``` 到 hosts
 * 启动 5 个微服务
 * 启动  [pecado-ui](https://github.com/batizhao/pecado-ui)
 

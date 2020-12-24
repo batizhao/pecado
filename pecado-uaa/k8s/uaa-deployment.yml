@@ -14,5 +14,8 @@ spec:
         app: pecado-uaa
     spec:
       containers:
-        - image: harbor.pecado.com/pecado/uaa:1.1
-          name: pecado-uaa
+        - name: pecado-uaa
+          image: harbor.pecado.com/pecado/uaa:1.1
+          env:
+            - name: NACOS_HOST
+              value: nacos-headless
