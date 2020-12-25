@@ -45,9 +45,9 @@ ingress:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  hosts:
-    - pecado-gateway
   path: /
+  hosts:
+    - gateway.pecado.com
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
