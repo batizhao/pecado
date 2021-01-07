@@ -5,7 +5,7 @@
     <parent>
         <artifactId>pecado</artifactId>
         <groupId>me.batizhao</groupId>
-        <version>1.1</version>
+        <version>1.1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,27 +16,27 @@
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-datasource</artifactId>
-            <version>1.1</version>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-mybatis</artifactId>
-            <version>1.1</version>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-security</artifactId>
-            <version>1.1</version>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-sentinel</artifactId>
-            <version>1.1</version>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-feign</artifactId>
-            <version>1.1</version>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
