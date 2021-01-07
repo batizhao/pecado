@@ -14,12 +14,12 @@
     <dependencies>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-core</artifactId>
+            <artifactId>pecado-commons-core</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-swagger</artifactId>
+            <artifactId>pecado-commons-swagger</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
 
@@ -38,6 +38,12 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.alibaba.csp</groupId>
@@ -51,6 +57,10 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
 
         <dependency>

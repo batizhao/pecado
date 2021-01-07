@@ -9,15 +9,15 @@
 	<packaging>pom</packaging>
 
 	<name>pecado</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Demo project for Spring Cloud</description>
 
 	<modules>
-		<module>pecado-ims</module>
-        <module>pecado-uaa</module>
-		<module>pecado-common</module>
+		<module>pecado-commons</module>
+		<module>pecado-dp</module>
 		<module>pecado-gateway</module>
+		<module>pecado-ims</module>
 		<module>pecado-system</module>
-        <module>pecado-dp</module>
+        <module>pecado-uaa</module>
     </modules>
 
 	<properties>
@@ -26,17 +26,20 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+		<spring-boot.version>2.4.1</spring-boot.version>
 		<spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
-		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
-		<spring-cloud-contract.version>2.2.5.RELEASE</spring-cloud-contract.version>
+		<spring-cloud.version>2020.0.0</spring-cloud.version>
+		<spring-cloud-contract.version>3.0.0</spring-cloud-contract.version>
+		<spring-cloud-security.version>2.2.4.RELEASE</spring-cloud-security.version>
 
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
+		<commons-configuration.version>2.7</commons-configuration.version>
 		<dynamic-datasource.version>3.2.1</dynamic-datasource.version>
-		<hutool.version>5.5.2</hutool.version>
+		<hutool.version>5.5.6</hutool.version>
 		<jasypt.version>3.0.3</jasypt.version>
 		<mybatis-plus.version>3.4.1</mybatis-plus.version>
 		<mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
-		<mockito.version>3.6.28</mockito.version>
+		<mockito.version>3.7.0</mockito.version>
 		<rocketmq.version>2.1.1</rocketmq.version>
 		<seata.version>1.4.0</seata.version>
 		<springfox.version>3.0.0</springfox.version>
@@ -71,6 +74,12 @@
 				<version>${spring-cloud-alibaba.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-security</artifactId>
+				<version>${spring-cloud-security.version}</version>
 			</dependency>
 
 			<dependency>
@@ -141,6 +150,17 @@
 			</dependency>
 
 			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons-beanutils.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-configuration2</artifactId>
+				<version>${commons-configuration.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-test</artifactId>
 				<version>${spring-boot.version}</version>
@@ -190,6 +210,10 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bootstrap</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>

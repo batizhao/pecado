@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-core</artifactId>
+            <artifactId>pecado-commons-core</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
