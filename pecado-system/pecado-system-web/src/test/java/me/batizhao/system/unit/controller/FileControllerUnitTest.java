@@ -14,8 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -45,27 +43,27 @@ public class FileControllerUnitTest extends BaseControllerUnitTest {
     @MockBean
     private FileService fileService;
 
-//    @Test
-//    @WithMockUser
-//    public void givenFile_whenUpload_thenSuccess() throws Exception {
-//        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "test.txt",
-//                MediaType.TEXT_PLAIN_VALUE, "test data".getBytes());
-//
-//        File file = new File().setFileName("hexFileName").setName("filename")
-//                .setSize(100L).setUrl("xxx/test2.txt")
-//                .setCreatedTime(LocalDateTime.now());
-//
-//        when(fileService.upload(any(MultipartFile.class))).thenReturn(file);
-//
-//        mvc.perform(multipart("/file/upload").file(mockMultipartFile).with(csrf()))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data.name", equalTo("filename")));
-//
-//        verify(fileService).upload(any(MockMultipartFile.class));
-//    }
+    @Test
+    @WithMockUser
+    public void givenFile_whenUpload_thenSuccess() throws Exception {
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "test.txt",
+                MediaType.TEXT_PLAIN_VALUE, "test data".getBytes());
+
+        File file = new File().setFileName("hexFileName").setName("filename")
+                .setSize(100L).setUrl("xxx/test2.txt")
+                .setCreatedTime(LocalDateTime.now());
+
+        when(fileService.upload(any(MultipartFile.class))).thenReturn(file);
+
+        mvc.perform(multipart("/file/upload").file(mockMultipartFile).with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.name", equalTo("filename")));
+
+        verify(fileService).upload(any(MultipartFile.class));
+    }
 
     @Test
     @WithMockUser
