@@ -29,7 +29,7 @@ public class PermitAllUrlTest extends BaseApiTest {
     void whenGetNacosYamlAntUrls_thenHaveItems() {
         List<String> ants = permitAllUrlProperties.getAnt().getUrls();
         log.info("ant path: {}", ants);
-        assertThat(ants.size(), is(4));
+        assertThat(ants.size(), is(7));
         assertThat(ants, hasItems("/log", "/actuator/**", "/v2/api-docs"));
     }
 }

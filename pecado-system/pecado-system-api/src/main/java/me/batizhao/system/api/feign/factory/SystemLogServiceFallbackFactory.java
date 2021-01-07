@@ -1,7 +1,7 @@
 package me.batizhao.system.api.feign.factory;
 
-import feign.hystrix.FallbackFactory;
 import me.batizhao.system.api.feign.fallback.SystemLogServiceFallbackImpl;
+import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 /**

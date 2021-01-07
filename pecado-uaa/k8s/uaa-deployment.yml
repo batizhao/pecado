@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pecado-uaa
+spec:
+  replicas: 3
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: pecado-uaa
+  template:
+    metadata:
+      labels:
+        app: pecado-uaa
+    spec:
+      containers:
+        - name: pecado-uaa
+          image: harbor.pecado.com/pecado/uaa:1.1
+          env:
+            - name: NACOS_HOST
+              value: nacos-headless

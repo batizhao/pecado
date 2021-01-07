@@ -4,8 +4,6 @@ import me.batizhao.common.core.util.ResultEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import static org.hamcrest.Matchers.containsString;
-
 /**
  * @author batizhao
  * @since 2020-04-24

@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  me.batizhao.common.sentinel.PecadoSentinelAutoConfiguration,\
+  me.batizhao.common.sentinel.feign.PecadoSentinelFeignAutoConfiguration

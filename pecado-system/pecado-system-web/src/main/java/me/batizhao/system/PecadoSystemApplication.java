@@ -1,11 +1,11 @@
 package me.batizhao.system;
 
+import me.batizhao.common.feign.annotation.EnablePecadoFeignClients;
 import me.batizhao.common.security.annotation.EnablePecadoResourceServer;
 import me.batizhao.system.config.FileUploadProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.SpringCloudApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @author batizhao
@@ -14,7 +14,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringCloudApplication
 @EnablePecadoResourceServer
 @EnableConfigurationProperties(FileUploadProperties.class)
-@EnableFeignClients(basePackages = "me.batizhao.ims.api.feign")
+@EnablePecadoFeignClients
 public class PecadoSystemApplication {
 
     public static void main(String[] args) {

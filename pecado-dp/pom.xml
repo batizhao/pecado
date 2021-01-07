@@ -5,7 +5,7 @@
     <parent>
         <artifactId>pecado</artifactId>
         <groupId>me.batizhao</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,23 +15,28 @@
     <dependencies>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-datasource</artifactId>
-            <version>1.0</version>
+            <artifactId>pecado-commons-datasource</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-mybatis</artifactId>
-            <version>1.0</version>
+            <artifactId>pecado-commons-mybatis</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-security</artifactId>
-            <version>1.0</version>
+            <artifactId>pecado-commons-security</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-system-api</artifactId>
-            <version>1.0</version>
+            <artifactId>pecado-commons-sentinel</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>me.batizhao</groupId>
+            <artifactId>pecado-commons-feign</artifactId>
+            <version>1.1</version>
         </dependency>
 
         <dependency>
@@ -53,6 +58,12 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.alibaba.csp</groupId>
@@ -81,15 +92,23 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.seata</groupId>-->
+<!--            <artifactId>seata-spring-boot-starter</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>-->
+<!--        </dependency>-->
 
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-configuration2</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>

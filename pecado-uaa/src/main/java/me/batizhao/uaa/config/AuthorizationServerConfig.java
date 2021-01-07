@@ -1,5 +1,6 @@
 package me.batizhao.uaa.config;
 
+import lombok.RequiredArgsConstructor;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.common.security.component.PecadoUser;
@@ -33,16 +34,13 @@ import java.util.Map;
 @Configuration
 @EnableAuthorizationServer
 @SuppressWarnings("unchecked")
+@RequiredArgsConstructor
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    private PecadoUserDetailsService userDetailsService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private WebResponseExceptionTranslator webResponseExceptionTranslator;
+    private final PecadoUserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final WebResponseExceptionTranslator webResponseExceptionTranslator;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {

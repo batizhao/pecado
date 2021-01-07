@@ -31,11 +31,12 @@ import java.util.Map;
 public class CodeController {
 
     @Autowired
-    CodeService codeService;
+    private CodeService codeService;
 
     /**
      * 分页查询
-     * @param page 分页对象
+     *
+     * @param page   分页对象
      * @param dsName 数据源
      * @return ResponseInfo
      */

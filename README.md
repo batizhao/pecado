@@ -25,12 +25,47 @@
 
 ## 快速开始
 
-* 顺序启动 Nacos、RocketMQ、Seata
+* 顺序启动 Nacos、~~RocketMQ~~、~~Seata~~
 * 导入 Nacos 配置
 * 执行  db/db.sql
 * mvn clean install
+* 加入 ```127.0.0.1  pecado-nacos``` 到 hosts
 * 启动 5 个微服务
 * 启动  [pecado-ui](https://github.com/batizhao/pecado-ui)
+
+## 使用 ArgoCD 部署到 K8s
+
+```sh 
+$ docker build -t harbor.pecado.com/pecado/uaa:1.1 .
+$ docker push harbor.pecado.com/pecado/uaa:1.1
+$ kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+$ argocd app create pecado-uaa --repo git@github.com:batizhao/pecado.git --path pecado-uaa/helm --revision v1.1 --dest-server https://172.31.21.180:8443 --dest-namespace default
+
+application 'pecado-uaa' created
+
+$ argocd app get pecado-uaa
+Name:               pecado-uaa
+Project:            default
+Server:             https://172.31.21.180:8443
+Namespace:          default
+URL:                https://localhost:8080/applications/pecado-uaa
+Repo:               git@github.com:batizhao/pecado.git
+Target:             v1.1
+Path:               pecado-uaa
+SyncWindow:         Sync Allowed
+Sync Policy:        <none>
+Sync Status:        Synced to v1.1 (55922aa)
+Health Status:      Healthy
+
+GROUP  KIND        NAMESPACE  NAME        STATUS  HEALTH   HOOK  MESSAGE
+       Service     default    pecado-uaa  Synced  Healthy        service/pecado-uaa unchanged
+apps   Deployment  default    pecado-uaa  Synced  Healthy        deployment.apps/pecado-uaa unchanged
+
+$ argocd app sync guestbook
+```
+
+
 
 
 

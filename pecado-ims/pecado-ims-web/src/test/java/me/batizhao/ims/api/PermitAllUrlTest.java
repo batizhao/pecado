@@ -10,8 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 /**
  * 测试放行URL
@@ -31,7 +30,7 @@ public class PermitAllUrlTest extends BaseApiTest {
     void whenGetNacosYamlAntUrls_thenHaveItems() {
         List<String> ants = permitAllUrlProperties.getAnt().getUrls();
         log.info("ant path: {}", ants);
-        assertThat(ants.size(), is(3));
+        assertThat(ants.size(), is(6));
         assertThat(ants, hasItems("/actuator/**", "/v2/api-docs"));
 
         List<String> regex = permitAllUrlProperties.getRegex().getUrls();

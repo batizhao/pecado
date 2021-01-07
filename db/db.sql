@@ -21,5 +21,5 @@ CREATE TABLE `ds` (
 
 INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`, `createdTime`, `updatedTime`)
 VALUES
-	(1,'system','jdbc:mysql://localhost:3306/pecado-system?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','9dcJ5GzdWew1PFp2LU/rVEp/eQZpLXhU',0,'2020-09-29 10:00:00','2020-09-29 11:00:00'),
-	(2,'ims','jdbc:mysql://localhost:3306/pecado-ims?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','9dcJ5GzdWew1PFp2LU/rVEp/eQZpLXhU',0,'2020-09-29 10:00:00','2020-09-29 11:00:00');
+	(1,'system','jdbc:mysql://localhost:3306/pecado-system?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/',0,'2020-09-29 10:00:00','2020-09-29 11:00:00'),
+	(2,'ims','jdbc:mysql://localhost:3306/pecado-ims?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/',0,'2020-09-29 10:00:00','2020-09-29 11:00:00');

@@ -1,15 +1,15 @@
 package me.batizhao.uaa;
 
+import me.batizhao.common.feign.annotation.EnablePecadoFeignClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @author batizhao
  * @since 2016/9/28
  */
 @SpringCloudApplication
-@EnableFeignClients(basePackages = "me.batizhao.ims.api.feign")
+@EnablePecadoFeignClients
 public class PecadoUaaApplication {
 
     public static void main(String[] args) {

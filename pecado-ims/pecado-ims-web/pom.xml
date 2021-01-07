@@ -5,7 +5,7 @@
     <parent>
         <artifactId>pecado-ims</artifactId>
         <groupId>me.batizhao</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,27 +15,32 @@
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-ims-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-security</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-system-api</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-sentinel</artifactId>
-            <version>1.0</version>
+            <artifactId>pecado-commons-security</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-common-mybatis</artifactId>
-            <version>1.0</version>
+            <artifactId>pecado-commons-sentinel</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>me.batizhao</groupId>
+            <artifactId>pecado-commons-mybatis</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>me.batizhao</groupId>
+            <artifactId>pecado-commons-swagger</artifactId>
+            <version>1.1</version>
         </dependency>
 
         <dependency>
@@ -57,6 +62,12 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.alibaba.csp</groupId>

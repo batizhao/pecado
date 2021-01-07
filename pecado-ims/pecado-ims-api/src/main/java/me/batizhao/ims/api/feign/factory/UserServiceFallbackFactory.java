@@ -1,7 +1,7 @@
 package me.batizhao.ims.api.feign.factory;
 
-import feign.hystrix.FallbackFactory;
 import me.batizhao.ims.api.feign.fallback.UserServiceFallbackImpl;
+import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 /**
