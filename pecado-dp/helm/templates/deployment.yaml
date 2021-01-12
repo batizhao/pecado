@@ -36,18 +36,22 @@ spec:
           env:
             - name: NACOS_HOST
               value: nacos-headless
+            - name: pecado_logs_idealdp
+              value: stdout
+            - name: pecado_logs_idealdp_tags
+              value: appname=pecado-dp
           ports:
             - name: http
               containerPort: 7000
               protocol: TCP
-{{/*          livenessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /*/}}
-{{/*              port: http*/}}
-{{/*          readinessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /*/}}
-{{/*              port: http*/}}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
