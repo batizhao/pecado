@@ -1,6 +1,3 @@
-server:
-  port: 5555
-
 info:
   app:
     build_time: '@git.build.time@'
