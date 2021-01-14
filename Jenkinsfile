@@ -2,7 +2,7 @@ node {
 //   def build_tag
   def registry_addr = "harbor.pecado.com"
   def maintainer_name = "pecado"
-//   def image
+  def dp_image, gateway_image, ims_image, system_image, uaa_image
   def version = "1.1"
 
   stage('Git Clone') {
@@ -20,39 +20,38 @@ node {
 
     dir('pecado-dp') {
       image_name = "${registry_addr}/${maintainer_name}/dp:${version}"
-      image = docker.build(image_name)
-      image.push()
+      dp_image = docker.build(image_name)
     }
 
     dir('pecado-gateway') {
       image_name = "${registry_addr}/${maintainer_name}/gateway:${version}"
-      image = docker.build(image_name)
-      image.push()
+      gateway_image = docker.build(image_name)
     }
 
     dir('pecado-ims/pecado-ims-web') {
       image_name = "${registry_addr}/${maintainer_name}/ims:${version}"
-      image = docker.build(image_name)
-      image.push()
+      ims_image = docker.build(image_name)
     }
 
     dir('pecado-system/pecado-system-web') {
       image_name = "${registry_addr}/${maintainer_name}/system:${version}"
-      image = docker.build(image_name)
-      image.push()
+      system_image = docker.build(image_name)
     }
 
     dir('pecado-uaa') {
       image_name = "${registry_addr}/${maintainer_name}/uaa:${version}"
-      image = docker.build(image_name)
-      image.push()
+      uaa_image = docker.build(image_name)
     }
 
   }
 
-//   stage('Push Docker Image') {
-//     docker.withRegistry('https://harbor.pecado.com', 'harbor-jiangsu-auth') {
-//       image.push()
-//     }
-//   }
+  stage('Push Docker Image') {
+    docker.withRegistry('https://harbor.pecado.com', 'harbor-jiangsu-auth') {
+      dp_image.push()
+      gateway_image.push()
+      ims_image.push()
+      system_image.push()
+      uaa_image.push()
+    }
+  }
 }
