@@ -226,6 +226,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${project.name}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -238,11 +239,6 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<version>${spring-boot.version}</version>
-					<configuration>
-						<layers>
-							<enabled>true</enabled>
-						</layers>
-					</configuration>
 					<executions>
 						<execution>
 							<id>repackage</id>

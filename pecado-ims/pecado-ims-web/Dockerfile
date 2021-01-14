@@ -1,6 +1,6 @@
 FROM harbor.pecado.com/ideal/alpine-openjdk:11 as builder
 WORKDIR application
-ARG JAR_FILE=target/pecado-ims-*.jar
+ARG JAR_FILE=target/pecado-ims-web.jar
 COPY ${JAR_FILE} app.jar
 RUN java -Djarmode=layertools -jar app.jar extract && rm app.jar
 
