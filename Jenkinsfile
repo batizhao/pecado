@@ -9,10 +9,16 @@ node {
     git branch: 'dev', credentialsId: 'github', url: 'git@github.com:batizhao/pecado.git'
   }
 
+  stage('Code Test') {
+    withMaven(maven: 'maven', mavenSettingsConfig: 'maven-settings') {
+      sh "mvn clean test -Ptest -DNACOS_HOST=nacos.pecado.com -DNACOS_PORT=80"
+    }
+  }
+
   stage('Build Maven Package') {
 //     build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
     withMaven(maven: 'maven', mavenSettingsConfig: 'maven-settings') {
-        sh "mvn clean package -Ptest -DNACOS_HOST=nacos.pecado.com -DNACOS_PORT=80"
+        sh "mvn clean package -Dmaven.test.skip=true"
     }
   }
 
