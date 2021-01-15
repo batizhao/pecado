@@ -54,7 +54,7 @@ public class DsApiTest extends BaseApiTest {
     public void givenJson_whenSaveDs_thenSuccess() throws Exception {
         Ds requestBody = new Ds()
                 .setName("test")
-                .setUrl("jdbc:mysql://172.31.21.180:30306/pecado-ims?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai")
+                .setUrl("jdbc:mysql://172.31.21.180:30306/pecado-system?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai")
                 .setUsername("root")
                 .setPassword("root");
 
