@@ -12,7 +12,7 @@ node {
   stage('Build Maven Package') {
 //     build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
     withMaven(maven: 'maven', mavenSettingsConfig: 'maven-settings') {
-        sh "mvn clean package -DNACOS_HOST=nacos.pecado.com -DNACOS_PORT=80"
+        sh "mvn clean package -Ptest -DNACOS_HOST=nacos.pecado.com -DNACOS_PORT=80"
     }
   }
 
