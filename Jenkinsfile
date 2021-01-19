@@ -10,7 +10,7 @@ node {
   }
 
   stage('Code Test') {
-    withMaven(maven: 'maven', mavenSettingsConfig: 'maven-settings') {
+    withMaven(maven: 'maven', jdk: 'jdk11', mavenSettingsConfig: 'maven-settings') {
       sh "mvn clean test -Ptest -DNACOS_HOST=nacos.pecado.com -DNACOS_PORT=80"
     }
   }
