@@ -27,7 +27,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<spring-boot.version>2.4.1</spring-boot.version>
-		<spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
+		<spring-cloud-alibaba.version>2.2.4.RELEASE</spring-cloud-alibaba.version>
 		<spring-cloud.version>2020.0.0</spring-cloud.version>
 		<spring-cloud-contract.version>3.0.0</spring-cloud-contract.version>
 		<spring-cloud-security.version>2.2.4.RELEASE</spring-cloud-security.version>
