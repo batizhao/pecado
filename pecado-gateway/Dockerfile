@@ -1,13 +1,15 @@
 FROM harbor.pecado.com/ideal/alpine-openjdk:11 as builder
+WORKDIR application
 ARG JAR_FILE=target/pecado-gateway.jar
-COPY ${JAR_FILE} application.jar
-RUN java -Djarmode=layertools -jar application.jar extract
+COPY ${JAR_FILE} app.jar
+RUN java -Djarmode=layertools -jar app.jar extract && rm app.jar
 
 FROM harbor.pecado.com/ideal/alpine-openjdk:11
-COPY --from=builder dependencies/ ./
-COPY --from=builder snapshot-dependencies/ ./
+WORKDIR application
+COPY --from=builder application/dependencies/ ./
+COPY --from=builder application/snapshot-dependencies/ ./
 RUN true
-COPY --from=builder spring-boot-loader/ ./
-COPY --from=builder application/ ./
+COPY --from=builder application/spring-boot-loader/ ./
+COPY --from=builder application/application/ ./
 EXPOSE 8080
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
