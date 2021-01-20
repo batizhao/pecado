@@ -6,6 +6,7 @@ RUN java -Djarmode=layertools -jar application.jar extract
 FROM harbor.pecado.com/ideal/alpine-openjdk:11
 COPY --from=builder dependencies/ ./
 COPY --from=builder snapshot-dependencies/ ./
+RUN true
 COPY --from=builder spring-boot-loader/ ./
 COPY --from=builder application/ ./
 EXPOSE 8080
