@@ -8,7 +8,7 @@ FROM harbor.pecado.com/ideal/alpine-openjdk:11
 WORKDIR application
 COPY --from=builder application/dependencies/ ./
 COPY --from=builder application/snapshot-dependencies/ ./
-COPY --from=builder application/spring-boot-loader/ ./
+COPY --from=builder application/resources/ ./
 COPY --from=builder application/application/ ./
 EXPOSE 8080
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
