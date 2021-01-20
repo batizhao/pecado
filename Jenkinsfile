@@ -1,5 +1,5 @@
 node {
-//   def build_tag
+  def build_tag
   def registry_addr = "harbor.pecado.com"
   def maintainer_name = "pecado"
   def dp_image, gateway_image, ims_image, system_image, uaa_image
@@ -16,7 +16,7 @@ node {
   }
 
   stage('Build Maven Package') {
-//     build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+    build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
     withMaven(maven: 'maven', jdk: 'jdk11', mavenSettingsConfig: 'maven-settings') {
         sh "mvn clean package -Dmaven.test.skip=true"
     }
@@ -25,27 +25,27 @@ node {
   stage('Build Docker Image') {
 
     dir('pecado-dp') {
-      image_name = "${registry_addr}/${maintainer_name}/dp:${version}"
+      image_name = "${registry_addr}/${maintainer_name}/dp:${version}-${build_tag}"
       dp_image = docker.build(image_name)
     }
 
     dir('pecado-gateway') {
-      image_name = "${registry_addr}/${maintainer_name}/gateway:${version}"
+      image_name = "${registry_addr}/${maintainer_name}/gateway:${version}-${build_tag}"
       gateway_image = docker.build(image_name)
     }
 
     dir('pecado-ims/pecado-ims-web') {
-      image_name = "${registry_addr}/${maintainer_name}/ims:${version}"
+      image_name = "${registry_addr}/${maintainer_name}/ims:${version}-${build_tag}"
       ims_image = docker.build(image_name)
     }
 
     dir('pecado-system/pecado-system-web') {
-      image_name = "${registry_addr}/${maintainer_name}/system:${version}"
+      image_name = "${registry_addr}/${maintainer_name}/system:${version}-${build_tag}"
       system_image = docker.build(image_name)
     }
 
     dir('pecado-uaa') {
-      image_name = "${registry_addr}/${maintainer_name}/uaa:${version}"
+      image_name = "${registry_addr}/${maintainer_name}/uaa:${version}-${build_tag}"
       uaa_image = docker.build(image_name)
     }
 
