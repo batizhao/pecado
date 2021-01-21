@@ -44,7 +44,7 @@ public class CodeApiTest extends BaseApiTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("Content-Length", "9153"));
+                .andExpect(header().string("Content-Disposition", "attachment; filename=ds.zip"));
     }
 
 }

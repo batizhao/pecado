@@ -11,6 +11,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "pecado.upload")
 public class FileUploadProperties {
 
-    private String location = "/Users/batizhao/Documents/upload-dir";
+    private String location = "/tmp";
 
 }

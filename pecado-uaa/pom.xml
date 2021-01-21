@@ -5,7 +5,7 @@
     <parent>
         <groupId>me.batizhao</groupId>
         <artifactId>pecado</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </parent>
 
     <artifactId>pecado-uaa</artifactId>
@@ -15,17 +15,17 @@
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-security</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-sentinel</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-feign</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
 
         <dependency>
@@ -40,6 +40,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

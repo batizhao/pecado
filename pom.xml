@@ -5,7 +5,7 @@
 
 	<groupId>me.batizhao</groupId>
 	<artifactId>pecado</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 	<packaging>pom</packaging>
 
 	<name>pecado</name>
@@ -26,18 +26,18 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<spring-boot.version>2.4.1</spring-boot.version>
-		<spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
+		<spring-boot.version>2.4.2</spring-boot.version>
+		<spring-cloud-alibaba.version>2.2.4.RELEASE</spring-cloud-alibaba.version>
 		<spring-cloud.version>2020.0.0</spring-cloud.version>
 		<spring-cloud-contract.version>3.0.0</spring-cloud-contract.version>
 		<spring-cloud-security.version>2.2.4.RELEASE</spring-cloud-security.version>
 
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<commons-configuration.version>2.7</commons-configuration.version>
-		<dynamic-datasource.version>3.2.1</dynamic-datasource.version>
-		<hutool.version>5.5.6</hutool.version>
+		<dynamic-datasource.version>3.3.1</dynamic-datasource.version>
+		<hutool.version>5.5.7</hutool.version>
 		<jasypt.version>3.0.3</jasypt.version>
-		<mybatis-plus.version>3.4.1</mybatis-plus.version>
+		<mybatis-plus.version>3.4.2</mybatis-plus.version>
 		<mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
 		<mockito.version>3.7.0</mockito.version>
 		<rocketmq.version>2.1.1</rocketmq.version>
@@ -226,6 +226,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${project.name}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -238,11 +239,6 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<version>${spring-boot.version}</version>
-					<configuration>
-						<layers>
-							<enabled>true</enabled>
-						</layers>
-					</configuration>
 					<executions>
 						<execution>
 							<id>repackage</id>
