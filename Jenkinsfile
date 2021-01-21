@@ -3,7 +3,7 @@ node {
   def registry_addr = "harbor.pecado.com"
   def maintainer_name = "pecado"
   def dp_image, gateway_image, ims_image, system_image, uaa_image
-  def version = "1.1"
+  def version = "1.2"
 
   stage('Git Clone') {
     git branch: 'dev', credentialsId: 'github', url: 'git@github.com:batizhao/pecado.git'
