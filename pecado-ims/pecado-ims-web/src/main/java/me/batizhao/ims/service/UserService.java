@@ -21,13 +21,13 @@ public interface UserService extends IService<User> {
 
 	IPage<UserVO> findUsers(Page<UserVO> page, User user);
 
-	UserVO findById(Long id);
+	UserVO findById(Long userId);
 
 	int deleteByUsername(String username);
 
 	UserVO saveOrUpdateUser(User user);
 
-    UserInfoVO getUserInfo(String username);
+    UserInfoVO getUserInfo(Long userId);
 
-	Boolean updateUserStatusById(Long id, Integer locked);
+	Boolean updateUserStatusById(Long userId, Integer locked);
 }

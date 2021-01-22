@@ -10,6 +10,8 @@ import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
+import me.batizhao.ims.service.MenuService;
+import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author batizhao
@@ -29,6 +32,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private MenuService menuService;
 
     @Override
     public UserVO findByUsername(String username) {
@@ -55,11 +62,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public UserVO findById(Long id) {
-        User user = userMapper.selectById(id);
+    public UserVO findById(Long userId) {
+        User user = userMapper.selectById(userId);
 
         if(user == null) {
-            throw new NotFoundException(String.format("没有该用户 '%s'。", id));
+            throw new NotFoundException(String.format("没有该用户 '%s'。", userId));
         }
 
         UserVO userVO = new UserVO();
@@ -94,11 +101,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public UserInfoVO getUserInfo(String username) {
-        User user = userMapper.selectOne(Wrappers.<User>query().lambda().eq(User::getUsername, username));
+    public UserInfoVO getUserInfo(Long userId) {
+        User user = userMapper.selectById(userId);
 
         if(user == null) {
-            throw new NotFoundException(String.format("没有该用户 '%s'。", username));
+            throw new NotFoundException(String.format("没有该用户 '%s'。", userId));
         }
 
         UserVO userVO = new UserVO();
@@ -106,12 +113,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setUserVO(userVO);
+        userInfoVO.setRoles(roleService.findRolesByUserId(userId).stream().map(x -> x.getCode()).collect(Collectors.toList()));
+        userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(x -> x.getPermission()).collect(Collectors.toList()));
         return userInfoVO;
     }
 
     @Override
     @Transactional
-    public Boolean updateUserStatusById(Long id, Integer locked) {
-        return userMapper.updateUserStatusById(id, locked) == 1;
+    public Boolean updateUserStatusById(Long userId, Integer locked) {
+        return userMapper.updateUserStatusById(userId, locked) == 1;
     }
 }

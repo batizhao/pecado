@@ -22,6 +22,14 @@ public interface MenuService extends IService<Menu> {
     List<MenuVO> findMenusByRoleId(Long roleId);
 
     /**
+     * 查询当前用户菜单
+     * 返回菜单树
+     *
+     * @return 菜单树
+     */
+    List<MenuVO> findMenusByUserId(Long userId);
+
+    /**
      * 查询所有菜单
      * @return 菜单树
      */

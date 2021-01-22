@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author batizhao
@@ -25,11 +26,11 @@ public class UserInfoVO implements Serializable {
 	 * @mock @pick(["common","admin"])
 	 */
 	@ApiModelProperty(value = "权限清单")
-	private String[] permissions;
+	private List<String> permissions;
 
 	/**
 	 * @mock @pick(["ADMIN","MEMBER","GUEST"])
 	 */
 	@ApiModelProperty(value = "角色清单 ")
-	private String[] roles;
+	private List<String> roles;
 }

@@ -9,6 +9,8 @@ import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
+import me.batizhao.ims.service.MenuService;
+import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -50,6 +52,10 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
     @MockBean
     private UserMapper userMapper;
+    @MockBean
+    private RoleService roleService;
+    @MockBean
+    private MenuService menuService;
 
     @Autowired
     private UserService userService;
@@ -222,9 +228,9 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenUsername_whenGetUserInfo_thenSuccess() {
-        doReturn(userList.get(0)).when(userMapper).selectOne(any());
+        doReturn(userList.get(0)).when(userMapper).selectById(anyLong());
 
-        UserInfoVO uiv = userService.getUserInfo("xxx");
+        UserInfoVO uiv = userService.getUserInfo(1L);
 
         assertThat(uiv.getUserVO().getEmail(), equalTo("zhangsan@gmail.com"));
     }
@@ -233,7 +239,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     public void givenUsername_whenGetUserInfo_thenNotFound() {
         doReturn(null).when(userMapper).selectOne(any());
 
-        assertThrows(NotFoundException.class, () -> userService.getUserInfo("xxxx"));
+        assertThrows(NotFoundException.class, () -> userService.getUserInfo(1L));
     }
 
     @Test

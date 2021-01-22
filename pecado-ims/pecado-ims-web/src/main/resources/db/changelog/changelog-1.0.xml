@@ -182,7 +182,7 @@
             <column name="name" value="系统管理"/>
             <column name="permission" value="system_root"/>
             <column name="description"/>
-            <column name="icon" value="setting"/>
+            <column name="icon" value="system"/>
             <column name="pid" valueNumeric="0"/>
             <column name="sort" valueNumeric="3"/>
         </insert>
@@ -374,7 +374,7 @@
             <column name="name" value="开发平台"/>
             <column name="permission" value="dp_root"/>
             <column name="description"/>
-            <column name="icon" value="codepen"/>
+            <column name="icon" value="develop"/>
             <column name="pid" valueNumeric="0"/>
             <column name="sort" valueNumeric="4"/>
         </insert>

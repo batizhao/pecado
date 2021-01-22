@@ -285,7 +285,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
             UserInfoVO userInfoVO = new UserInfoVO();
             userInfoVO.setUserVO(userVO);
 
-            doReturn(userInfoVO).when(userService).getUserInfo("zhangsan");
+            doReturn(userInfoVO).when(userService).getUserInfo(1L);
 
             mvc.perform(get("/user/me"))
                     .andDo(print())

@@ -184,8 +184,8 @@ public class UserController {
     @GetMapping("/user/me")
     @SystemLog
     public ResponseInfo<UserInfoVO> handleUserInfo() {
-        String username = SecurityUtils.getUser().getUsername();
-        UserInfoVO userInfoVO = userService.getUserInfo(username);
+        Long userId = SecurityUtils.getUser().getUserId();
+        UserInfoVO userInfoVO = userService.getUserInfo(userId);
         return ResponseInfo.ok(userInfoVO);
     }
 

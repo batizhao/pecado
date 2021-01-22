@@ -9,11 +9,9 @@ import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.dto.TreeNode;
 import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
-import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.controller.MenuController;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.service.MenuService;
-import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.controller.MenuController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -26,7 +24,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -57,11 +54,8 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
      */
     @MockBean
     private MenuService menuService;
-    @MockBean
-    private RoleService roleService;
 
     private List<Menu> menuList;
-    private List<RoleVO> roleList;
     private List<MenuVO> menuVOList;
 
     /**
@@ -76,10 +70,6 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
         menuList.add(new Menu().setId(4).setName("角色管理").setPermission("ims_role_admin").setPid(2).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
 
         menuVOList = BeanCopyUtil.copyListProperties(menuList, MenuVO::new);
-
-        roleList = new ArrayList<>();
-        roleList.add(new RoleVO().setId(1L));
-        roleList.add(new RoleVO().setId(2L));
     }
 
     @Test
@@ -100,9 +90,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
             SecurityUtils.getUser();
             mockStatic.verify(times(1), SecurityUtils::getUser);
 
-            when(roleService.findRolesByUserId(anyLong())).thenReturn(roleList);
-            when(menuService.findMenusByRoleId(anyLong())).thenReturn(menuVOList);
-            when(menuService.filterMenu((new HashSet<>(menuVOList)), null)).thenReturn(trees);
+            when(menuService.findMenusByUserId(anyLong())).thenReturn(trees);
 
             mvc.perform(get("/menu/me"))
                     .andDo(print())

@@ -4,21 +4,20 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.common.core.util.BeanCopyUtil;
+import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.util.TreeUtil;
 import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
+import me.batizhao.ims.service.RoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,11 +29,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Autowired
     private MenuMapper menuMapper;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public List<MenuVO> findMenusByRoleId(Long roleId) {
         List<Menu> menus = menuMapper.findMenusByRoleId(roleId);
         return BeanCopyUtil.copyListProperties(menus, MenuVO::new);
+    }
+
+    @Override
+    public List<MenuVO> findMenusByUserId(Long userId) {
+        Set<MenuVO> all = new HashSet<>();
+        roleService.findRolesByUserId(userId).forEach(roleVO -> all.addAll(findMenusByRoleId(roleVO.getId())));
+        return filterMenu(all, null);
     }
 
     @Override

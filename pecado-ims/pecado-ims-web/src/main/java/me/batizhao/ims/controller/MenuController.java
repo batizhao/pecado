@@ -10,7 +10,6 @@ import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.service.MenuService;
-import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单管理
@@ -40,8 +37,6 @@ public class MenuController {
 
     @Autowired
     private MenuService menuService;
-    @Autowired
-    private RoleService roleService;
 
     /**
      * 查询当前用户菜单
@@ -54,10 +49,7 @@ public class MenuController {
     @GetMapping("/menu/me")
     public ResponseInfo<List<MenuVO>> handleMenuTree4Me() {
         Long userId = SecurityUtils.getUser().getUserId();
-
-        Set<MenuVO> all = new HashSet<>();
-        roleService.findRolesByUserId(userId).forEach(roleVO -> all.addAll(menuService.findMenusByRoleId(roleVO.getId())));
-        return ResponseInfo.ok(menuService.filterMenu(all, null));
+        return ResponseInfo.ok(menuService.findMenusByUserId(userId));
     }
 
     /**

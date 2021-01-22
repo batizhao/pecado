@@ -11,6 +11,7 @@ import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
+import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.impl.MenuServiceImpl;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +51,8 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
 
     @MockBean
     private MenuMapper menuMapper;
+    @MockBean
+    private RoleService roleService;
 
     @Autowired
     private MenuService menuService;
