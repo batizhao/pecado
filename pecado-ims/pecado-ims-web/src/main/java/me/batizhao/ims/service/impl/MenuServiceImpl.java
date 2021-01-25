@@ -39,7 +39,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public List<MenuVO> findMenusByUserId(Long userId) {
+    public Set<MenuVO> findMenusByUserId(Long userId) {
+        Set<MenuVO> all = new HashSet<>();
+        roleService.findRolesByUserId(userId).forEach(roleVO -> all.addAll(findMenusByRoleId(roleVO.getId())));
+        return all;
+    }
+
+    @Override
+    public List<MenuVO> findMenuTreeByUserId(Long userId) {
         Set<MenuVO> all = new HashSet<>();
         roleService.findRolesByUserId(userId).forEach(roleVO -> all.addAll(findMenusByRoleId(roleVO.getId())));
         return filterMenu(all, null);

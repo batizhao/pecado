@@ -49,7 +49,7 @@ public class MenuController {
     @GetMapping("/menu/me")
     public ResponseInfo<List<MenuVO>> handleMenuTree4Me() {
         Long userId = SecurityUtils.getUser().getUserId();
-        return ResponseInfo.ok(menuService.findMenusByUserId(userId));
+        return ResponseInfo.ok(menuService.findMenuTreeByUserId(userId));
     }
 
     /**

@@ -90,7 +90,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
             SecurityUtils.getUser();
             mockStatic.verify(times(1), SecurityUtils::getUser);
 
-            when(menuService.findMenusByUserId(anyLong())).thenReturn(trees);
+            when(menuService.findMenuTreeByUserId(anyLong())).thenReturn(trees);
 
             mvc.perform(get("/menu/me"))
                     .andDo(print())

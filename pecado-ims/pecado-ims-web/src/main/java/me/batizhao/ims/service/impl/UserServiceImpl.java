@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
+import me.batizhao.ims.api.vo.MenuVO;
+import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
@@ -113,8 +115,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setUserVO(userVO);
-        userInfoVO.setRoles(roleService.findRolesByUserId(userId).stream().map(x -> x.getCode()).collect(Collectors.toList()));
-        userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(x -> x.getPermission()).collect(Collectors.toList()));
+        userInfoVO.setRoles(roleService.findRolesByUserId(userId).stream().map(RoleVO::getCode).collect(Collectors.toList()));
+        userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(MenuVO::getPermission).collect(Collectors.toList()));
         return userInfoVO;
     }
 
