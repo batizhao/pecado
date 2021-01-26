@@ -2,7 +2,8 @@ package me.batizhao.common.security.component;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.security.exception.MyAuthenticationEntryPoint;
+import me.batizhao.common.security.handler.MyAccessDeniedHandler;
+import me.batizhao.common.security.handler.MyAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -13,7 +14,6 @@ import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConv
 import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
  * @author batizhao
@@ -22,9 +22,9 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @Slf4j
 public class PecadoResourceServerConfigurerAdapter extends ResourceServerConfigurerAdapter {
 	@Autowired
-	protected MyAuthenticationEntryPoint authenticationEntryPoint;
+	private MyAuthenticationEntryPoint authenticationEntryPoint;
 	@Autowired
-	private AccessDeniedHandler accessDeniedHandler;
+	private MyAccessDeniedHandler accessDeniedHandler;
 	@Autowired
 	private PermitAllUrlProperties permitAllUrl;
 

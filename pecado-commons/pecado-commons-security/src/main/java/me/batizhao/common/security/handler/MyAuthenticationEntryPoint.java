@@ -1,4 +1,4 @@
-package me.batizhao.common.security.exception;
+package me.batizhao.common.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResponseInfo;
