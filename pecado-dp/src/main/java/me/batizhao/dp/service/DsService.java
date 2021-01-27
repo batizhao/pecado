@@ -48,4 +48,10 @@ public interface DsService extends IService<Ds> {
      */
     Boolean checkDataSource(Ds ds);
 
+    /**
+     * 更新数据源状态
+     * @param ds 数据源信息
+     * @return Boolean
+     */
+    Boolean updateDsStatus(Ds ds);
 }

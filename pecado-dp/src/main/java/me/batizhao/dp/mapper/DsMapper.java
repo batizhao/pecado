@@ -21,6 +21,5 @@ public interface DsMapper extends BaseMapper<Ds> {
      * @param ds 数据源
      * @return IPage<Ds>
      */
-    IPage<Ds> selectDsPage(Page<Ds> page, @Param("Ds") Ds ds);
-
+//    IPage<Ds> selectDsPage(Page<Ds> page, @Param("Ds") Ds ds);
 }

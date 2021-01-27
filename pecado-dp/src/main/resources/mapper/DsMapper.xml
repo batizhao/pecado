@@ -15,10 +15,10 @@
     <result property="updatedTime" column="updatedTime"/>
   </resultMap>
 
-  <select id="selectDsPage" resultMap="dsMap">
-    SELECT
-      *
-    FROM
-      ds
-  </select>
+<!--  <select id="selectDsPage" resultMap="dsMap">-->
+<!--    SELECT-->
+<!--      *-->
+<!--    FROM-->
+<!--      ds-->
+<!--  </select>-->
 </mapper>

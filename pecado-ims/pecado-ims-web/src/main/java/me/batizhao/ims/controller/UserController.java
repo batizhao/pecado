@@ -155,7 +155,7 @@ public class UserController {
     @PostMapping("/user/lock")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<Boolean> handleLockUser(@ApiParam(value = "用户ID串", required = true) @RequestParam Long id) {
+    public ResponseInfo<Boolean> handleLockUser(@ApiParam(value = "用户ID", required = true) @RequestParam Long id) {
         Boolean b = userService.updateUserStatusById(id, 1);
         return ResponseInfo.ok(b);
     }
@@ -170,7 +170,7 @@ public class UserController {
     @PostMapping("/user/unlock")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<Boolean> handleUnLockUser(@ApiParam(value = "用户ID串", required = true) @RequestParam Long id) {
+    public ResponseInfo<Boolean> handleUnLockUser(@ApiParam(value = "用户ID", required = true) @RequestParam Long id) {
         Boolean b = userService.updateUserStatusById(id, 0);
         return ResponseInfo.ok(b);
     }

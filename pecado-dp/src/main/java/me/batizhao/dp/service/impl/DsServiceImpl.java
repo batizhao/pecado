@@ -4,9 +4,13 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.creator.DataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import liquibase.pro.packaged.L;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.DataSourceException;
 import me.batizhao.common.core.exception.NotFoundException;
@@ -15,6 +19,7 @@ import me.batizhao.common.datasource.component.DataSourceConstants;
 import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.mapper.DsMapper;
 import me.batizhao.dp.service.DsService;
+import org.apache.commons.lang3.StringUtils;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +51,15 @@ public class DsServiceImpl extends ServiceImpl<DsMapper, Ds> implements DsServic
 
     @Override
     public IPage<Ds> findDss(Page<Ds> page, Ds ds) {
-        return dsMapper.selectDsPage(page, ds);
+        LambdaQueryWrapper<Ds> wrapper = Wrappers.lambdaQuery();
+        if (StringUtils.isNotBlank(ds.getName())) {
+            wrapper.like(Ds::getName, ds.getName());
+        }
+        if (StringUtils.isNotBlank(ds.getUsername())) {
+            wrapper.like(Ds::getUsername, ds.getUsername());
+        }
+
+        return dsMapper.selectPage(page, wrapper);
     }
 
     @Override
@@ -114,4 +127,11 @@ public class DsServiceImpl extends ServiceImpl<DsMapper, Ds> implements DsServic
         return Boolean.TRUE;
     }
 
+    @Override
+    @Transactional
+    public Boolean updateDsStatus(Ds ds) {
+        LambdaUpdateWrapper<Ds> wrapper = Wrappers.lambdaUpdate();
+        wrapper.eq(Ds::getId, ds.getId()).set(Ds::getStatus, ds.getStatus());
+        return dsMapper.update(null, wrapper) == 1;
+    }
 }

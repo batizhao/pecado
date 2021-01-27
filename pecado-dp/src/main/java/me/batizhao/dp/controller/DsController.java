@@ -92,4 +92,17 @@ public class DsController {
         return ResponseInfo.ok(dsService.removeByIds(ids));
     }
 
+    /**
+     * 更新数据源状态
+     *
+     * @param ds 数据源
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "禁用")
+    @PostMapping("/ds/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseInfo<Boolean> handleUpdateStatus(@Valid @ApiParam(value = "数据源" , required = true) @RequestBody Ds ds) {
+        return ResponseInfo.ok(dsService.updateDsStatus(ds));
+    }
+
 }

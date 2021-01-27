@@ -23,13 +23,13 @@ public class DsMapperUnitTest extends BaseMapperUnitTest {
     @Autowired
     DsMapper dsMapper;
 
-    @Test
-    public void testSelectDsPage() {
-        IPage<Ds> dss = dsMapper.selectDsPage(new Page<>(), new Ds());
-
-        log.info("dss: {}", dss);
-
-        assertThat(dss.getRecords().size(), greaterThan(0));
-    }
+//    @Test
+//    public void testSelectDsPage() {
+//        IPage<Ds> dss = dsMapper.selectDsPage(new Page<>(), new Ds());
+//
+//        log.info("dss: {}", dss);
+//
+//        assertThat(dss.getRecords().size(), greaterThan(0));
+//    }
 
 }

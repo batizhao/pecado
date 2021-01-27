@@ -86,18 +86,18 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
         dsPageList.setRecords(dsList);
     }
 
-    @Test
-    public void givenNothing_whenFindAllDs_thenSuccess() {
-        when(dsMapper.selectDsPage(any(Page.class), any(Ds.class)))
-                .thenReturn(dsPageList);
-
-        IPage<Ds> dss = dsService.findDss(new Page<>(), new Ds());
-
-        assertThat(dss.getRecords(), iterableWithSize(3));
-        assertThat(dss.getRecords(), hasItems(hasProperty("username", equalTo("zhangsan")),
-                hasProperty("username", equalTo("lisi")),
-                hasProperty("username", equalTo("wangwu"))));
-    }
+//    @Test
+//    public void givenNothing_whenFindAllDs_thenSuccess() {
+//        when(dsMapper.selectDsPage(any(Page.class), any(Ds.class)))
+//                .thenReturn(dsPageList);
+//
+//        IPage<Ds> dss = dsService.findDss(new Page<>(), new Ds());
+//
+//        assertThat(dss.getRecords(), iterableWithSize(3));
+//        assertThat(dss.getRecords(), hasItems(hasProperty("username", equalTo("zhangsan")),
+//                hasProperty("username", equalTo("lisi")),
+//                hasProperty("username", equalTo("wangwu"))));
+//    }
 
     @Test
     public void givenDsId_whenFindDs_thenSuccess() {
