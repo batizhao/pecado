@@ -130,7 +130,7 @@ public class FileServiceUnitTest extends BaseServiceUnitTest {
 
         File file = new File().setFileName("hexFileName").setName("filename")
                 .setSize(100L).setUrl("xxx/test2.txt")
-                .setCreatedTime(LocalDateTime.now());
+                .setCreateTime(LocalDateTime.now());
 
         doReturn(file).when(fileService).upload(any(MockMultipartFile.class));
         doReturn(true).when(service).save(any(File.class));

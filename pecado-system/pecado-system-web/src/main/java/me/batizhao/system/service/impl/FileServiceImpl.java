@@ -68,7 +68,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         //只返回文件名给前端，不包括路径
         return new File().setFileName(hexFileName).setName(filename)
                 .setSize(file.getSize()).setUrl(this.rootLocation.toString())
-                .setCreatedTime(LocalDateTime.now());
+                .setCreateTime(LocalDateTime.now());
     }
 
     @Override

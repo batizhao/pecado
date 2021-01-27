@@ -60,7 +60,7 @@ public class UserVO implements Serializable {
     private Integer locked;
 
     @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 
     /**
      * 角色列表

@@ -12,7 +12,7 @@
         <result column="avatar" property="avatar"/>
         <result column="unreadCount" property="unreadCount"/>
         <result column="locked" property="locked"/>
-        <result column="createdTime" property="createdTime"/>
+        <result column="createTime" property="createTime"/>
 <!--        <collection property="roleList" ofType="me.batizhao.ims.api.vo.RoleVO"-->
 <!--                    select="me.batizhao.ims.mapper.findRolesByUserId" column="id">-->
 <!--        </collection>-->
@@ -27,7 +27,7 @@
             u.avatar,
             u.unreadCount,
             u.locked,
-            u.createdTime
+            u.createTime
         FROM
         user AS u
         <where>
@@ -35,7 +35,7 @@
                 and u.username LIKE CONCAT('%',#{user.username},'%')
             </if>
         </where>
-        ORDER BY u.createdTime DESC
+        ORDER BY u.createTime DESC
     </select>
 
 </mapper>

@@ -90,7 +90,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(hashPass);
 
         if (user.getId() == null) {
-            user.setCreatedTime(LocalDateTime.now());
+            user.setCreateTime(LocalDateTime.now());
             userMapper.insert(user);
         } else {
             userMapper.updateById(user);

@@ -11,8 +11,8 @@
     <result property="username" column="username"/>
     <result property="password" column="password"/>
     <result property="status" column="status"/>
-    <result property="createdTime" column="createdTime"/>
-    <result property="updatedTime" column="updatedTime"/>
+    <result property="createTime" column="createTime"/>
+    <result property="updateTime" column="updateTime"/>
   </resultMap>
 
 <!--  <select id="selectDsPage" resultMap="dsMap">-->

@@ -65,13 +65,13 @@ public class Ds extends Model<Ds> {
      * 创建时间
      */
     @ApiModelProperty(value="创建时间")
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
     @ApiModelProperty(value="修改时间")
-    private LocalDateTime updatedTime;
+    private LocalDateTime updateTime;
 
     
 }

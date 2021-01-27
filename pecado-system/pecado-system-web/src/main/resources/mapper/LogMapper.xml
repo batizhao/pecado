@@ -16,7 +16,7 @@
         <result column="username" property="username"/>
         <result column="url" property="url"/>
         <result column="ip" property="ip"/>
-        <result column="createdTime" property="createdTime"/>
+        <result column="createTime" property="createTime"/>
     </resultMap>
 
     <select id="selectLogPage" resultMap="baseResultMap">
@@ -32,7 +32,7 @@
             l.username,
             l.url,
             l.ip,
-            l.createdTime,
+            l.createTime,
             l.result
         FROM
         log AS l

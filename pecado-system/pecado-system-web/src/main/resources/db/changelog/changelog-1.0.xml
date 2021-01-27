@@ -36,7 +36,7 @@
             <column name="ip" type="VARCHAR(255)" remarks="操作IP">
                 <constraints nullable="false"/>
             </column>
-            <column name="createdTime" type="datetime" remarks="操作时间">
+            <column name="createTime" type="datetime" remarks="操作时间">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -59,7 +59,7 @@
             <column name="size" type="BIGINT" remarks="大小"/>
             <column name="url" type="VARCHAR(255)" remarks="url"/>
             <column name="thumbUrl" type="VARCHAR(255)" remarks="缩略图 url"/>
-            <column name="createdTime" type="datetime" remarks="操作时间">
+            <column name="createTime" type="datetime" remarks="操作时间">
                 <constraints nullable="false"/>
             </column>
         </createTable>

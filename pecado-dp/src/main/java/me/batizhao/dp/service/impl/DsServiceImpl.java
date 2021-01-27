@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import liquibase.pro.packaged.L;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.DataSourceException;
 import me.batizhao.common.core.exception.NotFoundException;
@@ -82,8 +81,8 @@ public class DsServiceImpl extends ServiceImpl<DsMapper, Ds> implements DsServic
             // 添加动态数据源
             addDynamicDataSource(ds);
 
-            ds.setCreatedTime(LocalDateTime.now());
-            ds.setUpdatedTime(LocalDateTime.now());
+            ds.setCreateTime(LocalDateTime.now());
+            ds.setUpdateTime(LocalDateTime.now());
             ds.setPassword(stringEncryptor.encrypt(ds.getPassword()));
             dsMapper.insert(ds);
         } else {
@@ -94,7 +93,7 @@ public class DsServiceImpl extends ServiceImpl<DsMapper, Ds> implements DsServic
             // 再添加
             addDynamicDataSource(ds);
 
-            ds.setUpdatedTime(LocalDateTime.now());
+            ds.setUpdateTime(LocalDateTime.now());
             if (StrUtil.isNotBlank(ds.getPassword())) {
                 ds.setPassword(stringEncryptor.encrypt(ds.getPassword()));
             }

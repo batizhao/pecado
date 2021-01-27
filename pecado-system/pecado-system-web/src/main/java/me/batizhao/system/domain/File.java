@@ -48,7 +48,7 @@ public class File implements Serializable {
     private String thumbUrl;
 
     @ApiModelProperty(value = "操作时间")
-    @NotNull(message = "createdTime is not blank")
-    private LocalDateTime createdTime;
+    @NotNull(message = "createTime is not blank")
+    private LocalDateTime createTime;
 
 }

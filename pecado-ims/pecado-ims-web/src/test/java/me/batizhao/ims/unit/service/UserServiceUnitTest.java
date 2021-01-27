@@ -13,7 +13,6 @@ import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.service.impl.UserServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,7 +200,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         assertThat(bool, equalTo(true));
 
         user_test_data.setPassword(hashPass);
-        user_test_data.setCreatedTime(LocalDateTime.now());
+        user_test_data.setCreateTime(LocalDateTime.now());
         log.info("user_test_data: {}", user_test_data);
 
         //这里注意 saveOrUpdate 是第三方的方法，所以用了 spy 对 UserService 做了个 mock

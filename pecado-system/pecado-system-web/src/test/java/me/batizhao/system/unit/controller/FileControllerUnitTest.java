@@ -51,7 +51,7 @@ public class FileControllerUnitTest extends BaseControllerUnitTest {
 
         File file = new File().setFileName("hexFileName").setName("filename")
                 .setSize(100L).setUrl("xxx/test2.txt")
-                .setCreatedTime(LocalDateTime.now());
+                .setCreateTime(LocalDateTime.now());
 
         when(fileService.upload(any(MultipartFile.class))).thenReturn(file);
 

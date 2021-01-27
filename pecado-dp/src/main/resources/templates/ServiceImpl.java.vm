@@ -45,11 +45,11 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     @Transactional
     public ${className} saveOrUpdate${className}(${className} ${classname}) {
         if (${classname}.getId() == null) {
-            ${classname}.setCreatedTime(LocalDateTime.now());
-            ${classname}.setUpdatedTime(LocalDateTime.now());
+            ${classname}.setCreateTime(LocalDateTime.now());
+            ${classname}.setUpdateTime(LocalDateTime.now());
             ${classname}Mapper.insert(${classname});
         } else {
-            ${classname}.setUpdatedTime(LocalDateTime.now());
+            ${classname}.setUpdateTime(LocalDateTime.now());
             ${classname}Mapper.updateById(${classname});
         }
 

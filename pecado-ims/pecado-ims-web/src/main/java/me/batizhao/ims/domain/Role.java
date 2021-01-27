@@ -46,5 +46,5 @@ public class Role implements Serializable {
     private String description;
 
     @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 }

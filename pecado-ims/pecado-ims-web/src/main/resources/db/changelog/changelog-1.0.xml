@@ -46,7 +46,7 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="description" type="VARCHAR(255)" remarks="角色描述"/>
-            <column name="createdTime" type="datetime" remarks="创建时间">
+            <column name="createTime" type="datetime" remarks="创建时间">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -88,7 +88,7 @@
                     defaultValue="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"/>
             <column name="unreadCount" type="INT" remarks="未读消息数量" defaultValue="0"/>
             <column name="locked" type="INT" remarks="是否锁定" defaultValue="0"/>
-            <column name="createdTime" type="datetime" remarks="创建时间">
+            <column name="createTime" type="datetime" remarks="创建时间">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -215,13 +215,13 @@
             <column name="id" valueNumeric="1"/>
             <column name="name" value="普通用户"/>
             <column name="code" value="ROLE_USER"/>
-            <column name="createdTime" value="2020-07-29 10:00:00"/>
+            <column name="createTime" value="2020-07-29 10:00:00"/>
         </insert>
         <insert tableName="role">
             <column name="id" valueNumeric="2"/>
             <column name="name" value="系统管理员"/>
             <column name="code" value="ROLE_ADMIN"/>
-            <column name="createdTime" value="2020-07-29 10:00:05"/>
+            <column name="createTime" value="2020-07-29 10:00:05"/>
         </insert>
         <rollback>
             delete from role where id = 1;
@@ -289,7 +289,7 @@
             <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
             <column name="email" value="admin@qq.com"/>
             <column name="name" value="系统管理员"/>
-            <column name="createdTime" value="2016-09-29 10:00:00"/>
+            <column name="createTime" value="2016-09-29 10:00:00"/>
         </insert>
         <insert tableName="user">
             <column name="id" valueNumeric="2"/>
@@ -297,7 +297,7 @@
             <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
             <column name="email" value="tom@qq.com"/>
             <column name="name" value="张老师"/>
-            <column name="createdTime" value="2016-09-29 10:00:00"/>
+            <column name="createTime" value="2016-09-29 10:00:00"/>
         </insert>
         <insert tableName="user">
             <column name="id" valueNumeric="3"/>
@@ -305,7 +305,7 @@
             <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
             <column name="email" value="jerry@qq.com"/>
             <column name="name" value="李老师"/>
-            <column name="createdTime" value="2016-09-29 10:00:00"/>
+            <column name="createTime" value="2016-09-29 10:00:00"/>
         </insert>
         <insert tableName="user">
             <column name="id" valueNumeric="4"/>
@@ -313,7 +313,7 @@
             <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
             <column name="email" value="john@qq.com"/>
             <column name="name" value="王约翰"/>
-            <column name="createdTime" value="2016-09-29 10:00:00"/>
+            <column name="createTime" value="2016-09-29 10:00:00"/>
         </insert>
         <insert tableName="user">
             <column name="id" valueNumeric="5"/>
@@ -321,7 +321,7 @@
             <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
             <column name="email" value="bob@qq.com"/>
             <column name="name" value="孙波波"/>
-            <column name="createdTime" value="2016-09-29 10:00:00"/>
+            <column name="createTime" value="2016-09-29 10:00:00"/>
         </insert>
         <insert tableName="user">
             <column name="id" valueNumeric="6"/>
@@ -329,7 +329,7 @@
             <column name="password" value="$2a$10$rFoOrbWD2p.1CjBoBqTeaOUgpxFmtZknsDEvF78AsMXvsxU1AyAZu"/>
             <column name="email" value="bob2@qq.com"/>
             <column name="name" value="孙波波"/>
-            <column name="createdTime" value="2016-09-29 10:00:00"/>
+            <column name="createTime" value="2016-09-29 10:00:00"/>
         </insert>
         <rollback>
             delete from user where id = 1;

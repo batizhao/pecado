@@ -80,8 +80,8 @@ public class LogDTO implements Serializable {
     private String ip;
 
     @ApiModelProperty(value = "操作时间")
-    @NotNull(message = "createdTime is not blank")
+    @NotNull(message = "createTime is not blank")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 }
