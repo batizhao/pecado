@@ -1,11 +1,12 @@
-package ${package}.unit.service;
+package ${package}.${moduleName}.unit.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import ${package}.domain.${className};
-import ${package}.mapper.${className}Mapper;
-import ${package}.service.${className}Service;
-import ${package}.service.impl.${className}ServiceImpl;
+import ${package}.${moduleName}.domain.${className};
+import ${package}.${moduleName}.mapper.${className}Mapper;
+import ${package}.${moduleName}.service.${className}Service;
+import ${package}.${moduleName}.service.impl.${className}ServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
     private ${className}Service ${classname}Service;
 
     private List<${className}> ${classname}List;
-    private IPage<${className}> ${classname}PageList;
+    private Page<${className}> ${classname}PageList;
 
     /**
      * Prepare test data.
@@ -65,7 +66,7 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenNothing_whenFindAll${className}_thenSuccess() {
-        when(${classname}Mapper.select${className}Page(any(Page.class), any(${className}.class)))
+        when(${classname}Mapper.selectPage(any(Page.class), any(Wrapper.class)))
                 .thenReturn(${classname}PageList);
 
         IPage<${className}> ${classname}s = ${classname}Service.find${className}s(new Page<>(), new ${className}());

@@ -1,12 +1,14 @@
-package ${package}.service.impl;
+package ${package}.${moduleName}.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
-import ${package}.domain.${className};
-import ${package}.mapper.${className}Mapper;
-import ${package}.service.${className}Service;
+import ${package}.${moduleName}.domain.${className};
+import ${package}.${moduleName}.mapper.${className}Mapper;
+import ${package}.${moduleName}.service.${className}Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 /**
- * ${comments}
+ * ${comments}接口实现类
  *
  * @author ${author}
  * @since ${date}
@@ -27,11 +29,12 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
 
     @Override
     public IPage<${className}> find${className}s(Page<${className}> page, ${className} ${classname}) {
-        return ${classname}Mapper.select${className}Page(page, ${classname});
+        LambdaQueryWrapper<${className}> wrapper = Wrappers.lambdaQuery();
+        return ${classname}Mapper.selectPage(page, wrapper);
     }
 
     @Override
-    public ${className} findById(${pk.attrType} id) {
+    public ${className} findById(${pk.javaType} id) {
         ${className} ${classname} = ${classname}Mapper.selectById(id);
 
         if(${classname} == null) {

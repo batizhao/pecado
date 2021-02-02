@@ -1,12 +1,12 @@
-package ${package}.service;
+package ${package}.${moduleName}.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import ${package}.domain.${className};
+import ${package}.${moduleName}.domain.${className};
 
 /**
- * ${comments}
+ * ${comments}接口类
  *
  * @author ${author}
  * @since ${date}
@@ -23,16 +23,16 @@ public interface ${className}Service extends IService<${className}> {
 
     /**
      * 通过id查询${comments}
-     * @param ${pk.lowerAttrName} id
+     * @param ${pk.javaField} id
      * @return ${className}
      */
-    ${className} findById(${pk.attrType} id);
+    ${className} findById(${pk.javaType} id);
 
     /**
      * 添加或修改${comments}
      * @param ${classname} ${comments}
      * @return ResponseInfo
      */
-     ${className} saveOrUpdate${className}(${className} ${classname});
+    ${className} saveOrUpdate${className}(${className} ${classname});
 
 }

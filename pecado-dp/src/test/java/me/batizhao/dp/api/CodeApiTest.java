@@ -2,16 +2,14 @@ package me.batizhao.dp.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.dp.domain.Ds;
+import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.GenConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -32,6 +30,71 @@ public class CodeApiTest extends BaseApiTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Test
+    public void givenId_whenFindCode_thenSuccess() throws Exception {
+        mvc.perform(get("/code/{id}", 1L)
+                .header("Authorization", adminAccessToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
+    }
+
+    @Test
+    public void givenNothing_whenFindAllCode_thenSuccess() throws Exception {
+        mvc.perform(get("/codes")
+                .header("Authorization", adminAccessToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
+    }
+
+    @Test
+    @Transactional
+    public void givenJson_whenSaveCode_thenSuccess() throws Exception {
+        Code requestBody = new Code()
+                .setTableName("daxia").setTableComment("daxia@gmail.com");
+
+        mvc.perform(post("/code")
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", adminAccessToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.id", notNullValue()));
+    }
+
+    @Test
+    @Transactional
+    public void givenJson_whenUpdateCode_thenSuccess() throws Exception {
+        Code requestBody = new Code()
+                .setId(1L).setTableName("daxia").setTableComment("daxia@gmail.com");
+
+        mvc.perform(post("/code")
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", adminAccessToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
+    }
+
+    @Test
+    @Transactional
+    public void givenId_whenDeleteCode_thenSuccess() throws Exception {
+        mvc.perform(delete("/code").param("ids", "1,2")
+                .header("Authorization", adminAccessToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+    }
 
     @Test
     public void givenConfig_whenGenerateCode_thenSuccess() throws Exception {

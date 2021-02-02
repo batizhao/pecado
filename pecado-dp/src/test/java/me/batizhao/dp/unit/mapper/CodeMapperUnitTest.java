@@ -3,6 +3,7 @@ package me.batizhao.dp.unit.mapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.mapper.CodeMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author batizhao
@@ -25,8 +25,8 @@ public class CodeMapperUnitTest extends BaseMapperUnitTest {
     CodeMapper codeMapper;
 
     @Test
-    public void testSelectTableByDs() {
-        IPage<Map<String, String>> result = codeMapper.selectTableByDs(new Page<>(), "");
+    public void testSelectTablePageByDs() {
+        IPage<Code> result = codeMapper.selectTablePageByDs(new Page<>(), new Code());
 
         log.info("table: {}", result.getRecords());
 

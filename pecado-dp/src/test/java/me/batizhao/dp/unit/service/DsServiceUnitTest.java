@@ -3,6 +3,7 @@ package me.batizhao.dp.unit.service;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.creator.DataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.batizhao.common.core.exception.DataSourceException;
@@ -70,7 +71,7 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
     private DsService dsService2;
 
     private List<Ds> dsList;
-    private IPage<Ds> dsPageList;
+    private Page<Ds> dsPageList;
 
     /**
      * Prepare test data.
@@ -86,18 +87,18 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
         dsPageList.setRecords(dsList);
     }
 
-//    @Test
-//    public void givenNothing_whenFindAllDs_thenSuccess() {
-//        when(dsMapper.selectDsPage(any(Page.class), any(Ds.class)))
-//                .thenReturn(dsPageList);
-//
-//        IPage<Ds> dss = dsService.findDss(new Page<>(), new Ds());
-//
-//        assertThat(dss.getRecords(), iterableWithSize(3));
-//        assertThat(dss.getRecords(), hasItems(hasProperty("username", equalTo("zhangsan")),
-//                hasProperty("username", equalTo("lisi")),
-//                hasProperty("username", equalTo("wangwu"))));
-//    }
+    @Test
+    public void givenNothing_whenFindAllDs_thenSuccess() {
+        when(dsMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(dsPageList);
+
+        IPage<Ds> dss = dsService.findDss(new Page<>(), new Ds());
+
+        assertThat(dss.getRecords(), iterableWithSize(3));
+        assertThat(dss.getRecords(), hasItems(hasProperty("username", equalTo("zhangsan")),
+                hasProperty("username", equalTo("lisi")),
+                hasProperty("username", equalTo("wangwu"))));
+    }
 
     @Test
     public void givenDsId_whenFindDs_thenSuccess() {

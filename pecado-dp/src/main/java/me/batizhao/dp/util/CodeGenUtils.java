@@ -22,9 +22,8 @@ import cn.hutool.core.util.CharsetUtil;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.dp.domain.ColumnEntity;
-import me.batizhao.dp.domain.GenConfig;
-import me.batizhao.dp.domain.TableEntity;
+import me.batizhao.common.core.constant.GenConstants;
+import me.batizhao.dp.domain.*;
 import me.batizhao.common.core.constant.PecadoConstants;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -34,6 +33,7 @@ import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -41,6 +41,7 @@ import org.apache.velocity.app.Velocity;
 import java.io.File;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -88,26 +89,222 @@ public class CodeGenUtils {
     private final String AVUE_CRUD_JS_VM = "avue/crud.js.vm";
 
     /**
+     * 初始化数据
+     * @param code 生成代码
+     */
+    public static void initData(Code code) {
+        code.setClassName(columnToJava(code.getTableName()));
+        code.setClassComment(replaceText(code.getTableComment()));
+        code.setClassAuthor("batizhao");
+        code.setModuleName("system");
+        code.setPackageName("me.batizhao");
+        code.setTemplate("crud");
+        code.setCreateTime(LocalDateTime.now());
+        code.setUpdateTime(LocalDateTime.now());
+    }
+
+    /**
+     * 初始化列属性字段
+     * @param codeMeta
+     */
+    public static void initColumnField(CodeMeta codeMeta) {
+        String dataType = getDbType(codeMeta.getColumnType());
+        String columnName = codeMeta.getColumnName();
+        // 设置java字段名
+        codeMeta.setJavaField(getJavaField(columnName));
+        // 设置默认类型
+        codeMeta.setJavaType(GenConstants.TYPE_STRING);
+
+        if (arraysContains(GenConstants.COLUMNTYPE_STR, dataType) || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType))
+        {
+            // 字符串长度超过500设置为文本域
+            Integer columnLength = getColumnLength(codeMeta.getColumnType());
+            String htmlType = columnLength >= 500 || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType) ? GenConstants.HTML_TEXTAREA : GenConstants.HTML_INPUT;
+            codeMeta.setHtmlType(htmlType);
+        }
+        else if (arraysContains(GenConstants.COLUMNTYPE_TIME, dataType))
+        {
+            codeMeta.setJavaType(GenConstants.TYPE_DATE);
+            codeMeta.setHtmlType(GenConstants.HTML_DATETIME);
+        }
+        else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER, dataType))
+        {
+            codeMeta.setHtmlType(GenConstants.HTML_INPUT);
+
+            // 如果是浮点型 统一用BigDecimal
+            String[] str = StringUtils.split(StringUtils.substringBetween(codeMeta.getColumnType(), "(", ")"), ",");
+            if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0)
+            {
+                codeMeta.setJavaType(GenConstants.TYPE_BIGDECIMAL);
+            }
+            // 如果是整形
+            else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10)
+            {
+                codeMeta.setJavaType(GenConstants.TYPE_INTEGER);
+            }
+            // 长整形
+            else
+            {
+                codeMeta.setJavaType(GenConstants.TYPE_LONG);
+            }
+        }
+
+        // 插入字段
+        if (!arraysContains(GenConstants.COLUMNNAME_NOT_SAVE, columnName) && !codeMeta.getPrimaryKey())
+        {
+            codeMeta.setSave(true);
+        }
+        // 编辑字段
+        if (!arraysContains(GenConstants.COLUMNNAME_NOT_EDIT, columnName) && !codeMeta.getPrimaryKey())
+        {
+            codeMeta.setEdit(true);
+        }
+        // 列表字段
+        if (!arraysContains(GenConstants.COLUMNNAME_NOT_LIST, columnName) && !codeMeta.getPrimaryKey())
+        {
+            codeMeta.setDisplay(true);
+        }
+
+        // 默认都不可查
+        codeMeta.setSearch(false);
+
+        // 查询字段类型
+        if (StringUtils.endsWithIgnoreCase(columnName, "name"))
+        {
+            codeMeta.setSearch(true);
+            codeMeta.setSearchType(GenConstants.QUERY_LIKE);
+        }
+        // 状态字段设置单选框
+        if (StringUtils.endsWithIgnoreCase(columnName, "status"))
+        {
+            codeMeta.setHtmlType(GenConstants.HTML_RADIO);
+        }
+        // 类型&性别字段设置下拉框
+        else if (StringUtils.endsWithIgnoreCase(columnName, "type")
+                || StringUtils.endsWithIgnoreCase(columnName, "sex"))
+        {
+            codeMeta.setHtmlType(GenConstants.HTML_SELECT);
+        }
+        // 图片字段设置图片上传控件
+        else if (StringUtils.endsWithIgnoreCase(columnName, "image"))
+        {
+            codeMeta.setHtmlType(GenConstants.HTML_IMAGE_UPLOAD);
+        }
+        // 文件字段设置文件上传控件
+        else if (StringUtils.endsWithIgnoreCase(columnName, "file"))
+        {
+            codeMeta.setHtmlType(GenConstants.HTML_FILE_UPLOAD);
+        }
+        // 内容字段设置富文本控件
+        else if (StringUtils.endsWithIgnoreCase(columnName, "content"))
+        {
+            codeMeta.setHtmlType(GenConstants.HTML_EDITOR);
+        }
+    }
+
+    /**
+     * 关键字替换
+     *
+     * @param text 需要被替换的名字
+     * @return 替换后的名字
+     */
+    public static String replaceText(String text)
+    {
+        return RegExUtils.replaceAll(text, "(?:表|若依)", "");
+    }
+
+    /**
+     * 获取数据库类型字段
+     *
+     * @param columnType 列类型
+     * @return 截取后的列类型
+     */
+    public static String getDbType(String columnType)
+    {
+        if (StringUtils.indexOf(columnType, "(") > 0)
+        {
+            return StringUtils.substringBefore(columnType, "(");
+        }
+        else
+        {
+            return columnType;
+        }
+    }
+
+    /**
+     * 获取Java类型字段
+     *
+     * @param columnName 列名
+     * @return 截取后的列类型
+     */
+    public static String getJavaField(String columnName)
+    {
+        if (StringUtils.indexOf(columnName, "_") > 0)
+        {
+            return StringUtils.uncapitalize(columnToJava(columnName));
+        }
+        else
+        {
+            return columnName;
+        }
+    }
+
+    /**
+     * 校验数组是否包含指定值
+     *
+     * @param arr 数组
+     * @param targetValue 值
+     * @return 是否包含
+     */
+    public static boolean arraysContains(String[] arr, String targetValue)
+    {
+        return Arrays.asList(arr).contains(targetValue);
+    }
+
+    /**
+     * 获取字段长度
+     *
+     * @param columnType 列类型
+     * @return 截取后的列类型
+     */
+    public static Integer getColumnLength(String columnType)
+    {
+        if (StringUtils.indexOf(columnType, "(") > 0)
+        {
+            String length = StringUtils.substringBetween(columnType, "(", ")");
+            return Integer.valueOf(length);
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
      * 配置
      *
      * @return
      */
     private List<String> getTemplates() {
         List<String> templates = new ArrayList<>();
-        templates.add("templates/Entity.java.vm");
-        templates.add("templates/Mapper.java.vm");
-        templates.add("templates/MapperUnitTest.java.vm");
-        templates.add("templates/Mapper.xml.vm");
-        templates.add("templates/Service.java.vm");
-        templates.add("templates/ServiceImpl.java.vm");
-        templates.add("templates/ServiceUnitTest.java.vm");
-        templates.add("templates/Controller.java.vm");
-        templates.add("templates/ControllerUnitTest.java.vm");
-        templates.add("templates/ApiTest.java.vm");
-//		templates.add("templates/menu.sql.vm");
-//		templates.add("template/avue/api.js.vm");
-//		templates.add("template/avue/index.vue.vm");
-//		templates.add("template/avue/crud.js.vm");
+        templates.add("templates/java/Entity.java.vm");
+        templates.add("templates/java/Mapper.java.vm");
+        templates.add("templates/java/Service.java.vm");
+        templates.add("templates/java/ServiceImpl.java.vm");
+        templates.add("templates/java/Controller.java.vm");
+
+        templates.add("templates/xml/Mapper.xml.vm");
+
+        templates.add("templates/test/MapperUnitTest.java.vm");
+        templates.add("templates/test/ServiceUnitTest.java.vm");
+        templates.add("templates/test/ControllerUnitTest.java.vm");
+        templates.add("templates/test/ApiTest.java.vm");
+
+//		templates.add("templates/sql/sql.vm");
+
+//		templates.add("template/js/api.js.vm");
+//		templates.add("template/vue/index.vue.vm");
+//        templates.add("template/vue/index-tree.vue.vm");
         return templates;
     }
 
@@ -115,68 +312,67 @@ public class CodeGenUtils {
      * 生成代码
      */
     @SneakyThrows
-    public void generatorCode(GenConfig genConfig, Map<String, String> table, List<Map<String, String>> columns,
-                              ZipOutputStream zip) {
+    public void generatorCode(Code code, List<CodeMeta> codeMetas, ZipOutputStream zip) {
         // 配置信息
-        Configuration config = getConfig();
-        boolean hasBigDecimal = false;
-        // 表信息
-        TableEntity tableEntity = new TableEntity();
-        tableEntity.setTableName(table.get("tableName"));
-
-        if (StringUtils.isNotBlank(genConfig.getComments())) {
-            tableEntity.setComments(genConfig.getComments());
-        } else {
-            tableEntity.setComments(table.get("tableComment"));
-        }
-
-        String tablePrefix;
-        if (StringUtils.isNotBlank(genConfig.getTablePrefix())) {
-            tablePrefix = genConfig.getTablePrefix();
-        } else {
-            tablePrefix = config.getString("tablePrefix");
-        }
-
-        // 表名转换成Java类名
-        String className = tableToJava(tableEntity.getTableName(), tablePrefix);
-        tableEntity.setCaseClassName(className);
-        tableEntity.setLowerClassName(StringUtils.uncapitalize(className));
-
-        // 列信息
-        List<ColumnEntity> columnList = new ArrayList<>();
-        for (Map<String, String> column : columns) {
-            ColumnEntity columnEntity = new ColumnEntity();
-            columnEntity.setColumnName(column.get("columnName"));
-            columnEntity.setDataType(column.get("dataType"));
-            columnEntity.setComments(column.get("columnComment"));
-            columnEntity.setExtra(column.get("extra"));
-            columnEntity.setNullable("NO".equals(column.get("isNullable")));
-            columnEntity.setColumnType(column.get("columnType"));
-            columnEntity.setHidden(Boolean.FALSE);
-            // 列名转换成Java属性名
-            String attrName = columnEntity.getColumnName();
-            columnEntity.setCaseAttrName(attrName);
-            columnEntity.setLowerAttrName(StringUtils.uncapitalize(attrName));
-
-            // 列的数据类型，转换成Java类型
-            String attrType = config.getString(columnEntity.getDataType(), "unknowType");
-            columnEntity.setAttrType(attrType);
-            if (!hasBigDecimal && "BigDecimal".equals(attrType)) {
-                hasBigDecimal = true;
-            }
-            // 是否主键
-            if ("PRI".equalsIgnoreCase(column.get("columnKey")) && tableEntity.getPk() == null) {
-                tableEntity.setPk(columnEntity);
-            }
-
-            columnList.add(columnEntity);
-        }
-        tableEntity.setColumns(columnList);
-
-        // 没主键，则第一个字段为主键
-        if (tableEntity.getPk() == null) {
-            tableEntity.setPk(tableEntity.getColumns().get(0));
-        }
+//        Configuration config = getConfig();
+//        boolean hasBigDecimal = false;
+//        // 表信息
+//        TableEntity tableEntity = new TableEntity();
+//        tableEntity.setTableName(table.get("tableName"));
+//
+//        if (StringUtils.isNotBlank(genConfig.getComments())) {
+//            tableEntity.setComments(genConfig.getComments());
+//        } else {
+//            tableEntity.setComments(table.get("tableComment"));
+//        }
+//
+//        String tablePrefix;
+//        if (StringUtils.isNotBlank(genConfig.getTablePrefix())) {
+//            tablePrefix = genConfig.getTablePrefix();
+//        } else {
+//            tablePrefix = config.getString("tablePrefix");
+//        }
+//
+//        // 表名转换成Java类名
+//        String className = tableToJava(tableEntity.getTableName(), tablePrefix);
+//        tableEntity.setCaseClassName(className);
+//        tableEntity.setLowerClassName(StringUtils.uncapitalize(className));
+//
+//        // 列信息
+//        List<ColumnEntity> columnList = new ArrayList<>();
+//        for (Map<String, String> column : columns) {
+//            ColumnEntity columnEntity = new ColumnEntity();
+//            columnEntity.setColumnName(column.get("columnName"));
+//            columnEntity.setDataType(column.get("dataType"));
+//            columnEntity.setComments(column.get("columnComment"));
+//            columnEntity.setExtra(column.get("extra"));
+//            columnEntity.setNullable("NO".equals(column.get("isNullable")));
+//            columnEntity.setColumnType(column.get("columnType"));
+//            columnEntity.setHidden(Boolean.FALSE);
+//            // 列名转换成Java属性名
+//            String attrName = columnEntity.getColumnName();
+//            columnEntity.setCaseAttrName(attrName);
+//            columnEntity.setLowerAttrName(StringUtils.uncapitalize(attrName));
+//
+//            // 列的数据类型，转换成Java类型
+//            String attrType = config.getString(columnEntity.getDataType(), "unknowType");
+//            columnEntity.setAttrType(attrType);
+//            if (!hasBigDecimal && "BigDecimal".equals(attrType)) {
+//                hasBigDecimal = true;
+//            }
+//            // 是否主键
+//            if ("PRI".equalsIgnoreCase(column.get("columnKey")) && tableEntity.getPk() == null) {
+//                tableEntity.setPk(columnEntity);
+//            }
+//
+//            columnList.add(columnEntity);
+//        }
+//        tableEntity.setColumns(columnList);
+//
+//        // 没主键，则第一个字段为主键
+//        if (tableEntity.getPk() == null) {
+//            tableEntity.setPk(tableEntity.getColumns().get(0));
+//        }
 
         // 设置velocity资源加载器
         Properties prop = new Properties();
@@ -184,40 +380,19 @@ public class CodeGenUtils {
         Velocity.init(prop);
         // 封装模板数据
         Map<String, Object> map = new HashMap<>(16);
-        map.put("tableName", tableEntity.getTableName());
-        map.put("pk", tableEntity.getPk());
-        map.put("className", tableEntity.getCaseClassName());
-        map.put("classname", tableEntity.getLowerClassName());
-        map.put("pathName", tableEntity.getLowerClassName().toLowerCase());
-        map.put("columns", tableEntity.getColumns());
-        map.put("hasBigDecimal", hasBigDecimal);
+        map.put("tableName", code.getTableName());
+        map.put("pk", codeMetas.get(0));
+        map.put("className", code.getClassName());
+        map.put("classname", StringUtils.uncapitalize(code.getClassName()));
+        map.put("pathName", StringUtils.uncapitalize(code.getClassName()).toLowerCase());
+        map.put("columns", codeMetas);
+//        map.put("hasBigDecimal", hasBigDecimal);
         map.put("date", DateUtil.today());
+        map.put("comments", code.getClassComment());
+        map.put("author", code.getClassAuthor());
+        map.put("moduleName", code.getModuleName());
+        map.put("package", code.getPackageName());
 
-        if (StringUtils.isNotBlank(genConfig.getComments())) {
-            map.put("comments", genConfig.getComments());
-        } else {
-            map.put("comments", tableEntity.getComments());
-        }
-
-        if (StringUtils.isNotBlank(genConfig.getAuthor())) {
-            map.put("author", genConfig.getAuthor());
-        } else {
-            map.put("author", config.getString("author"));
-        }
-
-        if (StringUtils.isNotBlank(genConfig.getModuleName())) {
-            map.put("moduleName", genConfig.getModuleName());
-        } else {
-            map.put("moduleName", config.getString("moduleName"));
-        }
-
-        if (StringUtils.isNotBlank(genConfig.getPackageName())) {
-            map.put("package", genConfig.getPackageName());
-//			map.put("mainPath", genConfig.getPackageName());
-        } else {
-            map.put("package", config.getString("package"));
-//			map.put("mainPath", config.getString("mainPath"));
-        }
         VelocityContext context = new VelocityContext(map);
 
         // 获取模板列表
@@ -239,7 +414,7 @@ public class CodeGenUtils {
             tpl.merge(context, sw);
 
             // 添加到zip
-            zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(template, tableEntity.getCaseClassName(),
+            zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(template, code.getClassName(),
                     map.get("package").toString(), map.get("moduleName").toString()))));
             IoUtil.write(zip, StandardCharsets.UTF_8, false, sw.toString());
             IoUtil.close(sw);
@@ -263,6 +438,27 @@ public class CodeGenUtils {
         }
         return columnToJava(tableName);
     }
+
+    /**
+     * 设置主键列信息
+     *
+     * @param table 业务表信息
+     */
+//    public void setPkColumn(List<CodeMeta> codeMetas)
+//    {
+//        for (CodeMeta column : codeMetas)
+//        {
+//            if (column.getPrimaryKey())
+//            {
+//                table.setPkColumn(column);
+//                break;
+//            }
+//        }
+//        if (org.apache.commons.lang3.StringUtils.isNull(table.getPkColumn()))
+//        {
+//            table.setPkColumn(table.getColumns().get(0));
+//        }
+//    }
 
     /**
      * 获取配置信息
@@ -293,9 +489,9 @@ public class CodeGenUtils {
         String packageTestPath = packageRootPath + "test" + File.separator + "java" + File.separator;
 
         if (StringUtils.isNotBlank(packageName)) {
-//			packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
-            packageSrcPath += packageName.replace(".", File.separator) + File.separator + File.separator;
-            packageTestPath += packageName.replace(".", File.separator) + File.separator + File.separator;
+			String packagePath = packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
+            packageSrcPath += packagePath;
+            packageTestPath += packagePath;
         }
 
         if (template.contains(ENTITY_JAVA_VM)) {
