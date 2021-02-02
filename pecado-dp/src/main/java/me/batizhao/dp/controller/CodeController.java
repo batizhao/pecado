@@ -152,7 +152,18 @@ public class CodeController {
      */
     @ApiOperation(value = "预览")
     @GetMapping("/code/preview/{id}")
-    public ResponseInfo<Map<String, String>> handlePreview(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+    public ResponseInfo<Map<String, String>> handlePreviewCode(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(codeService.previewCode(id));
+    }
+
+    /**
+     * 同步表元数据
+     * @param id Code Id
+     * @return
+     */
+    @ApiOperation(value = "同步表元数据")
+    @PostMapping("/code/sync/{id}")
+    public ResponseInfo<Boolean> handleSyncCodeMeta(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return ResponseInfo.ok(codeService.syncCodeMeta(id));
     }
 }

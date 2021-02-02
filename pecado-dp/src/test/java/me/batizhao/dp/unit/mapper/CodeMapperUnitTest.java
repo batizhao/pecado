@@ -33,27 +33,27 @@ public class CodeMapperUnitTest extends BaseMapperUnitTest {
         assertThat(result.getRecords().size(), greaterThan(0));
     }
 
-    @Test
-    public void testSelectColumnsByTableName() {
-        List<Map<String, String>> result = codeMapper.selectColumnsByTableName("ds", "");
-
-        log.info("ds: {}", result);
-
-        assertThat(result.get(0).get("columnName"), equalTo("id"));
-
-//        result = codeMapper.selectColumnsByTableName("role", "ims");
-
-//        log.info("role: {}", result);
-
+//    @Test
+//    public void testSelectColumnsByTableName() {
+//        List<Map<String, String>> result = codeMapper.selectColumnsByTableName("ds", "");
+//
+//        log.info("ds: {}", result);
+//
 //        assertThat(result.get(0).get("columnName"), equalTo("id"));
-    }
+//
+////        result = codeMapper.selectColumnsByTableName("role", "ims");
+//
+////        log.info("role: {}", result);
+//
+////        assertThat(result.get(0).get("columnName"), equalTo("id"));
+//    }
 
-    @Test
-    public void testSelectMetaByTableName() {
-        Map<String, String> result = codeMapper.selectMetaByTableName("ds", "");
-
-        log.info("table: {}", result);
-
-        assertThat(result.get("tableComment"), equalTo("数据源"));
-    }
+//    @Test
+//    public void testSelectMetaByTableName() {
+//        Map<String, String> result = codeMapper.selectMetaByTableName("ds", "");
+//
+//        log.info("table: {}", result);
+//
+//        assertThat(result.get("tableComment"), equalTo("数据源"));
+//    }
 }

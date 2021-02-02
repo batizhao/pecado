@@ -78,4 +78,11 @@ public interface CodeService extends IService<Code> {
      * @return
      */
     Map<String, String> previewCode(Long id);
+
+    /**
+     * 同步表元数据
+     * @param id
+     * @return
+     */
+    Boolean syncCodeMeta(Long id);
 }

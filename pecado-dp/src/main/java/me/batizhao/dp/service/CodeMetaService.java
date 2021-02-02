@@ -31,7 +31,7 @@ public interface CodeMetaService extends IService<CodeMeta> {
 //    CodeMeta findById(Long id);
 
     /**
-     * 通过 codeId 查询
+     * 通过 codeId 查询表信息
      * @param codeId
      * @return
      */
@@ -45,7 +45,7 @@ public interface CodeMetaService extends IService<CodeMeta> {
 //    CodeMeta saveOrUpdateCodeMeta(CodeMeta codeMeta);
 
     /**
-     * 查询表列信息
+     * 查询表原始信息
      * @param tableName 表名
      * @param dsName 动态数据源名
      * @return
