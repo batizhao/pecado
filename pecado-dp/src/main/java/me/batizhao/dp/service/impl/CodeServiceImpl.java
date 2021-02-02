@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -129,5 +131,12 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
 
         IoUtil.close(zip);
         return outputStream.toByteArray();
+    }
+
+    @Override
+    public Map<String, String> previewCode(Long id) {
+        Code code = this.findById(id);
+        List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
+        return CodeGenUtils.previewCode(code, codeMetas);
     }
 }

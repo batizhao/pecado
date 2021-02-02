@@ -126,6 +126,11 @@ public class CodeController {
         return ResponseInfo.ok(codeService.importTables(codes));
     }
 
+    /**
+     * 生成代码
+     * @param ids
+     * @param response
+     */
     @SneakyThrows
     @ApiOperation(value = "生成代码")
     @PutMapping(value = "code")
@@ -138,5 +143,16 @@ public class CodeController {
         response.setContentType("application/octet-stream; charset=UTF-8");
 
         IoUtil.write(response.getOutputStream(), true, data);
+    }
+
+    /**
+     * 预览代码
+     * @param id Code Id
+     * @return
+     */
+    @ApiOperation(value = "预览")
+    @GetMapping("/code/preview/{id}")
+    public ResponseInfo<Map<String, String>> handlePreview(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return ResponseInfo.ok(codeService.previewCode(id));
     }
 }

@@ -39,6 +39,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -60,7 +61,7 @@ public class CodeGenUtils {
 
     public final String CRUD_PREFIX = "export const tableOption =";
 
-    private final String ENTITY_JAVA_VM = "Entity.java.vm";
+    private final String ENTITY_JAVA_VM = "Domain.java.vm";
 
     private final String MAPPER_JAVA_VM = "Mapper.java.vm";
 
@@ -287,7 +288,7 @@ public class CodeGenUtils {
      */
     private List<String> getTemplates() {
         List<String> templates = new ArrayList<>();
-        templates.add("templates/java/Entity.java.vm");
+        templates.add("templates/java/Domain.java.vm");
         templates.add("templates/java/Mapper.java.vm");
         templates.add("templates/java/Service.java.vm");
         templates.add("templates/java/ServiceImpl.java.vm");
@@ -313,101 +314,42 @@ public class CodeGenUtils {
      */
     @SneakyThrows
     public void generatorCode(Code code, List<CodeMeta> codeMetas, ZipOutputStream zip) {
-        // 配置信息
-//        Configuration config = getConfig();
-//        boolean hasBigDecimal = false;
-//        // 表信息
-//        TableEntity tableEntity = new TableEntity();
-//        tableEntity.setTableName(table.get("tableName"));
-//
-//        if (StringUtils.isNotBlank(genConfig.getComments())) {
-//            tableEntity.setComments(genConfig.getComments());
-//        } else {
-//            tableEntity.setComments(table.get("tableComment"));
-//        }
-//
-//        String tablePrefix;
-//        if (StringUtils.isNotBlank(genConfig.getTablePrefix())) {
-//            tablePrefix = genConfig.getTablePrefix();
-//        } else {
-//            tablePrefix = config.getString("tablePrefix");
-//        }
-//
-//        // 表名转换成Java类名
-//        String className = tableToJava(tableEntity.getTableName(), tablePrefix);
-//        tableEntity.setCaseClassName(className);
-//        tableEntity.setLowerClassName(StringUtils.uncapitalize(className));
-//
-//        // 列信息
-//        List<ColumnEntity> columnList = new ArrayList<>();
-//        for (Map<String, String> column : columns) {
-//            ColumnEntity columnEntity = new ColumnEntity();
-//            columnEntity.setColumnName(column.get("columnName"));
-//            columnEntity.setDataType(column.get("dataType"));
-//            columnEntity.setComments(column.get("columnComment"));
-//            columnEntity.setExtra(column.get("extra"));
-//            columnEntity.setNullable("NO".equals(column.get("isNullable")));
-//            columnEntity.setColumnType(column.get("columnType"));
-//            columnEntity.setHidden(Boolean.FALSE);
-//            // 列名转换成Java属性名
-//            String attrName = columnEntity.getColumnName();
-//            columnEntity.setCaseAttrName(attrName);
-//            columnEntity.setLowerAttrName(StringUtils.uncapitalize(attrName));
-//
-//            // 列的数据类型，转换成Java类型
-//            String attrType = config.getString(columnEntity.getDataType(), "unknowType");
-//            columnEntity.setAttrType(attrType);
-//            if (!hasBigDecimal && "BigDecimal".equals(attrType)) {
-//                hasBigDecimal = true;
-//            }
-//            // 是否主键
-//            if ("PRI".equalsIgnoreCase(column.get("columnKey")) && tableEntity.getPk() == null) {
-//                tableEntity.setPk(columnEntity);
-//            }
-//
-//            columnList.add(columnEntity);
-//        }
-//        tableEntity.setColumns(columnList);
-//
-//        // 没主键，则第一个字段为主键
-//        if (tableEntity.getPk() == null) {
-//            tableEntity.setPk(tableEntity.getColumns().get(0));
-//        }
+        // 封装模板数据
+        Map<String, Object> map = getStringObjectMap(code, codeMetas);
 
         // 设置velocity资源加载器
-        Properties prop = new Properties();
-        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-        Velocity.init(prop);
-        // 封装模板数据
-        Map<String, Object> map = new HashMap<>(16);
-        map.put("tableName", code.getTableName());
-        map.put("pk", codeMetas.get(0));
-        map.put("className", code.getClassName());
-        map.put("classname", StringUtils.uncapitalize(code.getClassName()));
-        map.put("pathName", StringUtils.uncapitalize(code.getClassName()).toLowerCase());
-        map.put("columns", codeMetas);
-//        map.put("hasBigDecimal", hasBigDecimal);
-        map.put("date", DateUtil.today());
-        map.put("comments", code.getClassComment());
-        map.put("author", code.getClassAuthor());
-        map.put("moduleName", code.getModuleName());
-        map.put("package", code.getPackageName());
-
-        VelocityContext context = new VelocityContext(map);
+        VelocityContext context = getVelocityContext(map);
 
         // 获取模板列表
-        List<String> templates = getTemplates();
-        for (String template : templates) {
-//			// 如果是crud
-//			if (template.contains(AVUE_CRUD_JS_VM) && formConf != null) {
-//				zip.putNextEntry(
-//						new ZipEntry(Objects.requireNonNull(getFileName(template, tableEntity.getCaseClassName(),
-//								map.get("package").toString(), map.get("moduleName").toString()))));
-//				IoUtil.write(zip, StandardCharsets.UTF_8, false, CRUD_PREFIX + formConf.getFormInfo());
-//				zip.closeEntry();
-//				continue;
-//			}
+        downloadZip(code, zip, context);
+    }
 
+    /**
+     * 预览代码
+     */
+    @SneakyThrows
+    public Map<String, String> previewCode(Code code, List<CodeMeta> codeMetas) {
+        // 封装模板数据
+        Map<String, Object> map = getStringObjectMap(code, codeMetas);
+
+        // 设置velocity资源加载器
+        VelocityContext context = getVelocityContext(map);
+
+        Map<String, String> dataMap = new LinkedHashMap<>();
+        // 获取模板列表
+        for (String template : getTemplates()) {
+            // 渲染模板
+            StringWriter sw = new StringWriter();
+            Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
+            tpl.merge(context, sw);
+            dataMap.put(template, sw.toString());
+        }
+
+        return dataMap;
+    }
+
+    private void downloadZip(Code code, ZipOutputStream zip, VelocityContext context) throws IOException {
+        for (String template : getTemplates()) {
             // 渲染模板
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
@@ -415,11 +357,35 @@ public class CodeGenUtils {
 
             // 添加到zip
             zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(template, code.getClassName(),
-                    map.get("package").toString(), map.get("moduleName").toString()))));
+                    code.getPackageName(), code.getModuleName()))));
             IoUtil.write(zip, StandardCharsets.UTF_8, false, sw.toString());
             IoUtil.close(sw);
             zip.closeEntry();
         }
+    }
+
+    private VelocityContext getVelocityContext(Map<String, Object> map) {
+        Properties prop = new Properties();
+        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        Velocity.init(prop);
+        VelocityContext context = new VelocityContext(map);
+        return context;
+    }
+
+    private Map<String, Object> getStringObjectMap(Code code, List<CodeMeta> codeMetas) {
+        Map<String, Object> map = new HashMap<>(11);
+        map.put("tableName", code.getTableName());
+        map.put("pk", codeMetas.get(0));
+        map.put("className", code.getClassName());
+        map.put("classname", StringUtils.uncapitalize(code.getClassName()));
+        map.put("pathName", StringUtils.uncapitalize(code.getClassName()).toLowerCase());
+        map.put("columns", codeMetas);
+        map.put("date", DateUtil.today());
+        map.put("comments", code.getClassComment());
+        map.put("author", code.getClassAuthor());
+        map.put("moduleName", code.getModuleName());
+        map.put("package", code.getPackageName());
+        return map;
     }
 
     /**

@@ -71,4 +71,11 @@ public interface CodeService extends IService<Code> {
      * @return byte[]
      */
     byte[] generateCode(List<Long> ids);
+
+    /**
+     * 预览代码
+     * @param id Code Id
+     * @return
+     */
+    Map<String, String> previewCode(Long id);
 }
