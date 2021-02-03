@@ -74,7 +74,7 @@ public class MenuController {
     @ApiOperation(value = "查询所有菜单")
     @SystemLog
     @GetMapping("/menus")
-    public ResponseInfo<List<MenuTree>> handleMenuTree() {
+    public ResponseInfo<List<MenuVO>> handleMenuTree() {
         return ResponseInfo.ok(menuService.findMenuTree());
     }
 
@@ -104,6 +104,19 @@ public class MenuController {
     public ResponseInfo<MenuVO> handleSaveOrUpdate(@Valid @ApiParam(value = "菜单", required = true) @RequestBody Menu menu) {
         MenuVO menuVO = menuService.saveOrUpdateMenu(menu);
         return ResponseInfo.ok(menuVO);
+    }
+
+    /**
+     * 更新菜单状态
+     *
+     * @param ds 菜单
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "更新菜单状态")
+    @PostMapping("/menu/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "菜单" , required = true) @RequestBody Menu menu) {
+        return ResponseInfo.ok(menuService.updateMenuStatus(menu));
     }
 
 }

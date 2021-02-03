@@ -11,18 +11,18 @@ CREATE DATABASE IF NOT EXISTS `pecado-test`;
 USE `pecado-dp`;
 
 CREATE TABLE `ds` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(64) NOT NULL COMMENT '名称',
   `url` varchar(255) NOT NULL COMMENT 'url',
   `username` varchar(64) NOT NULL COMMENT '用户名',
   `password` varchar(64) NOT NULL COMMENT '密码',
-  `status` int DEFAULT '0' COMMENT '是否可用',
-  `createTime` datetime NOT NULL COMMENT '创建时间',
-  `updateTime` datetime NOT NULL COMMENT '修改时间',
+  `status` tinyint(1) DEFAULT '1' COMMENT '是否可用',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `url` (`url`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='数据源';
+) COMMENT='数据源';
 
 INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`, `createTime`, `updateTime`)
 VALUES

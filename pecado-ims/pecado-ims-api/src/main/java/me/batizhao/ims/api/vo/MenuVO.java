@@ -10,6 +10,7 @@ import me.batizhao.ims.api.dto.TreeNode;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 构建菜单和路由数据
@@ -45,6 +46,24 @@ public class MenuVO extends TreeNode implements Serializable {
 
     @ApiModelProperty(value = "排序", example = "1")
     private Integer sort;
+
+    /**
+     * 是否可用
+     */
+    @ApiModelProperty(value="是否可用")
+    private Boolean status;
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value="创建时间")
+    private LocalDateTime createTime;
+
+    /**
+     * 修改时间
+     */
+    @ApiModelProperty(value="修改时间")
+    private LocalDateTime updateTime;
 
     public MenuVO() {
     }

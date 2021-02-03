@@ -91,8 +91,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         if (user.getId() == null) {
             user.setCreateTime(LocalDateTime.now());
+            user.setUpdateTime(LocalDateTime.now());
             userMapper.insert(user);
         } else {
+            user.setUpdateTime(LocalDateTime.now());
             userMapper.updateById(user);
         }
 

@@ -62,9 +62,24 @@ public class User implements Serializable {
     @ApiModelProperty(value = "未读消息数量", example = "99")
     private Integer unreadCount;
 
-    @ApiModelProperty(value = "是否锁定", example = "0")
-    private Integer locked;
+//    @ApiModelProperty(value = "是否锁定", example = "0")
+//    private Integer locked;
 
-    @ApiModelProperty(value = "创建时间")
+    /**
+     * 是否可用
+     */
+    @ApiModelProperty(value="是否可用")
+    private Boolean status;
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value="创建时间")
     private LocalDateTime createTime;
+
+    /**
+     * 修改时间
+     */
+    @ApiModelProperty(value="修改时间")
+    private LocalDateTime updateTime;
 }

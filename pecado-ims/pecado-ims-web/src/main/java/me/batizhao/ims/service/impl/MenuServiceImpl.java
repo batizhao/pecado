@@ -1,12 +1,11 @@
 package me.batizhao.ims.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.common.core.util.BeanCopyUtil;
-import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.util.TreeUtil;
-import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
@@ -17,7 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -53,19 +56,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public List<MenuTree> findMenuTree() {
+    public List<MenuVO> findMenuTree() {
         List<Menu> menus = menuMapper.selectList(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getSort));
-        List<MenuTree> menuTrees = new ArrayList<>();
-        MenuTree menuTree;
-        for (Menu menu : menus) {
-            menuTree = new MenuTree();
-            menuTree.setTitle(menu.getName());
-            menuTree.setKey(menu.getId().toString());
-            menuTree.setPid(menu.getPid());
-            menuTree.setId(menu.getId());
-            menuTrees.add(menuTree);
-        }
-        return TreeUtil.build(menuTrees, 0);
+//        List<MenuTree> menuTrees = new ArrayList<>();
+//        MenuTree menuTree;
+//        for (Menu menu : menus) {
+//            menuTree = new MenuTree();
+//            menuTree.setTitle(menu.getName());
+//            menuTree.setKey(menu.getId().toString());
+//            menuTree.setPid(menu.getPid());
+//            menuTree.setId(menu.getId());
+//            menuTrees.add(menuTree);
+//        }
+        return TreeUtil.build(BeanCopyUtil.copyListProperties(menus, MenuVO::new), 0);
     }
 
     @Override
@@ -92,8 +95,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Transactional
     public MenuVO saveOrUpdateMenu(Menu menu) {
         if (menu.getId() == null) {
+            menu.setCreateTime(LocalDateTime.now());
+            menu.setUpdateTime(LocalDateTime.now());
             menuMapper.insert(menu);
         } else {
+            menu.setUpdateTime(LocalDateTime.now());
             menuMapper.updateById(menu);
         }
 
@@ -101,5 +107,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         BeanUtils.copyProperties(menu, menuVO);
 
         return menuVO;
+    }
+
+    @Override
+    @Transactional
+    public Boolean updateMenuStatus(Menu menu) {
+        LambdaUpdateWrapper<Menu> wrapper = Wrappers.lambdaUpdate();
+        wrapper.eq(Menu::getId, menu.getId()).set(Menu::getStatus, menu.getStatus());
+        return menuMapper.update(null, wrapper) == 1;
     }
 }

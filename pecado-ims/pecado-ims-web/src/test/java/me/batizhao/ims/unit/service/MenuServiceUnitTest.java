@@ -92,9 +92,9 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
         //Fix can not find lambda cache for this entity
         TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), Menu.class);
 
-        doReturn(menuList).when(menuMapper).selectList(any());
+        doReturn(menuVOList).when(menuMapper).selectList(any());
 
-        List<MenuTree> menuTree = menuService.findMenuTree();
+        List<MenuVO> menuTree = menuService.findMenuTree();
 
         assertThat(menuTree, hasSize(1));
         assertThat(menuTree, hasItems(hasProperty("title", is("工作台")),

@@ -42,8 +42,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         role.setCreateTime(LocalDateTime.now());
 
         if (role.getId() == null) {
+            role.setCreateTime(LocalDateTime.now());
+            role.setUpdateTime(LocalDateTime.now());
             roleMapper.insert(role);
         } else {
+            role.setUpdateTime(LocalDateTime.now());
             roleMapper.updateById(role);
         }
 

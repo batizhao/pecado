@@ -40,7 +40,22 @@ public class RoleVO implements Serializable {
     @ApiModelProperty(value = "说明", example = "This is admin")
     private String description;
 
-    @ApiModelProperty(value = "创建时间")
+    /**
+     * 是否可用
+     */
+    @ApiModelProperty(value="是否可用")
+    private Boolean status;
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value="创建时间")
     private LocalDateTime createTime;
+
+    /**
+     * 修改时间
+     */
+    @ApiModelProperty(value="修改时间")
+    private LocalDateTime updateTime;
 
 }

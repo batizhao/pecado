@@ -16,6 +16,6 @@ public interface UserMapper extends BaseMapper<User> {
 
     IPage<UserVO> selectUserPage(Page<UserVO> page, @Param("user") User user);
 
-    @Update("update user set locked = #{locked} where id= #{id}")
-    int updateUserStatusById(@Param("id") Long id, @Param("locked") Integer locked);
+    @Update("update user set status = #{status} where id= #{id}")
+    int updateUserStatusById(@Param("id") Long id, @Param("status") Integer status);
 }

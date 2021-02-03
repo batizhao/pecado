@@ -59,7 +59,7 @@ public class Ds extends Model<Ds> {
      * 是否可用
      */
     @ApiModelProperty(value="是否可用")
-    private Integer status;
+    private Boolean status;
 
     /**
      * 创建时间
@@ -73,5 +73,4 @@ public class Ds extends Model<Ds> {
     @ApiModelProperty(value="修改时间")
     private LocalDateTime updateTime;
 
-    
 }

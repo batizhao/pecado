@@ -41,7 +41,7 @@ public interface MenuService extends IService<Menu> {
      * 查询所有菜单
      * @return 菜单树
      */
-    List<MenuTree> findMenuTree();
+    List<MenuVO> findMenuTree();
 
     /**
      * 构造菜单树
@@ -64,4 +64,11 @@ public interface MenuService extends IService<Menu> {
      * @return
      */
     MenuVO saveOrUpdateMenu(Menu menu);
+
+    /**
+     * 更新菜单状态
+     * @param menu 菜单信息
+     * @return Boolean
+     */
+    Boolean updateMenuStatus(Menu menu);
 }

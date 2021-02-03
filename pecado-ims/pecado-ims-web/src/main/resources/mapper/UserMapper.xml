@@ -11,8 +11,9 @@
         <result column="name" property="name"/>
         <result column="avatar" property="avatar"/>
         <result column="unreadCount" property="unreadCount"/>
-        <result column="locked" property="locked"/>
-        <result column="createTime" property="createTime"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
 <!--        <collection property="roleList" ofType="me.batizhao.ims.api.vo.RoleVO"-->
 <!--                    select="me.batizhao.ims.mapper.findRolesByUserId" column="id">-->
 <!--        </collection>-->
@@ -26,7 +27,7 @@
             u.name,
             u.avatar,
             u.unreadCount,
-            u.locked,
+            u.status,
             u.createTime
         FROM
         user AS u

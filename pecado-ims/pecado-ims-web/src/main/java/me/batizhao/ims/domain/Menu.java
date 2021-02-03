@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author batizhao
@@ -50,4 +51,22 @@ public class Menu implements Serializable {
 
     @ApiModelProperty(value = "排序", example = "1")
     private Integer sort;
+
+    /**
+     * 是否可用
+     */
+    @ApiModelProperty(value="是否可用")
+    private Boolean status;
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value="创建时间")
+    private LocalDateTime createTime;
+
+    /**
+     * 修改时间
+     */
+    @ApiModelProperty(value="修改时间")
+    private LocalDateTime updateTime;
 }
