@@ -45,7 +45,7 @@ public class CodeMetaServiceImpl extends ServiceImpl<CodeMetaMapper, CodeMeta> i
 
     @Override
     public List<CodeMeta> findByCodeId(Long codeId) {
-        return codeMetaMapper.selectList(Wrappers.<CodeMeta>query().lambda().eq(CodeMeta::getCodeId, codeId));
+        return codeMetaMapper.selectList(Wrappers.<CodeMeta>query().lambda().eq(CodeMeta::getCodeId, codeId).orderByAsc(CodeMeta::getSort));
     }
 
 //    @Override
