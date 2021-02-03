@@ -53,6 +53,7 @@ public class CodeController {
      */
     @ApiOperation(value = "分页查询")
     @GetMapping("/codes")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<IPage<Code>> handleCodes(Page<Code> page, Code code) {
         return ResponseInfo.ok(codeService.findCodes(page, code));
     }
@@ -65,6 +66,7 @@ public class CodeController {
      */
     @ApiOperation(value = "通过id查询")
     @GetMapping("/code/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Map<String, Object>> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         Code code = codeService.findById(id);
         List<CodeMeta> codeMetas = codeMetaService.findByCodeId(id);
@@ -111,6 +113,7 @@ public class CodeController {
      */
     @ApiOperation(value = "查询数据源下的所有表")
     @GetMapping("/code/tables")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<IPage<Code>> handleCodeTables(Page<Code> page, Code code, String dsName) {
         return ResponseInfo.ok(codeService.findTables(page, code, dsName));
     }
@@ -122,6 +125,7 @@ public class CodeController {
      */
     @ApiOperation(value = "导入选中的表")
     @PostMapping("/code/table")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleImportTables(@RequestBody List<Code> codes) {
         return ResponseInfo.ok(codeService.importTables(codes));
     }
@@ -134,6 +138,7 @@ public class CodeController {
     @SneakyThrows
     @ApiOperation(value = "生成代码")
     @PutMapping(value = "code")
+    @PreAuthorize("hasRole('ADMIN')")
     public void handleGenerateCode(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids, HttpServletResponse response) {
         byte[] data = codeService.generateCode(ids);
         response.reset();
@@ -152,6 +157,7 @@ public class CodeController {
      */
     @ApiOperation(value = "预览")
     @GetMapping("/code/preview/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Map<String, String>> handlePreviewCode(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(codeService.previewCode(id));
     }
@@ -163,6 +169,7 @@ public class CodeController {
      */
     @ApiOperation(value = "同步表元数据")
     @PostMapping("/code/sync/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleSyncCodeMeta(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(codeService.syncCodeMeta(id));
     }

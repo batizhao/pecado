@@ -1,6 +1,5 @@
 package me.batizhao.dp.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -15,7 +14,7 @@ import me.batizhao.dp.mapper.CodeMapper;
 import me.batizhao.dp.service.CodeMetaService;
 import me.batizhao.dp.service.CodeService;
 import me.batizhao.dp.util.CodeGenUtils;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -73,9 +71,18 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
             code.setCreateTime(LocalDateTime.now());
             code.setUpdateTime(LocalDateTime.now());
             codeMapper.insert(code);
+            List<CodeMeta> codeMetas = codeMetaService.findColumnsByTableName(code.getTableName(), code.getDsName());
+            codeMetas.forEach(p -> {
+                p.setCodeId(code.getId());
+                CodeGenUtils.initColumnField(p);
+            });
+            codeMetaService.saveBatch(codeMetas);
         } else {
             code.setUpdateTime(LocalDateTime.now());
             codeMapper.updateById(code);
+            if (CollectionUtils.isNotEmpty(code.getCodeMetaList())) {
+                codeMetaService.updateBatchById(code.getCodeMetaList());
+            }
         }
 
         return code;
@@ -107,16 +114,10 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
     @Override
     @Transactional
     public Boolean importTables(List<Code> codes) {
-        if (codes == null) return true;
+        if (codes == null) return false;
         for (Code c : codes) {
             CodeGenUtils.initData(c);
-            Code code = saveOrUpdateCode(c);
-            List<CodeMeta> codeMetas = codeMetaService.findColumnsByTableName(c.getTableName(), c.getDsName());
-            codeMetas.forEach(p -> {
-                p.setCodeId(code.getId());
-                CodeGenUtils.initColumnField(p);
-            });
-            codeMetaService.saveBatch(codeMetas);
+            saveOrUpdateCode(c);
         }
         return true;
     }
@@ -126,7 +127,7 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
 
-        for(Long i : ids) {
+        for (Long i : ids) {
             Code code = this.findById(i);
             List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
             CodeGenUtils.generatorCode(code, codeMetas, zip);
@@ -151,15 +152,13 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
         List<String> tableColumnNames = codeMetas.stream().map(CodeMeta::getColumnName).collect(Collectors.toList());
 
         List<CodeMeta> dbTableColumns = codeMetaService.findColumnsByTableName(code.getTableName(), code.getDsName());
-        if (CollUtil.isEmpty(dbTableColumns))
-        {
+        if (CollectionUtils.isEmpty(dbTableColumns)) {
             throw new RuntimeException("同步数据失败，原表结构不存在");
         }
         List<String> dbTableColumnNames = dbTableColumns.stream().map(CodeMeta::getColumnName).collect(Collectors.toList());
 
         dbTableColumns.forEach(column -> {
-            if (!tableColumnNames.contains(column.getColumnName()))
-            {
+            if (!tableColumnNames.contains(column.getColumnName())) {
                 column.setCodeId(id);
                 CodeGenUtils.initColumnField(column);
                 codeMetaService.save(column);
@@ -167,8 +166,7 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
         });
 
         List<CodeMeta> delColumns = codeMetas.stream().filter(column -> !dbTableColumnNames.contains(column.getColumnName())).collect(Collectors.toList());
-        if (CollUtil.isNotEmpty(delColumns))
-        {
+        if (CollectionUtils.isNotEmpty(delColumns)) {
             List<Long> ids = delColumns.stream().map(CodeMeta::getId).collect(Collectors.toList());
             codeMetaService.removeByIds(ids);
         }

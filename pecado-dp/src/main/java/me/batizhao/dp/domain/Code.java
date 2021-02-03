@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 生成代码
@@ -110,5 +111,10 @@ public class Code extends Model<Code> {
     @ApiModelProperty(value="修改时间")
     private LocalDateTime updateTime;
 
-    
+    /**
+     * 表元数据
+     */
+    @ApiModelProperty(value="表元数据")
+    private transient List<CodeMeta> codeMetaList;
+
 }

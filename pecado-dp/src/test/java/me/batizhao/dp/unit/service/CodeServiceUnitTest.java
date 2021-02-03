@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.GenConfig;
 import me.batizhao.dp.mapper.CodeMapper;
+import me.batizhao.dp.service.CodeMetaService;
 import me.batizhao.dp.service.CodeService;
 import me.batizhao.dp.service.impl.CodeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +48,8 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
 
     @MockBean
     private CodeMapper codeMapper;
+    @MockBean
+    private CodeMetaService codeMetaService;
 
     @Autowired
     private CodeService codeService;
@@ -86,9 +89,9 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
         IPage<Code> codes = codeService.findCodes(new Page<>(), new Code());
 
         assertThat(codes.getRecords(), iterableWithSize(3));
-        assertThat(codes.getRecords(), hasItems(hasProperty("username", equalTo("zhangsan")),
-                hasProperty("username", equalTo("lisi")),
-                hasProperty("username", equalTo("wangwu"))));
+        assertThat(codes.getRecords(), hasItems(hasProperty("tableName", equalTo("zhangsan")),
+                hasProperty("tableName", equalTo("lisi")),
+                hasProperty("tableName", equalTo("wangwu"))));
     }
 
     @Test

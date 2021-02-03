@@ -8,6 +8,7 @@ import me.batizhao.dp.controller.CodeController;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.domain.GenConfig;
+import me.batizhao.dp.service.CodeMetaService;
 import me.batizhao.dp.service.CodeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,8 @@ public class CodeControllerUnitTest extends BaseControllerUnitTest {
 
     @MockBean
     CodeService codeService;
+    @MockBean
+    private CodeMetaService codeMetaService;
 
     private List<Code> codeList;
     private IPage<Code> codePageList;
