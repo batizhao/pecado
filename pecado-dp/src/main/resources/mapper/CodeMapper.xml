@@ -15,6 +15,8 @@
 		<result property="moduleName" column="moduleName"/>
 		<result property="template" column="template"/>
 		<result property="parentMenuId" column="parentMenuId"/>
+		<result property="type" column="type"/>
+		<result property="path" column="path"/>
 		<result property="options" column="options"/>
 		<result property="createTime" column="createTime"/>
 		<result property="updateTime" column="updateTime"/>

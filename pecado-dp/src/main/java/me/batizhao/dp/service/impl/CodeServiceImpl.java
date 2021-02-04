@@ -123,18 +123,27 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
     }
 
     @Override
-    public byte[] generateCode(List<Long> ids) {
+    public byte[] downloadCode(List<Long> ids) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
 
         for (Long i : ids) {
             Code code = this.findById(i);
             List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
-            CodeGenUtils.generatorCode(code, codeMetas, zip);
+            CodeGenUtils.generateCode(code, codeMetas, zip);
         }
 
         IoUtil.close(zip);
         return outputStream.toByteArray();
+    }
+
+    @Override
+    public Boolean generateCode(Long id) {
+        Code code = this.findById(id);
+        List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
+        CodeGenUtils.generateCode(code, codeMetas);
+
+        return true;
     }
 
     @Override

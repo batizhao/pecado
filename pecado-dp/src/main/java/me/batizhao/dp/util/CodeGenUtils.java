@@ -31,9 +31,10 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -204,12 +205,94 @@ public class CodeGenUtils {
     }
 
     /**
+     * 生成代码到路径
+     */
+    @SneakyThrows
+    public void generateCode(Code code, List<CodeMeta> codeMetas) {
+        // 封装模板数据
+        Map<String, Object> map = getStringObjectMap(code, codeMetas);
+
+        // 设置velocity资源加载器
+        VelocityContext context = getVelocityContext(map);
+
+        // 获取模板列表
+        for (String template : getTemplates()) {
+            if (!StringUtils.containsAny(template, "sql.vm", "api.js.vm", "index.vue.vm", "index-tree.vue.vm"))
+            {
+                // 渲染模板
+                StringWriter sw = new StringWriter();
+                Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
+                tpl.merge(context, sw);
+                try
+                {
+                    String path = getGenPath(code, template);
+                    FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetUtil.UTF_8);
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException("渲染模板失败，表名：" + code.getTableName());
+                }
+            }
+        }
+    }
+
+    /**
+     * 生成代码然后下载
+     */
+    @SneakyThrows
+    public void generateCode(Code code, List<CodeMeta> codeMetas, ZipOutputStream zip) {
+        // 封装模板数据
+        Map<String, Object> map = getStringObjectMap(code, codeMetas);
+
+        // 设置velocity资源加载器
+        VelocityContext context = getVelocityContext(map);
+
+        // 获取模板列表
+        for (String template : getTemplates()) {
+            // 渲染模板
+            StringWriter sw = new StringWriter();
+            Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
+            tpl.merge(context, sw);
+
+            // 添加到zip
+            zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(code, template))));
+            IoUtil.write(zip, StandardCharsets.UTF_8, false, sw.toString());
+            IoUtil.close(sw);
+            zip.closeEntry();
+        }
+    }
+
+    /**
+     * 预览代码
+     */
+    @SneakyThrows
+    public Map<String, String> previewCode(Code code, List<CodeMeta> codeMetas) {
+        // 封装模板数据
+        Map<String, Object> map = getStringObjectMap(code, codeMetas);
+
+        // 设置velocity资源加载器
+        VelocityContext context = getVelocityContext(map);
+
+        Map<String, String> dataMap = new LinkedHashMap<>();
+        // 获取模板列表
+        for (String template : getTemplates()) {
+            // 渲染模板
+            StringWriter sw = new StringWriter();
+            Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
+            tpl.merge(context, sw);
+            dataMap.put(template, sw.toString());
+        }
+
+        return dataMap;
+    }
+
+    /**
      * 关键字替换
      *
      * @param text 需要被替换的名字
      * @return 替换后的名字
      */
-    public static String replaceText(String text)
+    private String replaceText(String text)
     {
         return RegExUtils.replaceAll(text, "(?:表|若依)", "");
     }
@@ -220,7 +303,7 @@ public class CodeGenUtils {
      * @param columnType 列类型
      * @return 截取后的列类型
      */
-    public static String getDbType(String columnType)
+    private String getDbType(String columnType)
     {
         if (StringUtils.indexOf(columnType, "(") > 0)
         {
@@ -238,7 +321,7 @@ public class CodeGenUtils {
      * @param columnName 列名
      * @return 截取后的列类型
      */
-    public static String getJavaField(String columnName)
+    private String getJavaField(String columnName)
     {
         if (StringUtils.indexOf(columnName, "_") > 0)
         {
@@ -257,7 +340,7 @@ public class CodeGenUtils {
      * @param targetValue 值
      * @return 是否包含
      */
-    public static boolean arraysContains(String[] arr, String targetValue)
+    private boolean arraysContains(String[] arr, String targetValue)
     {
         return Arrays.asList(arr).contains(targetValue);
     }
@@ -268,7 +351,7 @@ public class CodeGenUtils {
      * @param columnType 列类型
      * @return 截取后的列类型
      */
-    public static Integer getColumnLength(String columnType)
+    private Integer getColumnLength(String columnType)
     {
         if (StringUtils.indexOf(columnType, "(") > 0)
         {
@@ -307,61 +390,6 @@ public class CodeGenUtils {
 //		templates.add("template/vue/index.vue.vm");
 //        templates.add("template/vue/index-tree.vue.vm");
         return templates;
-    }
-
-    /**
-     * 生成代码
-     */
-    @SneakyThrows
-    public void generatorCode(Code code, List<CodeMeta> codeMetas, ZipOutputStream zip) {
-        // 封装模板数据
-        Map<String, Object> map = getStringObjectMap(code, codeMetas);
-
-        // 设置velocity资源加载器
-        VelocityContext context = getVelocityContext(map);
-
-        // 获取模板列表
-        downloadZip(code, zip, context);
-    }
-
-    /**
-     * 预览代码
-     */
-    @SneakyThrows
-    public Map<String, String> previewCode(Code code, List<CodeMeta> codeMetas) {
-        // 封装模板数据
-        Map<String, Object> map = getStringObjectMap(code, codeMetas);
-
-        // 设置velocity资源加载器
-        VelocityContext context = getVelocityContext(map);
-
-        Map<String, String> dataMap = new LinkedHashMap<>();
-        // 获取模板列表
-        for (String template : getTemplates()) {
-            // 渲染模板
-            StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
-            tpl.merge(context, sw);
-            dataMap.put(template, sw.toString());
-        }
-
-        return dataMap;
-    }
-
-    private void downloadZip(Code code, ZipOutputStream zip, VelocityContext context) throws IOException {
-        for (String template : getTemplates()) {
-            // 渲染模板
-            StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
-            tpl.merge(context, sw);
-
-            // 添加到zip
-            zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(template, code.getClassName(),
-                    code.getPackageName(), code.getModuleName()))));
-            IoUtil.write(zip, StandardCharsets.UTF_8, false, sw.toString());
-            IoUtil.close(sw);
-            zip.closeEntry();
-        }
     }
 
     private VelocityContext getVelocityContext(Map<String, Object> map) {
@@ -446,80 +474,97 @@ public class CodeGenUtils {
     }
 
     /**
+     * 获取代码生成地址
+     *
+     * @param code
+     * @param template
+     * @return 生成地址
+     */
+    private String getGenPath(Code code, String template)
+    {
+        String genPath = code.getPath();
+        if (StringUtils.equals(genPath, "/"))
+        {
+            return System.getProperty("user.dir") + File.separator + "src" + File.separator + getFileName(code, template);
+        }
+        return genPath + File.separator + getFileName(code, template);
+    }
+
+    /**
      * 获取文件名
      */
-    private String getFileName(String template, String className, String packageName, String moduleName) {
+    private String getFileName(Code code, String template) {
         String packageRootPath = PecadoConstants.BACK_END_PROJECT + File.separator + "src" + File.separator;
 
         String packageSrcPath = packageRootPath + "main" + File.separator + "java" + File.separator;
 
         String packageTestPath = packageRootPath + "test" + File.separator + "java" + File.separator;
 
-        if (StringUtils.isNotBlank(packageName)) {
-			String packagePath = packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
+        if (StringUtils.isNotBlank(code.getPackageName())) {
+			String packagePath = code.getPackageName().replace(".", File.separator) + File.separator + code.getModuleName() + File.separator;
             packageSrcPath += packagePath;
             packageTestPath += packagePath;
         }
 
         if (template.contains(ENTITY_JAVA_VM)) {
-            return packageSrcPath + "domain" + File.separator + className + ".java";
+            return packageSrcPath + "domain" + File.separator + code.getClassName() + ".java";
         }
 
         if (template.contains(MAPPER_JAVA_VM)) {
-            return packageSrcPath + "mapper" + File.separator + className + "Mapper.java";
+            return packageSrcPath + "mapper" + File.separator + code.getClassName() + "Mapper.java";
         }
 
         if (template.contains(MAPPER_UNIT_TEST_JAVA_VM)) {
-            return packageTestPath + "unit" + File.separator + "mapper" + File.separator + className + "MapperUnitTest.java";
+            return packageTestPath + "unit" + File.separator + "mapper" + File.separator + code.getClassName() + "MapperUnitTest.java";
         }
 
         if (template.contains(SERVICE_JAVA_VM)) {
-            return packageSrcPath + "service" + File.separator + className + "Service.java";
+            return packageSrcPath + "service" + File.separator + code.getClassName() + "Service.java";
         }
 
         if (template.contains(SERVICE_IMPL_JAVA_VM)) {
-            return packageSrcPath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+            return packageSrcPath + "service" + File.separator + "impl" + File.separator + code.getClassName() + "ServiceImpl.java";
         }
 
         if (template.contains(SERVICE_UNIT_TEST_JAVA_VM)) {
-            return packageTestPath + "unit" + File.separator + "service" + File.separator + className + "ServiceUnitTest.java";
+            return packageTestPath + "unit" + File.separator + "service" + File.separator + code.getClassName() + "ServiceUnitTest.java";
         }
 
         if (template.contains(CONTROLLER_JAVA_VM)) {
-            return packageSrcPath + "controller" + File.separator + className + "Controller.java";
+            return packageSrcPath + "controller" + File.separator + code.getClassName() + "Controller.java";
         }
 
         if (template.contains(CONTROLLER_UNIT_TEST_JAVA_VM)) {
-            return packageTestPath + "unit" + File.separator + "controller" + File.separator + className + "ControllerUnitTest.java";
+            return packageTestPath + "unit" + File.separator + "controller" + File.separator + code.getClassName() + "ControllerUnitTest.java";
         }
 
         if (template.contains(API_TEST_JAVA_VM)) {
-            return packageTestPath + "api" + File.separator + className + "ApiTest.java";
+            return packageTestPath + "api" + File.separator + code.getClassName() + "ApiTest.java";
         }
 
         if (template.contains(MAPPER_XML_VM)) {
             return PecadoConstants.BACK_END_PROJECT + File.separator + "src" + File.separator + "main" + File.separator
-                    + "resources" + File.separator + "mapper" + File.separator + className + "Mapper.xml";
+                    + "resources" + File.separator + "mapper" + File.separator + code.getClassName() + "Mapper.xml";
         }
 
         if (template.contains(MENU_SQL_VM)) {
-            return className.toLowerCase() + "_menu.sql";
+            return code.getClassName().toLowerCase() + "_menu.sql";
         }
 
         if (template.contains(AVUE_INDEX_VUE_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views"
-                    + File.separator + moduleName + File.separator + className.toLowerCase() + File.separator
+                    + File.separator + code.getClassName() + File.separator + code.getClassName().toLowerCase() + File.separator
                     + "index.vue";
         }
 
         if (template.contains(AVUE_API_JS_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "api" + File.separator
-                    + className.toLowerCase() + ".js";
+                    + code.getClassName().toLowerCase() + ".js";
         }
 
         if (template.contains(AVUE_CRUD_JS_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "const"
-                    + File.separator + "crud" + File.separator + className.toLowerCase() + ".js";
+                    + File.separator + "crud" + File.separator + code.getClassName().toLowerCase() + ".js";
         }
 
         return null;

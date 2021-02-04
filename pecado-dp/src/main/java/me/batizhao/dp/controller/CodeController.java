@@ -131,16 +131,16 @@ public class CodeController {
     }
 
     /**
-     * 生成代码
+     * 生成代码 zip
      * @param ids
      * @param response
      */
     @SneakyThrows
-    @ApiOperation(value = "生成代码")
-    @PutMapping(value = "code")
+    @ApiOperation(value = "生成代码zip")
+    @PostMapping(value = "/code/zip")
     @PreAuthorize("hasRole('ADMIN')")
-    public void handleGenerateCode(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids, HttpServletResponse response) {
-        byte[] data = codeService.generateCode(ids);
+    public void handleGenerateCode4Zip(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids, HttpServletResponse response) {
+        byte[] data = codeService.downloadCode(ids);
         response.reset();
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("attachment; filename=%s.zip", "ruoyi"));
@@ -148,6 +148,18 @@ public class CodeController {
         response.setContentType("application/octet-stream; charset=UTF-8");
 
         IoUtil.write(response.getOutputStream(), true, data);
+    }
+
+    /**
+     * 生成代码 path
+     * @param id Code Id
+     * @return
+     */
+    @ApiOperation(value = "生成代码path")
+    @PostMapping("/code/path/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseInfo<Boolean> handleGenerateCode4Path(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return ResponseInfo.ok(codeService.generateCode(id));
     }
 
     /**

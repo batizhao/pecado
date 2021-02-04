@@ -100,6 +100,18 @@ public class Code extends Model<Code> {
     private Long parentMenuId;
 
     /**
+     * 生成代码方式（zip压缩包 path自定义路径）
+     */
+    @ApiModelProperty(value="生成代码方式（zip压缩包 path自定义路径）")
+    private String type;
+
+    /**
+     * 生成路径（不填默认项目路径）
+     */
+    @ApiModelProperty(value="生成路径（不填默认项目路径）")
+    private String path;
+
+    /**
      * 附加选项
      */
     @ApiModelProperty(value="附加选项")

@@ -70,7 +70,9 @@ public interface CodeService extends IService<Code> {
      * @param ids
      * @return byte[]
      */
-    byte[] generateCode(List<Long> ids);
+    byte[] downloadCode(List<Long> ids);
+
+    Boolean generateCode(Long id);
 
     /**
      * 预览代码
@@ -85,4 +87,5 @@ public interface CodeService extends IService<Code> {
      * @return
      */
     Boolean syncCodeMeta(Long id);
+
 }
