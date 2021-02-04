@@ -94,6 +94,12 @@ public class Code extends Model<Code> {
     private String template;
 
     /**
+     * 父菜单ID
+     */
+    @ApiModelProperty(value="父菜单ID")
+    private Long parentMenuId;
+
+    /**
      * 附加选项
      */
     @ApiModelProperty(value="附加选项")

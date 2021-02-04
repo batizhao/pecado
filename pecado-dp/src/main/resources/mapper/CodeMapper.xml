@@ -14,6 +14,7 @@
 		<result property="packageName" column="packageName"/>
 		<result property="moduleName" column="moduleName"/>
 		<result property="template" column="template"/>
+		<result property="parentMenuId" column="parentMenuId"/>
 		<result property="options" column="options"/>
 		<result property="createTime" column="createTime"/>
 		<result property="updateTime" column="updateTime"/>
@@ -31,14 +32,4 @@
 		</if>
 		order by update_time desc
 	</select>
-
-<!--	<select id="selectMetaByTableName" resultMap="codeMap">-->
-<!--		select table_name tableName, engine engine, table_comment tableComment, create_time createTime, update_time updateTime from information_schema.tables-->
-<!--			where table_schema = (select database()) and table_name = #{tableName}-->
-<!--	</select>-->
-
-<!--	<select id="selectColumnsByTableName" resultMap="codeMetaMap">-->
-<!--		select column_name columnName, data_type dataType, column_comment columnComment, column_key columnKey, extra ,is_nullable as isNullable,column_type as columnType from information_schema.columns-->
-<!--		where table_name = #{tableName} and table_schema = (select database()) order by ordinal_position-->
-<!--	</select>-->
 </mapper>

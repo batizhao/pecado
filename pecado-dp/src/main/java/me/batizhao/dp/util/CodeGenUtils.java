@@ -301,7 +301,7 @@ public class CodeGenUtils {
         templates.add("templates/test/ControllerUnitTest.java.vm");
         templates.add("templates/test/ApiTest.java.vm");
 
-//		templates.add("templates/sql/sql.vm");
+		templates.add("templates/sql/menu.sql.vm");
 
 //		templates.add("template/js/api.js.vm");
 //		templates.add("template/vue/index.vue.vm");
@@ -385,6 +385,7 @@ public class CodeGenUtils {
         map.put("author", code.getClassAuthor());
         map.put("moduleName", code.getModuleName());
         map.put("package", code.getPackageName());
+        map.put("parentMenuId", code.getParentMenuId());
         return map;
     }
 

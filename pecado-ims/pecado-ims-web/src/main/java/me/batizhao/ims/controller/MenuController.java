@@ -109,7 +109,7 @@ public class MenuController {
     /**
      * 更新菜单状态
      *
-     * @param ds 菜单
+     * @param menu 菜单
      * @return ResponseInfo
      */
     @ApiOperation(value = "更新菜单状态")

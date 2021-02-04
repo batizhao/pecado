@@ -9,16 +9,14 @@
             <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="path" type="VARCHAR(255)" remarks="路径">
+            <column name="path" type="VARCHAR(255)" remarks="路径" defaultValue="">
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)" remarks="菜单名">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="permission" type="VARCHAR(255)" remarks="权限名">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="icon" type="VARCHAR(32)" remarks="图标"/>
+            <column name="permission" type="VARCHAR(64)" defaultValue="" remarks="权限名"/>
+            <column name="icon" type="VARCHAR(32)" defaultValue="#" remarks="图标"/>
             <column name="type" type="CHAR(1)" defaultValue="0" remarks="类型（0菜单 1按钮）">
                 <constraints nullable="false" />
             </column>
@@ -126,21 +124,9 @@
 
     <changeSet author="batizhao" id="InsertTableMenu-20200225-001">
         <insert tableName="menu">
-            <column name="id" valueNumeric="1"/>
-            <column name="path" value="/dashboard"/>
-            <column name="name" value="工作台"/>
-            <column name="permission" value="root:dashboard"/>
-            <column name="description"/>
-            <column name="icon" value="dashboard"/>
-            <column name="pid" valueNumeric="0"/>
-            <column name="sort" valueNumeric="1"/>
-        </insert>
-        <insert tableName="menu">
             <column name="id" valueNumeric="1000"/>
             <column name="path" value="/ims"/>
             <column name="name" value="权限管理"/>
-            <column name="permission" value="root:ims"/>
-            <column name="description"/>
             <column name="icon" value="ims"/>
             <column name="pid" valueNumeric="0"/>
             <column name="sort" valueNumeric="2"/>
@@ -150,35 +136,31 @@
             <column name="path" value="/ims/user"/>
             <column name="name" value="用户管理"/>
             <column name="permission" value="ims:user:admin"/>
-            <column name="description"/>
             <column name="icon" value="user"/>
             <column name="pid" valueNumeric="1000"/>
             <column name="sort" valueNumeric="1"/>
         </insert>
         <insert tableName="menu">
             <column name="id" valueNumeric="1101"/>
-            <column name="path" value="/ims/user/add"/>
             <column name="name" value="添加用户"/>
             <column name="permission" value="ims:user:add"/>
             <column name="type" value="1"/>
-            <column name="description"/>
             <column name="pid" valueNumeric="1100"/>
+            <column name="sort" valueNumeric="1"/>
         </insert>
         <insert tableName="menu">
             <column name="id" valueNumeric="1102"/>
-            <column name="path" value="/ims/user/edit"/>
             <column name="name" value="编辑用户"/>
             <column name="permission" value="ims:user:edit"/>
             <column name="type" value="1"/>
-            <column name="description"/>
             <column name="pid" valueNumeric="1100"/>
+            <column name="sort" valueNumeric="2"/>
         </insert>
         <insert tableName="menu">
             <column name="id" valueNumeric="1200"/>
             <column name="path" value="/ims/role"/>
             <column name="name" value="角色管理"/>
             <column name="permission" value="ims:role:admin"/>
-            <column name="description"/>
             <column name="icon" value="role"/>
             <column name="pid" valueNumeric="1000"/>
             <column name="sort" valueNumeric="2"/>
@@ -188,7 +170,6 @@
             <column name="path" value="/ims/menu"/>
             <column name="name" value="菜单管理"/>
             <column name="permission" value="ims:menu:admin"/>
-            <column name="description"/>
             <column name="icon" value="menu"/>
             <column name="pid" valueNumeric="1000"/>
             <column name="sort" valueNumeric="3"/>
@@ -197,8 +178,6 @@
             <column name="id" valueNumeric="2000"/>
             <column name="path" value="/system"/>
             <column name="name" value="系统管理"/>
-            <column name="permission" value="root:system"/>
-            <column name="description"/>
             <column name="icon" value="system"/>
             <column name="pid" valueNumeric="0"/>
             <column name="sort" valueNumeric="3"/>
@@ -208,12 +187,11 @@
             <column name="path" value="/system/log"/>
             <column name="name" value="日志管理"/>
             <column name="permission" value="system:log:admin"/>
-            <column name="description"/>
             <column name="icon" value="log"/>
             <column name="pid" valueNumeric="2000"/>
+            <column name="sort" valueNumeric="1"/>
         </insert>
         <rollback>
-            delete from menu where id = 1;
             delete from menu where id = 1000;
             delete from menu where id = 1100;
             delete from menu where id = 1101;
@@ -241,14 +219,6 @@
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableRoleMenu-20200225-003">
-        <insert tableName="role_menu">
-            <column name="roleId" valueNumeric="1"/>
-            <column name="menuId" valueNumeric="1"/>
-        </insert>
-        <insert tableName="role_menu">
-            <column name="roleId" valueNumeric="2"/>
-            <column name="menuId" valueNumeric="1"/>
-        </insert>
         <insert tableName="role_menu">
             <column name="roleId" valueNumeric="2"/>
             <column name="menuId" valueNumeric="1000"/>
@@ -282,8 +252,6 @@
             <column name="menuId" valueNumeric="2100"/>
         </insert>
         <rollback>
-            delete from role_menu where roleId = 1 and menuId = 1;
-            delete from role_menu where roleId = 2 and menuId = 1;
             delete from role_menu where roleId = 2 and menuId = 1000;
             delete from role_menu where roleId = 2 and menuId = 1100;
             delete from role_menu where roleId = 2 and menuId = 1101;
@@ -382,8 +350,6 @@
             <column name="id" valueNumeric="3000"/>
             <column name="path" value="/dp"/>
             <column name="name" value="开发平台"/>
-            <column name="permission" value="root:dp"/>
-            <column name="description"/>
             <column name="icon" value="develop"/>
             <column name="pid" valueNumeric="0"/>
             <column name="sort" valueNumeric="4"/>
@@ -393,7 +359,6 @@
             <column name="path" value="/dp/code"/>
             <column name="name" value="代码生成"/>
             <column name="permission" value="dp:code:admin"/>
-            <column name="description"/>
             <column name="icon" value="code"/>
             <column name="pid" valueNumeric="3000"/>
             <column name="sort" valueNumeric="2"/>

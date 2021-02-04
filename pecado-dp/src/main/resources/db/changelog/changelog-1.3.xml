@@ -39,6 +39,7 @@
             <column name="template" type="VARCHAR(16)" remarks="模板类型">
                 <constraints nullable="false" />
             </column>
+            <column name="parentMenuId" type="BIGINT" remarks="父菜单ID"/>
             <column name="options" type="VARCHAR(500)" remarks="附加选项" />
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>

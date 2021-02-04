@@ -1,0 +1,20 @@
+-- 菜单 SQL
+INSERT INTO `menu` (`path`, `name`, `permission`, `icon`, `type`, `sort`, `description`, `pid`, `status`)
+VALUES
+('/${moduleName}/${classname}', '${comments}', '${moduleName}:${classname}:admin', '#', '0', 1, NULL, ${parentMenuId}, 1);
+
+-- 按钮父菜单ID
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+INSERT INTO `menu` (`path`, `name`, `permission`, `icon`, `type`, `sort`, `description`, `pid`, `status`)
+VALUES
+('', '添加${comments}', '${moduleName}:${classname}:add', '#', '1', 1, NULL, @parentId, 1);
+
+INSERT INTO `menu` (`path`, `name`, `permission`, `icon`, `type`, `sort`, `description`, `pid`, `status`)
+VALUES
+('', '编辑${comments}', '${moduleName}:${classname}:edit', '#', '1', 2, NULL, @parentId, 1);
+
+INSERT INTO `menu` (`path`, `name`, `permission`, `icon`, `type`, `sort`, `description`, `pid`, `status`)
+VALUES
+('', '删除${comments}', '${moduleName}:${classname}:delete', '#', '1', 3, NULL, @parentId, 1);
