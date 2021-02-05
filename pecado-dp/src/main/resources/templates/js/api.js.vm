@@ -1,53 +1,36 @@
 import request from '@/utils/request'
 
-// 查询${functionName}列表
-export function list${BusinessName}(query) {
+// 查询${comments}列表
+export function list${className}(query) {
   return request({
-    url: '/${moduleName}/${businessName}/list',
-    method: 'get',
+    url: '/${moduleName}/${classname}s',
     params: query
   })
 }
 
-// 查询${functionName}详细
-export function get${BusinessName}(${pkColumn.javaField}) {
-  return request({
-    url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
-    method: 'get'
-  })
+// 查询${comments}详细
+export function get${className}(${pk.javaField}) {
+  return request(`/${moduleName}/${classname}/${${pk.javaField}}`);
 }
 
-// 新增${functionName}
-export function add${BusinessName}(data) {
+// 新增或者修改${comments}
+export function addOrUpdate${className}(data) {
   return request({
-    url: '/${moduleName}/${businessName}',
+    url: '/${moduleName}/${classname}',
     method: 'post',
     data: data
   })
 }
 
-// 修改${functionName}
-export function update${BusinessName}(data) {
-  return request({
-    url: '/${moduleName}/${businessName}',
-    method: 'put',
-    data: data
-  })
+// 删除${comments}
+export function delete${className}(${pk.javaField}s) {
+  return request.delete(`/${moduleName}/${classname}?ids=${${pk.javaField}s}`);
 }
 
-// 删除${functionName}
-export function del${BusinessName}(${pkColumn.javaField}) {
+// 导出${comments}
+export function export${className}(query) {
   return request({
-    url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
-    method: 'delete'
-  })
-}
-
-// 导出${functionName}
-export function export${BusinessName}(query) {
-  return request({
-    url: '/${moduleName}/${businessName}/export',
-    method: 'get',
+    url: '/${moduleName}/${classname}/export',
     params: query
   })
 }

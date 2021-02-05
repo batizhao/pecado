@@ -84,14 +84,15 @@ public class CodeGenUtils {
 
     private final String MENU_SQL_VM = "menu.sql.vm";
 
-    private final String AVUE_INDEX_VUE_VM = "avue/index.vue.vm";
+    private final String VUE_INDEX_VUE_VM = "vue/index.vue.vm";
 
-    private final String AVUE_API_JS_VM = "avue/api.js.vm";
+    private final String VUE_API_JS_VM = "vue/api.js.vm";
 
-    private final String AVUE_CRUD_JS_VM = "avue/crud.js.vm";
+    private final String VUE_CRUD_JS_VM = "vue/crud.js.vm";
 
     /**
      * 初始化数据
+     *
      * @param code 生成代码
      */
     public static void initData(Code code) {
@@ -107,6 +108,7 @@ public class CodeGenUtils {
 
     /**
      * 初始化列属性字段
+     *
      * @param codeMeta
      */
     public static void initColumnField(CodeMeta codeMeta) {
@@ -117,53 +119,42 @@ public class CodeGenUtils {
         // 设置默认类型
         codeMeta.setJavaType(GenConstants.TYPE_STRING);
 
-        if (arraysContains(GenConstants.COLUMNTYPE_STR, dataType) || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType))
-        {
+        if (arraysContains(GenConstants.COLUMNTYPE_STR, dataType) || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType)) {
             // 字符串长度超过500设置为文本域
             Integer columnLength = getColumnLength(codeMeta.getColumnType());
             String htmlType = columnLength >= 500 || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType) ? GenConstants.HTML_TEXTAREA : GenConstants.HTML_INPUT;
             codeMeta.setHtmlType(htmlType);
-        }
-        else if (arraysContains(GenConstants.COLUMNTYPE_TIME, dataType))
-        {
+        } else if (arraysContains(GenConstants.COLUMNTYPE_TIME, dataType)) {
             codeMeta.setJavaType(GenConstants.TYPE_DATE);
             codeMeta.setHtmlType(GenConstants.HTML_DATETIME);
-        }
-        else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER, dataType))
-        {
+        } else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER, dataType)) {
             codeMeta.setHtmlType(GenConstants.HTML_INPUT);
 
             // 如果是浮点型 统一用BigDecimal
             String[] str = StringUtils.split(StringUtils.substringBetween(codeMeta.getColumnType(), "(", ")"), ",");
-            if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0)
-            {
+            if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
                 codeMeta.setJavaType(GenConstants.TYPE_BIGDECIMAL);
             }
             // 如果是整形
-            else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10)
-            {
+            else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10) {
                 codeMeta.setJavaType(GenConstants.TYPE_INTEGER);
             }
             // 长整形
-            else
-            {
+            else {
                 codeMeta.setJavaType(GenConstants.TYPE_LONG);
             }
         }
 
         // 插入字段
-        if (!arraysContains(GenConstants.COLUMNNAME_NOT_SAVE, columnName) && !codeMeta.getPrimaryKey())
-        {
+        if (!arraysContains(GenConstants.COLUMNNAME_NOT_SAVE, columnName) && !codeMeta.getPrimaryKey()) {
             codeMeta.setSave(true);
         }
         // 编辑字段
-        if (!arraysContains(GenConstants.COLUMNNAME_NOT_EDIT, columnName) && !codeMeta.getPrimaryKey())
-        {
+        if (!arraysContains(GenConstants.COLUMNNAME_NOT_EDIT, columnName) && !codeMeta.getPrimaryKey()) {
             codeMeta.setEdit(true);
         }
         // 列表字段
-        if (!arraysContains(GenConstants.COLUMNNAME_NOT_LIST, columnName) && !codeMeta.getPrimaryKey())
-        {
+        if (!arraysContains(GenConstants.COLUMNNAME_NOT_LIST, columnName) && !codeMeta.getPrimaryKey()) {
             codeMeta.setDisplay(true);
         }
 
@@ -171,35 +162,29 @@ public class CodeGenUtils {
         codeMeta.setSearch(false);
 
         // 查询字段类型
-        if (StringUtils.endsWithIgnoreCase(columnName, "name"))
-        {
+        if (StringUtils.endsWithIgnoreCase(columnName, "name")) {
             codeMeta.setSearch(true);
             codeMeta.setSearchType(GenConstants.QUERY_LIKE);
         }
         // 状态字段设置单选框
-        if (StringUtils.endsWithIgnoreCase(columnName, "status"))
-        {
+        if (StringUtils.endsWithIgnoreCase(columnName, "status")) {
             codeMeta.setHtmlType(GenConstants.HTML_RADIO);
         }
         // 类型&性别字段设置下拉框
         else if (StringUtils.endsWithIgnoreCase(columnName, "type")
-                || StringUtils.endsWithIgnoreCase(columnName, "sex"))
-        {
+                || StringUtils.endsWithIgnoreCase(columnName, "sex")) {
             codeMeta.setHtmlType(GenConstants.HTML_SELECT);
         }
         // 图片字段设置图片上传控件
-        else if (StringUtils.endsWithIgnoreCase(columnName, "image"))
-        {
+        else if (StringUtils.endsWithIgnoreCase(columnName, "image")) {
             codeMeta.setHtmlType(GenConstants.HTML_IMAGE_UPLOAD);
         }
         // 文件字段设置文件上传控件
-        else if (StringUtils.endsWithIgnoreCase(columnName, "file"))
-        {
+        else if (StringUtils.endsWithIgnoreCase(columnName, "file")) {
             codeMeta.setHtmlType(GenConstants.HTML_FILE_UPLOAD);
         }
         // 内容字段设置富文本控件
-        else if (StringUtils.endsWithIgnoreCase(columnName, "content"))
-        {
+        else if (StringUtils.endsWithIgnoreCase(columnName, "content")) {
             codeMeta.setHtmlType(GenConstants.HTML_EDITOR);
         }
     }
@@ -217,19 +202,15 @@ public class CodeGenUtils {
 
         // 获取模板列表
         for (String template : getTemplates()) {
-            if (!StringUtils.containsAny(template, "sql.vm", "api.js.vm", "index.vue.vm", "index-tree.vue.vm"))
-            {
+            if (!StringUtils.containsAny(template, "sql.vm", "api.js.vm", "index.vue.vm", "index-tree.vue.vm")) {
                 // 渲染模板
                 StringWriter sw = new StringWriter();
                 Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
                 tpl.merge(context, sw);
-                try
-                {
+                try {
                     String path = getGenPath(code, template);
                     FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetUtil.UTF_8);
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     throw new RuntimeException("渲染模板失败，表名：" + code.getTableName());
                 }
             }
@@ -292,8 +273,7 @@ public class CodeGenUtils {
      * @param text 需要被替换的名字
      * @return 替换后的名字
      */
-    private String replaceText(String text)
-    {
+    private String replaceText(String text) {
         return RegExUtils.replaceAll(text, "(?:表|若依)", "");
     }
 
@@ -303,14 +283,10 @@ public class CodeGenUtils {
      * @param columnType 列类型
      * @return 截取后的列类型
      */
-    private String getDbType(String columnType)
-    {
-        if (StringUtils.indexOf(columnType, "(") > 0)
-        {
+    private String getDbType(String columnType) {
+        if (StringUtils.indexOf(columnType, "(") > 0) {
             return StringUtils.substringBefore(columnType, "(");
-        }
-        else
-        {
+        } else {
             return columnType;
         }
     }
@@ -321,14 +297,10 @@ public class CodeGenUtils {
      * @param columnName 列名
      * @return 截取后的列类型
      */
-    private String getJavaField(String columnName)
-    {
-        if (StringUtils.indexOf(columnName, "_") > 0)
-        {
+    private String getJavaField(String columnName) {
+        if (StringUtils.indexOf(columnName, "_") > 0) {
             return StringUtils.uncapitalize(columnToJava(columnName));
-        }
-        else
-        {
+        } else {
             return columnName;
         }
     }
@@ -336,12 +308,11 @@ public class CodeGenUtils {
     /**
      * 校验数组是否包含指定值
      *
-     * @param arr 数组
+     * @param arr         数组
      * @param targetValue 值
      * @return 是否包含
      */
-    private boolean arraysContains(String[] arr, String targetValue)
-    {
+    private boolean arraysContains(String[] arr, String targetValue) {
         return Arrays.asList(arr).contains(targetValue);
     }
 
@@ -351,15 +322,11 @@ public class CodeGenUtils {
      * @param columnType 列类型
      * @return 截取后的列类型
      */
-    private Integer getColumnLength(String columnType)
-    {
-        if (StringUtils.indexOf(columnType, "(") > 0)
-        {
+    private Integer getColumnLength(String columnType) {
+        if (StringUtils.indexOf(columnType, "(") > 0) {
             String length = StringUtils.substringBetween(columnType, "(", ")");
             return Integer.valueOf(length);
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
@@ -384,11 +351,11 @@ public class CodeGenUtils {
         templates.add("templates/test/ControllerUnitTest.java.vm");
         templates.add("templates/test/ApiTest.java.vm");
 
-		templates.add("templates/sql/menu.sql.vm");
+        templates.add("templates/sql/menu.sql.vm");
 
-//		templates.add("template/js/api.js.vm");
-//		templates.add("template/vue/index.vue.vm");
-//        templates.add("template/vue/index-tree.vue.vm");
+		templates.add("templates/js/api.js.vm");
+		templates.add("templates/vue/index.vue.vm");
+//        templates.add("templates/vue/index-tree.vue.vm");
         return templates;
     }
 
@@ -480,11 +447,9 @@ public class CodeGenUtils {
      * @param template
      * @return 生成地址
      */
-    private String getGenPath(Code code, String template)
-    {
+    private String getGenPath(Code code, String template) {
         String genPath = code.getPath();
-        if (StringUtils.equals(genPath, "/"))
-        {
+        if (StringUtils.equals(genPath, "/")) {
             return System.getProperty("user.dir") + File.separator + "src" + File.separator + getFileName(code, template);
         }
         return genPath + File.separator + getFileName(code, template);
@@ -501,7 +466,7 @@ public class CodeGenUtils {
         String packageTestPath = packageRootPath + "test" + File.separator + "java" + File.separator;
 
         if (StringUtils.isNotBlank(code.getPackageName())) {
-			String packagePath = code.getPackageName().replace(".", File.separator) + File.separator + code.getModuleName() + File.separator;
+            String packagePath = code.getPackageName().replace(".", File.separator) + File.separator + code.getModuleName() + File.separator;
             packageSrcPath += packagePath;
             packageTestPath += packagePath;
         }
@@ -551,18 +516,18 @@ public class CodeGenUtils {
             return code.getClassName().toLowerCase() + "_menu.sql";
         }
 
-        if (template.contains(AVUE_INDEX_VUE_VM)) {
+        if (template.contains(VUE_INDEX_VUE_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views"
                     + File.separator + code.getClassName() + File.separator + code.getClassName().toLowerCase() + File.separator
                     + "index.vue";
         }
 
-        if (template.contains(AVUE_API_JS_VM)) {
+        if (template.contains(VUE_API_JS_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "api" + File.separator
                     + code.getClassName().toLowerCase() + ".js";
         }
 
-        if (template.contains(AVUE_CRUD_JS_VM)) {
+        if (template.contains(VUE_CRUD_JS_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "const"
                     + File.separator + "crud" + File.separator + code.getClassName().toLowerCase() + ".js";
         }
