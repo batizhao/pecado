@@ -1,8 +1,9 @@
 package me.batizhao.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
@@ -30,6 +31,9 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
     @Override
     public IPage<DictType> findDictTypes(Page<DictType> page, DictType dictType) {
         LambdaQueryWrapper<DictType> wrapper = Wrappers.lambdaQuery();
+        if (StringUtils.isNotBlank(dictType.getName())) {
+            wrapper.like(DictType::getName, dictType.getName());
+        }
         return dictTypeMapper.selectPage(page, wrapper);
     }
 
@@ -37,7 +41,7 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
     public DictType findById(Long id) {
         DictType dictType = dictTypeMapper.selectById(id);
 
-        if(dictType == null) {
+        if (dictType == null) {
             throw new NotFoundException(String.format("没有该记录 '%s'。", id));
         }
 
