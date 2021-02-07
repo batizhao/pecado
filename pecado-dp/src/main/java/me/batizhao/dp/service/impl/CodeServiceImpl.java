@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
 
 /**
+ * 在这里要注意，在事务开启的情况下，动态数据源会无效。
+ * 无论是上级方法，还是当前方法，都不能开启事务。
+ *
  * @author batizhao
  * @date 2020/10/10
  */
@@ -64,26 +67,42 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
         return code;
     }
 
+    /**
+     * 当前方法开启事务，会导致动态数据源无法切换。
+     * 为了解决这个问题，单独封装了 saveCode 方法处理事务。
+     * 但是这种方式，只适合这个方法，并不适合所有的事务+动态数据源的场景。
+     * @see <a href="SpringBoot+Mybatis配置多数据源及事务方案">https://juejin.cn/post/6844904159074844685</a>
+     *
+     * @param code 生成代码
+     * @return
+     */
     @Override
-    @Transactional
     public Code saveOrUpdateCode(Code code) {
         if (code.getId() == null) {
             code.setCreateTime(LocalDateTime.now());
             code.setUpdateTime(LocalDateTime.now());
-            codeMapper.insert(code);
             List<CodeMeta> codeMetas = codeMetaService.findColumnsByTableName(code.getTableName(), code.getDsName());
-            codeMetas.forEach(p -> {
-                p.setCodeId(code.getId());
-                CodeGenUtils.initColumnField(p);
-            });
-            codeMetaService.saveBatch(codeMetas);
+            saveCode(code, codeMetas);
         } else {
             code.setUpdateTime(LocalDateTime.now());
-            codeMapper.updateById(code);
+            this.updateById(code);
             if (CollectionUtils.isNotEmpty(code.getCodeMetaList())) {
                 codeMetaService.updateBatchById(code.getCodeMetaList());
             }
         }
+
+        return code;
+    }
+
+    @Override
+    @Transactional
+    public Code saveCode(Code code, List<CodeMeta> codeMetas) {
+        this.save(code);
+        codeMetas.forEach(cm -> {
+            cm.setCodeId(code.getId());
+            CodeGenUtils.initColumnField(cm);
+        });
+        codeMetaService.saveBatch(codeMetas);
 
         return code;
     }
@@ -111,8 +130,13 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
         return p;
     }
 
+    /**
+     * 这里不能开启事务，会导致动态数据源失效。
+     *
+     * @param codes
+     * @return
+     */
     @Override
-    @Transactional
     public Boolean importTables(List<Code> codes) {
         if (codes == null) return false;
         for (Code c : codes) {
@@ -154,16 +178,22 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
     }
 
     @Override
-    @Transactional
     public Boolean syncCodeMeta(Long id) {
         Code code = this.findById(id);
         List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
-        List<String> tableColumnNames = codeMetas.stream().map(CodeMeta::getColumnName).collect(Collectors.toList());
-
         List<CodeMeta> dbTableColumns = codeMetaService.findColumnsByTableName(code.getTableName(), code.getDsName());
+        return syncColumn(id, codeMetas, dbTableColumns);
+    }
+
+    @Override
+    @Transactional
+    public Boolean syncColumn(Long id, List<CodeMeta> codeMetas, List<CodeMeta> dbTableColumns) {
         if (CollectionUtils.isEmpty(dbTableColumns)) {
             throw new RuntimeException("同步数据失败，原表结构不存在");
         }
+
+        List<String> tableColumnNames = codeMetas.stream().map(CodeMeta::getColumnName).collect(Collectors.toList());
+
         List<String> dbTableColumnNames = dbTableColumns.stream().map(CodeMeta::getColumnName).collect(Collectors.toList());
 
         dbTableColumns.forEach(column -> {

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import me.batizhao.dp.domain.Code;
+import me.batizhao.dp.domain.CodeMeta;
 import me.batizhao.dp.domain.GenConfig;
 
 import java.util.List;
@@ -37,9 +38,16 @@ public interface CodeService extends IService<Code> {
     Code findById(Long id);
 
     /**
+     * 添加\生成代码
+     * @param code 生成代码
+     * @return Code
+     */
+    Code saveCode(Code code, List<CodeMeta> codeMetas);
+
+    /**
      * 添加或修改生成代码
      * @param code 生成代码
-     * @return ResponseInfo
+     * @return Code
      */
     Code saveOrUpdateCode(Code code);
 
@@ -66,12 +74,17 @@ public interface CodeService extends IService<Code> {
     Boolean importTables(List<Code> codes);
 
     /**
-     * 生成代码
+     * 生成代码 zip
      * @param ids
      * @return byte[]
      */
     byte[] downloadCode(List<Long> ids);
 
+    /**
+     * 生成代码 path
+     * @param id
+     * @return
+     */
     Boolean generateCode(Long id);
 
     /**
@@ -87,5 +100,14 @@ public interface CodeService extends IService<Code> {
      * @return
      */
     Boolean syncCodeMeta(Long id);
+
+    /**
+     * 同步表列
+     * @param id
+     * @param codeMetas
+     * @param dbTableColumns
+     * @return
+     */
+    Boolean syncColumn(Long id, List<CodeMeta> codeMetas, List<CodeMeta> dbTableColumns);
 
 }

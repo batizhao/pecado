@@ -18,9 +18,7 @@
             <column name="classMethod" type="VARCHAR(255)" remarks="类方法">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="VARCHAR(255)" remarks="操作描述">
-                <constraints nullable="false"/>
-            </column>
+            <column name="description" type="VARCHAR(255)" remarks="操作描述" defaultValue="" />
             <column name="parameter" type="VARCHAR(1000)" remarks="操作参数"/>
             <column name="result" type="CLOB" remarks="操作结果"/>
             <column name="spend" type="INT" remarks="操作时长">

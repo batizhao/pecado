@@ -1,0 +1,99 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="batizhao" id="CreateTableDict-20210205-001">
+        <createTable tableName="dict_type" remarks="字典类型表">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(32)" remarks="名称">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="code" type="VARCHAR(32)" remarks="代码">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="status" type="TINYINT(1)" remarks="是否可用" defaultValue="1" />
+            <column name="description" type="VARCHAR(255)" remarks="描述" defaultValue="" />
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="dict_type"/>
+        </rollback>
+        <createTable tableName="dict_data" remarks="字典表">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="code" type="VARCHAR(32)" remarks="代码">
+                <constraints nullable="false" />
+            </column>
+            <column name="label" type="VARCHAR(32)" remarks="标签">
+                <constraints nullable="false" />
+            </column>
+            <column name="value" type="VARCHAR(32)" remarks="值">
+                <constraints nullable="false" />
+            </column>
+            <column name="default" type="TINYINT(1)" remarks="是否默认" defaultValue="0"/>
+            <column name="sort" type="INT" defaultValue="1" remarks="排序" />
+            <column name="status" type="TINYINT(1)" remarks="是否可用" defaultValue="1"/>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="dict_data"/>
+        </rollback>
+
+        <insert tableName="dict_type">
+            <column name="name" value="性别"/>
+            <column name="code" value="sex"/>
+        </insert>
+        <insert tableName="dict_type">
+            <column name="name" value="状态"/>
+            <column name="code" value="status"/>
+        </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="sex"/>
+            <column name="label" value="男"/>
+            <column name="value" value="male"/>
+            <column name="sort" valueNumeric="1"/>
+            <column name="default" valueNumeric="1"/>
+        </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="sex"/>
+            <column name="label" value="女"/>
+            <column name="value" value="female"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="status"/>
+            <column name="label" value="启用"/>
+            <column name="value" value="open"/>
+            <column name="sort" valueNumeric="1"/>
+            <column name="default" valueNumeric="1"/>
+        </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="status"/>
+            <column name="label" value="禁用"/>
+            <column name="value" value="close"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+
+        <rollback>
+            delete from dict_type where code = 'sex';
+            delete from dict_type where code = 'status';
+            delete from dict_data where code = 'sex';
+            delete from dict_data where code = 'status';
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

@@ -1,6 +1,5 @@
 package me.batizhao.dp.mapper;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import me.batizhao.dp.domain.CodeMeta;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,10 +19,8 @@ public interface CodeMetaMapper extends BaseMapper<CodeMeta> {
     /**
      * 查询表列信息
      * @param tableName 表名称
-     * @param dsName
      * @return
      */
-    @DS("#last")
-    List<CodeMeta> selectColumnsByTableName(@Param("tableName") String tableName, String dsName);
+    List<CodeMeta> selectColumnsByTableName(@Param("tableName") String tableName);
 
 }

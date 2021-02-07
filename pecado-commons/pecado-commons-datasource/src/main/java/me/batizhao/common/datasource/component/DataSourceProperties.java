@@ -51,6 +51,6 @@ public class DataSourceProperties {
 	/**
 	 * 查询数据源的SQL
 	 */
-	private String queryDsSql = "select * from ds where status = 0";
+	private String queryDsSql = "select * from ds where status = 1";
 
 }
