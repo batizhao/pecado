@@ -78,7 +78,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['${moduleName}:${classname}:add']"
-        >新增</el-button>
+        >添加</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -455,14 +455,14 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    /** 新增按钮操作 */
+    /** 添加按钮操作 */
     handleAdd() {
       this.reset();
 	  this.getTreeselect();
       this.open = true;
       this.title = "添加${comments}";
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
 	  this.getTreeselect();
@@ -477,7 +477,7 @@ export default {
 #end
 #end
         this.open = true;
-        this.title = "修改${comments}";
+        this.title = "编辑${comments}";
       });
     },
     /** 提交按钮 */
@@ -491,13 +491,13 @@ export default {
 #end
           if (this.form.${pk.javaField} != null) {
             addOrUpdate${className}(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });
           } else {
             addOrUpdate${className}(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.msgSuccess("添加成功");
               this.open = false;
               this.getList();
             });

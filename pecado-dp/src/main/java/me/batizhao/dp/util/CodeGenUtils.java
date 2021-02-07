@@ -84,11 +84,11 @@ public class CodeGenUtils {
 
     private final String MENU_SQL_VM = "menu.sql.vm";
 
-    private final String VUE_INDEX_VUE_VM = "vue/index.vue.vm";
+    private final String VUE_INDEX_VUE_VM = "index.vue.vm";
 
-    private final String VUE_API_JS_VM = "vue/api.js.vm";
+    private final String VUE_API_JS_VM = "api.js.vm";
 
-    private final String VUE_CRUD_JS_VM = "vue/crud.js.vm";
+    private final String VUE_CRUD_JS_VM = "crud.js.vm";
 
     /**
      * 初始化数据

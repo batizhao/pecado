@@ -17,7 +17,7 @@
             </column>
             <column name="permission" type="VARCHAR(64)" defaultValue="" remarks="权限名"/>
             <column name="icon" type="VARCHAR(32)" defaultValue="#" remarks="图标"/>
-            <column name="type" type="CHAR(1)" defaultValue="0" remarks="类型（0菜单 1按钮）">
+            <column name="type" type="CHAR(1)" defaultValue="L" remarks="类型（L左侧 T顶部 B按钮）">
                 <constraints nullable="false" />
             </column>
             <column name="sort" type="INT" defaultValue="1" remarks="排序">
@@ -144,7 +144,7 @@
             <column name="id" valueNumeric="1101"/>
             <column name="name" value="添加用户"/>
             <column name="permission" value="ims:user:add"/>
-            <column name="type" value="1"/>
+            <column name="type" value="B"/>
             <column name="pid" valueNumeric="1100"/>
             <column name="sort" valueNumeric="1"/>
         </insert>
@@ -152,9 +152,17 @@
             <column name="id" valueNumeric="1102"/>
             <column name="name" value="编辑用户"/>
             <column name="permission" value="ims:user:edit"/>
-            <column name="type" value="1"/>
+            <column name="type" value="B"/>
             <column name="pid" valueNumeric="1100"/>
             <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1103"/>
+            <column name="name" value="删除用户"/>
+            <column name="permission" value="ims:user:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1100"/>
+            <column name="sort" valueNumeric="3"/>
         </insert>
         <insert tableName="menu">
             <column name="id" valueNumeric="1200"/>
@@ -166,12 +174,60 @@
             <column name="sort" valueNumeric="2"/>
         </insert>
         <insert tableName="menu">
+            <column name="id" valueNumeric="1201"/>
+            <column name="name" value="添加角色"/>
+            <column name="permission" value="ims:role:add"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1200"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1202"/>
+            <column name="name" value="编辑角色"/>
+            <column name="permission" value="ims:role:edit"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1200"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1203"/>
+            <column name="name" value="删除角色"/>
+            <column name="permission" value="ims:role:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1200"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+        <insert tableName="menu">
             <column name="id" valueNumeric="1300"/>
             <column name="path" value="/ims/menu"/>
             <column name="name" value="菜单管理"/>
             <column name="permission" value="ims:menu:admin"/>
             <column name="icon" value="menu"/>
             <column name="pid" valueNumeric="1000"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1301"/>
+            <column name="name" value="添加菜单"/>
+            <column name="permission" value="ims:menu:add"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1300"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1302"/>
+            <column name="name" value="编辑菜单"/>
+            <column name="permission" value="ims:menu:edit"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1300"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1303"/>
+            <column name="name" value="删除菜单"/>
+            <column name="permission" value="ims:menu:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1300"/>
             <column name="sort" valueNumeric="3"/>
         </insert>
         <insert tableName="menu">
@@ -189,17 +245,61 @@
             <column name="permission" value="system:log:admin"/>
             <column name="icon" value="log"/>
             <column name="pid" valueNumeric="2000"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="2200"/>
+            <column name="path" value="/system/dict"/>
+            <column name="name" value="字典管理"/>
+            <column name="permission" value="system:dict:admin"/>
+            <column name="icon" value="dict"/>
+            <column name="pid" valueNumeric="2000"/>
             <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="2201"/>
+            <column name="name" value="添加字典"/>
+            <column name="permission" value="system:dict:add"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="2200"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="2202"/>
+            <column name="name" value="编辑字典"/>
+            <column name="permission" value="system:dict:edit"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="2200"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="2203"/>
+            <column name="name" value="删除字典"/>
+            <column name="permission" value="system:dict:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="2200"/>
+            <column name="sort" valueNumeric="3"/>
         </insert>
         <rollback>
             delete from menu where id = 1000;
             delete from menu where id = 1100;
             delete from menu where id = 1101;
             delete from menu where id = 1102;
+            delete from menu where id = 1103;
             delete from menu where id = 1200;
+            delete from menu where id = 1201;
+            delete from menu where id = 1202;
+            delete from menu where id = 1203;
             delete from menu where id = 1300;
+            delete from menu where id = 1301;
+            delete from menu where id = 1302;
+            delete from menu where id = 1303;
             delete from menu where id = 2000;
             delete from menu where id = 2100;
+            delete from menu where id = 2200;
+            delete from menu where id = 2201;
+            delete from menu where id = 2202;
+            delete from menu where id = 2203;
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableRole-20200225-002">
@@ -237,11 +337,39 @@
         </insert>
         <insert tableName="role_menu">
             <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1103"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
             <column name="menuId" valueNumeric="1200"/>
         </insert>
         <insert tableName="role_menu">
             <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1201"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1202"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1203"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
             <column name="menuId" valueNumeric="1300"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1301"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1302"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1303"/>
         </insert>
         <insert tableName="role_menu">
             <column name="roleId" valueNumeric="2"/>
@@ -251,15 +379,42 @@
             <column name="roleId" valueNumeric="2"/>
             <column name="menuId" valueNumeric="2100"/>
         </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2200"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2201"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2202"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2203"/>
+        </insert>
         <rollback>
             delete from role_menu where roleId = 2 and menuId = 1000;
             delete from role_menu where roleId = 2 and menuId = 1100;
             delete from role_menu where roleId = 2 and menuId = 1101;
             delete from role_menu where roleId = 2 and menuId = 1102;
+            delete from role_menu where roleId = 2 and menuId = 1103;
             delete from role_menu where roleId = 2 and menuId = 1200;
+            delete from role_menu where roleId = 2 and menuId = 1201;
+            delete from role_menu where roleId = 2 and menuId = 1202;
+            delete from role_menu where roleId = 2 and menuId = 1203;
             delete from role_menu where roleId = 2 and menuId = 1300;
+            delete from role_menu where roleId = 2 and menuId = 1301;
+            delete from role_menu where roleId = 2 and menuId = 1302;
+            delete from role_menu where roleId = 2 and menuId = 1303;
             delete from role_menu where roleId = 2 and menuId = 2000;
             delete from role_menu where roleId = 2 and menuId = 2100;
+            delete from role_menu where roleId = 2 and menuId = 2200;
+            delete from role_menu where roleId = 2 and menuId = 2201;
+            delete from role_menu where roleId = 2 and menuId = 2202;
+            delete from role_menu where roleId = 2 and menuId = 2203;
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableUser-20200225-004">
@@ -364,6 +519,54 @@
             <column name="sort" valueNumeric="2"/>
         </insert>
         <insert tableName="menu">
+            <column name="id" valueNumeric="3101"/>
+            <column name="name" value="导入"/>
+            <column name="permission" value="dp:code:import"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3100"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3102"/>
+            <column name="name" value="编辑"/>
+            <column name="permission" value="dp:code:edit"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3100"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3103"/>
+            <column name="name" value="删除"/>
+            <column name="permission" value="dp:code:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3100"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3104"/>
+            <column name="name" value="同步"/>
+            <column name="permission" value="dp:code:sync"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3100"/>
+            <column name="sort" valueNumeric="4"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3105"/>
+            <column name="name" value="预览"/>
+            <column name="permission" value="dp:code:preview"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3100"/>
+            <column name="sort" valueNumeric="5"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3106"/>
+            <column name="name" value="生成"/>
+            <column name="permission" value="dp:code:gen"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3100"/>
+            <column name="sort" valueNumeric="6"/>
+        </insert>
+        <insert tableName="menu">
             <column name="id" valueNumeric="3200"/>
             <column name="path" value="/dp/ds"/>
             <column name="name" value="数据源"/>
@@ -373,10 +576,43 @@
             <column name="pid" valueNumeric="3000"/>
             <column name="sort" valueNumeric="1"/>
         </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3201"/>
+            <column name="name" value="添加数据源"/>
+            <column name="permission" value="dp:ds:add"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3200"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3202"/>
+            <column name="name" value="编辑数据源"/>
+            <column name="permission" value="dp:ds:edit"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3200"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3203"/>
+            <column name="name" value="删除数据源"/>
+            <column name="permission" value="dp:ds:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3200"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
         <rollback>
             delete from menu where id = 3000;
             delete from menu where id = 3100;
+            delete from menu where id = 3101;
+            delete from menu where id = 3102;
+            delete from menu where id = 3103;
+            delete from menu where id = 3104;
+            delete from menu where id = 3105;
+            delete from menu where id = 3106;
             delete from menu where id = 3200;
+            delete from menu where id = 3201;
+            delete from menu where id = 3202;
+            delete from menu where id = 3203;
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableRoleMenu-20201013-003">
@@ -390,12 +626,57 @@
         </insert>
         <insert tableName="role_menu">
             <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3101"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3102"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3103"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3104"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3105"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3106"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
             <column name="menuId" valueNumeric="3200"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3201"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3202"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3203"/>
         </insert>
         <rollback>
             delete from role_menu where roleId = 2 and menuId = 3000;
             delete from role_menu where roleId = 2 and menuId = 3100;
+            delete from role_menu where roleId = 2 and menuId = 3101;
+            delete from role_menu where roleId = 2 and menuId = 3102;
+            delete from role_menu where roleId = 2 and menuId = 3103;
+            delete from role_menu where roleId = 2 and menuId = 3104;
+            delete from role_menu where roleId = 2 and menuId = 3105;
+            delete from role_menu where roleId = 2 and menuId = 3106;
             delete from role_menu where roleId = 2 and menuId = 3200;
+            delete from role_menu where roleId = 2 and menuId = 3201;
+            delete from role_menu where roleId = 2 and menuId = 3202;
+            delete from role_menu where roleId = 2 and menuId = 3203;
         </rollback>
     </changeSet>
 

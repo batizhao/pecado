@@ -13,7 +13,7 @@ export function get${className}(${pk.javaField}) {
   return request(`/${moduleName}/${classname}/${${pk.javaField}}`);
 }
 
-// 新增或者修改${comments}
+// 添加或者修改${comments}
 export function addOrUpdate${className}(data) {
   return request({
     url: '/${moduleName}/${classname}',

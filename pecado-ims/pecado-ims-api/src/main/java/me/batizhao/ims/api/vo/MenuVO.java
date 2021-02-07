@@ -41,7 +41,7 @@ public class MenuVO extends TreeNode implements Serializable {
     @ApiModelProperty(value = "图标", example = "icon-web")
     private String icon;
 
-    @ApiModelProperty(value = "类型（0菜单 1按钮）", example = "0")
+    @ApiModelProperty(value = "类型（L左侧 T顶部 B按钮）", example = "0")
     private String type;
 
     @ApiModelProperty(value = "排序", example = "1")

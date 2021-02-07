@@ -78,7 +78,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['${moduleName}:${classname}:add']"
-        >新增</el-button>
+        >添加</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -147,7 +147,7 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['${moduleName}:${classname}:edit']"
-          >修改</el-button>
+          >编辑</el-button>
           <el-button
             size="mini"
             type="text"
@@ -167,7 +167,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改${comments}对话框 -->
+    <!-- 添加或编辑${comments}对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
 #foreach($column in $columns)
@@ -506,13 +506,13 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
+    /** 添加按钮操作 */
     handleAdd() {
       this.reset();
       this.open = true;
       this.title = "添加${comments}";
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       const ${pk.javaField} = row.${pk.javaField} || this.ids
@@ -527,7 +527,7 @@ export default {
         this.${subclassName}List = response.data.${subclassName}List;
 #end
         this.open = true;
-        this.title = "修改${comments}";
+        this.title = "编辑${comments}";
       });
     },
     /** 提交按钮 */
@@ -543,7 +543,7 @@ export default {
           this.form.${subclassName}List = this.${subclassName}List;
 #end
           addOrUpdate${className}(this.form).then(response => {
-            this.msgSuccess("新增成功");
+            this.msgSuccess("添加成功");
             this.open = false;
             this.getList();
           });
