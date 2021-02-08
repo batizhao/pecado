@@ -16,7 +16,7 @@ CREATE TABLE `ds` (
   `url` varchar(255) NOT NULL COMMENT 'url',
   `username` varchar(64) NOT NULL COMMENT '用户名',
   `password` varchar(64) NOT NULL COMMENT '密码',
-  `status` tinyint(1) DEFAULT '1' COMMENT '是否可用',
+  `status` varchar(32) NOT NULL DEFAULT 'open' COMMENT '状态',
   `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
@@ -24,7 +24,7 @@ CREATE TABLE `ds` (
   UNIQUE KEY `url` (`url`)
 ) COMMENT='数据源';
 
-INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`, `createTime`, `updateTime`)
+INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`)
 VALUES
-	(1,'system','jdbc:mysql://localhost:3306/pecado-system?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/',0,'2020-09-29 10:00:00','2020-09-29 11:00:00'),
-	(2,'ims','jdbc:mysql://localhost:3306/pecado-ims?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/',0,'2020-09-29 10:00:00','2020-09-29 11:00:00');
+	(1,'system','jdbc:mysql://localhost:3306/pecado-system?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/','open'),
+	(2,'ims','jdbc:mysql://localhost:3306/pecado-ims?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/','open');

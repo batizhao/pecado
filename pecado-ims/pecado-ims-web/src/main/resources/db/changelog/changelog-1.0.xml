@@ -27,7 +27,9 @@
             <column name="pid" type="BIGINT" remarks="权限父ID">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="TINYINT(1)" remarks="是否可用" defaultValue="1"/>
+            <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
+                <constraints nullable="false" />
+            </column>
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
@@ -51,7 +53,9 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="description" type="VARCHAR(255)" remarks="角色描述" defaultValue="" />
-            <column name="status" type="TINYINT(1)" remarks="是否可用" defaultValue="1"/>
+            <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
+                <constraints nullable="false" />
+            </column>
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
@@ -96,7 +100,9 @@
             <column name="avatar" type="VARCHAR(255)" remarks="用户头像"
                     defaultValue="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"/>
             <column name="unreadCount" type="INT" remarks="未读消息数量" defaultValue="0"/>
-            <column name="status" type="TINYINT(1)" remarks="是否可用" defaultValue="1"/>
+            <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
+                <constraints nullable="false" />
+            </column>
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>

@@ -1,12 +1,11 @@
 package me.batizhao.system.unit.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.system.controller.DictTypeController;
-import me.batizhao.system.domain.DictType;
-import me.batizhao.system.service.DictTypeService;
+import me.batizhao.system.controller.DictDataController;
+import me.batizhao.system.domain.DictData;
+import me.batizhao.system.service.DictDataService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +29,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * 字典类型
+ * 字典
  *
  * @author batizhao
- * @since 2021-02-07
+ * @since 2021-02-08
  */
-@WebMvcTest(DictTypeController.class)
-public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
+@WebMvcTest(DictDataController.class)
+public class DictDataControllerUnitTest extends BaseControllerUnitTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -45,31 +44,27 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
     private MockMvc mvc;
 
     @MockBean
-    DictTypeService dictTypeService;
+    DictDataService dictDataService;
 
-    private List<DictType> dictTypeList;
-    private IPage<DictType> dictTypePageList;
+    private List<DictData> dictDataList;
 
     /**
      * Prepare test data.
      */
     @BeforeEach
     public void setUp() {
-        dictTypeList = new ArrayList<>();
-        dictTypeList.add(new DictType().setId(1L).setName("zhangsan"));
-        dictTypeList.add(new DictType().setId(2L).setName("lisi"));
-        dictTypeList.add(new DictType().setId(3L).setName("wangwu"));
-
-        dictTypePageList = new Page<>();
-        dictTypePageList.setRecords(dictTypeList);
+        dictDataList = new ArrayList<>();
+        dictDataList.add(new DictData().setId(1L).setLabel("zhangsan"));
+        dictDataList.add(new DictData().setId(2L).setLabel("lisi"));
+        dictDataList.add(new DictData().setId(3L).setLabel("wangwu"));
     }
 
     @Test
     @WithMockUser
-    public void givenNothing_whenFindAllDictType_thenSuccess() throws Exception {
-        when(dictTypeService.findDictTypes(any(Page.class), any(DictType.class))).thenReturn(dictTypePageList);
+    public void givenNothing_whenFindAllDictData_thenSuccess() throws Exception {
+        when(dictDataService.list()).thenReturn(dictDataList);
 
-        mvc.perform(get("/dict/types"))
+        mvc.perform(get("/dict/data"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -78,35 +73,35 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.records", hasSize(3)))
                 .andExpect(jsonPath("$.data.records[0].username", equalTo("zhangsan")));
 
-        verify(dictTypeService).findDictTypes(any(Page.class), any(DictType.class));
+        verify(dictDataService).list();
     }
 
     @Test
     @WithMockUser
-    public void givenId_whenFindDictType_thenSuccess() throws Exception {
+    public void givenId_whenFindDictData_thenSuccess() throws Exception {
         Long id = 1L;
 
-        when(dictTypeService.findById(id)).thenReturn(dictTypeList.get(0));
+        when(dictDataService.findById(id)).thenReturn(dictDataList.get(0));
 
-        mvc.perform(get("/dict/type/{id}", id))
+        mvc.perform(get("/dict/data/{id}", id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.username").value("zhangsan"));
 
-        verify(dictTypeService).findById(anyLong());
+        verify(dictDataService).findById(anyLong());
     }
 
     @Test
     @WithMockUser
-    public void givenJson_whenSaveDictType_thenSuccess() throws Exception {
-        DictType requestBody = new DictType().setName("zhaoliu");
+    public void givenJson_whenSaveDictData_thenSuccess() throws Exception {
+        DictData requestBody = new DictData().setLabel("zhaoliu");
 
-        when(dictTypeService.saveOrUpdateDictType(any(DictType.class)))
-                .thenReturn(dictTypeList.get(0));
+        when(dictDataService.saveOrUpdateDictData(any(DictData.class)))
+                .thenReturn(dictDataList.get(0));
 
-        mvc.perform(post("/dict/type").with(csrf())
+        mvc.perform(post("/dict/data").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -115,18 +110,18 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.id", equalTo(1)));
 
-        verify(dictTypeService).saveOrUpdateDictType(any(DictType.class));
+        verify(dictDataService).saveOrUpdateDictData(any(DictData.class));
     }
 
     @Test
     @WithMockUser
-    public void givenJson_whenUpdateDictType_thenSuccess() throws Exception {
-        DictType requestBody = new DictType().setId(2L).setName("zhaoliu");
+    public void givenJson_whenUpdateDictData_thenSuccess() throws Exception {
+        DictData requestBody = new DictData().setId(2L).setLabel("zhaoliu");
 
-        when(dictTypeService.saveOrUpdateDictType(any(DictType.class)))
-                .thenReturn(dictTypeList.get(1));
+        when(dictDataService.saveOrUpdateDictData(any(DictData.class)))
+                .thenReturn(dictDataList.get(1));
 
-        mvc.perform(post("/dict/type").with(csrf())
+        mvc.perform(post("/dict/data").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -135,21 +130,21 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.id", equalTo(2)));
 
-        verify(dictTypeService).saveOrUpdateDictType(any(DictType.class));
+        verify(dictDataService).saveOrUpdateDictData(any(DictData.class));
     }
 
     @Test
     @WithMockUser
-    public void givenId_whenDeleteDictType_thenSuccess() throws Exception {
-        when(dictTypeService.removeByIds(anyList())).thenReturn(true);
+    public void givenId_whenDeleteDictData_thenSuccess() throws Exception {
+        when(dictDataService.removeByIds(anyList())).thenReturn(true);
 
-        mvc.perform(delete("/dict/type").param("ids", "1,2").with(csrf()))
+        mvc.perform(delete("/dict/data").param("ids", "1,2").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data").value(true));
 
-        verify(dictTypeService).removeByIds(anyList());
+        verify(dictDataService).removeByIds(anyList());
     }
 }

@@ -56,10 +56,10 @@ public class Ds extends Model<Ds> {
     private String password;
 
     /**
-     * 是否可用
+     * 状态
      */
-    @ApiModelProperty(value="是否可用")
-    private Boolean status;
+    @ApiModelProperty(value="状态")
+    private String status;
 
     /**
      * 创建时间

@@ -29,7 +29,7 @@ public interface ${className}Service extends IService<${className}> {
     ${className} findById(${pk.javaType} id);
 
     /**
-     * 添加或修改${comments}
+     * 添加或编辑${comments}
      * @param ${classname} ${comments}
      * @return ${className}
      */

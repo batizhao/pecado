@@ -60,11 +60,11 @@ public class ${className}Controller {
     }
 
     /**
-     * 添加或修改${comments}
+     * 添加或编辑${comments}
      * @param ${classname} ${comments}
      * @return ResponseInfo
      */
-    @ApiOperation(value = "添加或修改${comments}")
+    @ApiOperation(value = "添加或编辑${comments}")
     @PostMapping("/${pathName}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<${className}> handleSaveOrUpdate(@Valid @ApiParam(value = "${comments}" , required = true) @RequestBody ${className} ${classname}) {

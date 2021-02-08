@@ -57,10 +57,10 @@ public class UserVO implements Serializable {
     private Integer unreadCount;
 
     /**
-     * 是否可用
+     * 状态
      */
-    @ApiModelProperty(value="是否可用")
-    private Boolean status;
+    @ApiModelProperty(value="状态")
+    private String status;
 
     /**
      * 创建时间

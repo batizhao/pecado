@@ -15,7 +15,9 @@
             <column name="code" type="VARCHAR(32)" remarks="代码">
                 <constraints nullable="false" unique="true" />
             </column>
-            <column name="status" type="TINYINT(1)" remarks="是否可用" defaultValue="1" />
+            <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
+                <constraints nullable="false" />
+            </column>
             <column name="description" type="VARCHAR(255)" remarks="描述" defaultValue="" />
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
@@ -40,9 +42,11 @@
             <column name="value" type="VARCHAR(32)" remarks="值">
                 <constraints nullable="false" />
             </column>
-            <column name="default" type="TINYINT(1)" remarks="是否默认" defaultValue="0"/>
+            <column name="isDefault" type="TINYINT(1)" remarks="是否默认" defaultValue="0"/>
             <column name="sort" type="INT" defaultValue="1" remarks="排序" />
-            <column name="status" type="TINYINT(1)" remarks="是否可用" defaultValue="1"/>
+            <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
+                <constraints nullable="false" />
+            </column>
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
@@ -57,17 +61,24 @@
         <insert tableName="dict_type">
             <column name="name" value="性别"/>
             <column name="code" value="sex"/>
+            <column name="description" value="男|女"/>
         </insert>
         <insert tableName="dict_type">
             <column name="name" value="状态"/>
             <column name="code" value="status"/>
+            <column name="description" value="启用|禁用"/>
+        </insert>
+        <insert tableName="dict_type">
+            <column name="name" value="是否"/>
+            <column name="code" value="yes_or_no"/>
+            <column name="description" value="是|否"/>
         </insert>
         <insert tableName="dict_data">
             <column name="code" value="sex"/>
             <column name="label" value="男"/>
             <column name="value" value="male"/>
             <column name="sort" valueNumeric="1"/>
-            <column name="default" valueNumeric="1"/>
+            <column name="isDefault" valueNumeric="1"/>
         </insert>
         <insert tableName="dict_data">
             <column name="code" value="sex"/>
@@ -80,7 +91,7 @@
             <column name="label" value="启用"/>
             <column name="value" value="open"/>
             <column name="sort" valueNumeric="1"/>
-            <column name="default" valueNumeric="1"/>
+            <column name="isDefault" valueNumeric="1"/>
         </insert>
         <insert tableName="dict_data">
             <column name="code" value="status"/>
@@ -88,12 +99,27 @@
             <column name="value" value="close"/>
             <column name="sort" valueNumeric="2"/>
         </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="yes_or_no"/>
+            <column name="label" value="是"/>
+            <column name="value" value="yes"/>
+            <column name="sort" valueNumeric="1"/>
+            <column name="isDefault" valueNumeric="1"/>
+        </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="yes_or_no"/>
+            <column name="label" value="否"/>
+            <column name="value" value="no"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
 
         <rollback>
             delete from dict_type where code = 'sex';
-            delete from dict_type where code = 'status';
             delete from dict_data where code = 'sex';
+            delete from dict_type where code = 'status';
             delete from dict_data where code = 'status';
+            delete from dict_type where code = 'yes_or_no';
+            delete from dict_data where code = 'yes_or_no';
         </rollback>
     </changeSet>
 </databaseChangeLog>

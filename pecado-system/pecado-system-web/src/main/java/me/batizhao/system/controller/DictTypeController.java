@@ -1,13 +1,16 @@
 package me.batizhao.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.system.domain.DictData;
 import me.batizhao.system.domain.DictType;
+import me.batizhao.system.service.DictDataService;
 import me.batizhao.system.service.DictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +37,8 @@ public class DictTypeController {
 
     @Autowired
     private DictTypeService dictTypeService;
+    @Autowired
+    private DictDataService dictDataService;
 
     /**
      * 分页查询
@@ -47,6 +52,15 @@ public class DictTypeController {
         return ResponseInfo.ok(dictTypeService.findDictTypes(page, dictType));
     }
 
+    /**
+     * 查询所有
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "查询所有")
+    @GetMapping("/dict/type")
+    public ResponseInfo<List<DictType>> handleDictType() {
+        return ResponseInfo.ok(dictTypeService.list());
+    }
 
     /**
      * 通过id查询字典类型
@@ -56,7 +70,9 @@ public class DictTypeController {
     @ApiOperation(value = "通过id查询")
     @GetMapping("/dict/type/{id}")
     public ResponseInfo<DictType> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
-        return ResponseInfo.ok(dictTypeService.findById(id));
+        DictType dictType = dictTypeService.findById(id);
+//        dictType.setDictDataList(dictDataService.list(Wrappers.<DictData>lambdaQuery().eq(DictData::getCode, dictType.getCode())));
+        return ResponseInfo.ok(dictType);
     }
 
     /**
@@ -81,6 +97,19 @@ public class DictTypeController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
         return ResponseInfo.ok(dictTypeService.removeByIds(ids));
+    }
+
+    /**
+     * 更新字典类型状态
+     *
+     * @param dictType 字典类型
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "更新字典类型状态")
+    @PostMapping("/dict/type/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "字典类型" , required = true) @RequestBody DictType dictType) {
+        return ResponseInfo.ok(dictTypeService.updateStatus(dictType));
     }
 
 }

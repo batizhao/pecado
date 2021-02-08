@@ -1,6 +1,7 @@
 package me.batizhao.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -63,4 +64,11 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
         return dictType;
     }
 
+    @Override
+    @Transactional
+    public Boolean updateStatus(DictType dictType) {
+        LambdaUpdateWrapper<DictType> wrapper = Wrappers.lambdaUpdate();
+        wrapper.eq(DictType::getId, dictType.getId()).set(DictType::getStatus, dictType.getStatus());
+        return dictTypeMapper.update(null, wrapper) == 1;
+    }
 }

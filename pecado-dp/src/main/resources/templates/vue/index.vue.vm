@@ -26,9 +26,9 @@
         <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small">
           <el-option
             v-for="dict in ${column.javaField}Options"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
           />
         </el-select>
       </el-form-item>
@@ -89,7 +89,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['${moduleName}:${classname}:edit']"
-        >修改</el-button>
+        >编辑</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -130,7 +130,7 @@
 #elseif($column.display && $column.htmlType == "datetime")
       <el-table-column label="${comment}" align="center" prop="${javaField}" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.${javaField}, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.${javaField}) }}</span>
         </template>
       </el-table-column>
 #elseif($column.display && "" != $column.dictType)
@@ -202,9 +202,9 @@
           <el-select v-model="form.${field}" placeholder="请选择${comment}">
             <el-option
               v-for="dict in ${field}Options"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              #if($column.javaType == "Integer" || $column.javaType == "Long"):value="parseInt(dict.dictValue)"#else:value="dict.dictValue"#end
+              :key="dict.value"
+              :label="dict.label"
+              #if($column.javaType == "Integer" || $column.javaType == "Long"):value="parseInt(dict.value)"#else:value="dict.value"#end
 
             ></el-option>
           </el-select>
@@ -220,9 +220,9 @@
           <el-checkbox-group v-model="form.${field}">
             <el-checkbox
               v-for="dict in ${field}Options"
-              :key="dict.dictValue"
-              :label="dict.dictValue">
-              {{dict.dictLabel}}
+              :key="dict.value"
+              :label="dict.value">
+              {{dict.label}}
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
@@ -237,10 +237,10 @@
           <el-radio-group v-model="form.${field}">
             <el-radio
               v-for="dict in ${field}Options"
-              :key="dict.dictValue"
-              #if($column.javaType == "Integer" || $column.javaType == "Long"):label="parseInt(dict.dictValue)"#else:label="dict.dictValue"#end
+              :key="dict.value"
+              #if($column.javaType == "Integer" || $column.javaType == "Long"):label="parseInt(dict.value)"#else:label="dict.value"#end
 
-            >{{dict.dictLabel}}</el-radio>
+            >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
 #elseif($column.htmlType == "radio" && $dictType)
@@ -482,6 +482,20 @@ export default {
     },
     // 表单重置
     reset() {
+      this.form = {
+#foreach ($column in $columns)
+    #if($column.htmlType == "radio")
+        $column.javaField: #if($column.javaType == "Integer" || $column.javaType == "Long")0#else"0"#end#if($velocityCount != $columns.size()),#end
+
+    #elseif($column.htmlType == "checkbox")
+        $column.javaField: []#if($velocityCount != $columns.size()),#end
+
+    #else
+        $column.javaField: null#if($velocityCount != $columns.size()),#end
+
+    #end
+#end
+      };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -543,7 +557,7 @@ export default {
           this.form.${subclassName}List = this.${subclassName}List;
 #end
           addOrUpdate${className}(this.form).then(response => {
-            this.msgSuccess("添加成功");
+            this.msgSuccess("保存成功");
             this.open = false;
             this.getList();
           });
