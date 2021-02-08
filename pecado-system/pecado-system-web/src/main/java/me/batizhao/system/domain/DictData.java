@@ -53,7 +53,7 @@ public class DictData extends Model<DictData> {
      * 是否默认
      */
     @ApiModelProperty(value="是否默认")
-    private Boolean isDefault;
+    private String isDefault;
 
     /**
      * 排序
