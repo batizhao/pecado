@@ -50,6 +50,32 @@ public class UserController {
     private UserRoleService userRoleService;
 
     /**
+     * 分页查询
+     * @param page 分页对象
+     * @param user 用户
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "查询所有用户")
+    @GetMapping("users")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<IPage<User>> handleUsers(Page<User> page, User user) {
+        return ResponseInfo.ok(userService.findUsers(page, user));
+    }
+
+    /**
+     * 通过id查询用户
+     * @param id id
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "通过id查询")
+    @GetMapping("/user/{id}")
+    @SystemLog
+    public ResponseInfo<User> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return ResponseInfo.ok(userService.findById(id));
+    }
+
+    /**
      * 根据用户名查询用户
      * 用户名不重复，返回单个用户详情（包括其角色）
      *
@@ -78,56 +104,23 @@ public class UserController {
      */
     @ApiOperation(value = "根据姓名查询用户")
     @GetMapping(value = "user", params = "name")
-    @SystemLog
-    public ResponseInfo<List<UserVO>> handleName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
-        List<UserVO> users = userService.findByName(name);
-        return ResponseInfo.ok(users);
-    }
-
-    /**
-     * 根据ID查询用户
-     * 返回用户详情
-     *
-     * @param id 用户id
-     * @return 用户详情
-     */
-    @ApiOperation(value = "根据ID查询用户")
-    @GetMapping("/user/{id}")
-    @SystemLog
-    public ResponseInfo<UserVO> handleId(@ApiParam(value = "用户ID", required = true) @PathVariable("id") @Min(1) Long id) {
-        UserVO user = userService.findById(id);
-        return ResponseInfo.ok(user);
-    }
-
-    /**
-     * 查询所有用户
-     * 返回所有的用户
-     *
-     * @return 所有用户列表
-     */
-    @ApiOperation(value = "查询所有用户")
-    @GetMapping("users")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<IPage<UserVO>> handleUsers(Page<UserVO> page, User user) {
-        IPage<UserVO> users = userService.findUsers(page, user);
-        return ResponseInfo.ok(users);
+    public ResponseInfo<List<User>> handleName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
+        return ResponseInfo.ok(userService.findByName(name));
     }
 
     /**
-     * 添加或修改用户
-     * 根据是否有ID判断是添加还是修改
-     *
-     * @param request_user 用户属性
-     * @return 用户对象
+     * 添加或编辑用户
+     * @param user 用户
+     * @return ResponseInfo
      */
-    @ApiOperation(value = "添加或修改用户")
-    @PostMapping("user")
+    @ApiOperation(value = "添加或编辑用户")
+    @PostMapping("/user")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<UserVO> handleSaveOrUpdate(@Valid @ApiParam(value = "用户", required = true) @RequestBody User request_user) {
-        UserVO user = userService.saveOrUpdateUser(request_user);
-        return ResponseInfo.ok(user);
+    public ResponseInfo<User> handleSaveOrUpdate(@Valid @ApiParam(value = "用户" , required = true) @RequestBody User user) {
+        return ResponseInfo.ok(userService.saveOrUpdateUser(user));
     }
 
     /**
@@ -146,33 +139,17 @@ public class UserController {
     }
 
     /**
-     * 禁用
+     * 更新用户状态
      *
-     * @param id 用户ID
-     * @return
+     * @param user 用户
+     * @return ResponseInfo
      */
-    @ApiOperation(value = "禁用")
-    @PostMapping("/user/lock")
+    @ApiOperation(value = "更新用户状态")
+    @PostMapping("/user/status")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<Boolean> handleLockUser(@ApiParam(value = "用户ID", required = true) @RequestParam Long id) {
-        Boolean b = userService.updateUserStatusById(id, 1);
-        return ResponseInfo.ok(b);
-    }
-
-    /**
-     * 启用
-     *
-     * @param id 用户ID
-     * @return
-     */
-    @ApiOperation(value = "启用")
-    @PostMapping("/user/unlock")
-    @PreAuthorize("hasRole('ADMIN')")
-    @SystemLog
-    public ResponseInfo<Boolean> handleUnLockUser(@ApiParam(value = "用户ID", required = true) @RequestParam Long id) {
-        Boolean b = userService.updateUserStatusById(id, 0);
-        return ResponseInfo.ok(b);
+    public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "用户" , required = true) @RequestBody User user) {
+        return ResponseInfo.ok(userService.updateUserStatus(user));
     }
 
     /**

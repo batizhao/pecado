@@ -108,7 +108,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
         when(userMapper.selectList(any())).thenReturn(userList.subList(0,1));
 
-        List<UserVO> users = userService.findByName(name);
+        List<User> users = userService.findByName(name);
 
         verify(userMapper).selectList(any());
 
@@ -123,7 +123,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         userList.clear();
         when(userMapper.selectList(any())).thenReturn(userList);
 
-        List<UserVO> users = userService.findByName("xxxx");
+        List<User> users = userService.findByName("xxxx");
 
         verify(userMapper).selectList(any());
 
@@ -137,7 +137,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         when(userMapper.selectUserPage(any(Page.class), any(User.class)))
                 .thenReturn(userPageList);
 
-        IPage<UserVO> users = userService.findUsers(new Page<>(), new User().setUsername("tom"));
+        IPage<User> users = userService.findUsers(new Page<>(), new User().setUsername("tom"));
 
         assertThat(users.getRecords(), iterableWithSize(3));
         assertThat(users.getRecords(), hasItems(hasProperty("username", is("zhangsan")),
@@ -158,7 +158,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         when(userMapper.selectById(1L))
                 .thenReturn(userList.get(0));
 
-        UserVO user = userService.findById(1L);
+        User user = userService.findById(1L);
 
         assertThat(user.getUsername(), equalTo("zhangsan"));
         assertThat(user.getEmail(), equalTo("zhangsan@gmail.com"));
@@ -176,17 +176,17 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         verify(userMapper).selectById(anyLong());
     }
 
-    @Test
-    public void givenUserName_whenDeleteUser_thenSuccess() {
-        String username = "zhangsan";
-
-        when(userMapper.delete(any()))
-                .thenReturn(1);
-
-        int result = userService.deleteByUsername(username);
-
-        assertThat(result, equalTo(1));
-    }
+//    @Test
+//    public void givenUserName_whenDeleteUser_thenSuccess() {
+//        String username = "zhangsan";
+//
+//        when(userMapper.delete(any()))
+//                .thenReturn(1);
+//
+//        int result = userService.deleteByUsername(username);
+//
+//        assertThat(result, equalTo(1));
+//    }
 
     @Test
     public void givenUserJson_whenSaveOrUpdateUser_thenSuccess() {
@@ -211,7 +211,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         // insert 不带 id
         doReturn(1).when(userMapper).insert(any());
 
-        UserVO user = userService.saveOrUpdateUser(user_test_data);
+        User user = userService.saveOrUpdateUser(user_test_data);
         log.info("user: {}", user);
 
         verify(userMapper).insert(any());
@@ -241,16 +241,16 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         assertThrows(NotFoundException.class, () -> userService.getUserInfo(1L));
     }
 
-    @Test
-    public void givenUserId_whenUpdateUserStatus_thenSuccess() {
-        when(userMapper.updateUserStatusById(1L, 1))
-                .thenReturn(1);
-
-        assertThat(userService.updateUserStatusById(1L, 1), equalTo(true));
-
-        when(userMapper.updateUserStatusById(1L, 1))
-                .thenReturn(0);
-
-        assertThat(userService.updateUserStatusById(1L, 1), equalTo(false));
-    }
+//    @Test
+//    public void givenUserId_whenUpdateUserStatus_thenSuccess() {
+//        when(userMapper.updateUserStatusById(1L, 1))
+//                .thenReturn(1);
+//
+//        assertThat(userService.updateUserStatusById(1L, 1), equalTo(true));
+//
+//        when(userMapper.updateUserStatusById(1L, 1))
+//                .thenReturn(0);
+//
+//        assertThat(userService.updateUserStatusById(1L, 1), equalTo(false));
+//    }
 }

@@ -15,19 +15,54 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
 
+	/**
+	 * 分页查询
+	 * @param page 分页对象
+	 * @param user 用户
+	 * @return IPage<User>
+	 */
+	IPage<User> findUsers(Page<User> page, User user);
+
+	/**
+	 * 通过id查询用户
+	 * @param id id
+	 * @return User
+	 */
+	User findById(Long id);
+
+	/**
+	 * 通过 username 查询用户
+	 * @param username
+	 * @return
+	 */
 	UserVO findByUsername(String username);
 
-	List<UserVO> findByName(String name);
+	/**
+	 * 通过 name 查询用户
+	 * @param name
+	 * @return
+	 */
+	List<User> findByName(String name);
 
-	IPage<UserVO> findUsers(Page<UserVO> page, User user);
+	/**
+	 * 添加或编辑用户
+	 * @param user 用户
+	 * @return User
+	 */
+	User saveOrUpdateUser(User user);
 
-	UserVO findById(Long userId);
+	/**
+	 * 更新用户状态
+	 * @param user 用户
+	 * @return Boolean
+	 */
+	Boolean updateUserStatus(User user);
 
-	int deleteByUsername(String username);
-
-	UserVO saveOrUpdateUser(User user);
-
+	/**
+	 * 通过id查询用户信息
+	 * @param userId
+	 * @return
+	 */
     UserInfoVO getUserInfo(Long userId);
 
-	Boolean updateUserStatusById(Long userId, Integer locked);
 }

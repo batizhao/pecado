@@ -61,7 +61,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
 
     @Override
     @Transactional
-    public Boolean update${className}Status(${className} role) {
+    public Boolean update${className}Status(${className} ${classname}) {
         LambdaUpdateWrapper<${className}> wrapper = Wrappers.lambdaUpdate();
         wrapper.eq(${className}::getId, ${classname}.getId()).set(${className}::getStatus, ${classname}.getStatus());
         return ${classname}Mapper.update(null, wrapper) == 1;

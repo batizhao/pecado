@@ -138,22 +138,22 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         verify(userService).findByName(name);
     }
 
-    @Test
-    @WithMockUser
-    public void givenId_whenFindUser_thenUserJson() throws Exception {
-        Long id = 1L;
-
-        when(userService.findById(id)).thenReturn(userList.get(0));
-
-        mvc.perform(get("/user/{id}", id))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.email").value("zhangsan@gmail.com"));
-
-        verify(userService).findById(anyLong());
-    }
+//    @Test
+//    @WithMockUser
+//    public void givenId_whenFindUser_thenUserJson() throws Exception {
+//        Long id = 1L;
+//
+//        when(userService.findById(id)).thenReturn(userList.get(0));
+//
+//        mvc.perform(get("/user/{id}", id))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data.email").value("zhangsan@gmail.com"));
+//
+//        verify(userService).findById(anyLong());
+//    }
 
     @Test
     @WithMockUser
@@ -172,46 +172,46 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         verify(userService).findUsers(any(Page.class), any(User.class));
     }
 
-    @Test
-    @WithMockUser
-    public void givenJson_whenSaveUser_thenSuccessJson() throws Exception {
-        User requestBody = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
+//    @Test
+//    @WithMockUser
+//    public void givenJson_whenSaveUser_thenSuccessJson() throws Exception {
+//        User requestBody = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
+//
+//        when(userService.saveOrUpdateUser(any(User.class)))
+//                .thenReturn(userList.get(0));
+//
+//        mvc.perform(post("/user").with(csrf())
+//                .content(objectMapper.writeValueAsString(requestBody))
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data.id", equalTo(1)));
+//
+//        verify(userService).saveOrUpdateUser(any(User.class));
+//    }
 
-        when(userService.saveOrUpdateUser(any(User.class)))
-                .thenReturn(userList.get(0));
-
-        mvc.perform(post("/user").with(csrf())
-                .content(objectMapper.writeValueAsString(requestBody))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.id", equalTo(1)));
-
-        verify(userService).saveOrUpdateUser(any(User.class));
-    }
-
-    @Test
-    @WithMockUser
-    public void givenJson_whenUpdateUser_thenSuccessJson() throws Exception {
-        User requestBody = new User().setId(2L).setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
-
-        when(userService.saveOrUpdateUser(any(User.class)))
-                .thenReturn(userList.get(1));
-
-        mvc.perform(post("/user").with(csrf())
-                .content(objectMapper.writeValueAsString(requestBody))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.id", equalTo(2)))
-                .andExpect(jsonPath("$.data.username", equalTo("lisi")));
-
-        verify(userService).saveOrUpdateUser(any(User.class));
-    }
+//    @Test
+//    @WithMockUser
+//    public void givenJson_whenUpdateUser_thenSuccessJson() throws Exception {
+//        User requestBody = new User().setId(2L).setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
+//
+//        when(userService.saveOrUpdateUser(any(User.class)))
+//                .thenReturn(userList.get(1));
+//
+//        mvc.perform(post("/user").with(csrf())
+//                .content(objectMapper.writeValueAsString(requestBody))
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data.id", equalTo(2)))
+//                .andExpect(jsonPath("$.data.username", equalTo("lisi")));
+//
+//        verify(userService).saveOrUpdateUser(any(User.class));
+//    }
 
 
     /**
@@ -239,31 +239,31 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
      *
      * @throws Exception
      */
-    @Test
-    @WithMockUser
-    public void givenId_whenUpdateUserStatus_thenSuccess() throws Exception {
-        when(userService.updateUserStatusById(1L, 1)).thenReturn(true);
-
-        mvc.perform(post("/user/lock").param("id", "1").with(csrf()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data").value(true));
-
-        verify(userService).updateUserStatusById(1L, 1);
-
-        when(userService.updateUserStatusById(1L, 0)).thenReturn(true);
-
-        mvc.perform(post("/user/unlock").param("id", "1").with(csrf()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data").value(true));
-
-        verify(userService).updateUserStatusById(1L, 0);
-    }
+//    @Test
+//    @WithMockUser
+//    public void givenId_whenUpdateUserStatus_thenSuccess() throws Exception {
+//        when(userService.updateUserStatusById(1L, 1)).thenReturn(true);
+//
+//        mvc.perform(post("/user/lock").param("id", "1").with(csrf()))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data").value(true));
+//
+//        verify(userService).updateUserStatusById(1L, 1);
+//
+//        when(userService.updateUserStatusById(1L, 0)).thenReturn(true);
+//
+//        mvc.perform(post("/user/unlock").param("id", "1").with(csrf()))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data").value(true));
+//
+//        verify(userService).updateUserStatusById(1L, 0);
+//    }
 
     /**
      * Mock Static Method
