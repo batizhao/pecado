@@ -99,7 +99,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['${moduleName}:${classname}:remove']"
+          v-hasPermi="['${moduleName}:${classname}:delete']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -133,6 +133,17 @@
           <span>{{ parseTime(scope.row.${javaField}) }}</span>
         </template>
       </el-table-column>
+#elseif($column.display && $column.htmlType == "switch")
+      <el-table-column label="${comment}" align="center">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.${javaField}"
+            @change="handleStatusChange(scope.row)"
+            active-value="open"
+            inactive-value="close"
+          ></el-switch>
+        </template>
+      </el-table-column>
 #elseif($column.display && "" != $column.dictType)
       <el-table-column label="${comment}" align="center" prop="${javaField}" :formatter="${javaField}Format" />
 #elseif($column.display && "" != $javaField)
@@ -151,7 +162,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['${moduleName}:${classname}:remove']"
+            v-hasPermi="['${moduleName}:${classname}:delete']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -306,7 +317,7 @@
 </template>
 
 <script>
-import { list${className}, get${className}, delete${className}, addOrUpdate${className}, export${className} } from "@/api/${moduleName}/${classname}";
+import { list${className}, get${className}, delete${className}, addOrUpdate${className}, change${className}Status, export${className} } from "@/api/${moduleName}/${classname}";
 #foreach($column in $columns)
 #if($column.save && !$column.superColumn && !$column.primaryKey && $column.htmlType == "imageUpload")
 import ImageUpload from '@/components/ImageUpload';
@@ -458,6 +469,21 @@ export default {
         this.total = response.data.total;
         this.loading = false;
       });
+    },
+    // ${comments}状态编辑
+    handleStatusChange(row) {
+      let text = row.status === "open" ? "启用" : "停用";
+      this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return change${className}Status(row.id, row.status);
+        }).then(() => {
+          this.msgSuccess(text + "成功");
+        }).catch(function() {
+          row.status = row.status === "open" ? "close" : "open";
+        });
     },
 #foreach ($column in $columns)
 #if(${column.dictType} != '')

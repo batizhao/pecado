@@ -1,5 +1,7 @@
 package me.batizhao.ims.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,6 +42,74 @@ public class RoleController {
     private RoleMenuService roleMenuService;
 
     /**
+     * 查询所有角色
+     * 返回角色集合
+     *
+     * @return 角色集合
+     */
+    @SystemLog
+    @ApiOperation(value = "分页查询")
+    @GetMapping("/roles")
+    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    public ResponseInfo<IPage<Role>> handleRoles(Page<Role> page, Role role) {
+        return ResponseInfo.ok(roleService.findRoles(page, role));
+    }
+
+    /**
+     * 通过id查询角色
+     * @param id id
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "通过id查询")
+    @GetMapping("/role/{id}")
+    public ResponseInfo<Role> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return ResponseInfo.ok(roleService.findById(id));
+    }
+
+    /**
+     * 添加或修改角色
+     * 根据是否有ID判断是添加还是修改
+     *
+     * @param role 角色属性
+     * @return 角色对象
+     */
+    @ApiOperation(value = "添加或修改角色")
+    @PostMapping("role")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<Role> handleSaveOrUpdate(@Valid @ApiParam(value = "角色", required = true) @RequestBody Role role) {
+        return ResponseInfo.ok(roleService.saveOrUpdateRole(role));
+    }
+
+    /**
+     * 删除角色
+     * 根据角色ID删除角色
+     *
+     * @return 成功或者失败
+     */
+    @ApiOperation(value = "删除角色")
+    @DeleteMapping("role")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "角色ID串", required = true) @RequestParam List<Long> ids) {
+        Boolean b = roleService.removeByIds(ids);
+        return ResponseInfo.ok(b);
+    }
+
+    /**
+     * 更新角色状态
+     *
+     * @param role 角色
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "更新角色状态")
+    @PostMapping("/role/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "角色" , required = true) @RequestBody Role role) {
+        return ResponseInfo.ok(roleService.updateRoleStatus(role));
+    }
+
+    /**
      * 根据用户ID查询角色
      * 返回角色集合
      *
@@ -53,20 +123,6 @@ public class RoleController {
     public ResponseInfo<List<RoleVO>> handleRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         List<RoleVO> roles = roleService.findRolesByUserId(userId);
         return ResponseInfo.ok(roles);
-    }
-
-    /**
-     * 查询所有角色
-     * 返回角色集合
-     *
-     * @return 角色集合
-     */
-    @ApiOperation(value = "查询所有角色")
-    @GetMapping(value = "roles")
-    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
-    @SystemLog
-    public ResponseInfo<List<RoleVO>> handleRoles() {
-        return ResponseInfo.ok(roleService.findRoles());
     }
 
     /**
@@ -86,34 +142,4 @@ public class RoleController {
         return ResponseInfo.ok(roleMenuService.updateRoleMenus(id, menus));
     }
 
-    /**
-     * 添加或修改角色
-     * 根据是否有ID判断是添加还是修改
-     *
-     * @param request_role 角色属性
-     * @return 角色对象
-     */
-    @ApiOperation(value = "添加或修改角色")
-    @PostMapping("role")
-    @PreAuthorize("hasRole('ADMIN')")
-    @SystemLog
-    public ResponseInfo<RoleVO> handleSaveOrUpdate(@Valid @ApiParam(value = "角色", required = true) @RequestBody Role request_role) {
-        RoleVO roleVO = roleService.saveOrUpdateRole(request_role);
-        return ResponseInfo.ok(roleVO);
-    }
-
-    /**
-     * 删除角色
-     * 根据角色ID删除角色
-     *
-     * @return 成功或者失败
-     */
-    @ApiOperation(value = "删除角色")
-    @DeleteMapping("role")
-    @PreAuthorize("hasRole('ADMIN')")
-    @SystemLog
-    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "角色ID串", required = true) @RequestParam List<Long> ids) {
-        Boolean b = roleService.removeByIds(ids);
-        return ResponseInfo.ok(b);
-    }
 }

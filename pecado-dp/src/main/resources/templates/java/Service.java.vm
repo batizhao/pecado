@@ -35,4 +35,11 @@ public interface ${className}Service extends IService<${className}> {
      */
     ${className} saveOrUpdate${className}(${className} ${classname});
 
+    /**
+     * 更新${comments}状态
+     * @param ${classname} ${comments}
+     * @return Boolean
+     */
+    Boolean update${className}Status(${className} ${classname});
+
 }

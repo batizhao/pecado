@@ -79,6 +79,9 @@ public class GenConstants
     /** 复选框 */
     public static final String HTML_CHECKBOX = "checkbox";
 
+    /** 开关 */
+    public static final String HTML_SWITCH = "switch";
+
     /** 日期控件 */
     public static final String HTML_DATETIME = "datetime";
 

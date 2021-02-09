@@ -168,7 +168,7 @@ public class CodeGenUtils {
         }
         // 状态字段设置单选框
         if (StringUtils.endsWithIgnoreCase(columnName, "status")) {
-            codeMeta.setHtmlType(GenConstants.HTML_RADIO);
+            codeMeta.setHtmlType(GenConstants.HTML_SWITCH);
         }
         // 类型&性别字段设置下拉框
         else if (StringUtils.endsWithIgnoreCase(columnName, "type")

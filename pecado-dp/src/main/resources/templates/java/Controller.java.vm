@@ -83,4 +83,17 @@ public class ${className}Controller {
         return ResponseInfo.ok(${classname}Service.removeByIds(ids));
     }
 
+    /**
+     * 更新${comments}状态
+     *
+     * @param ${classname} ${comments}
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "更新${comments}状态")
+    @PostMapping("/${pathName}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "${comments}" , required = true) @RequestBody ${className} ${classname}) {
+        return ResponseInfo.ok(${classname}Service.update${className}Status(${classname}));
+    }
+
 }

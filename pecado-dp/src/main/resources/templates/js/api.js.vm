@@ -27,6 +27,19 @@ export function delete${className}(${pk.javaField}s) {
   return request.delete(`/${moduleName}/${classname}?ids=${${pk.javaField}s}`);
 }
 
+// 角色状态编辑
+export function change${className}Status(id, status) {
+  const data = {
+    id,
+    status
+  }
+  return request({
+    url: '/${moduleName}/${classname}/status',
+    method: 'post',
+    data: data
+  })
+}
+
 // 导出${comments}
 export function export${className}(query) {
   return request({

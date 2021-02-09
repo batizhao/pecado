@@ -1,11 +1,18 @@
 package me.batizhao.ims.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.mapper.RoleMapper;
 import me.batizhao.ims.service.RoleService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,22 +32,28 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private RoleMapper roleMapper;
 
     @Override
-    public List<RoleVO> findRolesByUserId(Long userId) {
-        List<Role> roleList = roleMapper.findRolesByUserId(userId);
-        return BeanCopyUtil.copyListProperties(roleList, RoleVO::new);
+    public IPage<Role> findRoles(Page<Role> page, Role role) {
+        LambdaQueryWrapper<Role> wrapper = Wrappers.lambdaQuery();
+        if (StringUtils.isNotBlank(role.getName())) {
+            wrapper.like(Role::getName, role.getName());
+        }
+        return roleMapper.selectPage(page, wrapper);
     }
 
     @Override
-    public List<RoleVO> findRoles() {
-        List<Role> roles = baseMapper.selectList(null);
-        return BeanCopyUtil.copyListProperties(roles, RoleVO::new);
+    public Role findById(Long id) {
+        Role role = roleMapper.selectById(id);
+
+        if(role == null) {
+            throw new NotFoundException(String.format("没有该记录 '%s'。", id));
+        }
+
+        return role;
     }
 
     @Override
     @Transactional
-    public RoleVO saveOrUpdateRole(Role role) {
-        role.setCreateTime(LocalDateTime.now());
-
+    public Role saveOrUpdateRole(Role role) {
         if (role.getId() == null) {
             role.setCreateTime(LocalDateTime.now());
             role.setUpdateTime(LocalDateTime.now());
@@ -50,9 +63,20 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             roleMapper.updateById(role);
         }
 
-        RoleVO roleVO = new RoleVO();
-        BeanUtils.copyProperties(role, roleVO);
+        return role;
+    }
 
-        return roleVO;
+    @Override
+    @Transactional
+    public Boolean updateRoleStatus(Role role) {
+        LambdaUpdateWrapper<Role> wrapper = Wrappers.lambdaUpdate();
+        wrapper.eq(Role::getId, role.getId()).set(Role::getStatus, role.getStatus());
+        return roleMapper.update(null, wrapper) == 1;
+    }
+
+    @Override
+    public List<RoleVO> findRolesByUserId(Long userId) {
+        List<Role> roleList = roleMapper.findRolesByUserId(userId);
+        return BeanCopyUtil.copyListProperties(roleList, RoleVO::new);
     }
 }

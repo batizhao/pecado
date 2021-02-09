@@ -70,15 +70,15 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
         assertThat(roles, hasItems(hasProperty("name", is("admin"))));
     }
 
-    @Test
-    void givenNothing_whenFindAllRole_thenSuccess() {
-        when(roleMapper.selectList(null))
-                .thenReturn(roleList);
-
-        List<RoleVO> roles = roleService.findRoles();
-
-        assertThat(roles, hasSize(2));
-        assertThat(roles, hasItems(hasProperty("name", is("admin")),
-                hasProperty("name", is("common"))));
-    }
+//    @Test
+//    void givenNothing_whenFindAllRole_thenSuccess() {
+//        when(roleMapper.selectList(null))
+//                .thenReturn(roleList);
+//
+//        List<RoleVO> roles = roleService.findRoles();
+//
+//        assertThat(roles, hasSize(2));
+//        assertThat(roles, hasItems(hasProperty("name", is("admin")),
+//                hasProperty("name", is("common"))));
+//    }
 }

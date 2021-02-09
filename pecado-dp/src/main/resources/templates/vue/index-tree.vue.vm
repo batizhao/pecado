@@ -125,7 +125,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['${moduleName}:${classname}:remove']"
+            v-hasPermi="['${moduleName}:${classname}:delete']"
           >删除</el-button>
         </template>
       </el-table-column>
