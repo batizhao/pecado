@@ -36,8 +36,8 @@ public interface DictTypeService extends IService<DictType> {
     DictType saveOrUpdateDictType(DictType dictType);
 
     /**
-     * 更新菜单状态
-     * @param dictType 菜单信息
+     * 更新字典类型状态
+     * @param dictType 字典类型
      * @return Boolean
      */
     Boolean updateStatus(DictType dictType);

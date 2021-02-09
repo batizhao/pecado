@@ -25,4 +25,10 @@ public interface DictDataService extends IService<DictData> {
      */
     DictData saveOrUpdateDictData(DictData dictData);
 
+    /**
+     * 更新字典状态
+     * @param dictData 字典
+     * @return Boolean
+     */
+    Boolean updateStatus(DictData dictData);
 }

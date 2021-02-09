@@ -1,8 +1,11 @@
 package me.batizhao.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.system.domain.DictData;
+import me.batizhao.system.domain.DictType;
 import me.batizhao.system.mapper.DictDataMapper;
 import me.batizhao.system.service.DictDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +52,11 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
         return dictData;
     }
 
+    @Override
+    @Transactional
+    public Boolean updateStatus(DictData dictData) {
+        LambdaUpdateWrapper<DictData> wrapper = Wrappers.lambdaUpdate();
+        wrapper.eq(DictData::getId, dictData.getId()).set(DictData::getStatus, dictData.getStatus());
+        return dictDataMapper.update(null, wrapper) == 1;
+    }
 }

@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.system.domain.DictData;
+import me.batizhao.system.domain.DictType;
 import me.batizhao.system.service.DictDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -89,6 +90,19 @@ public class DictDataController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
         return ResponseInfo.ok(dictDataService.removeByIds(ids));
+    }
+
+    /**
+     * 更新字典状态
+     *
+     * @param dictData 字典
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "更新字典类型状态")
+    @PostMapping("/dict/data/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "字典" , required = true) @RequestBody DictData dictData) {
+        return ResponseInfo.ok(dictDataService.updateStatus(dictData));
     }
 
 }
