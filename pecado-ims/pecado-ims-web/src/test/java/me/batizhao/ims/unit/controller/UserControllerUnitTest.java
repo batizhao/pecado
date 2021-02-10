@@ -296,16 +296,16 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         }
     }
 
-    @Test
-    @WithMockUser
-    public void givenRoles_whenAddUserRoles_thenSuccess() throws Exception {
-        doReturn(true).when(userRoleService).updateUserRoles(anyLong(), anyList());
-
-        mvc.perform(post("/user/role").param("id", "1").param("roles", "2,3,4").with(csrf()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data").value(true));
-    }
+//    @Test
+//    @WithMockUser
+//    public void givenRoles_whenAddUserRoles_thenSuccess() throws Exception {
+//        doReturn(true).when(userRoleService).updateUserRoles(anyLong(), anyList());
+//
+//        mvc.perform(post("/user/role").param("id", "1").param("roles", "2,3,4").with(csrf()))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data").value(true));
+//    }
 }

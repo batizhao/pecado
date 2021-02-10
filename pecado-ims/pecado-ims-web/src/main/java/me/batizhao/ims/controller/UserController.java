@@ -13,6 +13,7 @@ import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
+import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
@@ -176,9 +177,8 @@ public class UserController {
     @PostMapping(value = "/user/role")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "用户ID", required = true) @RequestParam @Min(1) Long id,
-                                                    @ApiParam(value = "关联角色ID串", required = true) @RequestParam List<String> roles) {
-        return ResponseInfo.ok(userRoleService.updateUserRoles(id, roles));
+    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "关联角色ID串", required = true) @RequestBody List<UserRole> userRole) {
+        return ResponseInfo.ok(userRoleService.updateUserRoles(userRole));
     }
 
 }

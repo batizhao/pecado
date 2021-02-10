@@ -13,12 +13,12 @@ import static org.hamcrest.Matchers.is;
  */
 public class UserRoleMapperUnitTest extends BaseMapperUnitTest {
 
-    @Autowired
-    private UserRoleMapper userRoleMapper;
+//    @Autowired
+//    private UserRoleMapper userRoleMapper;
 
-    @Test
-    public void testDeleteByUserId() {
-        assertThat(userRoleMapper.deleteByUserId(1L), is(2));
-    }
+//    @Test
+//    public void testDeleteByUserId() {
+//        assertThat(userRoleMapper.deleteByUserId(1L), is(2));
+//    }
 
 }

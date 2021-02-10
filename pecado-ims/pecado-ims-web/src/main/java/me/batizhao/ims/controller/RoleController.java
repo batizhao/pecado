@@ -42,7 +42,7 @@ public class RoleController {
     private RoleMenuService roleMenuService;
 
     /**
-     * 查询所有角色
+     * 分页查询
      * 返回角色集合
      *
      * @return 角色集合
@@ -53,6 +53,20 @@ public class RoleController {
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
     public ResponseInfo<IPage<Role>> handleRoles(Page<Role> page, Role role) {
         return ResponseInfo.ok(roleService.findRoles(page, role));
+    }
+
+    /**
+     * 查询所有角色
+     * 返回角色集合
+     *
+     * @return 角色集合
+     */
+    @SystemLog
+    @ApiOperation(value = "查询所有角色")
+    @GetMapping("/role")
+    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    public ResponseInfo<List<Role>> handleRoles() {
+        return ResponseInfo.ok(roleService.list());
     }
 
     /**
