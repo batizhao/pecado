@@ -17,18 +17,10 @@ import java.util.List;
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 
-//    @Autowired
-//    private UserRoleMapper userRoleMapper;
-
     @Override
     @Transactional
     public Boolean updateUserRoles(List<UserRole> userRoles) {
         this.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userRoles.get(0).getUserId()));
-
-//        List<UserRole> userRoles = new ArrayList<>();
-//        userRoles.forEach(item -> {
-//            userRoles.add(new UserRole().setUserId(id).setRoleId(item));
-//        });
         return saveBatch(userRoles);
     }
 }

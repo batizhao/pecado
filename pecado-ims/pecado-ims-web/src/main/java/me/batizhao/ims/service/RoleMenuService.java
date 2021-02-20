@@ -11,5 +11,11 @@ import java.util.List;
  **/
 public interface RoleMenuService extends IService<RoleMenu> {
 
-    Boolean updateRoleMenus(Long id, List<String> menus);
+    /**
+     * 更新角色菜单
+     * @param roleMenuList
+     * @return
+     */
+    Boolean updateRoleMenus(List<RoleMenu> roleMenuList);
+
 }

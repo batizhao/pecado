@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Role;
+import me.batizhao.ims.domain.RoleMenu;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;
@@ -143,17 +144,15 @@ public class RoleController {
      * 分配角色权限
      * 返回 true or false
      *
-     * @param id 角色ID
-     * @param menus 关联权限ID串
+     * @param roleMenuList 权限清单
      * @return true or false
      */
     @ApiOperation(value = "分配角色权限")
     @PostMapping(value = "/role/menu")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "角色ID", required = true) @RequestParam @Min(1) Long id,
-                                                    @ApiParam(value = "关联权限ID串", required = true) @RequestParam List<String> menus) {
-        return ResponseInfo.ok(roleMenuService.updateRoleMenus(id, menus));
+    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "关联菜单", required = true) @RequestBody List<RoleMenu> roleMenuList) {
+        return ResponseInfo.ok(roleMenuService.updateRoleMenus(roleMenuList));
     }
 
 }

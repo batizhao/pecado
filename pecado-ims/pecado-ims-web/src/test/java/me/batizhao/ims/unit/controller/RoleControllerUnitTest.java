@@ -1,11 +1,10 @@
 package me.batizhao.ims.unit.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.controller.RoleController;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.controller.RoleController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +106,7 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenMenus_whenAddRoleMenus_thenSuccess() throws Exception {
-        doReturn(true).when(roleMenuService).updateRoleMenus(anyLong(), anyList());
+        doReturn(true).when(roleMenuService).updateRoleMenus(any(List.class));
 
         mvc.perform(post("/role/menu").param("id", "1").param("menus", "2,3,4").with(csrf()))
                 .andDo(print())

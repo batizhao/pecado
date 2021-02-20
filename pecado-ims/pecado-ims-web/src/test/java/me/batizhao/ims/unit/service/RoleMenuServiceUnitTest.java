@@ -57,21 +57,21 @@ public class RoleMenuServiceUnitTest extends BaseServiceUnitTest {
 
     }
 
-    @Test
-    public void givenUserAndRoles_whenUpdate_thenSuccess() {
-        when(roleMenuMapper.deleteByRoleId(anyLong()))
-                .thenReturn(1);
-
-        doReturn(true).when(service).saveBatch(anyCollection());
-
-        Boolean b = roleMenuService.updateRoleMenus(1L, Collections.singletonList("1"));
-
-        assertThat(b, equalTo(true));
-
-        doReturn(false).when(service).saveBatch(anyCollection());
-
-        b = roleMenuService.updateRoleMenus(1L, Collections.singletonList("1"));
-
-        assertThat(b, equalTo(false));
-    }
+//    @Test
+//    public void givenUserAndRoles_whenUpdate_thenSuccess() {
+//        when(roleMenuMapper.deleteByRoleId(anyLong()))
+//                .thenReturn(1);
+//
+//        doReturn(true).when(service).saveBatch(anyCollection());
+//
+//        Boolean b = roleMenuService.updateRoleMenus(1L, Collections.singletonList("1"));
+//
+//        assertThat(b, equalTo(true));
+//
+//        doReturn(false).when(service).saveBatch(anyCollection());
+//
+//        b = roleMenuService.updateRoleMenus(1L, Collections.singletonList("1"));
+//
+//        assertThat(b, equalTo(false));
+//    }
 }

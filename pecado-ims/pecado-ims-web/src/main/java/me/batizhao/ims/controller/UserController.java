@@ -171,14 +171,15 @@ public class UserController {
      * 分配用户角色
      * 返回 true or false
      *
+     * @param userRoleList 角色清单
      * @return true or false
      */
     @ApiOperation(value = "分配用户角色")
     @PostMapping(value = "/user/role")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "关联角色ID串", required = true) @RequestBody List<UserRole> userRole) {
-        return ResponseInfo.ok(userRoleService.updateUserRoles(userRole));
+    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "关联角色", required = true) @RequestBody List<UserRole> userRoleList) {
+        return ResponseInfo.ok(userRoleService.updateUserRoles(userRoleList));
     }
 
 }
