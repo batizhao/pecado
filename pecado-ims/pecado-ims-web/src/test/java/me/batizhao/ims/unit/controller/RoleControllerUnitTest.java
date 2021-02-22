@@ -94,23 +94,9 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
         verify(roleService).findRolesByUserId(anyLong());
     }
 
-//    @Test
-//    @WithMockUser
-//    void givenNothing_whenFindRoles_thenSuccess() throws Exception {
-//        doReturn(roleList).when(roleService).findRoles();
-//
-//        mvc.perform(get("/roles"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data", hasSize(2)))
-//                .andExpect(jsonPath("$.data[0].name", equalTo("admin")));
-//    }
-
     @Test
     @WithMockUser
-    public void givenMenus_whenAddRoleMenus_thenSuccess() throws Exception {
+    public void givenRoleMenus_whenAddRoleMenus_thenSuccess() throws Exception {
         List<RoleMenu> roleMenuList = new ArrayList<>();
         roleMenuList.add(new RoleMenu().setRoleId(1L).setMenuId(1L));
         roleMenuList.add(new RoleMenu().setRoleId(1L).setMenuId(2L));

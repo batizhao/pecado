@@ -9,7 +9,10 @@ import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
+import me.batizhao.ims.domain.Menu;
+import me.batizhao.ims.domain.RoleMenu;
 import me.batizhao.ims.domain.User;
+import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
@@ -68,8 +71,8 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     @MockBean
     private UserRoleService userRoleService;
 
-    private List<UserVO> userList;
-    private IPage<UserVO> userPageList;
+    private List<User> userList;
+    private IPage<User> userPageList;
 
     /**
      * Prepare test data.
@@ -77,9 +80,9 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     @BeforeEach
     public void setUp() {
         userList = new ArrayList<>();
-        userList.add(new UserVO().setId(1L).setEmail("zhangsan@gmail.com").setUsername("zhangsan").setName("张三"));
-        userList.add(new UserVO().setId(2L).setEmail("lisi@gmail.com").setUsername("lisi").setName("李四"));
-        userList.add(new UserVO().setId(3L).setEmail("wangwu@gmail.com").setUsername("wangwu").setName("王五"));
+        userList.add(new User().setId(1L).setEmail("zhangsan@gmail.com").setUsername("zhangsan").setName("张三"));
+        userList.add(new User().setId(2L).setEmail("lisi@gmail.com").setUsername("lisi").setName("李四"));
+        userList.add(new User().setId(3L).setEmail("wangwu@gmail.com").setUsername("wangwu").setName("王五"));
 
         userPageList = new Page<>();
         userPageList.setRecords(userList);
@@ -94,7 +97,8 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         roleList.add(new RoleVO().setId(1L).setName("admin"));
         roleList.add(new RoleVO().setId(2L).setName("common"));
 
-        UserVO userVO = userList.get(0);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(userList.get(0), userVO);
         when(userService.findByUsername(username)).thenReturn(userVO);
 
         userVO.setRoleList(roleList);
@@ -138,22 +142,22 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         verify(userService).findByName(name);
     }
 
-//    @Test
-//    @WithMockUser
-//    public void givenId_whenFindUser_thenUserJson() throws Exception {
-//        Long id = 1L;
-//
-//        when(userService.findById(id)).thenReturn(userList.get(0));
-//
-//        mvc.perform(get("/user/{id}", id))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data.email").value("zhangsan@gmail.com"));
-//
-//        verify(userService).findById(anyLong());
-//    }
+    @Test
+    @WithMockUser
+    public void givenId_whenFindUser_thenUserJson() throws Exception {
+        Long id = 1L;
+
+        when(userService.findById(id)).thenReturn(userList.get(0));
+
+        mvc.perform(get("/user/{id}", id))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.email").value("zhangsan@gmail.com"));
+
+        verify(userService).findById(anyLong());
+    }
 
     @Test
     @WithMockUser
@@ -172,47 +176,46 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         verify(userService).findUsers(any(Page.class), any(User.class));
     }
 
-//    @Test
-//    @WithMockUser
-//    public void givenJson_whenSaveUser_thenSuccessJson() throws Exception {
-//        User requestBody = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
-//
-//        when(userService.saveOrUpdateUser(any(User.class)))
-//                .thenReturn(userList.get(0));
-//
-//        mvc.perform(post("/user").with(csrf())
-//                .content(objectMapper.writeValueAsString(requestBody))
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data.id", equalTo(1)));
-//
-//        verify(userService).saveOrUpdateUser(any(User.class));
-//    }
+    @Test
+    @WithMockUser
+    public void givenJson_whenSaveUser_thenSuccessJson() throws Exception {
+        User requestBody = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
 
-//    @Test
-//    @WithMockUser
-//    public void givenJson_whenUpdateUser_thenSuccessJson() throws Exception {
-//        User requestBody = new User().setId(2L).setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
-//
-//        when(userService.saveOrUpdateUser(any(User.class)))
-//                .thenReturn(userList.get(1));
-//
-//        mvc.perform(post("/user").with(csrf())
-//                .content(objectMapper.writeValueAsString(requestBody))
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data.id", equalTo(2)))
-//                .andExpect(jsonPath("$.data.username", equalTo("lisi")));
-//
-//        verify(userService).saveOrUpdateUser(any(User.class));
-//    }
+        when(userService.saveOrUpdateUser(any(User.class)))
+                .thenReturn(userList.get(0));
 
+        mvc.perform(post("/user").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.id", equalTo(1)));
+
+        verify(userService).saveOrUpdateUser(any(User.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenJson_whenUpdateUser_thenSuccessJson() throws Exception {
+        User requestBody = new User().setId(2L).setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
+
+        when(userService.saveOrUpdateUser(any(User.class)))
+                .thenReturn(userList.get(1));
+
+        mvc.perform(post("/user").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.id", equalTo(2)))
+                .andExpect(jsonPath("$.data.username", equalTo("lisi")));
+
+        verify(userService).saveOrUpdateUser(any(User.class));
+    }
 
     /**
      * 删除成功的情况
@@ -239,31 +242,24 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
      *
      * @throws Exception
      */
-//    @Test
-//    @WithMockUser
-//    public void givenId_whenUpdateUserStatus_thenSuccess() throws Exception {
-//        when(userService.updateUserStatusById(1L, 1)).thenReturn(true);
-//
-//        mvc.perform(post("/user/lock").param("id", "1").with(csrf()))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data").value(true));
-//
-//        verify(userService).updateUserStatusById(1L, 1);
-//
-//        when(userService.updateUserStatusById(1L, 0)).thenReturn(true);
-//
-//        mvc.perform(post("/user/unlock").param("id", "1").with(csrf()))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data").value(true));
-//
-//        verify(userService).updateUserStatusById(1L, 0);
-//    }
+    @Test
+    @WithMockUser
+    public void givenUser_whenUpdateStatus_thenSuccess() throws Exception {
+        User requestBody = new User().setId(2L).setStatus("close");
+
+        when(userService.updateUserStatus(any(User.class))).thenReturn(true);
+
+        mvc.perform(post("/user/status").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(userService).updateUserStatus(any(User.class));
+    }
 
     /**
      * Mock Static Method
@@ -296,16 +292,22 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         }
     }
 
-//    @Test
-//    @WithMockUser
-//    public void givenRoles_whenAddUserRoles_thenSuccess() throws Exception {
-//        doReturn(true).when(userRoleService).updateUserRoles(anyLong(), anyList());
-//
-//        mvc.perform(post("/user/role").param("id", "1").param("roles", "2,3,4").with(csrf()))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data").value(true));
-//    }
+    @Test
+    @WithMockUser
+    public void giveUserRoles_whenAddUserRoles_thenSuccess() throws Exception {
+        List<UserRole> userRoleList = new ArrayList<>();
+        userRoleList.add(new UserRole().setUserId(1L).setRoleId(1L));
+        userRoleList.add(new UserRole().setUserId(1L).setRoleId(2L));
+
+        doReturn(true).when(userRoleService).updateUserRoles(any(List.class));
+
+        mvc.perform(post("/user/role").with(csrf())
+                .content(objectMapper.writeValueAsString(userRoleList))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+    }
 }

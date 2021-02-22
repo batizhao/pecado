@@ -198,4 +198,23 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
 
         verify(menuService).saveOrUpdateMenu(any(Menu.class));
     }
+
+    @Test
+    @WithMockUser
+    public void givenMenu_whenUpdateStatus_thenSuccess() throws Exception {
+        Menu requestBody = new Menu().setId(2).setStatus("close");
+
+        when(menuService.updateMenuStatus(any(Menu.class))).thenReturn(true);
+
+        mvc.perform(post("/menu/status").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(menuService).updateMenuStatus(any(Menu.class));
+    }
 }
