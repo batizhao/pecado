@@ -25,12 +25,6 @@ public interface CodeService extends IService<Code> {
     IPage<Code> findCodes(Page<Code> page, Code code);
 
     /**
-     * 查询所有
-     * @return List<Code>
-     */
-    List<Code> findCodes();
-
-    /**
      * 通过id查询生成代码
      * @param id id
      * @return Code

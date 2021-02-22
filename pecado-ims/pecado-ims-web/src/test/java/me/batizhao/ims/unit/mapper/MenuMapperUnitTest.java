@@ -23,12 +23,7 @@ public class MenuMapperUnitTest extends BaseMapperUnitTest {
 
     @Test
     public void testFindMenusByRoleId() {
-        List<Menu> menus = menuMapper.findMenusByRoleId(1L);
-
-        assertThat(menus, hasItem(allOf(hasProperty("id", is(1)),
-                hasProperty("permission", is("root:dashboard")))));
-
-        menus = menuMapper.findMenusByRoleId(2L);
+        List<Menu> menus = menuMapper.findMenusByRoleId(2L);
         assertThat(menus.size(), greaterThan(0));
     }
 

@@ -52,11 +52,6 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
     }
 
     @Override
-    public List<Code> findCodes() {
-        return codeMapper.selectList(null);
-    }
-
-    @Override
     public Code findById(Long id) {
         Code code = codeMapper.selectById(id);
 

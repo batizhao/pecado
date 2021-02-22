@@ -70,7 +70,7 @@ public class CodeController {
     public ResponseInfo<Map<String, Object>> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         Code code = codeService.findById(id);
         List<CodeMeta> codeMetas = codeMetaService.findByCodeId(id);
-        List<Code> codes = codeService.findCodes();
+        List<Code> codes = codeService.list();
 
         Map<String, Object> map = new HashMap<>();
         map.put("code", code);

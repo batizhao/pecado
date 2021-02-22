@@ -1,7 +1,9 @@
 package me.batizhao.ims.unit.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.mapper.UserRoleMapper;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.impl.UserRoleServiceImpl;
@@ -13,14 +15,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.anyCollection;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 /**
  * @author batizhao
@@ -40,38 +42,38 @@ public class UserRoleServiceUnitTest extends BaseServiceUnitTest {
         }
     }
 
-    @MockBean
-    private UserRoleMapper userRoleMapper;
-
     @Autowired
     private UserRoleService userRoleService;
 
+    @MockBean
+    private UserRoleMapper userRoleMapper;
+
     @SpyBean
     private IService service;
+
+    private List<UserRole> userRoleList;
 
     /**
      * Prepare test data.
      */
     @BeforeEach
     public void setUp() {
-
+        userRoleList = new ArrayList<>();
+        userRoleList.add(new UserRole().setUserId(1L).setRoleId(1L));
+        userRoleList.add(new UserRole().setUserId(1L).setRoleId(2L));
     }
 
-//    @Test
-//    public void givenUserAndRoles_whenUpdate_thenSuccess() {
-//        when(userRoleMapper.deleteByUserId(anyLong()))
-//                .thenReturn(1);
-//
-//        doReturn(true).when(service).saveBatch(anyCollection());
-//
-//        Boolean b = userRoleService.updateUserRoles(1L, Collections.singletonList(1L));
-//
-//        assertThat(b, equalTo(true));
-//
-//        doReturn(false).when(service).saveBatch(anyCollection());
-//
-//        b = userRoleService.updateUserRoles(1L, Collections.singletonList(1L));
-//
-//        assertThat(b, equalTo(false));
-//    }
+    @Test
+    public void givenUserRole_whenUpdate_thenSuccess() {
+        doReturn(true).when(service).remove(any(Wrapper.class));
+        doReturn(true).when(service).saveBatch(anyList());
+
+        Boolean b = userRoleService.updateUserRoles(userRoleList);
+        assertThat(b, equalTo(true));
+
+        doReturn(false).when(service).saveBatch(anyList());
+
+        b = userRoleService.updateUserRoles(userRoleList);
+        assertThat(b, equalTo(false));
+    }
 }

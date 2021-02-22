@@ -3,8 +3,11 @@ package me.batizhao.dp.unit.service;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.creator.DataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.batizhao.common.core.exception.DataSourceException;
 import me.batizhao.common.core.exception.NotFoundException;
@@ -13,6 +16,7 @@ import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.mapper.DsMapper;
 import me.batizhao.dp.service.DsService;
 import me.batizhao.dp.service.impl.DsServiceImpl;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,8 +84,8 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
     public void setUp() {
         dsList = new ArrayList<>();
         dsList.add(new Ds().setId(1).setUsername("zhangsan").setPassword("xxx").setUrl("aaa").setName("bbb"));
-        dsList.add(new Ds().setId(2).setUsername("lisi"));
-        dsList.add(new Ds().setId(3).setUsername("wangwu"));
+        dsList.add(new Ds().setId(2).setUsername("lisi").setName("lname"));
+        dsList.add(new Ds().setId(3).setUsername("wangwu").setName("wname"));
 
         dsPageList = new Page<>();
         dsPageList.setRecords(dsList);
@@ -98,6 +102,21 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
         assertThat(dss.getRecords(), hasItems(hasProperty("username", equalTo("zhangsan")),
                 hasProperty("username", equalTo("lisi")),
                 hasProperty("username", equalTo("wangwu"))));
+
+        dsPageList.setRecords(dsList.subList(1, 2));
+        when(dsMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(dsPageList);
+
+        dss = dsService.findDss(new Page<>(), new Ds().setName("lname"));
+        assertThat(dss.getRecords(), iterableWithSize(1));
+        assertThat(dss.getRecords(), hasItems(hasProperty("username", equalTo("lisi"))));
+
+        dsPageList.setRecords(dsList.subList(2, 3));
+        when(dsMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(dsPageList);
+        dss = dsService.findDss(new Page<>(), new Ds().setUsername("wangwu"));
+        assertThat(dss.getRecords(), iterableWithSize(1));
+        assertThat(dss.getRecords(), hasItems(hasProperty("name", equalTo("wname"))));
     }
 
     @Test
@@ -203,6 +222,16 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
 
             assertThrows(DataSourceException.class, () -> dsService.checkDataSource(dsList.get(0)));
         }
+    }
+
+    @Test
+    public void givenDs_whenUpdateStatus_thenSuccess() {
+        //Fix can not find lambda cache for this entity
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), Ds.class);
+
+        doReturn(1).when(dsMapper).update(any(), any(Wrapper.class));
+        assertThat(dsService.updateDsStatus(dsList.get(0)), equalTo(true));
+        verify(dsMapper).update(any(), any(LambdaUpdateWrapper.class));
     }
 
 }

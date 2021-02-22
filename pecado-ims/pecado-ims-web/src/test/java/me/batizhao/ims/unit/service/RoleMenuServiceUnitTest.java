@@ -1,7 +1,10 @@
 package me.batizhao.ims.unit.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.ims.domain.RoleMenu;
+import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.mapper.RoleMenuMapper;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.impl.RoleMenuServiceImpl;
@@ -13,12 +16,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.anyCollection;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -49,29 +54,30 @@ public class RoleMenuServiceUnitTest extends BaseServiceUnitTest {
     @SpyBean
     private IService service;
 
+    private List<RoleMenu> roleMenuList;
+
     /**
      * Prepare test data.
      */
     @BeforeEach
     public void setUp() {
-
+        roleMenuList = new ArrayList<>();
+        roleMenuList.add(new RoleMenu().setRoleId(1L).setMenuId(1L));
+        roleMenuList.add(new RoleMenu().setRoleId(1L).setMenuId(2L));
     }
 
-//    @Test
-//    public void givenUserAndRoles_whenUpdate_thenSuccess() {
-//        when(roleMenuMapper.deleteByRoleId(anyLong()))
-//                .thenReturn(1);
-//
-//        doReturn(true).when(service).saveBatch(anyCollection());
-//
-//        Boolean b = roleMenuService.updateRoleMenus(1L, Collections.singletonList("1"));
-//
-//        assertThat(b, equalTo(true));
-//
-//        doReturn(false).when(service).saveBatch(anyCollection());
-//
-//        b = roleMenuService.updateRoleMenus(1L, Collections.singletonList("1"));
-//
-//        assertThat(b, equalTo(false));
-//    }
+    @Test
+    public void givenUserRole_whenUpdate_thenSuccess() {
+        doReturn(true).when(service).remove(any(Wrapper.class));
+        doReturn(true).when(service).saveBatch(anyList());
+
+        Boolean b = roleMenuService.updateRoleMenus(roleMenuList);
+        assertThat(b, equalTo(true));
+
+        doReturn(false).when(service).saveBatch(anyList());
+
+        b = roleMenuService.updateRoleMenus(roleMenuList);
+        assertThat(b, equalTo(false));
+    }
+
 }

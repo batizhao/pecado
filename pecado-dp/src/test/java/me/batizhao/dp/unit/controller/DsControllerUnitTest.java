@@ -66,7 +66,7 @@ public class DsControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void givenNothing_whenFindAllDs_thenSuccess() throws Exception {
+    public void givenNothing_whenFindDs4Page_thenSuccess() throws Exception {
         when(dsService.findDss(any(Page.class), any(Ds.class))).thenReturn(dsPageList);
 
         mvc.perform(get("/dss"))
@@ -79,6 +79,23 @@ public class DsControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.records[0].username", equalTo("zhangsan")));
 
         verify(dsService).findDss(any(Page.class), any(Ds.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenNothing_whenFindAllDs_thenSuccess() throws Exception {
+        when(dsService.list()).thenReturn(dsList);
+
+        mvc.perform(get("/ds"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
+                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$.data[0].username", equalTo("zhangsan")));
+
+        verify(dsService).list();
     }
 
     @Test
@@ -151,5 +168,24 @@ public class DsControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data").value(true));
 
         verify(dsService).removeByIds(anyList());
+    }
+
+    @Test
+    @WithMockUser
+    public void givenDs_whenUpdateStatus_thenSuccess() throws Exception {
+        Ds requestBody = new Ds().setId(2).setStatus("close");
+
+        when(dsService.updateDsStatus(any(Ds.class))).thenReturn(true);
+
+        mvc.perform(post("/ds/status").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(dsService).updateDsStatus(any(Ds.class));
     }
 }

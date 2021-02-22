@@ -1,8 +1,10 @@
 package me.batizhao.ims.unit.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.controller.RoleController;
+import me.batizhao.ims.domain.RoleMenu;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +37,9 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * 所有实现的接口都要 Mock
@@ -106,9 +111,15 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenMenus_whenAddRoleMenus_thenSuccess() throws Exception {
+        List<RoleMenu> roleMenuList = new ArrayList<>();
+        roleMenuList.add(new RoleMenu().setRoleId(1L).setMenuId(1L));
+        roleMenuList.add(new RoleMenu().setRoleId(1L).setMenuId(2L));
+
         doReturn(true).when(roleMenuService).updateRoleMenus(any(List.class));
 
-        mvc.perform(post("/role/menu").param("id", "1").param("menus", "2,3,4").with(csrf()))
+        mvc.perform(post("/role/menu").with(csrf())
+                .content(objectMapper.writeValueAsString(roleMenuList))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

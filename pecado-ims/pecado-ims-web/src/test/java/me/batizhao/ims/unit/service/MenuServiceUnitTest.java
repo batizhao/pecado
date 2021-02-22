@@ -97,7 +97,7 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
         List<MenuVO> menuTree = menuService.findMenuTree();
 
         assertThat(menuTree, hasSize(1));
-        assertThat(menuTree, hasItems(hasProperty("title", is("工作台")),
+        assertThat(menuTree, hasItems(hasProperty("name", is("工作台")),
                 hasProperty("children", hasSize(1))));
 
         List<TreeNode> treeNodes = menuTree.get(0).getChildren().get(0).getChildren();

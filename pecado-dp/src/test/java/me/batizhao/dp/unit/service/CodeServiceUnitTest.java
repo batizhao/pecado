@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.dp.domain.Code;
-import me.batizhao.dp.domain.GenConfig;
+import me.batizhao.dp.domain.CodeMeta;
 import me.batizhao.dp.mapper.CodeMapper;
 import me.batizhao.dp.service.CodeMetaService;
 import me.batizhao.dp.service.CodeService;
+import me.batizhao.dp.service.impl.CodeMetaServiceImpl;
 import me.batizhao.dp.service.impl.CodeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,14 +19,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 /**
@@ -44,6 +42,10 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
         public CodeService generatorService() {
             return new CodeServiceImpl();
         }
+        @Bean
+        public CodeMetaService generatorCodeMetaService() {
+            return new CodeMetaServiceImpl();
+        }
     }
 
     @MockBean
@@ -56,29 +58,24 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
 
     private List<Code> codeList;
     private Page<Code> codePageList;
-
-//    private List<Map<String, String>> list;
-//    private Page<Map<String, String>> codePageList;
+    private List<CodeMeta> codeMetaList;
 
     /**
      * Prepare test data.
      */
     @BeforeEach
     public void setUp() {
+        codeMetaList = new ArrayList<>();
+        codeMetaList.add(new CodeMeta().setId(1L).setCodeId(1L).setPrimaryKey(true));
+        codeMetaList.add(new CodeMeta().setId(2L).setCodeId(1L).setPrimaryKey(false));
+
         codeList = new ArrayList<>();
-        codeList.add(new Code().setId(1L).setTableName("zhangsan"));
-        codeList.add(new Code().setId(2L).setTableName("lisi"));
+        codeList.add(new Code().setId(1L).setTableName("zhangsan").setCodeMetaList(codeMetaList));
+        codeList.add(new Code().setId(2L).setTableName("lisi").setClassName("xxx"));
         codeList.add(new Code().setId(3L).setTableName("wangwu"));
 
         codePageList = new Page<>();
         codePageList.setRecords(codeList);
-
-//        list = new ArrayList<>();
-//        list.add(Map.of("tableName","user", "tableCollation", "utf8"));
-//        list.add(Map.of("tableName","role", "tableCollation", "uft8mb4"));
-//
-//        codePageList = new Page<>();
-//        codePageList.setRecords(list);
     }
 
     @Test
@@ -92,6 +89,15 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
         assertThat(codes.getRecords(), hasItems(hasProperty("tableName", equalTo("zhangsan")),
                 hasProperty("tableName", equalTo("lisi")),
                 hasProperty("tableName", equalTo("wangwu"))));
+
+        codePageList.setRecords(codeList.subList(1, 2));
+        log.info("codePageList: {}", codeList.subList(1, 2));
+        when(codeMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(codePageList);
+
+        codes = codeService.findCodes(new Page<>(), new Code().setTableName("lisi"));
+        assertThat(codes.getRecords(), iterableWithSize(1));
+        assertThat(codes.getRecords(), hasItems(hasProperty("className", equalTo("xxx"))));
     }
 
     @Test
@@ -106,50 +112,21 @@ public class CodeServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenCodeJson_whenSaveOrUpdateCode_thenSuccess() {
-        Code code_test_data = new Code().setTableName("zhaoliu");
+        Code code_test_data = new Code().setTableName("zhaoliu").setDsName("ims");
 
         // insert 不带 id
-        doReturn(1).when(codeMapper).insert(any(Code.class));
+        doReturn(codeMetaList).when(codeMetaService).findColumnsByTableName(any(String.class), any(String.class));
+        doReturn(true).when(codeMetaService).saveBatch(anyList());
 
         Code code = codeService.saveOrUpdateCode(code_test_data);
-
-        verify(codeMapper).insert(any(Code.class));
+        assertThat(code.getDsName(), equalTo("ims"));
 
         // update 需要带 id
-        doReturn(1).when(codeMapper).updateById(any(Code.class));
+        doReturn(true).when(codeMetaService).updateBatchById(anyList());
 
         code = codeService.saveOrUpdateCode(codeList.get(0));
-
-        verify(codeMapper).updateById(any(Code.class));
+        assertThat(code.getTableName(), equalTo("zhangsan"));
     }
 
-//    @Test
-//    public void givenNothing_whenFindTables_thenSuccess() {
-//        when(codeMapper.selectTableByDs(any(Page.class), anyString()))
-//                .thenReturn(codePageList);
-//
-//        IPage<Map<String, String>> page = codeService.findTables(new Page<>(), "", "ims");
-//
-//        log.info("result: {}", page.getRecords());
-//
-//        assertThat(page.getRecords().size(), is(2));
-//        assertThat(page.getRecords().get(0).get("dsName"), equalTo("ims"));
-//    }
-//
-//    @Test
-//    public void givenTableName_whenSelectColumns_thenSuccess() {
-//        when(codeMapper.selectColumnsByTableName(anyString(), anyString()))
-//                .thenReturn(list);
-//
-//        when(codeMapper.selectMetaByTableName(anyString(), anyString()))
-//                .thenReturn(Map.of("tableComment", "日志表", "tableName", "log"));
-//
-//        byte[] data = codeService.generateCode(new GenConfig().setTableName("log").setAuthor("batizhao").setComments("comment")
-//                .setModuleName("system").setPackageName("me.batizhao").setTablePrefix("ims_").setDsName("ims"));
-//
-//        log.info("data: {}", data);
-//
-//        assertThat(data.length, greaterThan(0));
-//    }
 
 }

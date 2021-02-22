@@ -32,13 +32,13 @@ public class CodeApiTest extends BaseApiTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void givenId_whenFindCode_thenSuccess() throws Exception {
-        mvc.perform(get("/code/{id}", 1L)
+    public void givenId_whenFindCode_thenNotFound() throws Exception {
+        mvc.perform(get("/code/{id}", 10000L)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
+                .andExpect(jsonPath("$.code").value(ResultEnum.RESOURCE_NOT_FOUND.getCode()));
     }
 
     @Test
@@ -55,7 +55,9 @@ public class CodeApiTest extends BaseApiTest {
     @Transactional
     public void givenJson_whenSaveCode_thenSuccess() throws Exception {
         Code requestBody = new Code()
-                .setTableName("daxia").setTableComment("daxia@gmail.com");
+                .setTableName("daxia").setTableComment("daxia@gmail.com").setDsName("ims").setEngine("InnoDB")
+                .setClassName("Demo").setClassComment("xxx").setClassAuthor("batizhao").setPackageName("cn.sh")
+                .setModuleName("system").setTemplate("xxxx");
 
         mvc.perform(post("/code")
                 .content(objectMapper.writeValueAsString(requestBody))
@@ -96,18 +98,18 @@ public class CodeApiTest extends BaseApiTest {
                 .andExpect(jsonPath("$.data").value(true));
     }
 
-    @Test
-    public void givenConfig_whenGenerateCode_thenSuccess() throws Exception {
-        GenConfig requestBody = new GenConfig().setTableName("ds").setAuthor("batizhao").setComments("comment")
-                .setModuleName("system").setPackageName("me.batizhao");
-
-        mvc.perform(post("/code").with(csrf())
-                .header("Authorization", adminAccessToken)
-                .content(objectMapper.writeValueAsString(requestBody))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(header().string("Content-Disposition", "attachment; filename=ds.zip"));
-    }
+//    @Test
+//    public void givenConfig_whenGenerateCode_thenSuccess() throws Exception {
+//        GenConfig requestBody = new GenConfig().setTableName("ds").setAuthor("batizhao").setComments("comment")
+//                .setModuleName("system").setPackageName("me.batizhao");
+//
+//        mvc.perform(post("/code").with(csrf())
+//                .header("Authorization", adminAccessToken)
+//                .content(objectMapper.writeValueAsString(requestBody))
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(header().string("Content-Disposition", "attachment; filename=ds.zip"));
+//    }
 
 }

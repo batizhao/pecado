@@ -1,5 +1,6 @@
 package me.batizhao.ims.unit.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +61,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     private UserService userService;
 
     private List<User> userList;
-    private IPage<UserVO> userPageList;
+    private Page<UserVO> userPageList;
 
     /**
      * Prepare test data.
@@ -134,7 +135,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenNothing_whenFindAllUser_thenSuccess() {
-        when(userMapper.selectUserPage(any(Page.class), any(User.class)))
+        when(userMapper.selectPage(any(Page.class), any(Wrapper.class)))
                 .thenReturn(userPageList);
 
         IPage<User> users = userService.findUsers(new Page<>(), new User().setUsername("tom"));
