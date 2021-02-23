@@ -11,7 +11,6 @@ import me.batizhao.ims.api.dto.TreeNode;
 import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Menu;
-import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
@@ -22,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
@@ -70,10 +68,10 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
     @BeforeEach
     public void setUp() {
         menuList = new ArrayList<>();
-        menuList.add(new Menu().setId(1).setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
-        menuList.add(new Menu().setId(2).setName("权限管理").setPermission("ims_root").setPid(1).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
-        menuList.add(new Menu().setId(3).setName("用户管理").setPermission("ims_user_admin").setPid(2).setSort(2).setType(MenuTypeEnum.LEFT_MENU.getType()));
-        menuList.add(new Menu().setId(4).setName("角色管理").setPermission("ims_role_admin").setPid(2).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
+        menuList.add(new Menu().setId(1).setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.MENU.getType()));
+        menuList.add(new Menu().setId(2).setName("权限管理").setPermission("ims_root").setPid(1).setSort(1).setType(MenuTypeEnum.MENU.getType()));
+        menuList.add(new Menu().setId(3).setName("用户管理").setPermission("ims_user_admin").setPid(2).setSort(2).setType(MenuTypeEnum.MENU.getType()));
+        menuList.add(new Menu().setId(4).setName("角色管理").setPermission("ims_role_admin").setPid(2).setSort(1).setType(MenuTypeEnum.MENU.getType()));
 
         menuVOList = BeanCopyUtil.copyListProperties(menuList, MenuVO::new);
     }
@@ -166,7 +164,7 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenMenu_whenSaveOrUpdate_thenSuccess() {
-        Menu menu = new Menu().setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType());
+        Menu menu = new Menu().setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.MENU.getType());
 
         // insert 不带 id
         doReturn(1).when(menuMapper).insert(any(Menu.class));

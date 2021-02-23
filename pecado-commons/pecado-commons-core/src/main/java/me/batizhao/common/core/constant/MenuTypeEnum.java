@@ -34,12 +34,12 @@ public enum MenuTypeEnum {
 	/**
 	 * 左侧菜单
 	 */
-	LEFT_MENU("L", "left"),
+	MENU("M", "menu"),
 
 	/**
 	 * 顶部菜单
 	 */
-	TOP_MENU("T", "top"),
+//	TOP_MENU("T", "top"),
 
 	/**
 	 * 按钮

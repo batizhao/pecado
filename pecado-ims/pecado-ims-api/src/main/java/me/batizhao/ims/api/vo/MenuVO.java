@@ -32,7 +32,6 @@ public class MenuVO extends TreeNode implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "权限名", example = "ims_root")
-    @NotBlank(message = "permission is not blank")
     private String permission;
 
     @ApiModelProperty(value = "权限说明", example = "This is admin permission")

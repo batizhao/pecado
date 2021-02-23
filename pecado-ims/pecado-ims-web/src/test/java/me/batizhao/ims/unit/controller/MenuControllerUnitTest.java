@@ -64,10 +64,10 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @BeforeEach
     public void setUp() {
         menuList = new ArrayList<>();
-        menuList.add(new Menu().setId(1).setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()).setPath("/aaa"));
-        menuList.add(new Menu().setId(2).setName("权限管理").setPermission("ims_root").setPid(1).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
-        menuList.add(new Menu().setId(3).setName("用户管理").setPermission("ims_user_admin").setPid(2).setSort(2).setType(MenuTypeEnum.LEFT_MENU.getType()));
-        menuList.add(new Menu().setId(4).setName("角色管理").setPermission("ims_role_admin").setPid(2).setSort(1).setType(MenuTypeEnum.LEFT_MENU.getType()));
+        menuList.add(new Menu().setId(1).setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.MENU.getType()).setPath("/aaa"));
+        menuList.add(new Menu().setId(2).setName("权限管理").setPermission("ims_root").setPid(1).setSort(1).setType(MenuTypeEnum.MENU.getType()));
+        menuList.add(new Menu().setId(3).setName("用户管理").setPermission("ims_user_admin").setPid(2).setSort(2).setType(MenuTypeEnum.MENU.getType()));
+        menuList.add(new Menu().setId(4).setName("角色管理").setPermission("ims_role_admin").setPid(2).setSort(1).setType(MenuTypeEnum.MENU.getType()));
 
         menuVOList = BeanCopyUtil.copyListProperties(menuList, MenuVO::new);
     }

@@ -74,7 +74,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public List<MenuVO> filterMenu(Set<MenuVO> all, Integer parentId) {
         List<MenuVO> menuTreeList = all.stream()
-                .filter(vo -> MenuTypeEnum.LEFT_MENU.getType().equals(vo.getType()))
+                .filter(vo -> MenuTypeEnum.MENU.getType().equals(vo.getType()))
                 .map(MenuVO::new)
                 .sorted(Comparator.comparingInt(MenuVO::getSort))
                 .collect(Collectors.toList());
