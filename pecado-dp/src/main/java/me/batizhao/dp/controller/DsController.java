@@ -102,7 +102,7 @@ public class DsController {
     @PostMapping("/ds/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "数据源" , required = true) @RequestBody Ds ds) {
-        return ResponseInfo.ok(dsService.updateDsStatus(ds));
+        return ResponseInfo.ok(dsService.updateStatus(ds));
     }
 
 }

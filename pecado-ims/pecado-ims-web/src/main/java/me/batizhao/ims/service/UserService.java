@@ -56,7 +56,7 @@ public interface UserService extends IService<User> {
 	 * @param user 用户
 	 * @return Boolean
 	 */
-	Boolean updateUserStatus(User user);
+	Boolean updateStatus(User user);
 
 	/**
 	 * 通过id查询用户信息

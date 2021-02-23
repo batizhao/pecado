@@ -128,7 +128,7 @@ public class DsServiceImpl extends ServiceImpl<DsMapper, Ds> implements DsServic
 
     @Override
     @Transactional
-    public Boolean updateDsStatus(Ds ds) {
+    public Boolean updateStatus(Ds ds) {
         LambdaUpdateWrapper<Ds> wrapper = Wrappers.lambdaUpdate();
         wrapper.eq(Ds::getId, ds.getId()).set(Ds::getStatus, ds.getStatus());
         return dsMapper.update(null, wrapper) == 1;

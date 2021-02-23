@@ -56,9 +56,9 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
     @BeforeEach
     public void setUp() {
         ${classname}List = new ArrayList<>();
-        ${classname}List.add(new ${className}().setId(1L).setname("zhangsan"));
-        ${classname}List.add(new ${className}().setId(2L).setname("lisi"));
-        ${classname}List.add(new ${className}().setId(3L).setname("wangwu"));
+        ${classname}List.add(new ${className}().setId(1L).setName("zhangsan"));
+        ${classname}List.add(new ${className}().setId(2L).setName("lisi"));
+        ${classname}List.add(new ${className}().setId(3L).setName("wangwu"));
 
         ${classname}PageList = new Page<>();
         ${classname}PageList.setRecords(${classname}List);
@@ -107,7 +107,7 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void given${className}Json_whenSaveOrUpdate${className}_thenSuccess() {
-        ${className} ${classname}_test_data = new ${className}().setname("zhaoliu");
+        ${className} ${classname}_test_data = new ${className}().setName("zhaoliu");
 
         // insert 不带 id
         doReturn(1).when(${classname}Mapper).insert(any(${className}.class));

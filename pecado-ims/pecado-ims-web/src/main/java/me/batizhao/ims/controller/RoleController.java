@@ -121,7 +121,7 @@ public class RoleController {
     @PostMapping("/role/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "角色" , required = true) @RequestBody Role role) {
-        return ResponseInfo.ok(roleService.updateRoleStatus(role));
+        return ResponseInfo.ok(roleService.updateStatus(role));
     }
 
     /**

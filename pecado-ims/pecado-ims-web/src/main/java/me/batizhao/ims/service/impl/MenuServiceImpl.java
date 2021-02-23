@@ -111,7 +111,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     @Transactional
-    public Boolean updateMenuStatus(Menu menu) {
+    public Boolean updateStatus(Menu menu) {
         LambdaUpdateWrapper<Menu> wrapper = Wrappers.lambdaUpdate();
         wrapper.eq(Menu::getId, menu.getId()).set(Menu::getStatus, menu.getStatus());
         return menuMapper.update(null, wrapper) == 1;

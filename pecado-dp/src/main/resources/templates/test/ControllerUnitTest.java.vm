@@ -56,9 +56,9 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
     @BeforeEach
     public void setUp() {
         ${classname}List = new ArrayList<>();
-        ${classname}List.add(new ${className}().setId(1L).setUsername("zhangsan"));
-        ${classname}List.add(new ${className}().setId(2L).setUsername("lisi"));
-        ${classname}List.add(new ${className}().setId(3L).setUsername("wangwu"));
+        ${classname}List.add(new ${className}().setId(1L).setName("zhangsan"));
+        ${classname}List.add(new ${className}().setId(2L).setName("lisi"));
+        ${classname}List.add(new ${className}().setId(3L).setName("wangwu"));
 
         ${classname}PageList = new Page<>();
         ${classname}PageList.setRecords(${classname}List);
@@ -76,7 +76,7 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
                 .andExpect(jsonPath("$.data.records", hasSize(3)))
-                .andExpect(jsonPath("$.data.records[0].username", equalTo("zhangsan")));
+                .andExpect(jsonPath("$.data.records[0].name", equalTo("zhangsan")));
 
         verify(${classname}Service).find${className}s(any(Page.class), any(${className}.class));
     }
@@ -110,7 +110,7 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.username").value("zhangsan"));
+                .andExpect(jsonPath("$.data.name").value("zhangsan"));
 
         verify(${classname}Service).findById(anyLong());
     }
@@ -118,7 +118,7 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenJson_whenSave${className}_thenSuccess() throws Exception {
-        ${className} requestBody = new ${className}().setUsername("zhaoliu");
+        ${className} requestBody = new ${className}().setName("zhaoliu");
 
         when(${classname}Service.saveOrUpdate${className}(any(${className}.class)))
                 .thenReturn(${classname}List.get(0));
@@ -138,7 +138,7 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenJson_whenUpdate${className}_thenSuccess() throws Exception {
-        ${className} requestBody = new ${className}().setId(2L).setUsername("zhaoliu");
+        ${className} requestBody = new ${className}().setId(2L).setName("zhaoliu");
 
         when(${classname}Service.saveOrUpdate${className}(any(${className}.class)))
                 .thenReturn(${classname}List.get(1));

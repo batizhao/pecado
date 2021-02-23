@@ -53,5 +53,5 @@ public interface DsService extends IService<Ds> {
      * @param ds 数据源信息
      * @return Boolean
      */
-    Boolean updateDsStatus(Ds ds);
+    Boolean updateStatus(Ds ds);
 }

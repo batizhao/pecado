@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.util.SecurityUtils;
-import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.service.MenuService;
@@ -116,7 +115,7 @@ public class MenuController {
     @PostMapping("/menu/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "菜单" , required = true) @RequestBody Menu menu) {
-        return ResponseInfo.ok(menuService.updateMenuStatus(menu));
+        return ResponseInfo.ok(menuService.updateStatus(menu));
     }
 
 }

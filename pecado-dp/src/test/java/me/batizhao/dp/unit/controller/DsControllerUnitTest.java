@@ -175,7 +175,7 @@ public class DsControllerUnitTest extends BaseControllerUnitTest {
     public void givenDs_whenUpdateStatus_thenSuccess() throws Exception {
         Ds requestBody = new Ds().setId(2).setStatus("close");
 
-        when(dsService.updateDsStatus(any(Ds.class))).thenReturn(true);
+        when(dsService.updateStatus(any(Ds.class))).thenReturn(true);
 
         mvc.perform(post("/ds/status").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
@@ -186,6 +186,6 @@ public class DsControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data").value(true));
 
-        verify(dsService).updateDsStatus(any(Ds.class));
+        verify(dsService).updateStatus(any(Ds.class));
     }
 }

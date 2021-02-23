@@ -103,7 +103,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional
-    public Boolean updateUserStatus(User user) {
+    public Boolean updateStatus(User user) {
         LambdaUpdateWrapper<User> wrapper = Wrappers.lambdaUpdate();
         wrapper.eq(User::getId, user.getId()).set(User::getStatus, user.getStatus());
         return userMapper.update(null, wrapper) == 1;

@@ -41,7 +41,7 @@ public interface RoleService extends IService<Role> {
      * @param role 角色信息
      * @return Boolean
      */
-    Boolean updateRoleStatus(Role role);
+    Boolean updateStatus(Role role);
 
     /**
      * 通过用户 ID 查相关的角色

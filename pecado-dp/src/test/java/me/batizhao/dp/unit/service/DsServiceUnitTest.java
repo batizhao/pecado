@@ -230,10 +230,10 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
         TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), Ds.class);
 
         doReturn(1).when(dsMapper).update(any(), any(Wrapper.class));
-        assertThat(dsService.updateDsStatus(dsList.get(0)), equalTo(true));
+        assertThat(dsService.updateStatus(dsList.get(0)), equalTo(true));
 
         doReturn(0).when(dsMapper).update(any(), any(Wrapper.class));
-        assertThat(dsService.updateDsStatus(dsList.get(0)), equalTo(false));
+        assertThat(dsService.updateStatus(dsList.get(0)), equalTo(false));
 
         verify(dsMapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
     }

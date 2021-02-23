@@ -150,7 +150,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "用户" , required = true) @RequestBody User user) {
-        return ResponseInfo.ok(userService.updateUserStatus(user));
+        return ResponseInfo.ok(userService.updateStatus(user));
     }
 
     /**

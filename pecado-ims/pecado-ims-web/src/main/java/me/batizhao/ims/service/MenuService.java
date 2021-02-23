@@ -70,5 +70,5 @@ public interface MenuService extends IService<Menu> {
      * @param menu 菜单信息
      * @return Boolean
      */
-    Boolean updateMenuStatus(Menu menu);
+    Boolean updateStatus(Menu menu);
 }

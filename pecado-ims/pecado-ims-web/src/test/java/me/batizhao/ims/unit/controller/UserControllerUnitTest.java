@@ -9,8 +9,6 @@ import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.domain.Menu;
-import me.batizhao.ims.domain.RoleMenu;
 import me.batizhao.ims.domain.User;
 import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.service.RoleService;
@@ -247,7 +245,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     public void givenUser_whenUpdateStatus_thenSuccess() throws Exception {
         User requestBody = new User().setId(2L).setStatus("close");
 
-        when(userService.updateUserStatus(any(User.class))).thenReturn(true);
+        when(userService.updateStatus(any(User.class))).thenReturn(true);
 
         mvc.perform(post("/user/status").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
@@ -258,7 +256,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data").value(true));
 
-        verify(userService).updateUserStatus(any(User.class));
+        verify(userService).updateStatus(any(User.class));
     }
 
     /**

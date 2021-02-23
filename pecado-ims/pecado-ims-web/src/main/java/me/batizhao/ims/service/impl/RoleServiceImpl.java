@@ -68,7 +68,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     @Transactional
-    public Boolean updateRoleStatus(Role role) {
+    public Boolean updateStatus(Role role) {
         LambdaUpdateWrapper<Role> wrapper = Wrappers.lambdaUpdate();
         wrapper.eq(Role::getId, role.getId()).set(Role::getStatus, role.getStatus());
         return roleMapper.update(null, wrapper) == 1;
