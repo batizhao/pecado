@@ -23,8 +23,9 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.GenConstants;
-import me.batizhao.dp.domain.*;
 import me.batizhao.common.core.constant.PecadoConstants;
+import me.batizhao.dp.domain.Code;
+import me.batizhao.dp.domain.CodeMeta;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -60,8 +61,6 @@ import java.util.zip.ZipOutputStream;
 @UtilityClass
 public class CodeGenUtils {
 
-    public final String CRUD_PREFIX = "export const tableOption =";
-
     private final String ENTITY_JAVA_VM = "Domain.java.vm";
 
     private final String MAPPER_JAVA_VM = "Mapper.java.vm";
@@ -88,8 +87,6 @@ public class CodeGenUtils {
 
     private final String VUE_API_JS_VM = "api.js.vm";
 
-    private final String VUE_CRUD_JS_VM = "crud.js.vm";
-
     /**
      * 初始化数据
      *
@@ -102,6 +99,7 @@ public class CodeGenUtils {
         code.setModuleName("system");
         code.setPackageName("me.batizhao");
         code.setTemplate("crud");
+        code.setMappingPath(StringUtils.uncapitalize(code.getClassName()));
         code.setCreateTime(LocalDateTime.now());
         code.setUpdateTime(LocalDateTime.now());
     }
@@ -373,7 +371,7 @@ public class CodeGenUtils {
         map.put("pk", codeMetas.get(0));
         map.put("className", code.getClassName());
         map.put("classname", StringUtils.uncapitalize(code.getClassName()));
-        map.put("pathName", StringUtils.uncapitalize(code.getClassName()).toLowerCase());
+        map.put("mappingPath", code.getMappingPath());
         map.put("columns", codeMetas);
         map.put("date", DateUtil.today());
         map.put("comments", code.getClassComment());
@@ -525,11 +523,6 @@ public class CodeGenUtils {
         if (template.contains(VUE_API_JS_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "api" + File.separator
                     + code.getClassName().toLowerCase() + ".js";
-        }
-
-        if (template.contains(VUE_CRUD_JS_VM)) {
-            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "const"
-                    + File.separator + "crud" + File.separator + code.getClassName().toLowerCase() + ".js";
         }
 
         return null;

@@ -36,6 +36,9 @@
             <column name="moduleName" type="VARCHAR(32)" remarks="所属模块/微服务/系统名，英文">
                 <constraints nullable="false" />
             </column>
+            <column name="mappingPath" type="VARCHAR(64)" remarks="API后端路由">
+                <constraints nullable="false" />
+            </column>
             <column name="template" type="VARCHAR(16)" remarks="模板类型">
                 <constraints nullable="false" />
             </column>

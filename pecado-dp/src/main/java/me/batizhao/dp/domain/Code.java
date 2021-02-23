@@ -88,6 +88,12 @@ public class Code extends Model<Code> {
     private String moduleName;
 
     /**
+     * API后端路由
+     */
+    @ApiModelProperty(value="API后端路由")
+    private String mappingPath;
+
+    /**
      * 模板类型
      */
     @ApiModelProperty(value="模板类型")
