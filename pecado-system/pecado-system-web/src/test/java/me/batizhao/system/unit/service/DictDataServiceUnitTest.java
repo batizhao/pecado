@@ -1,12 +1,16 @@
 package me.batizhao.system.unit.service;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.system.domain.DictData;
 import me.batizhao.system.mapper.DictDataMapper;
 import me.batizhao.system.service.DictDataService;
 import me.batizhao.system.service.impl.DictDataServiceImpl;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.any;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -75,22 +79,46 @@ public class DictDataServiceUnitTest extends BaseServiceUnitTest {
     }
 
     @Test
+    public void givenDictDataId_whenFindDictData_thenNotFound() {
+        when(dictDataMapper.selectById(any()))
+                .thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> dictDataService.findById(1L));
+
+        verify(dictDataMapper).selectById(any());
+    }
+
+    @Test
     public void givenDictDataJson_whenSaveOrUpdateDictData_thenSuccess() {
         DictData dictData_test_data = new DictData().setLabel("zhaoliu");
 
         // insert 不带 id
         doReturn(1).when(dictDataMapper).insert(any(DictData.class));
 
-        DictData dictData = dictDataService.saveOrUpdateDictData(dictData_test_data);
+        dictDataService.saveOrUpdateDictData(dictData_test_data);
 
         verify(dictDataMapper).insert(any(DictData.class));
 
         // update 需要带 id
         doReturn(1).when(dictDataMapper).updateById(any(DictData.class));
 
-        dictData = dictDataService.saveOrUpdateDictData(dictDataList.get(0));
+        dictDataService.saveOrUpdateDictData(dictDataList.get(0));
 
         verify(dictDataMapper).updateById(any(DictData.class));
+    }
+
+    @Test
+    public void givenDictData_whenUpdateStatus_thenSuccess() {
+        //Fix can not find lambda cache for this entity
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), DictData.class);
+
+        doReturn(1).when(dictDataMapper).update(any(), any(Wrapper.class));
+        assertThat(dictDataService.updateStatus(dictDataList.get(0)), equalTo(true));
+
+        doReturn(0).when(dictDataMapper).update(any(), any(Wrapper.class));
+        assertThat(dictDataService.updateStatus(dictDataList.get(0)), equalTo(false));
+
+        verify(dictDataMapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
     }
 
 

@@ -66,10 +66,10 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void givenNothing_whenFindAll${className}_thenSuccess() throws Exception {
+    public void givenNothing_whenFind${className}s_thenSuccess() throws Exception {
         when(${classname}Service.find${className}s(any(Page.class), any(${className}.class))).thenReturn(${classname}PageList);
 
-        mvc.perform(get("/${classname}s"))
+        mvc.perform(get("/${pathName}s"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -83,12 +83,29 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
+    public void givenNothing_whenFindAll${className}_thenSuccess() throws Exception {
+        when(${classname}Service.list()).thenReturn(${classname}List);
+
+        mvc.perform(get("/${pathName}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
+                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("zhangsan")));
+
+        verify(${classname}Service).list();
+    }
+
+    @Test
+    @WithMockUser
     public void givenId_whenFind${className}_thenSuccess() throws Exception {
         Long id = 1L;
 
         when(${classname}Service.findById(id)).thenReturn(${classname}List.get(0));
 
-        mvc.perform(get("/${classname}/{id}", id))
+        mvc.perform(get("/${pathName}/{id}", id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -106,7 +123,7 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
         when(${classname}Service.saveOrUpdate${className}(any(${className}.class)))
                 .thenReturn(${classname}List.get(0));
 
-        mvc.perform(post("/${classname}").with(csrf())
+        mvc.perform(post("/${pathName}").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -126,7 +143,7 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
         when(${classname}Service.saveOrUpdate${className}(any(${className}.class)))
                 .thenReturn(${classname}List.get(1));
 
-        mvc.perform(post("/${classname}").with(csrf())
+        mvc.perform(post("/${pathName}").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -143,7 +160,7 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
     public void givenId_whenDelete${className}_thenSuccess() throws Exception {
         when(${classname}Service.removeByIds(anyList())).thenReturn(true);
 
-        mvc.perform(delete("/${classname}").param("ids", "1,2").with(csrf()))
+        mvc.perform(delete("/${pathName}").param("ids", "1,2").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -151,5 +168,24 @@ public class ${className}ControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data").value(true));
 
         verify(${classname}Service).removeByIds(anyList());
+    }
+
+    @Test
+    @WithMockUser
+    public void given${className}_whenUpdateStatus_thenSuccess() throws Exception {
+        ${className} requestBody = new ${className}().setId(2L).setStatus("close");
+
+        when(${classname}Service.updateStatus(any(${className}.class))).thenReturn(true);
+
+        mvc.perform(post("/${pathName}/status").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(${classname}Service).updateStatus(any(${className}.class));
     }
 }

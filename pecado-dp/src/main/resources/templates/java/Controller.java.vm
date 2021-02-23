@@ -47,6 +47,16 @@ public class ${className}Controller {
         return ResponseInfo.ok(${classname}Service.find${className}s(page, ${classname}));
     }
 
+    /**
+     * 查询所有
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "查询所有")
+    @GetMapping("/${pathName}")
+    public ResponseInfo<List<${className}>> handle${className}() {
+        return ResponseInfo.ok(${classname}Service.list());
+    }
+
 
     /**
      * 通过id查询${comments}
@@ -93,7 +103,7 @@ public class ${className}Controller {
     @PostMapping("/${pathName}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "${comments}" , required = true) @RequestBody ${className} ${classname}) {
-        return ResponseInfo.ok(${classname}Service.update${className}Status(${classname}));
+        return ResponseInfo.ok(${classname}Service.updateStatus(${classname}));
     }
 
 }

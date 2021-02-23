@@ -1,12 +1,17 @@
 package me.batizhao.system.unit.service;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.system.domain.DictType;
 import me.batizhao.system.mapper.DictTypeMapper;
 import me.batizhao.system.service.DictTypeService;
 import me.batizhao.system.service.impl.DictTypeServiceImpl;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
@@ -75,6 +81,14 @@ public class DictTypeServiceUnitTest extends BaseServiceUnitTest {
         assertThat(dictTypes.getRecords(), hasItems(hasProperty("name", equalTo("zhangsan")),
                 hasProperty("name", equalTo("lisi")),
                 hasProperty("name", equalTo("wangwu"))));
+
+        dictTypePageList.setRecords(dictTypeList.subList(1, 2));
+        when(dictTypeMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(dictTypePageList);
+
+        dictTypes = dictTypeService.findDictTypes(new Page<>(), new DictType().setName("lname"));
+        assertThat(dictTypes.getRecords(), iterableWithSize(1));
+        assertThat(dictTypes.getRecords(), hasItems(hasProperty("name", equalTo("lisi"))));
     }
 
     @Test
@@ -85,6 +99,16 @@ public class DictTypeServiceUnitTest extends BaseServiceUnitTest {
         DictType dictType = dictTypeService.findById(1L);
 
         assertThat(dictType.getName(), equalTo("zhangsan"));
+    }
+
+    @Test
+    public void givenDictTypeId_whenFindDictType_thenNotFound() {
+        when(dictTypeMapper.selectById(any()))
+                .thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> dictTypeService.findById(1L));
+
+        verify(dictTypeMapper).selectById(any());
     }
 
     @Test
@@ -106,5 +130,17 @@ public class DictTypeServiceUnitTest extends BaseServiceUnitTest {
         verify(dictTypeMapper).updateById(any(DictType.class));
     }
 
+    @Test
+    public void givenDictType_whenUpdateStatus_thenSuccess() {
+        //Fix can not find lambda cache for this entity
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), DictType.class);
 
+        doReturn(1).when(dictTypeMapper).update(any(), any(Wrapper.class));
+        assertThat(dictTypeService.updateStatus(dictTypeList.get(0)), equalTo(true));
+
+        doReturn(0).when(dictTypeMapper).update(any(), any(Wrapper.class));
+        assertThat(dictTypeService.updateStatus(dictTypeList.get(0)), equalTo(false));
+
+        verify(dictTypeMapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
+    }
 }

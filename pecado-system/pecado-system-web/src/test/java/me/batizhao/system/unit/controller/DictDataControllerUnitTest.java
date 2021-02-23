@@ -1,6 +1,6 @@
 package me.batizhao.system.unit.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.system.controller.DictDataController;
@@ -95,6 +95,23 @@ public class DictDataControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
+    public void givenCode_whenFindDictData_thenSuccess() throws Exception {
+        when(dictDataService.list(any(Wrapper.class))).thenReturn(dictDataList.subList(0, 2));
+
+        mvc.perform(get("/dict/data").param("code", "xxx"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi")))
+                .andExpect(jsonPath("$.data", hasSize(2)))
+                .andExpect(jsonPath("$.data[0].label", equalTo("zhangsan")));
+
+        verify(dictDataService).list(any(Wrapper.class));
+    }
+
+    @Test
+    @WithMockUser
     public void givenJson_whenSaveDictData_thenSuccess() throws Exception {
         DictData requestBody = new DictData().setLabel("zhaoliu");
 
@@ -146,5 +163,24 @@ public class DictDataControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data").value(true));
 
         verify(dictDataService).removeByIds(anyList());
+    }
+
+    @Test
+    @WithMockUser
+    public void givenDs_whenUpdateStatus_thenSuccess() throws Exception {
+        DictData requestBody = new DictData().setId(2L).setStatus("close");
+
+        when(dictDataService.updateStatus(any(DictData.class))).thenReturn(true);
+
+        mvc.perform(post("/dict/data/status").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(dictDataService).updateStatus(any(DictData.class));
     }
 }

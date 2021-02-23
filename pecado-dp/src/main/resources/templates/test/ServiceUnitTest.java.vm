@@ -56,9 +56,9 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
     @BeforeEach
     public void setUp() {
         ${classname}List = new ArrayList<>();
-        ${classname}List.add(new ${className}().setId(1L).setUsername("zhangsan"));
-        ${classname}List.add(new ${className}().setId(2L).setUsername("lisi"));
-        ${classname}List.add(new ${className}().setId(3L).setUsername("wangwu"));
+        ${classname}List.add(new ${className}().setId(1L).setname("zhangsan"));
+        ${classname}List.add(new ${className}().setId(2L).setname("lisi"));
+        ${classname}List.add(new ${className}().setId(3L).setname("wangwu"));
 
         ${classname}PageList = new Page<>();
         ${classname}PageList.setRecords(${classname}List);
@@ -72,9 +72,17 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
         IPage<${className}> ${classname}s = ${classname}Service.find${className}s(new Page<>(), new ${className}());
 
         assertThat(${classname}s.getRecords(), iterableWithSize(3));
-        assertThat(${classname}s.getRecords(), hasItems(hasProperty("username", equalTo("zhangsan")),
-                hasProperty("username", equalTo("lisi")),
-                hasProperty("username", equalTo("wangwu"))));
+        assertThat(${classname}s.getRecords(), hasItems(hasProperty("name", equalTo("zhangsan")),
+                hasProperty("name", equalTo("lisi")),
+                hasProperty("name", equalTo("wangwu"))));
+            
+        ${classname}PageList.setRecords(${classname}List.subList(1, 2));
+        when(${classname}Mapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(${classname}PageList);
+
+        ${classname}s = ${classname}Service.find${className}s(new Page<>(), new ${className}().setName("lname"));
+        assertThat(${classname}s.getRecords(), iterableWithSize(1));
+        assertThat(${classname}s.getRecords(), hasItems(hasProperty("name", equalTo("lisi"))));
     }
 
     @Test
@@ -84,27 +92,49 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
 
         ${className} ${classname} = ${classname}Service.findById(1L);
 
-        assertThat(${classname}.getUsername(), equalTo("zhangsan"));
+        assertThat(${classname}.getname(), equalTo("zhangsan"));
+    }
+
+    @Test
+    public void given${className}Id_whenFind${className}_thenNotFound() {
+        when(${classname}Mapper.selectById(any()))
+                .thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> ${classname}Service.findById(1L));
+
+        verify(${classname}Mapper).selectById(any());
     }
 
     @Test
     public void given${className}Json_whenSaveOrUpdate${className}_thenSuccess() {
-        ${className} ${classname}_test_data = new ${className}().setUsername("zhaoliu");
+        ${className} ${classname}_test_data = new ${className}().setname("zhaoliu");
 
         // insert 不带 id
         doReturn(1).when(${classname}Mapper).insert(any(${className}.class));
 
-        ${className} ${classname} = ${classname}Service.saveOrUpdate${className}(${classname}_test_data);
+        ${classname}Service.saveOrUpdate${className}(${classname}_test_data);
 
         verify(${classname}Mapper).insert(any(${className}.class));
 
         // update 需要带 id
         doReturn(1).when(${classname}Mapper).updateById(any(${className}.class));
 
-        ${classname} = ${classname}Service.saveOrUpdate${className}(${classname}List.get(0));
+        ${classname}Service.saveOrUpdate${className}(${classname}List.get(0));
 
         verify(${classname}Mapper).updateById(any(${className}.class));
     }
 
+    @Test
+    public void given${className}_whenUpdateStatus_thenSuccess() {
+        //Fix can not find lambda cache for this entity
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), ${className}.class);
 
+        doReturn(1).when(${classname}Mapper).update(any(), any(Wrapper.class));
+        assertThat(${classname}Service.updateStatus(${classname}List.get(0)), equalTo(true));
+
+        doReturn(0).when(${classname}Mapper).update(any(), any(Wrapper.class));
+        assertThat(${classname}Service.updateStatus(${classname}List.get(0)), equalTo(false));
+
+        verify(${classname}Mapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
+    }
 }

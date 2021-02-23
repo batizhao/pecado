@@ -66,7 +66,7 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void givenNothing_whenFindAllDictType_thenSuccess() throws Exception {
+    public void givenNothing_whenFindDictTypes_thenSuccess() throws Exception {
         when(dictTypeService.findDictTypes(any(Page.class), any(DictType.class))).thenReturn(dictTypePageList);
 
         mvc.perform(get("/dict/types"))
@@ -79,6 +79,23 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.records[0].name", equalTo("zhangsan")));
 
         verify(dictTypeService).findDictTypes(any(Page.class), any(DictType.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenNothing_whenFindAllDictType_thenSuccess() throws Exception {
+        when(dictTypeService.list()).thenReturn(dictTypeList);
+
+        mvc.perform(get("/dict/type"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
+                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$.data[0].name", equalTo("zhangsan")));
+
+        verify(dictTypeService).list();
     }
 
     @Test
@@ -151,5 +168,24 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data").value(true));
 
         verify(dictTypeService).removeByIds(anyList());
+    }
+
+    @Test
+    @WithMockUser
+    public void givenDs_whenUpdateStatus_thenSuccess() throws Exception {
+        DictType requestBody = new DictType().setId(2L).setStatus("close");
+
+        when(dictTypeService.updateStatus(any(DictType.class))).thenReturn(true);
+
+        mvc.perform(post("/dict/type/status").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(dictTypeService).updateStatus(any(DictType.class));
     }
 }

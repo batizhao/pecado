@@ -98,7 +98,7 @@ public class DictDataController {
      * @param dictData 字典
      * @return ResponseInfo
      */
-    @ApiOperation(value = "更新字典类型状态")
+    @ApiOperation(value = "更新字典状态")
     @PostMapping("/dict/data/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "字典" , required = true) @RequestBody DictData dictData) {

@@ -40,6 +40,6 @@ public interface ${className}Service extends IService<${className}> {
      * @param ${classname} ${comments}
      * @return Boolean
      */
-    Boolean update${className}Status(${className} ${classname});
+    Boolean updateStatus(${className} ${classname});
 
 }

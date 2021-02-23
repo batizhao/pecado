@@ -231,7 +231,11 @@ public class DsServiceUnitTest extends BaseServiceUnitTest {
 
         doReturn(1).when(dsMapper).update(any(), any(Wrapper.class));
         assertThat(dsService.updateDsStatus(dsList.get(0)), equalTo(true));
-        verify(dsMapper).update(any(), any(LambdaUpdateWrapper.class));
+
+        doReturn(0).when(dsMapper).update(any(), any(Wrapper.class));
+        assertThat(dsService.updateDsStatus(dsList.get(0)), equalTo(false));
+
+        verify(dsMapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
     }
 
 }
