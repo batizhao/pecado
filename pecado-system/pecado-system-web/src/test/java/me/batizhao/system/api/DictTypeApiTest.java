@@ -31,7 +31,7 @@ public class DictTypeApiTest extends BaseApiTest {
 
     @Test
     public void givenId_whenFindDictType_thenSuccess() throws Exception {
-        mvc.perform(get("/dictType/{id}", 1L)
+        mvc.perform(get("/dict/type/{id}", 1L)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -41,7 +41,7 @@ public class DictTypeApiTest extends BaseApiTest {
 
     @Test
     public void givenNothing_whenFindAllDictType_thenSuccess() throws Exception {
-        mvc.perform(get("/dictTypes")
+        mvc.perform(get("/dict/types")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -55,7 +55,7 @@ public class DictTypeApiTest extends BaseApiTest {
         DictType requestBody = new DictType()
                 .setName("daxia").setCode("daxia@gmail.com");
 
-        mvc.perform(post("/dictType")
+        mvc.perform(post("/dict/type")
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
@@ -72,7 +72,7 @@ public class DictTypeApiTest extends BaseApiTest {
         DictType requestBody = new DictType()
                 .setId(8L).setName("daxia").setCode("daxia@gmail.com");
 
-        mvc.perform(post("/dictType")
+        mvc.perform(post("/dict/type")
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
@@ -85,7 +85,7 @@ public class DictTypeApiTest extends BaseApiTest {
     @Test
     @Transactional
     public void givenId_whenDeleteDictType_thenSuccess() throws Exception {
-        mvc.perform(delete("/dictType").param("ids", "1,2")
+        mvc.perform(delete("/dict/type").param("ids", "1,2")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())

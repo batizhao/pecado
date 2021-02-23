@@ -76,7 +76,7 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
                 .andExpect(jsonPath("$.data.records", hasSize(3)))
-                .andExpect(jsonPath("$.data.records[0].username", equalTo("zhangsan")));
+                .andExpect(jsonPath("$.data.records[0].name", equalTo("zhangsan")));
 
         verify(dictTypeService).findDictTypes(any(Page.class), any(DictType.class));
     }
@@ -93,7 +93,7 @@ public class DictTypeControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.username").value("zhangsan"));
+                .andExpect(jsonPath("$.data.name").value("zhangsan"));
 
         verify(dictTypeService).findById(anyLong());
     }

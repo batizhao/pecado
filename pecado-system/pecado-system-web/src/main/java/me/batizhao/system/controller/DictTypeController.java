@@ -1,16 +1,13 @@
 package me.batizhao.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
-import me.batizhao.system.domain.DictData;
 import me.batizhao.system.domain.DictType;
-import me.batizhao.system.service.DictDataService;
 import me.batizhao.system.service.DictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,8 +34,6 @@ public class DictTypeController {
 
     @Autowired
     private DictTypeService dictTypeService;
-    @Autowired
-    private DictDataService dictDataService;
 
     /**
      * 分页查询

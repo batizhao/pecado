@@ -31,7 +31,7 @@ public class DictDataApiTest extends BaseApiTest {
 
     @Test
     public void givenId_whenFindDictData_thenSuccess() throws Exception {
-        mvc.perform(get("/dictData/{id}", 1L)
+        mvc.perform(get("/dict/data/{id}", 1L)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -41,7 +41,7 @@ public class DictDataApiTest extends BaseApiTest {
 
     @Test
     public void givenNothing_whenFindAllDictData_thenSuccess() throws Exception {
-        mvc.perform(get("/dictDatas")
+        mvc.perform(get("/dict/data")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -53,9 +53,9 @@ public class DictDataApiTest extends BaseApiTest {
     @Transactional
     public void givenJson_whenSaveDictData_thenSuccess() throws Exception {
         DictData requestBody = new DictData()
-                .setLabel("daxia").setValue("daxia@gmail.com");
+                .setLabel("daxia").setValue("daxia@gmail.com").setCode("xxx");
 
-        mvc.perform(post("/dictData")
+        mvc.perform(post("/dict/data")
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
@@ -72,7 +72,7 @@ public class DictDataApiTest extends BaseApiTest {
         DictData requestBody = new DictData()
                 .setId(8L).setLabel("daxia").setValue("daxia@gmail.com");
 
-        mvc.perform(post("/dictData")
+        mvc.perform(post("/dict/data")
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
@@ -85,7 +85,7 @@ public class DictDataApiTest extends BaseApiTest {
     @Test
     @Transactional
     public void givenId_whenDeleteDictData_thenSuccess() throws Exception {
-        mvc.perform(delete("/dictData").param("ids", "1,2")
+        mvc.perform(delete("/dict/data").param("ids", "1,2")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())

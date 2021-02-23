@@ -72,9 +72,9 @@ public class DictTypeServiceUnitTest extends BaseServiceUnitTest {
         IPage<DictType> dictTypes = dictTypeService.findDictTypes(new Page<>(), new DictType());
 
         assertThat(dictTypes.getRecords(), iterableWithSize(3));
-        assertThat(dictTypes.getRecords(), hasItems(hasProperty("username", equalTo("zhangsan")),
-                hasProperty("username", equalTo("lisi")),
-                hasProperty("username", equalTo("wangwu"))));
+        assertThat(dictTypes.getRecords(), hasItems(hasProperty("name", equalTo("zhangsan")),
+                hasProperty("name", equalTo("lisi")),
+                hasProperty("name", equalTo("wangwu"))));
     }
 
     @Test
