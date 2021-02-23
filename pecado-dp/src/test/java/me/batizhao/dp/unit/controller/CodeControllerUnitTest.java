@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.dp.controller.CodeController;
 import me.batizhao.dp.domain.Code;
-import me.batizhao.dp.domain.Ds;
-import me.batizhao.dp.domain.GenConfig;
 import me.batizhao.dp.service.CodeMetaService;
 import me.batizhao.dp.service.CodeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,17 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.text.StringContainsInOrder.stringContainsInOrder;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -70,110 +65,93 @@ public class CodeControllerUnitTest extends BaseControllerUnitTest {
         codePageList.setRecords(codeList);
     }
 
-//    @Test
-//    @WithMockUser
-//    public void givenNothing_whenFindAllCode_thenSuccess() throws Exception {
-//        when(codeService.findCodes(any(Page.class), any(Code.class))).thenReturn(codePageList);
-//
-//        mvc.perform(get("/codes"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
-//                .andExpect(jsonPath("$.data.records", hasSize(3)))
-//                .andExpect(jsonPath("$.data.records[0].username", equalTo("zhangsan")));
-//
-//        verify(codeService).findCodes(any(Page.class), any(Code.class));
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void givenId_whenFindCode_thenSuccess() throws Exception {
-//        Long id = 1L;
-//
-//        when(codeService.findById(id)).thenReturn(codeList.get(0));
-//
-//        mvc.perform(get("/code/{id}", id))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data.username").value("zhangsan"));
-//
-//        verify(codeService).findById(anyLong());
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void givenJson_whenSaveCode_thenSuccess() throws Exception {
-//        Code requestBody = new Code().setUsername("zhaoliu");
-//
-//        when(codeService.saveOrUpdateCode(any(Code.class)))
-//                .thenReturn(codeList.get(0));
-//
-//        mvc.perform(post("/code").with(csrf())
-//                .content(objectMapper.writeValueAsString(requestBody))
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data.id", equalTo(1)));
-//
-//        verify(codeService).saveOrUpdateCode(any(Code.class));
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void givenJson_whenUpdateCode_thenSuccess() throws Exception {
-//        Code requestBody = new Code().setId(2L).setUsername("zhaoliu");
-//
-//        when(codeService.saveOrUpdateCode(any(Code.class)))
-//                .thenReturn(codeList.get(1));
-//
-//        mvc.perform(post("/code").with(csrf())
-//                .content(objectMapper.writeValueAsString(requestBody))
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data.id", equalTo(2)));
-//
-//        verify(codeService).saveOrUpdateCode(any(Code.class));
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void givenId_whenDeleteCode_thenSuccess() throws Exception {
-//        when(codeService.removeByIds(anyList())).thenReturn(true);
-//
-//        mvc.perform(delete("/code").param("ids", "1,2").with(csrf()))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-//                .andExpect(jsonPath("$.data").value(true));
-//
-//        verify(codeService).removeByIds(anyList());
-//    }
-
     @Test
     @WithMockUser
-    public void givenNothing_whenFindTables_thenSuccess() throws Exception {
-        when(codeService.findTables(any(Page.class), any(Code.class), anyString()))
-                .thenReturn(codePageList);
+    public void givenNothing_whenFindCodes_thenSuccess() throws Exception {
+        when(codeService.findCodes(any(Page.class), any(Code.class))).thenReturn(codePageList);
 
-        mvc.perform(get("/code/tables").param("dsName", "bbb"))
+        mvc.perform(get("/codes"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
                 .andExpect(jsonPath("$.data.records", hasSize(3)))
-                .andExpect(jsonPath("$.data.records[1].tableName", equalTo("lisi")));
+                .andExpect(jsonPath("$.data.records[0].tableName", equalTo("zhangsan")));
 
-        verify(codeService).findTables(any(Page.class), any(Code.class), anyString());
+        verify(codeService).findCodes(any(Page.class), any(Code.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenFindCode_thenSuccess() throws Exception {
+        Long id = 1L;
+
+        when(codeService.findById(id)).thenReturn(codeList.get(0));
+
+        mvc.perform(get("/code/{id}", id))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.code.tableName").value("zhangsan"));
+
+        verify(codeService).findById(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    public void givenJson_whenSaveCode_thenSuccess() throws Exception {
+        Code requestBody = new Code().setTableName("zhaoliu");
+
+        when(codeService.saveOrUpdateCode(any(Code.class)))
+                .thenReturn(codeList.get(0));
+
+        mvc.perform(post("/code").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.id", equalTo(1)));
+
+        verify(codeService).saveOrUpdateCode(any(Code.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenJson_whenUpdateCode_thenSuccess() throws Exception {
+        Code requestBody = new Code().setId(2L).setTableName("zhaoliu");
+
+        when(codeService.saveOrUpdateCode(any(Code.class)))
+                .thenReturn(codeList.get(1));
+
+        mvc.perform(post("/code").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.id", equalTo(2)));
+
+        verify(codeService).saveOrUpdateCode(any(Code.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenDeleteCode_thenSuccess() throws Exception {
+        when(codeService.deleteByIds(anyList())).thenReturn(true);
+
+        mvc.perform(delete("/code").param("ids", "1,2").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(codeService).deleteByIds(anyList());
     }
 
 //    @Test

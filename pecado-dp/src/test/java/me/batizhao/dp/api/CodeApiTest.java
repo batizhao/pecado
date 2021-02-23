@@ -57,7 +57,7 @@ public class CodeApiTest extends BaseApiTest {
         Code requestBody = new Code()
                 .setTableName("daxia").setTableComment("daxia@gmail.com").setDsName("ims").setEngine("InnoDB")
                 .setClassName("Demo").setClassComment("xxx").setClassAuthor("batizhao").setPackageName("cn.sh")
-                .setModuleName("system").setTemplate("xxxx");
+                .setModuleName("system").setTemplate("xxxx").setMappingPath("path");
 
         mvc.perform(post("/code")
                 .content(objectMapper.writeValueAsString(requestBody))
