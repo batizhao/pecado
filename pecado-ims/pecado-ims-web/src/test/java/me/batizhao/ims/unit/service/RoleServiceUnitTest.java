@@ -1,11 +1,18 @@
 package me.batizhao.ims.unit.service;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.mapper.RoleMapper;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.impl.RoleServiceImpl;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +25,9 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.*;
 
 /**
  * @author batizhao
@@ -46,6 +54,7 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
     private RoleService roleService;
 
     private List<Role> roleList;
+    private Page<Role> rolePageList;
 
     /**
      * Prepare test data.
@@ -53,32 +62,85 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
     @BeforeEach
     public void setUp() {
         roleList = new ArrayList<>();
-        roleList.add(new Role().setId(1L).setName("admin"));
-        roleList.add(new Role().setId(2L).setName("common"));
+        roleList.add(new Role().setId(1L).setName("zhangsan"));
+        roleList.add(new Role().setId(2L).setName("lisi"));
+        roleList.add(new Role().setId(3L).setName("wangwu"));
+
+        rolePageList = new Page<>();
+        rolePageList.setRecords(roleList);
     }
 
     @Test
-    public void givenUserId_whenFindRoles_thenSuccess() {
-        when(roleMapper.findRolesByUserId(anyLong()))
-                .thenReturn(roleList);
+    public void givenNothing_whenFindAllRole_thenSuccess() {
+        when(roleMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(rolePageList);
 
-        List<RoleVO> roles = roleService.findRolesByUserId(1L);
+        IPage<Role> roles = roleService.findRoles(new Page<>(), new Role());
 
-        log.info("roles: {}", roles);
+        assertThat(roles.getRecords(), iterableWithSize(3));
+        assertThat(roles.getRecords(), hasItems(hasProperty("name", equalTo("zhangsan")),
+                hasProperty("name", equalTo("lisi")),
+                hasProperty("name", equalTo("wangwu"))));
 
-        assertThat(roles, hasSize(2));
-        assertThat(roles, hasItems(hasProperty("name", is("admin"))));
+        rolePageList.setRecords(roleList.subList(1, 2));
+        when(roleMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(rolePageList);
+
+        roles = roleService.findRoles(new Page<>(), new Role().setName("lname"));
+        assertThat(roles.getRecords(), iterableWithSize(1));
+        assertThat(roles.getRecords(), hasItems(hasProperty("name", equalTo("lisi"))));
     }
 
-//    @Test
-//    void givenNothing_whenFindAllRole_thenSuccess() {
-//        when(roleMapper.selectList(null))
-//                .thenReturn(roleList);
-//
-//        List<RoleVO> roles = roleService.findRoles();
-//
-//        assertThat(roles, hasSize(2));
-//        assertThat(roles, hasItems(hasProperty("name", is("admin")),
-//                hasProperty("name", is("common"))));
-//    }
+    @Test
+    public void givenRoleId_whenFindRole_thenSuccess() {
+        when(roleMapper.selectById(1L))
+                .thenReturn(roleList.get(0));
+
+        Role role = roleService.findById(1L);
+
+        assertThat(role.getName(), equalTo("zhangsan"));
+    }
+
+    @Test
+    public void givenRoleId_whenFindRole_thenNotFound() {
+        when(roleMapper.selectById(any()))
+                .thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> roleService.findById(1L));
+
+        verify(roleMapper).selectById(any());
+    }
+
+    @Test
+    public void givenRoleJson_whenSaveOrUpdateRole_thenSuccess() {
+        Role role_test_data = new Role().setName("zhaoliu");
+
+        // insert 不带 id
+        doReturn(1).when(roleMapper).insert(any(Role.class));
+
+        roleService.saveOrUpdateRole(role_test_data);
+
+        verify(roleMapper).insert(any(Role.class));
+
+        // update 需要带 id
+        doReturn(1).when(roleMapper).updateById(any(Role.class));
+
+        roleService.saveOrUpdateRole(roleList.get(0));
+
+        verify(roleMapper).updateById(any(Role.class));
+    }
+
+    @Test
+    public void givenRole_whenUpdateStatus_thenSuccess() {
+        //Fix can not find lambda cache for this entity
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), Role.class);
+
+        doReturn(1).when(roleMapper).update(any(), any(Wrapper.class));
+        assertThat(roleService.updateStatus(roleList.get(0)), equalTo(true));
+
+        doReturn(0).when(roleMapper).update(any(), any(Wrapper.class));
+        assertThat(roleService.updateStatus(roleList.get(0)), equalTo(false));
+
+        verify(roleMapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
+    }
 }

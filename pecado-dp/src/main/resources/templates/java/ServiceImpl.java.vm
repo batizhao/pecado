@@ -30,6 +30,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     @Override
     public IPage<${className}> find${className}s(Page<${className}> page, ${className} ${classname}) {
         LambdaQueryWrapper<${className}> wrapper = Wrappers.lambdaQuery();
+        // TODO: 自己实现查询条件
         return ${classname}Mapper.selectPage(page, wrapper);
     }
 

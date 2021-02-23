@@ -1,7 +1,10 @@
 package me.batizhao.ims.unit.service;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
@@ -14,6 +17,7 @@ import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.service.impl.UserServiceImpl;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,6 +156,12 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
                                                 allOf(hasProperty("email", is("wangwu@gmail.com")),
                                                       hasProperty("username", is("wangwu")))));
 
+        when(userMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(userPageList);
+
+        users = userService.findUsers(new Page<>(), new User().setName("tom"));
+
+        assertThat(users.getRecords(), iterableWithSize(3));
     }
 
     @Test
@@ -176,18 +186,6 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
         verify(userMapper).selectById(anyLong());
     }
-
-//    @Test
-//    public void givenUserName_whenDeleteUser_thenSuccess() {
-//        String username = "zhangsan";
-//
-//        when(userMapper.delete(any()))
-//                .thenReturn(1);
-//
-//        int result = userService.deleteByUsername(username);
-//
-//        assertThat(result, equalTo(1));
-//    }
 
     @Test
     public void givenUserJson_whenSaveOrUpdateUser_thenSuccess() {
@@ -242,16 +240,17 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         assertThrows(NotFoundException.class, () -> userService.getUserInfo(1L));
     }
 
-//    @Test
-//    public void givenUserId_whenUpdateUserStatus_thenSuccess() {
-//        when(userMapper.updateUserStatusById(1L, 1))
-//                .thenReturn(1);
-//
-//        assertThat(userService.updateUserStatusById(1L, 1), equalTo(true));
-//
-//        when(userMapper.updateUserStatusById(1L, 1))
-//                .thenReturn(0);
-//
-//        assertThat(userService.updateUserStatusById(1L, 1), equalTo(false));
-//    }
+    @Test
+    public void givenUser_whenUpdateStatus_thenSuccess() {
+        //Fix can not find lambda cache for this entity
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), User.class);
+
+        doReturn(1).when(userMapper).update(any(), any(Wrapper.class));
+        assertThat(userService.updateStatus(userList.get(0)), equalTo(true));
+
+        doReturn(0).when(userMapper).update(any(), any(Wrapper.class));
+        assertThat(userService.updateStatus(userList.get(0)), equalTo(false));
+
+        verify(userMapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
+    }
 }

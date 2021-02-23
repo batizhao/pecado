@@ -1,14 +1,17 @@
 package me.batizhao.ims.unit.service;
 
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.dto.TreeNode;
-import me.batizhao.ims.api.vo.MenuTree;
 import me.batizhao.ims.api.vo.MenuVO;
+import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Menu;
+import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
@@ -19,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
@@ -85,6 +89,23 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
 
         assertThat(menus, hasSize(4));
         assertThat(menus, hasItems(hasProperty("name", is("工作台"))));
+    }
+
+    @Test
+    public void givenUserId_whenFindMenus_thenSuccess() {
+        List<RoleVO> roleList = new ArrayList<>();
+        roleList.add(new RoleVO().setId(1L).setName("admin"));
+
+        when(roleService.findRolesByUserId(anyLong())).thenReturn(roleList);
+        when(menuMapper.findMenusByRoleId(anyLong())).thenReturn(menuList);
+
+        List<MenuVO> menus = menuService.findMenuTreeByUserId(1L);
+
+        log.info("menus: {}", menus);
+
+        assertThat(menus, hasSize(1));
+        assertThat(menus, hasItems(hasProperty("name", is("工作台")),
+                hasProperty("children", hasSize(1))));
     }
 
     @Test
@@ -162,5 +183,19 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
         log.info("menuVO: {}", menuVO);
 
         verify(menuMapper).updateById(any());
+    }
+
+    @Test
+    public void givenMenu_whenUpdateStatus_thenSuccess() {
+        //Fix can not find lambda cache for this entity
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), Menu.class);
+
+        doReturn(1).when(menuMapper).update(any(), any(Wrapper.class));
+        assertThat(menuService.updateStatus(menuList.get(0)), equalTo(true));
+
+        doReturn(0).when(menuMapper).update(any(), any(Wrapper.class));
+        assertThat(menuService.updateStatus(menuList.get(0)), equalTo(false));
+
+        verify(menuMapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
     }
 }
