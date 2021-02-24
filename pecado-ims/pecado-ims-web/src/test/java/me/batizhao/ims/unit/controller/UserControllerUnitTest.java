@@ -223,7 +223,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenId_whenDeleteUser_thenSuccess() throws Exception {
-        when(userService.removeByIds(anyList())).thenReturn(true);
+        when(userService.deleteByIds(anyList())).thenReturn(true);
 
         mvc.perform(delete("/user").param("ids", "1,2").with(csrf()))
                 .andDo(print())
@@ -232,7 +232,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data").value(true));
 
-        verify(userService).removeByIds(anyList());
+        verify(userService).deleteByIds(anyList());
     }
 
     /**
@@ -292,7 +292,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void giveUserRoles_whenAddUserRoles_thenSuccess() throws Exception {
+    public void giveUserRoles_whenAdd_thenSuccess() throws Exception {
         List<UserRole> userRoleList = new ArrayList<>();
         userRoleList.add(new UserRole().setUserId(1L).setRoleId(1L));
         userRoleList.add(new UserRole().setUserId(1L).setRoleId(2L));

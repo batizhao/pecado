@@ -31,8 +31,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -197,6 +196,21 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.name").value("工作台"));
 
         verify(menuService).saveOrUpdateMenu(any(Menu.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenDeleteMenu_thenSuccess() throws Exception {
+        when(menuService.deleteByIds(anyList())).thenReturn(true);
+
+        mvc.perform(delete("/menu").param("ids", "1,2").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(menuService).deleteByIds(anyList());
     }
 
     @Test

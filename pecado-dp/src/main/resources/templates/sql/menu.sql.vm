@@ -1,7 +1,7 @@
 -- 菜单 SQL
 INSERT INTO `menu` (`path`, `name`, `permission`, `icon`, `type`, `sort`, `description`, `pid`, `status`)
 VALUES
-('/${moduleName}/${classname}', '${comments}', '${moduleName}:${classname}:admin', '#', '0', 1, NULL, ${parentMenuId}, 1);
+('/${moduleName}/${mappingPath}', '${comments}', '${moduleName}:${classname}:admin', '#', '0', 1, NULL, ${parentMenuId}, 1);
 
 -- 按钮父菜单ID
 SELECT @parentId := LAST_INSERT_ID();

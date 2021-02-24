@@ -3,20 +3,20 @@ import request from '@/utils/request'
 // 查询${comments}列表
 export function list${className}(query) {
   return request({
-    url: '/${moduleName}/${classname}s',
+    url: '/${moduleName}/${mappingPath}s',
     params: query
   })
 }
 
 // 查询${comments}详细
 export function get${className}(${pk.javaField}) {
-  return request(`/${moduleName}/${classname}/${${pk.javaField}}`);
+  return request(`/${moduleName}/${mappingPath}/${${pk.javaField}}`);
 }
 
 // 添加或者编辑${comments}
 export function addOrUpdate${className}(data) {
   return request({
-    url: '/${moduleName}/${classname}',
+    url: '/${moduleName}/${mappingPath}',
     method: 'post',
     data: data
   })
@@ -24,7 +24,7 @@ export function addOrUpdate${className}(data) {
 
 // 删除${comments}
 export function delete${className}(${pk.javaField}s) {
-  return request.delete(`/${moduleName}/${classname}?ids=${${pk.javaField}s}`);
+  return request.delete(`/${moduleName}/${mappingPath}?ids=${${pk.javaField}s}`);
 }
 
 // 角色状态编辑
@@ -34,7 +34,7 @@ export function change${className}Status(id, status) {
     status
   }
   return request({
-    url: '/${moduleName}/${classname}/status',
+    url: '/${moduleName}/${mappingPath}/status',
     method: 'post',
     data: data
   })
@@ -43,7 +43,7 @@ export function change${className}Status(id, status) {
 // 导出${comments}
 export function export${className}(query) {
   return request({
-    url: '/${moduleName}/${classname}/export',
+    url: '/${moduleName}/${mappingPath}/export',
     params: query
   })
 }

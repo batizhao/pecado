@@ -66,6 +66,13 @@ public interface MenuService extends IService<Menu> {
     MenuVO saveOrUpdateMenu(Menu menu);
 
     /**
+     * 删除
+     * @param ids
+     * @return
+     */
+    Boolean deleteByIds(List<Long> ids);
+
+    /**
      * 更新菜单状态
      * @param menu 菜单信息
      * @return Boolean

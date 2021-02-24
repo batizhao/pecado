@@ -6,11 +6,14 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.ims.domain.Role;
 import me.batizhao.ims.mapper.RoleMapper;
+import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
+import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.impl.RoleServiceImpl;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,9 +21,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,9 +54,16 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
 
     @MockBean
     private RoleMapper roleMapper;
+    @MockBean
+    private UserRoleService userRoleService;
+    @MockBean
+    private RoleMenuService roleMenuService;
 
     @Autowired
     private RoleService roleService;
+
+    @SpyBean
+    private ServiceImpl service;
 
     private List<Role> roleList;
     private Page<Role> rolePageList;
@@ -128,6 +140,16 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
         roleService.saveOrUpdateRole(roleList.get(0));
 
         verify(roleMapper).updateById(any(Role.class));
+    }
+
+    @Test
+    public void givenIds_whenDelete_thenSuccess() {
+        doReturn(true).when(service).removeByIds(anyList());
+        doReturn(true).when(userRoleService).remove(any(Wrapper.class));
+        doReturn(true).when(roleMenuService).remove(any(Wrapper.class));
+
+        Boolean b = roleService.deleteByIds(Arrays.asList(1L, 2L));
+        assertThat(b, equalTo(true));
     }
 
     @Test

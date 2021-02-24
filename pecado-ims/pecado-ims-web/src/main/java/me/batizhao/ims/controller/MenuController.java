@@ -52,15 +52,15 @@ public class MenuController {
     }
 
     /**
-     * 查询角色菜单
+     * 查询菜单菜单
      * 返回菜单树
      *
      * @return 菜单树
      */
-    @ApiOperation(value = "查询角色菜单")
+    @ApiOperation(value = "查询菜单菜单")
     @SystemLog
     @GetMapping(value = "menu", params = "roleId")
-    public ResponseInfo<List<MenuVO>> handleMenusByRoleId(@ApiParam(value = "角色ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
+    public ResponseInfo<List<MenuVO>> handleMenusByRoleId(@ApiParam(value = "菜单ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
         return ResponseInfo.ok(menuService.findMenusByRoleId(roleId));
     }
 
@@ -103,6 +103,21 @@ public class MenuController {
     public ResponseInfo<MenuVO> handleSaveOrUpdate(@Valid @ApiParam(value = "菜单", required = true) @RequestBody Menu menu) {
         MenuVO menuVO = menuService.saveOrUpdateMenu(menu);
         return ResponseInfo.ok(menuVO);
+    }
+
+    /**
+     * 删除菜单
+     * 根据菜单ID删除菜单
+     *
+     * @return 成功或者失败
+     */
+    @ApiOperation(value = "删除菜单")
+    @DeleteMapping("menu")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
+    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "菜单ID串", required = true) @RequestParam List<Long> ids) {
+        Boolean b = menuService.deleteByIds(ids);
+        return ResponseInfo.ok(b);
     }
 
     /**

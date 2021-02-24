@@ -8,8 +8,10 @@ import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.util.TreeUtil;
 import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.domain.Menu;
+import me.batizhao.ims.domain.RoleMenu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
+import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private MenuMapper menuMapper;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     @Override
     public List<MenuVO> findMenusByRoleId(Long roleId) {
@@ -107,6 +111,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         BeanUtils.copyProperties(menu, menuVO);
 
         return menuVO;
+    }
+
+    @Override
+    public Boolean deleteByIds(List<Long> ids) {
+        this.removeByIds(ids);
+        ids.forEach(i -> roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getMenuId, i)));
+        return true;
     }
 
     @Override

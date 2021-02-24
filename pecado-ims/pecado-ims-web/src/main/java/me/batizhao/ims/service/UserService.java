@@ -52,6 +52,13 @@ public interface UserService extends IService<User> {
 	User saveOrUpdateUser(User user);
 
 	/**
+	 * 删除
+	 * @param ids
+	 * @return
+	 */
+	Boolean deleteByIds(List<Long> ids);
+
+	/**
 	 * 更新用户状态
 	 * @param user 用户
 	 * @return Boolean

@@ -268,22 +268,6 @@ public class UserApiTest extends BaseApiTest {
      * @throws Exception
      */
     @Test
-    public void givenInValidId_whenDeleteUser_thenValidateFail() throws Exception {
-        mvc.perform(delete("/user").param("ids", "-1")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data").value(false));
-    }
-
-    /**
-     * 测试参数检验失败的情况
-     *
-     * @throws Exception
-     */
-    @Test
     public void givenStringId_whenDeleteUser_thenValidateFail() throws Exception {
         mvc.perform(delete("/user").param("ids", "xxxx")
                 .header("Authorization", adminAccessToken))

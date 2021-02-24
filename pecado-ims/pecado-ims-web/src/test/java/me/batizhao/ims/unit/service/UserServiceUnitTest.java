@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
@@ -15,6 +16,7 @@ import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
+import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.ims.service.impl.UserServiceImpl;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
@@ -23,11 +25,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -60,9 +64,14 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     private RoleService roleService;
     @MockBean
     private MenuService menuService;
+    @MockBean
+    private UserRoleService userRoleService;
 
     @Autowired
     private UserService userService;
+
+    @SpyBean
+    private ServiceImpl service;
 
     private List<User> userList;
     private Page<UserVO> userPageList;
@@ -222,6 +231,15 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         log.info("user: {}", user);
 
         verify(userMapper).updateById(any());
+    }
+
+    @Test
+    public void givenIds_whenDelete_thenSuccess() {
+        doReturn(true).when(service).removeByIds(anyList());
+        doReturn(true).when(userRoleService).remove(any(Wrapper.class));
+
+        Boolean b = userService.deleteByIds(Arrays.asList(1L, 2L));
+        assertThat(b, equalTo(true));
     }
 
     @Test

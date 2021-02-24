@@ -10,10 +10,13 @@ import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Role;
+import me.batizhao.ims.domain.RoleMenu;
+import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.mapper.RoleMapper;
+import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
+import me.batizhao.ims.service.UserRoleService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     @Override
     public IPage<Role> findRoles(Page<Role> page, Role role) {
@@ -64,6 +71,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
 
         return role;
+    }
+
+    @Override
+    public Boolean deleteByIds(List<Long> ids) {
+        this.removeByIds(ids);
+        ids.forEach(i -> {
+            userRoleService.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getRoleId, i));
+            roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRoleId, i));
+        });
+        return true;
     }
 
     @Override

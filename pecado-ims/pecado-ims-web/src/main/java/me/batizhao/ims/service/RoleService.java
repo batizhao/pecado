@@ -37,6 +37,13 @@ public interface RoleService extends IService<Role> {
     Role saveOrUpdateRole(Role role);
 
     /**
+     * 删除
+     * @param ids
+     * @return
+     */
+    Boolean deleteByIds(List<Long> ids);
+
+    /**
      * 更新角色状态
      * @param role 角色信息
      * @return Boolean

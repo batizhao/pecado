@@ -244,7 +244,7 @@
 </template>
 
 <script>
-import { list${className}, get${className}, delete${className}, addOrUpdate${className}, export${className} } from "@/api/${moduleName}/${classname}";
+import { list${className}, get${className}, delete${className}, addOrUpdate${className}, export${className} } from "@/api/${moduleName}/${mappingPath}";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 #foreach($column in $columns)

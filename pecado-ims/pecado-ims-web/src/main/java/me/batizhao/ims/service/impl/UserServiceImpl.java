@@ -12,9 +12,11 @@ import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.api.vo.UserVO;
 import me.batizhao.ims.domain.User;
+import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.mapper.UserMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
+import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +42,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RoleService roleService;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Override
     public IPage<User> findUsers(Page<User> page, User user) {
@@ -99,6 +103,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         return user;
+    }
+
+    @Override
+    public Boolean deleteByIds(List<Long> ids) {
+        this.removeByIds(ids);
+        ids.forEach(i -> {
+            userRoleService.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, i));
+        });
+        return true;
     }
 
     @Override

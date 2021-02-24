@@ -317,7 +317,7 @@
 </template>
 
 <script>
-import { list${className}, get${className}, delete${className}, addOrUpdate${className}, change${className}Status, export${className} } from "@/api/${moduleName}/${classname}";
+import { list${className}, get${className}, delete${className}, addOrUpdate${className}, change${className}Status, export${className} } from "@/api/${moduleName}/${mappingPath}";
 #foreach($column in $columns)
 #if($column.save && !$column.superColumn && !$column.primaryKey && $column.htmlType == "imageUpload")
 import ImageUpload from '@/components/ImageUpload';

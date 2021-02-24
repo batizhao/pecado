@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.common.core.util.BeanCopyUtil;
@@ -13,6 +14,7 @@ import me.batizhao.ims.api.vo.RoleVO;
 import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
+import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.impl.MenuServiceImpl;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
@@ -21,9 +23,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -55,9 +59,14 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
     private MenuMapper menuMapper;
     @MockBean
     private RoleService roleService;
+    @MockBean
+    private RoleMenuService roleMenuService;
 
     @Autowired
     private MenuService menuService;
+
+    @SpyBean
+    private ServiceImpl service;
 
     private List<Menu> menuList;
     private List<MenuVO> menuVOList;
@@ -181,6 +190,15 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
         log.info("menuVO: {}", menuVO);
 
         verify(menuMapper).updateById(any());
+    }
+
+    @Test
+    public void givenIds_whenDelete_thenSuccess() {
+        doReturn(true).when(service).removeByIds(anyList());
+        doReturn(true).when(roleMenuService).remove(any(Wrapper.class));
+
+        Boolean b = menuService.deleteByIds(Arrays.asList(1L, 2L));
+        assertThat(b, equalTo(true));
     }
 
     @Test

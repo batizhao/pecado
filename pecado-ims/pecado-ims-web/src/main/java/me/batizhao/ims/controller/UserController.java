@@ -135,7 +135,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "用户ID串", required = true) @RequestParam List<Long> ids) {
-        Boolean b = userService.removeByIds(ids);
+        Boolean b = userService.deleteByIds(ids);
         return ResponseInfo.ok(b);
     }
 

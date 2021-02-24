@@ -107,7 +107,7 @@ public class RoleController {
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "角色ID串", required = true) @RequestParam List<Long> ids) {
-        Boolean b = roleService.removeByIds(ids);
+        Boolean b = roleService.deleteByIds(ids);
         return ResponseInfo.ok(b);
     }
 

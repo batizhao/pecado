@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.controller.RoleController;
 import me.batizhao.ims.domain.Role;
+import me.batizhao.ims.domain.RoleMenu;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -159,7 +160,7 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenId_whenDeleteRole_thenSuccess() throws Exception {
-        when(roleService.removeByIds(anyList())).thenReturn(true);
+        when(roleService.deleteByIds(anyList())).thenReturn(true);
 
         mvc.perform(delete("/role").param("ids", "1,2").with(csrf()))
                 .andDo(print())
@@ -168,7 +169,7 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data").value(true));
 
-        verify(roleService).removeByIds(anyList());
+        verify(roleService).deleteByIds(anyList());
     }
 
     @Test
@@ -188,5 +189,24 @@ public class RoleControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data").value(true));
 
         verify(roleService).updateStatus(any(Role.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void giveRoleMenus_whenAdd_thenSuccess() throws Exception {
+        List<RoleMenu> roleMenuList = new ArrayList<>();
+        roleMenuList.add(new RoleMenu().setRoleId(1L).setMenuId(1L));
+        roleMenuList.add(new RoleMenu().setRoleId(1L).setMenuId(2L));
+
+        doReturn(true).when(roleMenuService).updateRoleMenus(any(List.class));
+
+        mvc.perform(post("/role/menu").with(csrf())
+                .content(objectMapper.writeValueAsString(roleMenuList))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
     }
 }
