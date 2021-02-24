@@ -41,7 +41,7 @@ public interface MenuService extends IService<Menu> {
      * 查询所有菜单
      * @return 菜单树
      */
-    List<MenuVO> findMenuTree();
+    List<MenuVO> findMenuTree(Menu menu);
 
     /**
      * 构造菜单树

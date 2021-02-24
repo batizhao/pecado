@@ -1,5 +1,6 @@
 package me.batizhao.ims.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -13,6 +14,7 @@ import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,8 +62,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public List<MenuVO> findMenuTree() {
-        List<Menu> menus = menuMapper.selectList(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getSort));
+    public List<MenuVO> findMenuTree(Menu menu) {
+        LambdaQueryWrapper<Menu> wrapper = Wrappers.lambdaQuery();
+        if (null != menu && StringUtils.isNotBlank(menu.getName())) {
+            wrapper.like(Menu::getName, menu.getName());
+        }
+        wrapper.orderByAsc(Menu::getSort);
+
+        List<Menu> menus = menuMapper.selectList(wrapper);
 //        List<MenuTree> menuTrees = new ArrayList<>();
 //        MenuTree menuTree;
 //        for (Menu menu : menus) {

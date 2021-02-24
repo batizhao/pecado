@@ -118,17 +118,17 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     void givenNothing_whenFindMenuTree_thenSuccess() throws Exception {
-        List<MenuTree> menuTrees = new ArrayList<>();
+        List<MenuVO> menuTrees = new ArrayList<>();
 
-        MenuTree menuTree = new MenuTree();
-        menuTree.setTitle(menuList.get(0).getName());
-        menuTree.setKey(menuList.get(0).getPermission());
+        MenuVO menuTree = new MenuVO();
+        menuTree.setName(menuList.get(0).getName());
+        menuTree.setPermission(menuList.get(0).getPermission());
         menuTree.setPid(menuList.get(0).getPid());
         menuTree.setId(menuList.get(0).getId());
 
-        MenuTree menuTree2 = new MenuTree();
-        menuTree2.setTitle(menuList.get(1).getName());
-        menuTree2.setKey(menuList.get(1).getPermission());
+        MenuVO menuTree2 = new MenuVO();
+        menuTree2.setName(menuList.get(1).getName());
+        menuTree2.setPermission(menuList.get(1).getPermission());
         menuTree2.setPid(menuList.get(1).getPid());
         menuTree2.setId(menuList.get(1).getId());
 
@@ -137,7 +137,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
         menuTree.setChildren(children);
         menuTrees.add(menuTree);
 
-        doReturn(menuTrees).when(menuService).findMenuTree();
+        doReturn(menuTrees).when(menuService).findMenuTree(any(Menu.class));
 
         mvc.perform(get("/menus"))
                 .andDo(print())
@@ -145,7 +145,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data", hasSize(1)))
-                .andExpect(jsonPath("$.data[0].children[0].key", equalTo("ims_root")));
+                .andExpect(jsonPath("$.data[0].children[0].name", equalTo("权限管理")));
     }
 
     @Test

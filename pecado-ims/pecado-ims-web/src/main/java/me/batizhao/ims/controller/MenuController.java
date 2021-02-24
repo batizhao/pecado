@@ -73,8 +73,8 @@ public class MenuController {
     @ApiOperation(value = "查询所有菜单")
     @SystemLog
     @GetMapping("/menus")
-    public ResponseInfo<List<MenuVO>> handleMenuTree() {
-        return ResponseInfo.ok(menuService.findMenuTree());
+    public ResponseInfo<List<MenuVO>> handleMenuTree(Menu menu) {
+        return ResponseInfo.ok(menuService.findMenuTree(menu));
     }
 
     /**
