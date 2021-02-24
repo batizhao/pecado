@@ -1,8 +1,9 @@
-package me.batizhao.ims.api.vo;
+package me.batizhao.ims.api.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
@@ -16,8 +17,9 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
+@NoArgsConstructor
 @ApiModel(description = "角色")
-public class RoleVO implements Serializable {
+public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -57,5 +59,4 @@ public class RoleVO implements Serializable {
      */
     @ApiModelProperty(value="修改时间")
     private LocalDateTime updateTime;
-
 }

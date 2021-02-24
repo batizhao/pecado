@@ -1,7 +1,7 @@
 package me.batizhao.ims.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import me.batizhao.ims.domain.RoleMenu;
+import me.batizhao.ims.api.domain.RoleMenu;
 
 import java.util.List;
 

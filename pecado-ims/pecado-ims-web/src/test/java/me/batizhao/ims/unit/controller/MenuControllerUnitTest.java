@@ -2,15 +2,12 @@ package me.batizhao.ims.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.MenuTypeEnum;
-import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
+import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.ims.api.dto.TreeNode;
-import me.batizhao.ims.api.vo.MenuTree;
-import me.batizhao.ims.api.vo.MenuVO;
 import me.batizhao.ims.controller.MenuController;
-import me.batizhao.ims.domain.Menu;
 import me.batizhao.ims.service.MenuService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +52,6 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     private MenuService menuService;
 
     private List<Menu> menuList;
-    private List<MenuVO> menuVOList;
 
     /**
      * Prepare test data.
@@ -63,12 +59,10 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @BeforeEach
     public void setUp() {
         menuList = new ArrayList<>();
-        menuList.add(new Menu().setId(1).setName("工作台").setPermission("user_dashboard").setPid(0).setSort(1).setType(MenuTypeEnum.MENU.getType()).setPath("/aaa"));
-        menuList.add(new Menu().setId(2).setName("权限管理").setPermission("ims_root").setPid(1).setSort(1).setType(MenuTypeEnum.MENU.getType()));
-        menuList.add(new Menu().setId(3).setName("用户管理").setPermission("ims_user_admin").setPid(2).setSort(2).setType(MenuTypeEnum.MENU.getType()));
-        menuList.add(new Menu().setId(4).setName("角色管理").setPermission("ims_role_admin").setPid(2).setSort(1).setType(MenuTypeEnum.MENU.getType()));
-
-        menuVOList = BeanCopyUtil.copyListProperties(menuList, MenuVO::new);
+        menuList.add(new Menu(1, 0).setName("工作台").setPermission("user_dashboard").setSort(1).setType(MenuTypeEnum.MENU.getType()));
+        menuList.add(new Menu(2, 1).setName("权限管理").setPermission("ims_root").setSort(1).setType(MenuTypeEnum.MENU.getType()));
+        menuList.add(new Menu(3, 2).setName("用户管理").setPermission("ims_user_admin").setSort(2).setType(MenuTypeEnum.MENU.getType()));
+        menuList.add(new Menu(4, 2).setName("角色管理").setPermission("ims_role_admin").setSort(1).setType(MenuTypeEnum.MENU.getType()));
     }
 
     @Test
@@ -76,13 +70,13 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     public void givenNothing_whenFindMenuTree4Me_thenSuccess() throws Exception {
         PecadoUser pecadoUser = new PecadoUser(1L, 2L, "zhangsan", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 
-        List<MenuVO> trees = new ArrayList<>();
-        MenuVO menuVO = menuVOList.get(0);
+        List<Menu> trees = new ArrayList<>();
+        Menu menu = menuList.get(0);
 
         List<TreeNode> children = new ArrayList<>();
-        children.add(menuVOList.get(1));
-        menuVO.setChildren(children);
-        trees.add(menuVO);
+        children.add(menuList.get(1));
+        menu.setChildren(children);
+        trees.add(menu);
 
         try (MockedStatic<SecurityUtils> mockStatic = mockStatic(SecurityUtils.class)) {
             mockStatic.when(SecurityUtils::getUser).thenReturn(pecadoUser);
@@ -104,7 +98,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenRoleId_whenFindMenus_thenSuccess() throws Exception {
-        doReturn(menuVOList).when(menuService).findMenusByRoleId(anyLong());
+        doReturn(menuList).when(menuService).findMenusByRoleId(anyLong());
 
         mvc.perform(get("/menu").param("roleId", "1"))
                 .andDo(print())
@@ -118,15 +112,15 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     void givenNothing_whenFindMenuTree_thenSuccess() throws Exception {
-        List<MenuVO> menuTrees = new ArrayList<>();
+        List<Menu> menuTrees = new ArrayList<>();
 
-        MenuVO menuTree = new MenuVO();
+        Menu menuTree = new Menu();
         menuTree.setName(menuList.get(0).getName());
         menuTree.setPermission(menuList.get(0).getPermission());
         menuTree.setPid(menuList.get(0).getPid());
         menuTree.setId(menuList.get(0).getId());
 
-        MenuVO menuTree2 = new MenuVO();
+        Menu menuTree2 = new Menu();
         menuTree2.setName(menuList.get(1).getName());
         menuTree2.setPermission(menuList.get(1).getPermission());
         menuTree2.setPid(menuList.get(1).getPid());
@@ -151,7 +145,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenId_whenFindMenu_thenSuccess() throws Exception {
-        doReturn(menuVOList.get(0)).when(menuService).findMenuById(anyInt());
+        doReturn(menuList.get(0)).when(menuService).findMenuById(anyInt());
 
         mvc.perform(get("/menu/1"))
                 .andDo(print())
@@ -167,7 +161,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
         Menu menu = menuList.get(0);
         menu.setId(null);
 
-        doReturn(menuVOList.get(1)).when(menuService).saveOrUpdateMenu(any(Menu.class));
+        doReturn(menuList.get(1)).when(menuService).saveOrUpdateMenu(any(Menu.class));
 
         mvc.perform(post("/menu").with(csrf())
                 .content(objectMapper.writeValueAsString(menu))
@@ -184,7 +178,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenMenu_whenUpdateMenu_thenSuccess() throws Exception {
-        doReturn(menuVOList.get(0)).when(menuService).saveOrUpdateMenu(any(Menu.class));
+        doReturn(menuList.get(0)).when(menuService).saveOrUpdateMenu(any(Menu.class));
 
         mvc.perform(post("/menu").with(csrf())
                 .content(objectMapper.writeValueAsString(menuList.get(0)))
@@ -216,7 +210,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenMenu_whenUpdateStatus_thenSuccess() throws Exception {
-        Menu requestBody = new Menu().setId(2).setStatus("close");
+        Menu requestBody = new Menu();
 
         when(menuService.updateStatus(any(Menu.class))).thenReturn(true);
 

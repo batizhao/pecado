@@ -8,7 +8,6 @@ package me.batizhao.ims.api.util;
 
 import lombok.experimental.UtilityClass;
 import me.batizhao.ims.api.dto.TreeNode;
-import me.batizhao.ims.api.vo.MenuVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,22 +86,22 @@ public class TreeUtil {
 	 * @param root
 	 * @return
 	 */
-	public List<MenuVO> buildTree(List<MenuVO> menus, int root) {
-		List<MenuVO> trees = new ArrayList<>();
-		MenuVO node;
-		for (MenuVO menu : menus) {
-			node = new MenuVO();
-			node.setId(menu.getId());
-			node.setPid(menu.getPid());
-			node.setName(menu.getName());
-			node.setPath(menu.getPath());
-			node.setPermission(menu.getPermission());
-			node.setIcon(menu.getIcon());
-			node.setType(menu.getType());
-			node.setSort(menu.getSort());
-			trees.add(node);
-		}
-		return TreeUtil.build(trees, root);
-	}
+//	public List<MenuVO> buildTree(List<MenuVO> menus, int root) {
+//		List<MenuVO> trees = new ArrayList<>();
+//		MenuVO node;
+//		for (MenuVO menu : menus) {
+//			node = new MenuVO();
+//			node.setId(menu.getId());
+//			node.setPid(menu.getPid());
+//			node.setName(menu.getName());
+//			node.setPath(menu.getPath());
+//			node.setPermission(menu.getPermission());
+//			node.setIcon(menu.getIcon());
+//			node.setType(menu.getType());
+//			node.setSort(menu.getSort());
+//			trees.add(node);
+//		}
+//		return TreeUtil.build(trees, root);
+//	}
 
 }

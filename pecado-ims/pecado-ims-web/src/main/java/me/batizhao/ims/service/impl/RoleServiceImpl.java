@@ -8,10 +8,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
-import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.ims.domain.Role;
-import me.batizhao.ims.domain.RoleMenu;
-import me.batizhao.ims.domain.UserRole;
+import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.RoleMenu;
+import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.mapper.RoleMapper;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
@@ -92,8 +91,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public List<RoleVO> findRolesByUserId(Long userId) {
+    public List<Role> findRolesByUserId(Long userId) {
         List<Role> roleList = roleMapper.findRolesByUserId(userId);
-        return BeanCopyUtil.copyListProperties(roleList, RoleVO::new);
+        return BeanCopyUtil.copyListProperties(roleList, Role::new);
     }
 }

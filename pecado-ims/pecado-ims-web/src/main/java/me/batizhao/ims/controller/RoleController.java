@@ -7,9 +7,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
-import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.ims.domain.Role;
-import me.batizhao.ims.domain.RoleMenu;
+import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.RoleMenu;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.system.api.annotation.SystemLog;
@@ -135,8 +134,8 @@ public class RoleController {
     @GetMapping(value = "role", params = "userId")
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
     @SystemLog
-    public ResponseInfo<List<RoleVO>> handleRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
-        List<RoleVO> roles = roleService.findRolesByUserId(userId);
+    public ResponseInfo<List<Role>> handleRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
+        List<Role> roles = roleService.findRolesByUserId(userId);
         return ResponseInfo.ok(roles);
     }
 

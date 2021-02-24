@@ -6,11 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
-import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.User;
+import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.domain.User;
-import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
@@ -18,7 +17,6 @@ import me.batizhao.ims.controller.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -91,16 +89,15 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     public void givenUserName_whenFindUser_thenUserJson() throws Exception {
         String username = "zhangsan";
 
-        List<RoleVO> roleList = new ArrayList<>();
-        roleList.add(new RoleVO().setId(1L).setName("admin"));
-        roleList.add(new RoleVO().setId(2L).setName("common"));
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(new Role().setId(1L).setName("admin"));
+        roleList.add(new Role().setId(2L).setName("common"));
 
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(userList.get(0), userVO);
-        when(userService.findByUsername(username)).thenReturn(userVO);
+        User user = userList.get(0);
+        when(userService.findByUsername(username)).thenReturn(user);
 
-        userVO.setRoleList(roleList);
-        when(roleService.findRolesByUserId(userVO.getId())).thenReturn(roleList);
+        user.setRoleList(roleList);
+        when(roleService.findRolesByUserId(user.getId())).thenReturn(roleList);
 
         mvc.perform(get("/user").param("username", username))
                 .andDo(print())
@@ -273,11 +270,8 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
             SecurityUtils.getUser();
             mockStatic.verify(times(1), SecurityUtils::getUser);
 
-            UserVO userVO = new UserVO();
-            BeanUtils.copyProperties(userList.get(0), userVO);
-
             UserInfoVO userInfoVO = new UserInfoVO();
-            userInfoVO.setUserVO(userVO);
+            userInfoVO.setUser(userList.get(0));
 
             doReturn(userInfoVO).when(userService).getUserInfo(1L);
 
@@ -286,7 +280,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                    .andExpect(jsonPath("$.data.userVO.username").value("zhangsan"));
+                    .andExpect(jsonPath("$.data.user.username").value("zhangsan"));
         }
     }
 

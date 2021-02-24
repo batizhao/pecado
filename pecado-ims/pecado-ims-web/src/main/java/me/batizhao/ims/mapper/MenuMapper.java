@@ -1,7 +1,7 @@
 package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import me.batizhao.ims.domain.Menu;
+import me.batizhao.ims.api.domain.Menu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

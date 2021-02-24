@@ -1,7 +1,5 @@
-package me.batizhao.ims.domain;
+package me.batizhao.ims.api.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author batizhao
@@ -28,7 +27,6 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户ID", example = "100")
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "用户名", example = "zhangsan")
@@ -82,4 +80,10 @@ public class User implements Serializable {
      */
     @ApiModelProperty(value="修改时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 角色列表
+     */
+    @ApiModelProperty(value = "角色列表")
+    private transient List<Role> roleList;
 }

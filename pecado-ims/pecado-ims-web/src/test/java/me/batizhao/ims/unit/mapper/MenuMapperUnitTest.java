@@ -1,7 +1,7 @@
 package me.batizhao.ims.unit.mapper;
 
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.ims.domain.Menu;
+import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,9 +3,9 @@ package me.batizhao.ims.api.feign.fallback;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.feign.UserFeignService;
-import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.ims.api.vo.UserVO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,13 +22,13 @@ public class UserServiceFallbackImpl implements UserFeignService {
     private Throwable throwable;
 
     @Override
-    public ResponseInfo<UserVO> loadUserByUsername(String username, String from) {
+    public ResponseInfo<User> loadUserByUsername(String username, String from) {
         log.error("feign 查询用户信息失败: {}", username, throwable);
         return null;
     }
 
     @Override
-    public ResponseInfo<List<RoleVO>> findRolesByUserId(Long userId) {
+    public ResponseInfo<List<Role>> findRolesByUserId(Long userId) {
         log.error("feign 查询用户角色信息失败: {}", userId, throwable);
         return null;
     }

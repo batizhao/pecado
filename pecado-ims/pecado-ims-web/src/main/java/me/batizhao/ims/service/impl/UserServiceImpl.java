@@ -7,19 +7,17 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
-import me.batizhao.ims.api.vo.MenuVO;
-import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.api.domain.Menu;
+import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.User;
+import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.domain.User;
-import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.mapper.UserMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,16 +67,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public UserVO findByUsername(String username) {
+    public User findByUsername(String username) {
         User user = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
 
         if(user == null) {
             throw new NotFoundException(String.format("没有该用户 '%s'。", username));
         }
 
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
-        return userVO;
+        return user;
     }
 
     @Override
@@ -130,13 +126,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new NotFoundException(String.format("没有该用户 '%s'。", userId));
         }
 
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
-
         UserInfoVO userInfoVO = new UserInfoVO();
-        userInfoVO.setUserVO(userVO);
-        userInfoVO.setRoles(roleService.findRolesByUserId(userId).stream().map(RoleVO::getCode).collect(Collectors.toList()));
-        userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(MenuVO::getPermission).collect(Collectors.toList()));
+        userInfoVO.setUser(user);
+        userInfoVO.setRoles(roleService.findRolesByUserId(userId).stream().map(Role::getCode).collect(Collectors.toList()));
+        userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(Menu::getPermission).collect(Collectors.toList()));
         return userInfoVO;
     }
 

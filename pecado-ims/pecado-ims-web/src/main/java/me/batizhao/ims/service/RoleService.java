@@ -3,8 +3,7 @@ package me.batizhao.ims.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.ims.domain.Role;
+import me.batizhao.ims.api.domain.Role;
 
 import java.util.List;
 
@@ -55,5 +54,5 @@ public interface RoleService extends IService<Role> {
      * @param userId
      * @return
      */
-    List<RoleVO> findRolesByUserId(Long userId);
+    List<Role> findRolesByUserId(Long userId);
 }

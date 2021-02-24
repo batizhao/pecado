@@ -1,4 +1,4 @@
-package me.batizhao.ims.domain;
+package me.batizhao.ims.api.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

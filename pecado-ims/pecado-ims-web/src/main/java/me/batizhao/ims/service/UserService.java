@@ -3,9 +3,8 @@ package me.batizhao.ims.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.domain.User;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public interface UserService extends IService<User> {
 	 * @param username
 	 * @return
 	 */
-	UserVO findByUsername(String username);
+	User findByUsername(String username);
 
 	/**
 	 * 通过 name 查询用户

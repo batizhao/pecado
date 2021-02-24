@@ -6,8 +6,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.util.SecurityUtils;
-import me.batizhao.ims.api.vo.MenuVO;
-import me.batizhao.ims.domain.Menu;
+import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class MenuController {
     @ApiOperation(value = "查询当前用户菜单")
     @SystemLog
     @GetMapping("/menu/me")
-    public ResponseInfo<List<MenuVO>> handleMenuTree4Me() {
+    public ResponseInfo<List<Menu>> handleMenuTree4Me() {
         Long userId = SecurityUtils.getUser().getUserId();
         return ResponseInfo.ok(menuService.findMenuTreeByUserId(userId));
     }
@@ -60,7 +59,7 @@ public class MenuController {
     @ApiOperation(value = "查询菜单菜单")
     @SystemLog
     @GetMapping(value = "menu", params = "roleId")
-    public ResponseInfo<List<MenuVO>> handleMenusByRoleId(@ApiParam(value = "菜单ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
+    public ResponseInfo<List<Menu>> handleMenusByRoleId(@ApiParam(value = "菜单ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
         return ResponseInfo.ok(menuService.findMenusByRoleId(roleId));
     }
 
@@ -73,7 +72,7 @@ public class MenuController {
     @ApiOperation(value = "查询所有菜单")
     @SystemLog
     @GetMapping("/menus")
-    public ResponseInfo<List<MenuVO>> handleMenuTree(Menu menu) {
+    public ResponseInfo<List<Menu>> handleMenuTree(Menu menu) {
         return ResponseInfo.ok(menuService.findMenuTree(menu));
     }
 
@@ -85,7 +84,7 @@ public class MenuController {
     @ApiOperation(value = "根据菜单 ID 查询")
     @SystemLog
     @GetMapping("/menu/{id}")
-    public ResponseInfo<MenuVO> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) Integer id) {
+    public ResponseInfo<Menu> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) Integer id) {
         return ResponseInfo.ok(menuService.findMenuById(id));
     }
 
@@ -100,9 +99,9 @@ public class MenuController {
     @PostMapping("menu")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<MenuVO> handleSaveOrUpdate(@Valid @ApiParam(value = "菜单", required = true) @RequestBody Menu menu) {
-        MenuVO menuVO = menuService.saveOrUpdateMenu(menu);
-        return ResponseInfo.ok(menuVO);
+    public ResponseInfo<Menu> handleSaveOrUpdate(@Valid @ApiParam(value = "菜单", required = true) @RequestBody Menu menu) {
+        Menu Menu = menuService.saveOrUpdateMenu(menu);
+        return ResponseInfo.ok(Menu);
     }
 
     /**

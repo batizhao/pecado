@@ -1,7 +1,7 @@
 package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import me.batizhao.ims.domain.RoleMenu;
+import me.batizhao.ims.api.domain.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

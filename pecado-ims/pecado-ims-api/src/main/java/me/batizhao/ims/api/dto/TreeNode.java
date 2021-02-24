@@ -19,50 +19,50 @@ import java.util.List;
  */
 public class TreeNode {
 
-	@ApiModelProperty(value = "ID", example = "100")
-	protected Integer id;
+    @ApiModelProperty(value = "ID", example = "100")
+    protected Integer id;
 
-	@ApiModelProperty(value = "父ID", example = "100")
-	@Min(0)
-	protected Integer pid;
+    @ApiModelProperty(value = "父ID", example = "100")
+    @Min(0)
+    protected Integer pid;
 
-	protected List<TreeNode> children = new ArrayList<>();;
+    protected transient List<TreeNode> children = new ArrayList<>();
 
-	protected boolean isLeaf = true;
+    protected transient boolean isLeaf = true;
 
-	public void add(TreeNode node) {
-		children.add(node);
-	}
+    public void add(TreeNode node) {
+        children.add(node);
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Integer getPid() {
-		return pid;
-	}
+    public Integer getPid() {
+        return pid;
+    }
 
-	public void setPid(Integer pid) {
-		this.pid = pid;
-	}
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
 
-	public List<TreeNode> getChildren() {
-		return children;
-	}
+    public List<TreeNode> getChildren() {
+        return children;
+    }
 
-	public void setChildren(List<TreeNode> children) {
-		this.children = children;
-	}
+    public void setChildren(List<TreeNode> children) {
+        this.children = children;
+    }
 
-	public boolean getIsLeaf() {
-		return isLeaf;
-	}
+    public boolean getIsLeaf() {
+        return isLeaf;
+    }
 
-	public void setIsLeaf(boolean leaf) {
-		isLeaf = leaf;
-	}
+    public void setIsLeaf(boolean leaf) {
+        isLeaf = leaf;
+    }
 }

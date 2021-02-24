@@ -10,9 +10,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
+import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleService;
@@ -74,7 +73,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     private ServiceImpl service;
 
     private List<User> userList;
-    private Page<UserVO> userPageList;
+    private Page<User> userPageList;
 
     /**
      * Prepare test data.
@@ -86,9 +85,8 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         userList.add(new User().setId(2L).setEmail("lisi@gmail.com").setUsername("lisi").setName("李四").setPassword("123456"));
         userList.add(new User().setId(3L).setEmail("wangwu@gmail.com").setUsername("wangwu").setName("王五").setPassword("123456"));
 
-        List<UserVO> userVOList = BeanCopyUtil.copyListProperties(userList, UserVO::new);
         userPageList = new Page<>();
-        userPageList.setRecords(userVOList);
+        userPageList.setRecords(userList);
     }
 
     @Test
@@ -98,7 +96,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         when(userMapper.selectOne(any()))
                 .thenReturn(userList.get(0));
 
-        UserVO user = userService.findByUsername(username);
+        User user = userService.findByUsername(username);
 
         assertThat(user.getUsername(), equalTo(username));
         assertThat(user.getEmail(), equalTo("zhangsan@gmail.com"));
@@ -248,7 +246,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
         UserInfoVO uiv = userService.getUserInfo(1L);
 
-        assertThat(uiv.getUserVO().getEmail(), equalTo("zhangsan@gmail.com"));
+        assertThat(uiv.getUser().getEmail(), equalTo("zhangsan@gmail.com"));
     }
 
     @Test

@@ -1,12 +1,12 @@
-package me.batizhao.ims.domain;
+package me.batizhao.ims.api.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import me.batizhao.ims.api.dto.TreeNode;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,18 +18,12 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@ApiModel(description = "菜单类")
-public class Menu implements Serializable {
+@ApiModel(description = "菜单")
+public class Menu extends TreeNode implements Serializable {
 
-    @ApiModelProperty(value = "ID", example = "100")
-    private Integer id;
-
-    @ApiModelProperty(value = "父ID", example = "100")
-    @Min(0)
-    private Integer pid;
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "路径", example = "/user/common")
-    @NotBlank(message = "path is not blank")
     private String path;
 
     @ApiModelProperty(value = "菜单名", example = "权限管理")
@@ -68,4 +62,9 @@ public class Menu implements Serializable {
      */
     @ApiModelProperty(value="修改时间")
     private LocalDateTime updateTime;
+
+    public Menu(Integer id, Integer pid) {
+        this.id = id;
+        this.pid = pid;
+    }
 }

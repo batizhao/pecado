@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import me.batizhao.ims.api.domain.User;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,7 +21,7 @@ public class UserInfoVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty(value = "用户基本信息")
-	private UserVO userVO;
+	private User user;
 
 	/**
 	 * @mock @pick(["common","admin"])

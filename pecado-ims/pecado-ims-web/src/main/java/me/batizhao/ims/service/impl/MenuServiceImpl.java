@@ -5,17 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.constant.MenuTypeEnum;
+import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.util.TreeUtil;
-import me.batizhao.ims.api.vo.MenuVO;
-import me.batizhao.ims.domain.Menu;
-import me.batizhao.ims.domain.RoleMenu;
+import me.batizhao.ims.api.domain.Menu;
+import me.batizhao.ims.api.domain.RoleMenu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,27 +41,26 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private RoleMenuService roleMenuService;
 
     @Override
-    public List<MenuVO> findMenusByRoleId(Long roleId) {
-        List<Menu> menus = menuMapper.findMenusByRoleId(roleId);
-        return BeanCopyUtil.copyListProperties(menus, MenuVO::new);
+    public List<Menu> findMenusByRoleId(Long roleId) {
+        return menuMapper.findMenusByRoleId(roleId);
     }
 
     @Override
-    public Set<MenuVO> findMenusByUserId(Long userId) {
-        Set<MenuVO> all = new HashSet<>();
-        roleService.findRolesByUserId(userId).forEach(roleVO -> all.addAll(findMenusByRoleId(roleVO.getId())));
+    public Set<Menu> findMenusByUserId(Long userId) {
+        Set<Menu> all = new HashSet<>();
+        roleService.findRolesByUserId(userId).forEach(role -> all.addAll(findMenusByRoleId(role.getId())));
         return all;
     }
 
     @Override
-    public List<MenuVO> findMenuTreeByUserId(Long userId) {
-        Set<MenuVO> all = new HashSet<>();
-        roleService.findRolesByUserId(userId).forEach(roleVO -> all.addAll(findMenusByRoleId(roleVO.getId())));
+    public List<Menu> findMenuTreeByUserId(Long userId) {
+        Set<Menu> all = new HashSet<>();
+        roleService.findRolesByUserId(userId).forEach(role -> all.addAll(findMenusByRoleId(role.getId())));
         return filterMenu(all, null);
     }
 
     @Override
-    public List<MenuVO> findMenuTree(Menu menu) {
+    public List<Menu> findMenuTree(Menu menu) {
         LambdaQueryWrapper<Menu> wrapper = Wrappers.lambdaQuery();
         if (null != menu && StringUtils.isNotBlank(menu.getName())) {
             wrapper.like(Menu::getName, menu.getName());
@@ -80,15 +78,15 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 //            menuTree.setId(menu.getId());
 //            menuTrees.add(menuTree);
 //        }
-        return TreeUtil.build(BeanCopyUtil.copyListProperties(menus, MenuVO::new), 0);
+        return TreeUtil.build(BeanCopyUtil.copyListProperties(menus, Menu::new), 0);
     }
 
     @Override
-    public List<MenuVO> filterMenu(Set<MenuVO> all, Integer parentId) {
-        List<MenuVO> menuTreeList = all.stream()
-                .filter(vo -> MenuTypeEnum.MENU.getType().equals(vo.getType()))
-                .map(MenuVO::new)
-                .sorted(Comparator.comparingInt(MenuVO::getSort))
+    public List<Menu> filterMenu(Set<Menu> all, Integer parentId) {
+        List<Menu> menuTreeList = all.stream()
+                .filter(menu -> MenuTypeEnum.MENU.getType().equals(menu.getType()))
+//                .map(Menu::new)
+                .sorted(Comparator.comparingInt(Menu::getSort))
                 .collect(Collectors.toList());
 
         Integer parent = parentId == null ? 0 : parentId;
@@ -96,16 +94,17 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public MenuVO findMenuById(int menuId) {
-        Menu menu = menuMapper.selectById(menuId);
-        MenuVO menuVO = new MenuVO();
-        BeanUtils.copyProperties(menu, menuVO);
-        return menuVO;
+    public Menu findMenuById(Integer id) {
+        Menu menu = menuMapper.selectById(id);
+        if(menu == null) {
+            throw new NotFoundException(String.format("没有该记录 '%s'。", id));
+        }
+        return menu;
     }
 
     @Override
     @Transactional
-    public MenuVO saveOrUpdateMenu(Menu menu) {
+    public Menu saveOrUpdateMenu(Menu menu) {
         if (menu.getId() == null) {
             menu.setCreateTime(LocalDateTime.now());
             menu.setUpdateTime(LocalDateTime.now());
@@ -115,10 +114,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             menuMapper.updateById(menu);
         }
 
-        MenuVO menuVO = new MenuVO();
-        BeanUtils.copyProperties(menu, menuVO);
-
-        return menuVO;
+        return menu;
     }
 
     @Override

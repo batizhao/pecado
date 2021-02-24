@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.component.PecadoUserDetailsService;
+import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.feign.UserFeignService;
-import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.ims.api.vo.UserVO;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ public class PecadoUserDetailsServiceUnitTest {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    private List<RoleVO> roleList;
+    private List<Role> roleList;
 
     /**
      * Prepare test data.
@@ -62,17 +62,17 @@ public class PecadoUserDetailsServiceUnitTest {
     @BeforeEach
     public void setUp() {
         roleList = new ArrayList<>();
-        roleList.add(new RoleVO().setId(1L).setCode("admin"));
-        roleList.add(new RoleVO().setId(2L).setCode("common"));
+        roleList.add(new Role().setId(1L).setCode("admin"));
+        roleList.add(new Role().setId(2L).setCode("common"));
     }
 
     @Test
     public void givenUserName_whenFindUser_thenSuccess() {
         String username = "zhangsan";
-        UserVO user_test_data = new UserVO().setId(1L).setUsername(username).setPassword("123456");
+        User user_test_data = new User().setId(1L).setUsername(username).setPassword("123456");
         user_test_data.setRoleList(roleList);
 
-        ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok(user_test_data);
+        ResponseInfo<User> userResponseInfo = ResponseInfo.ok(user_test_data);
 
         when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);
@@ -92,7 +92,7 @@ public class PecadoUserDetailsServiceUnitTest {
 
     @Test
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
-        ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok();
+        ResponseInfo<User> userResponseInfo = ResponseInfo.ok();
 
         doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(anyString(), anyString());
 
@@ -103,12 +103,12 @@ public class PecadoUserDetailsServiceUnitTest {
     @Test
     public void givenUserName_whenFindUserRoles_thenRoleIsEmpty() {
         String username = "zhangsan";
-        UserVO user_test_data = new UserVO().setId(1L).setUsername(username).setPassword("123456");
+        User user_test_data = new User().setId(1L).setUsername(username).setPassword("123456");
 
         roleList.clear();
         user_test_data.setRoleList(roleList);
 
-        ResponseInfo<UserVO> userResponseInfo = ResponseInfo.ok(user_test_data);
+        ResponseInfo<User> userResponseInfo = ResponseInfo.ok(user_test_data);
 
         when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);

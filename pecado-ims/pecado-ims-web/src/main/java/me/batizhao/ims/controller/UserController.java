@@ -9,11 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.annotation.Inner;
 import me.batizhao.common.security.util.SecurityUtils;
-import me.batizhao.ims.api.vo.RoleVO;
+import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.User;
+import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.domain.User;
-import me.batizhao.ims.domain.UserRole;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
@@ -87,10 +86,10 @@ public class UserController {
     @GetMapping(value = "user", params = "username")
     @Inner
     @SystemLog
-    public ResponseInfo<UserVO> handleUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
-        UserVO user = userService.findByUsername(username);
+    public ResponseInfo<User> handleUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
+        User user = userService.findByUsername(username);
 
-        List<RoleVO> roles = roleService.findRolesByUserId(user.getId());
+        List<Role> roles = roleService.findRolesByUserId(user.getId());
         user.setRoleList(roles);
 
         return ResponseInfo.ok(user);

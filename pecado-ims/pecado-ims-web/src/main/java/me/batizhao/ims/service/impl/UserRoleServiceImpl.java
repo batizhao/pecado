@@ -2,7 +2,7 @@ package me.batizhao.ims.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import me.batizhao.ims.domain.UserRole;
+import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.mapper.UserRoleMapper;
 import me.batizhao.ims.service.UserRoleService;
 import org.springframework.stereotype.Service;

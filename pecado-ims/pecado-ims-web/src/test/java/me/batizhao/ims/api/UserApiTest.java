@@ -3,7 +3,7 @@ package me.batizhao.ims.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.ims.domain.User;
+import me.batizhao.ims.api.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -308,6 +308,6 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.userVO.username").value("admin"));
+                .andExpect(jsonPath("$.data.user.username").value("admin"));
     }
 }
