@@ -7,7 +7,7 @@
 package me.batizhao.ims.api.util;
 
 import lombok.experimental.UtilityClass;
-import me.batizhao.ims.api.dto.TreeNode;
+import me.batizhao.ims.api.domain.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;

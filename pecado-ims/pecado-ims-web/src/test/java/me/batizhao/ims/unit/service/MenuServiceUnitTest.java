@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.ims.api.domain.Role;
-import me.batizhao.ims.api.dto.TreeNode;
+import me.batizhao.ims.api.domain.TreeNode;
 import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;

@@ -1,10 +1,9 @@
-package me.batizhao.ims.api.vo;
+package me.batizhao.ims.api.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import me.batizhao.ims.api.dto.TreeNode;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -17,7 +16,7 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 @ApiModel(description = "菜单树")
-public class MenuTree extends TreeNode implements Serializable {
+public class AntdMenuTree extends TreeNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

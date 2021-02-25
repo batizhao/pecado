@@ -6,7 +6,7 @@ import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.domain.Menu;
-import me.batizhao.ims.api.dto.TreeNode;
+import me.batizhao.ims.api.domain.TreeNode;
 import me.batizhao.ims.controller.MenuController;
 import me.batizhao.ims.service.MenuService;
 import org.junit.jupiter.api.BeforeEach;
