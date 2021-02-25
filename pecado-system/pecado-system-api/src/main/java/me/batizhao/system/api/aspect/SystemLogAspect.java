@@ -24,15 +24,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  * 这里可以使用 Spring @Async 异步 或者 MQ 两种方法发送消息
+ *
  * @author batizhao
  * @since 2020-04-01
  **/
@@ -55,9 +61,8 @@ public class SystemLogAspect {
         Object result = point.proceed();
         long endTime = System.currentTimeMillis();
 
-        logDTO.setResult(result.toString());
+        logDTO.setResult(null != result ? result.toString() : null);
         logDTO.setSpend((int) (endTime - startTime));
-
 
         log.info("@Around System Log is : {}", logDTO);
 //        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
@@ -139,37 +144,11 @@ public class SystemLogAspect {
      * 获取方法参数
      *
      * @param parameters 参数名
-     * @param args 参数值
+     * @param args       参数值
      * @return
      */
     @SneakyThrows
     private String getParameter(Parameter[] parameters, Object[] args) {
-//        List<Object> argList = new ArrayList<>();
-//        for (int i = 0; i < parameters.length; i++) {
-//            //将RequestBody注解修饰的参数作为请求参数
-//            RequestBody requestBody = parameters[i].getAnnotation(RequestBody.class);
-//            if (requestBody != null) {
-//                argList.add(args[i]);
-//            }
-//            //将RequestParam注解修饰的参数作为请求参数
-//            RequestParam requestParam = parameters[i].getAnnotation(RequestParam.class);
-//            if (requestParam != null) {
-//                Map<String, Object> map = new HashMap<>();
-//                String key = parameters[i].getName();
-//                if (!StringUtils.isEmpty(requestParam.value())) {
-//                    key = requestParam.value();
-//                }
-//                map.put(key, args[i]);
-//                argList.add(map);
-//            }
-//        }
-//        if (argList.isEmpty()) {
-//            return null;
-//        } else if (argList.size() == 1) {
-//            return argList.get(0).toString();
-//        } else {
-//            return argList.toString();
-//        }
         if (ArrayUtils.isEmpty(parameters) || ArrayUtils.isEmpty(args)) {
             return "";
         }
@@ -179,18 +158,49 @@ public class SystemLogAspect {
             String name = parameters[i].getName();
             //参数值
             Object value = args[i];
+
+            if (isFilterObject(value)) {
+                continue;
+            }
+
             builder.append(name).append("=");
             if (value instanceof String) {
                 builder.append(value);
             } else {
                 builder.append(objectMapper.writeValueAsString(value));
             }
-            if (i < args.length -1) {
+            if (i < args.length - 1) {
                 builder.append(", ");
             }
         }
 
         return builder.toString();
+    }
+
+    /**
+     * 判断是否需要过滤的对象。
+     *
+     * @param o 对象信息。
+     * @return 如果是需要过滤的对象，则返回true；否则返回false。
+     */
+    @SuppressWarnings("rawtypes")
+    private boolean isFilterObject(final Object o) {
+        Class<?> clazz = o.getClass();
+        if (clazz.isArray()) {
+            return clazz.getComponentType().isAssignableFrom(MultipartFile.class);
+        } else if (Collection.class.isAssignableFrom(clazz)) {
+            Collection collection = (Collection) o;
+            for (Iterator iter = collection.iterator(); iter.hasNext(); ) {
+                return iter.next() instanceof MultipartFile;
+            }
+        } else if (Map.class.isAssignableFrom(clazz)) {
+            Map map = (Map) o;
+            for (Iterator iter = map.entrySet().iterator(); iter.hasNext(); ) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                return entry.getValue() instanceof MultipartFile;
+            }
+        }
+        return o instanceof MultipartFile || o instanceof HttpServletRequest || o instanceof HttpServletResponse;
     }
 
 }
