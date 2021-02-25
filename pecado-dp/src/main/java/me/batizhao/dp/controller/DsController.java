@@ -36,22 +36,22 @@ public class DsController {
     private DsService dsService;
 
     /**
-     * 分页查询
+     * 分页查询数据源
      * @param page 分页对象
      * @param ds 数据源
      * @return ResponseInfo
      */
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询数据源")
     @GetMapping("/dss")
     public ResponseInfo<IPage<Ds>> handleDss(Page<Ds> page, Ds ds) {
         return ResponseInfo.ok(dsService.findDss(page, ds));
     }
 
     /**
-     * 查询所有
+     * 查询所有数据源
      * @return ResponseInfo
      */
-    @ApiOperation(value = "查询所有")
+    @ApiOperation(value = "查询所有数据源")
     @GetMapping("/ds")
     public ResponseInfo<List<Ds>> handleDss() {
         return ResponseInfo.ok(dsService.list());
@@ -62,7 +62,7 @@ public class DsController {
      * @param id id
      * @return ResponseInfo
      */
-    @ApiOperation(value = "通过id查询")
+    @ApiOperation(value = "通过id查询数据源")
     @GetMapping("/ds/{id}")
     public ResponseInfo<Ds> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Integer id) {
         return ResponseInfo.ok(dsService.findById(id));

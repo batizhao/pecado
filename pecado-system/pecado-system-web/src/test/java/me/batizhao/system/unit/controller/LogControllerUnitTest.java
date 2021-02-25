@@ -4,10 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.system.api.dto.LogDTO;
-import me.batizhao.system.domain.Log;
-import me.batizhao.system.service.LogService;
+import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.controller.LogController;
+import me.batizhao.system.service.LogService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +69,7 @@ public class LogControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenUserId_whenFindRole_thenRoleJsonArray() throws Exception {
-        LogDTO logDTO = new LogDTO().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
+        Log logDTO = new Log().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
                 .setClassName("me.batizhao.ims.web.RoleController").setClientId("client_app").setHttpRequestMethod("POST")
                 .setIp("127.0.0.1").setCreateTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 

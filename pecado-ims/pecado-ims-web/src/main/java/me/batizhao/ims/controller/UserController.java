@@ -55,7 +55,7 @@ public class UserController {
      * @param user 用户
      * @return ResponseInfo
      */
-    @ApiOperation(value = "查询所有用户")
+    @ApiOperation(value = "分页查询用户")
     @GetMapping("users")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
@@ -68,7 +68,7 @@ public class UserController {
      * @param id id
      * @return ResponseInfo
      */
-    @ApiOperation(value = "通过id查询")
+    @ApiOperation(value = "通过id查询用户")
     @GetMapping("/user/{id}")
     @SystemLog
     public ResponseInfo<User> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {

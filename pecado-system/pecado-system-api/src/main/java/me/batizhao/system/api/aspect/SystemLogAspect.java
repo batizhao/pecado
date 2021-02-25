@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.SpringContextHolder;
 import me.batizhao.system.api.annotation.SystemLog;
-import me.batizhao.system.api.dto.LogDTO;
+import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.api.event.SystemLogEvent;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
@@ -49,7 +49,7 @@ public class SystemLogAspect {
     @Around("@annotation(systemLog)")
     @SneakyThrows
     public Object around(ProceedingJoinPoint point, SystemLog systemLog) {
-        LogDTO logDTO = getLogDTO(point, systemLog);
+        Log logDTO = getLog(point, systemLog);
 
         long startTime = System.currentTimeMillis();
         Object result = point.proceed();
@@ -68,7 +68,7 @@ public class SystemLogAspect {
 
     @AfterThrowing(value = "@annotation(systemLog)", throwing = "throwable")
     public void afterThrowing(JoinPoint point, SystemLog systemLog, Throwable throwable) {
-        LogDTO logDTO = getLogDTO(point, systemLog);
+        Log logDTO = getLog(point, systemLog);
         logDTO.setResult(throwable.getMessage());
         logDTO.setSpend(0);
 
@@ -77,12 +77,12 @@ public class SystemLogAspect {
         SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
     }
 
-    private LogDTO getLogDTO(JoinPoint point, SystemLog systemLog) {
+    private Log getLog(JoinPoint point, SystemLog systemLog) {
         Signature signature = point.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
 
-        LogDTO logDTO = new LogDTO();
+        Log logDTO = new Log();
 
         if (!StringUtils.isEmpty(systemLog.value())) {
             logDTO.setDescription(systemLog.value());

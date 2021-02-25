@@ -1,4 +1,4 @@
-package me.batizhao.system.api.dto;
+package me.batizhao.system.api.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @NoArgsConstructor
 @ApiModel(description = "日志")
-public class LogDTO implements Serializable {
+public class Log implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

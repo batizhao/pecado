@@ -2,7 +2,7 @@ package me.batizhao.system.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.system.domain.DictData;
+import me.batizhao.system.api.domain.DictData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

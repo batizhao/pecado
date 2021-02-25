@@ -1,7 +1,7 @@
 package me.batizhao.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import me.batizhao.system.domain.DictData;
+import me.batizhao.system.api.domain.DictData;
 
 /**
  * 字典接口类

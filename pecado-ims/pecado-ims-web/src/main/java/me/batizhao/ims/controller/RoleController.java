@@ -48,7 +48,7 @@ public class RoleController {
      * @return 角色集合
      */
     @SystemLog
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询角色")
     @GetMapping("/roles")
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
     public ResponseInfo<IPage<Role>> handleRoles(Page<Role> page, Role role) {
@@ -74,7 +74,7 @@ public class RoleController {
      * @param id id
      * @return ResponseInfo
      */
-    @ApiOperation(value = "通过id查询")
+    @ApiOperation(value = "通过id查询角色")
     @GetMapping("/role/{id}")
     public ResponseInfo<Role> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(roleService.findById(id));

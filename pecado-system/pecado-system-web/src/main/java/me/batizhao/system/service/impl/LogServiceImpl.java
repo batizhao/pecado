@@ -3,7 +3,7 @@ package me.batizhao.system.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import me.batizhao.system.domain.Log;
+import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.mapper.LogMapper;
 import me.batizhao.system.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;

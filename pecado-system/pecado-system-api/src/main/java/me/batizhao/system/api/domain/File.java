@@ -1,10 +1,7 @@
-package me.batizhao.system.domain;
+package me.batizhao.system.api.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -27,7 +24,6 @@ public class File implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "文件ID", example = "100")
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "显示名", example = "xxx")

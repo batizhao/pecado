@@ -2,7 +2,7 @@ package me.batizhao.system.unit.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import me.batizhao.system.domain.Log;
+import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.mapper.LogMapper;
 import me.batizhao.system.service.LogService;
 import me.batizhao.system.service.impl.LogServiceImpl;

@@ -2,7 +2,7 @@ package me.batizhao.system.unit.controller;
 
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.system.controller.FileController;
-import me.batizhao.system.domain.File;
+import me.batizhao.system.api.domain.File;
 import me.batizhao.system.service.FileService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

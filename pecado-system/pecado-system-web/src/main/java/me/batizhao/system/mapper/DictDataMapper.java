@@ -1,7 +1,7 @@
 package me.batizhao.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import me.batizhao.system.domain.DictData;
+import me.batizhao.system.api.domain.DictData;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

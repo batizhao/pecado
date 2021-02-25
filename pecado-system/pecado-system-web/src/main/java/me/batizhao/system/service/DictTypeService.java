@@ -3,7 +3,7 @@ package me.batizhao.system.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import me.batizhao.system.domain.DictType;
+import me.batizhao.system.api.domain.DictType;
 
 /**
  * 字典类型接口类

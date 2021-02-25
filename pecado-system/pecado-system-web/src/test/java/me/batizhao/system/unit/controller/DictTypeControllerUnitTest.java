@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.system.controller.DictTypeController;
-import me.batizhao.system.domain.DictType;
+import me.batizhao.system.api.domain.DictType;
 import me.batizhao.system.service.DictTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

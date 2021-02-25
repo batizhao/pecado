@@ -51,12 +51,12 @@ public class MenuController {
     }
 
     /**
-     * 查询菜单菜单
+     * 根据角色查询菜单
      * 返回菜单树
      *
      * @return 菜单树
      */
-    @ApiOperation(value = "查询菜单菜单")
+    @ApiOperation(value = "根据角色查询菜单")
     @SystemLog
     @GetMapping(value = "menu", params = "roleId")
     public ResponseInfo<List<Menu>> handleMenusByRoleId(@ApiParam(value = "菜单ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
@@ -77,11 +77,11 @@ public class MenuController {
     }
 
     /**
-     * 根据菜单 ID 查询
+     * 通过id查询菜单
      * @param id 菜单 ID
      * @return 菜单对象
      */
-    @ApiOperation(value = "根据菜单 ID 查询")
+    @ApiOperation(value = "通过id查询菜单")
     @SystemLog
     @GetMapping("/menu/{id}")
     public ResponseInfo<Menu> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) Integer id) {

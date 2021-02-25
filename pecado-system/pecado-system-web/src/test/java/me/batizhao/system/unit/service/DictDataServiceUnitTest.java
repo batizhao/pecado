@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.batizhao.common.core.exception.NotFoundException;
-import me.batizhao.system.domain.DictData;
+import me.batizhao.system.api.domain.DictData;
 import me.batizhao.system.mapper.DictDataMapper;
 import me.batizhao.system.service.DictDataService;
 import me.batizhao.system.service.impl.DictDataServiceImpl;

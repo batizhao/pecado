@@ -14,7 +14,7 @@ import ${package}.${moduleName}.domain.${className};
 public interface ${className}Service extends IService<${className}> {
 
     /**
-     * 分页查询
+     * 分页查询${comments}
      * @param page 分页对象
      * @param ${classname} ${comments}
      * @return IPage<${className}>

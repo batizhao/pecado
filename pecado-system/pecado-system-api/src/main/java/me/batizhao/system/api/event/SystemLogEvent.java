@@ -1,6 +1,6 @@
 package me.batizhao.system.api.event;
 
-import me.batizhao.system.api.dto.LogDTO;
+import me.batizhao.system.api.domain.Log;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationEvent;
  **/
 public class SystemLogEvent extends ApplicationEvent {
 
-    public SystemLogEvent(LogDTO source) {
+    public SystemLogEvent(Log source) {
         super(source);
     }
 }

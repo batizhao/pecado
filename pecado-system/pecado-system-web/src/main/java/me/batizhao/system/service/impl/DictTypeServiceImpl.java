@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
-import me.batizhao.system.domain.DictType;
+import me.batizhao.system.api.domain.DictType;
 import me.batizhao.system.mapper.DictTypeMapper;
 import me.batizhao.system.service.DictTypeService;
 import org.apache.commons.lang3.StringUtils;

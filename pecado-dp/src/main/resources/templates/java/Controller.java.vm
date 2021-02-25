@@ -41,7 +41,7 @@ public class ${className}Controller {
      * @param ${classname} ${comments}
      * @return ResponseInfo
      */
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询${comments}")
     @GetMapping("/${moduleName}/${mappingPath}s")
     public ResponseInfo<IPage<${className}>> handle${className}s(Page<${className}> page, ${className} ${classname}) {
         return ResponseInfo.ok(${classname}Service.find${className}s(page, ${classname}));
@@ -51,7 +51,7 @@ public class ${className}Controller {
      * 查询所有
      * @return ResponseInfo
      */
-    @ApiOperation(value = "查询所有")
+    @ApiOperation(value = "查询所有${comments}")
     @GetMapping("/${moduleName}/${mappingPath}")
     public ResponseInfo<List<${className}>> handle${className}() {
         return ResponseInfo.ok(${classname}Service.list());
@@ -63,7 +63,7 @@ public class ${className}Controller {
      * @param ${pk.javaField} id
      * @return ResponseInfo
      */
-    @ApiOperation(value = "通过id查询")
+    @ApiOperation(value = "通过id查询${comments}")
     @GetMapping("/${moduleName}/${mappingPath}/{${pk.javaField}}")
     public ResponseInfo<${className}> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("${pk.javaField}") @Min(1) ${pk.javaType} ${pk.javaField}) {
         return ResponseInfo.ok(${classname}Service.findById(${pk.javaField}));

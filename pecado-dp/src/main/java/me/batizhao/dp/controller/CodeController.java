@@ -46,12 +46,12 @@ public class CodeController {
     private CodeMetaService codeMetaService;
 
     /**
-     * 分页查询
+     * 分页查询代码
      * @param page 分页对象
      * @param code 生成代码
      * @return ResponseInfo
      */
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询代码")
     @GetMapping("/codes")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<IPage<Code>> handleCodes(Page<Code> page, Code code) {
@@ -64,7 +64,7 @@ public class CodeController {
      * @param id id
      * @return ResponseInfo
      */
-    @ApiOperation(value = "通过id查询")
+    @ApiOperation(value = "通过id查询代码")
     @GetMapping("/code/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Map<String, Object>> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
@@ -167,7 +167,7 @@ public class CodeController {
      * @param id Code Id
      * @return
      */
-    @ApiOperation(value = "预览")
+    @ApiOperation(value = "预览代码")
     @GetMapping("/code/preview/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseInfo<Map<String, String>> handlePreviewCode(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {

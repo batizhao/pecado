@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.system.controller.DictDataController;
-import me.batizhao.system.domain.DictData;
+import me.batizhao.system.api.domain.DictData;
 import me.batizhao.system.service.DictDataService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
