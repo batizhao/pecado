@@ -1,6 +1,5 @@
 package me.batizhao.ims.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,9 +34,7 @@ public class User implements Serializable {
     private String username;
 
     @ApiModelProperty(value = "密码")
-    @NotBlank(message = "password is not blank")
-    @JsonIgnore
-    private String password = "123456";
+    private String password;
 
     @ApiModelProperty(value = "邮箱", example = "zhangsan@qq.com")
     @NotBlank(message = "email is not blank")
@@ -59,9 +56,6 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "未读消息数量", example = "99")
     private Integer unreadCount;
-
-//    @ApiModelProperty(value = "是否锁定", example = "0")
-//    private Integer locked;
 
     /**
      * 状态

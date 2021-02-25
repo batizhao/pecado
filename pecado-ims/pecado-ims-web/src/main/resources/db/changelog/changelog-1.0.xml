@@ -88,7 +88,7 @@
             <column name="username" type="VARCHAR(255)" remarks="用户名">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="password" type="VARCHAR(255)" remarks="密码">
+            <column name="password" type="VARCHAR(255)" remarks="密码" defaultValue="123456">
                 <constraints nullable="false"/>
             </column>
             <column name="email" type="VARCHAR(100)" remarks="用户邮箱">
