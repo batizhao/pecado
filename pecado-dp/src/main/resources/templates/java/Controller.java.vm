@@ -36,7 +36,7 @@ public class ${className}Controller {
     private ${className}Service ${classname}Service;
 
     /**
-     * 分页查询
+     * 分页查询${comments}
      * @param page 分页对象
      * @param ${classname} ${comments}
      * @return ResponseInfo
@@ -48,12 +48,12 @@ public class ${className}Controller {
     }
 
     /**
-     * 查询所有
+     * 查询所有${comments}
      * @return ResponseInfo
      */
     @ApiOperation(value = "查询所有${comments}")
     @GetMapping("/${moduleName}/${mappingPath}")
-    public ResponseInfo<List<${className}>> handle${className}() {
+    public ResponseInfo<List<${className}>> handleAll${className}() {
         return ResponseInfo.ok(${classname}Service.list());
     }
 

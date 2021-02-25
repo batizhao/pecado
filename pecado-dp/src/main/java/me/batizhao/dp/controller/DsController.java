@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.dp.domain.Ds;
 import me.batizhao.dp.service.DsService;
+import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -43,6 +44,7 @@ public class DsController {
      */
     @ApiOperation(value = "分页查询数据源")
     @GetMapping("/dss")
+    @SystemLog
     public ResponseInfo<IPage<Ds>> handleDss(Page<Ds> page, Ds ds) {
         return ResponseInfo.ok(dsService.findDss(page, ds));
     }
@@ -53,6 +55,7 @@ public class DsController {
      */
     @ApiOperation(value = "查询所有数据源")
     @GetMapping("/ds")
+    @SystemLog
     public ResponseInfo<List<Ds>> handleDss() {
         return ResponseInfo.ok(dsService.list());
     }
@@ -64,6 +67,7 @@ public class DsController {
      */
     @ApiOperation(value = "通过id查询数据源")
     @GetMapping("/ds/{id}")
+    @SystemLog
     public ResponseInfo<Ds> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Integer id) {
         return ResponseInfo.ok(dsService.findById(id));
     }
@@ -76,6 +80,7 @@ public class DsController {
     @ApiOperation(value = "添加或修改数据源")
     @PostMapping("/ds")
     @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<Ds> handleSaveOrUpdate(@Valid @ApiParam(value = "数据源" , required = true) @RequestBody Ds ds) {
         return ResponseInfo.ok(dsService.saveOrUpdateDs(ds));
     }
@@ -88,6 +93,7 @@ public class DsController {
     @ApiOperation(value = "通过id删除数据源")
     @DeleteMapping("/ds")
     @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
         return ResponseInfo.ok(dsService.removeByIds(ids));
     }
@@ -101,6 +107,7 @@ public class DsController {
     @ApiOperation(value = "更新数据源状态")
     @PostMapping("/ds/status")
     @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "数据源" , required = true) @RequestBody Ds ds) {
         return ResponseInfo.ok(dsService.updateStatus(ds));
     }

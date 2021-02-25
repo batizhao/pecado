@@ -47,10 +47,10 @@ public class RoleController {
      *
      * @return 角色集合
      */
-    @SystemLog
     @ApiOperation(value = "分页查询角色")
     @GetMapping("/roles")
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @SystemLog
     public ResponseInfo<IPage<Role>> handleRoles(Page<Role> page, Role role) {
         return ResponseInfo.ok(roleService.findRoles(page, role));
     }
@@ -61,10 +61,10 @@ public class RoleController {
      *
      * @return 角色集合
      */
-    @SystemLog
     @ApiOperation(value = "查询所有角色")
     @GetMapping("/role")
     @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @SystemLog
     public ResponseInfo<List<Role>> handleRoles() {
         return ResponseInfo.ok(roleService.list());
     }
@@ -76,6 +76,8 @@ public class RoleController {
      */
     @ApiOperation(value = "通过id查询角色")
     @GetMapping("/role/{id}")
+    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @SystemLog
     public ResponseInfo<Role> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(roleService.findById(id));
     }
@@ -119,6 +121,7 @@ public class RoleController {
     @ApiOperation(value = "更新角色状态")
     @PostMapping("/role/status")
     @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "角色" , required = true) @RequestBody Role role) {
         return ResponseInfo.ok(roleService.updateStatus(role));
     }

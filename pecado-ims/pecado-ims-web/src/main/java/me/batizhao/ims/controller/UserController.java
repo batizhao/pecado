@@ -104,7 +104,6 @@ public class UserController {
      */
     @ApiOperation(value = "根据姓名查询用户")
     @GetMapping(value = "user", params = "name")
-    @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
     public ResponseInfo<List<User>> handleName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
         return ResponseInfo.ok(userService.findByName(name));

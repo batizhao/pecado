@@ -43,8 +43,9 @@ public class MenuController {
      * @return 菜单树
      */
     @ApiOperation(value = "查询当前用户菜单")
-    @SystemLog
     @GetMapping("/menu/me")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<List<Menu>> handleMenuTree4Me() {
         Long userId = SecurityUtils.getUser().getUserId();
         return ResponseInfo.ok(menuService.findMenuTreeByUserId(userId));
@@ -57,8 +58,9 @@ public class MenuController {
      * @return 菜单树
      */
     @ApiOperation(value = "根据角色查询菜单")
-    @SystemLog
     @GetMapping(value = "menu", params = "roleId")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<List<Menu>> handleMenusByRoleId(@ApiParam(value = "菜单ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
         return ResponseInfo.ok(menuService.findMenusByRoleId(roleId));
     }
@@ -70,8 +72,9 @@ public class MenuController {
      * @return 菜单树
      */
     @ApiOperation(value = "查询所有菜单")
-    @SystemLog
     @GetMapping("/menus")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<List<Menu>> handleMenuTree(Menu menu) {
         return ResponseInfo.ok(menuService.findMenuTree(menu));
     }
@@ -82,8 +85,9 @@ public class MenuController {
      * @return 菜单对象
      */
     @ApiOperation(value = "通过id查询菜单")
-    @SystemLog
     @GetMapping("/menu/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<Menu> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) Integer id) {
         return ResponseInfo.ok(menuService.findMenuById(id));
     }
@@ -128,6 +132,7 @@ public class MenuController {
     @ApiOperation(value = "更新菜单状态")
     @PostMapping("/menu/status")
     @PreAuthorize("hasRole('ADMIN')")
+    @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "菜单" , required = true) @RequestBody Menu menu) {
         return ResponseInfo.ok(menuService.updateStatus(menu));
     }

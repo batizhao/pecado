@@ -1,11 +1,16 @@
 import request from '@/utils/request'
 
-// 查询${comments}列表
+// 分页查询${comments}
 export function list${className}(query) {
   return request({
     url: '/${moduleName}/${mappingPath}s',
     params: query
   })
+}
+
+// 查询所有${comments}
+export function listAll${className}(query) {
+  return request('/${moduleName}/${mappingPath}')
 }
 
 // 查询${comments}详细
