@@ -1,6 +1,7 @@
 package ${package}.${moduleName}.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -9,6 +10,7 @@ import me.batizhao.common.core.exception.NotFoundException;
 import ${package}.${moduleName}.domain.${className};
 import ${package}.${moduleName}.mapper.${className}Mapper;
 import ${package}.${moduleName}.service.${className}Service;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +32,18 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     @Override
     public IPage<${className}> find${className}s(Page<${className}> page, ${className} ${classname}) {
         LambdaQueryWrapper<${className}> wrapper = Wrappers.lambdaQuery();
-        // TODO: 自己实现查询条件
+#foreach ($column in $columns)
+#if($column.search)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+    #set($AttrName=$column.javaField)
+#else
+    #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+        if (StringUtils.isNotBlank(${classname}.get${AttrName}())) {
+            wrapper.like(${className}::get${AttrName}, ${classname}.get${AttrName}());
+        }
+#end
+#end
         return ${classname}Mapper.selectPage(page, wrapper);
     }
 

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.constant.PecadoConstants;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.CodeMeta;
@@ -151,7 +152,7 @@ public class CodeController {
         byte[] data = codeService.downloadCode(ids);
         response.reset();
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                String.format("attachment; filename=%s.zip", "ruoyi"));
+                String.format("attachment; filename=%s.zip", PecadoConstants.BACK_END_PROJECT));
         response.addHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(data.length));
         response.setContentType("application/octet-stream; charset=UTF-8");
 

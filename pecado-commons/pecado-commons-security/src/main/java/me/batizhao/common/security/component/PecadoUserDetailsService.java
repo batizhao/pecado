@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +31,7 @@ public class PecadoUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         ResponseInfo<User> userData = userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN);
 
-        if (userData == null || StringUtils.isEmpty(userData.getData())) {
+        if (userData == null || null == userData.getData()) {
             throw new UsernameNotFoundException(String.format("没有该用户 '%s'。", username));
         }
 

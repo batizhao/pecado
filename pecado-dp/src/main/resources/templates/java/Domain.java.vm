@@ -27,10 +27,7 @@ public class ${className} implements Serializable {
 /**
      * $column.columnComment
      */
-    #if($column.columnName == $pk.columnName)
-@TableId
-    #end
-@ApiModelProperty(value="$column.columnComment")
+    @ApiModelProperty(value="$column.columnComment")
     private $column.javaType $column.javaField;
 
     #end

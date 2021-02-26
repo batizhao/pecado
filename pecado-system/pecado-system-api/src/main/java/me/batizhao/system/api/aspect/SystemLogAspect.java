@@ -10,6 +10,7 @@ import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.api.event.SystemLogEvent;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -21,7 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -89,7 +89,7 @@ public class SystemLogAspect {
 
         Log logDTO = new Log();
 
-        if (!StringUtils.isEmpty(systemLog.value())) {
+        if (StringUtils.isNotBlank(systemLog.value())) {
             logDTO.setDescription(systemLog.value());
         } else if (method.isAnnotationPresent(ApiOperation.class)) {
             ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);

@@ -515,14 +515,14 @@ public class CodeGenUtils {
         }
 
         if (template.contains(VUE_INDEX_VUE_VM)) {
-            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views"
-                    + File.separator + code.getClassName() + File.separator + code.getClassName().toLowerCase() + File.separator
+            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views" + File.separator
+                    + code.getModuleName() + File.separator + code.getClassName().toLowerCase() + File.separator
                     + "index.vue";
         }
 
         if (template.contains(VUE_API_JS_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "api" + File.separator
-                    + code.getClassName().toLowerCase() + ".js";
+                    + code.getModuleName() + File.separator + code.getClassName().toLowerCase() + ".js";
         }
 
         return null;
