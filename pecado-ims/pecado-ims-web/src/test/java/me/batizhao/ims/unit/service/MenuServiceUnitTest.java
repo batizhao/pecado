@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.MenuTypeEnum;
+import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.TreeNode;
 import me.batizhao.ims.api.domain.Menu;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -125,6 +127,14 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
 
         List<TreeNode> treeNodes = menuTree.get(0).getChildren().get(0).getChildren();
         assertThat(treeNodes, hasSize(2));
+
+        doReturn(menuList).when(menuMapper).selectList(any(Wrapper.class));
+        menuTree = menuService.findMenuTree(menuList.get(0));
+        assertThat(menuTree, hasSize(1));
+
+        doReturn(menuList).when(menuMapper).selectList(any(Wrapper.class));
+        menuTree = menuService.findMenuTree(menuList.get(0).setName(""));
+        assertThat(menuTree, hasSize(1));
     }
 
     @Test
@@ -167,6 +177,16 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
     }
 
     @Test
+    public void givenId_whenFindMenu_thenNotFound() {
+        when(menuMapper.selectById(any()))
+                .thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> menuService.findMenuById(1));
+
+        verify(menuMapper).selectById(any());
+    }
+
+    @Test
     public void givenMenu_whenSaveOrUpdate_thenSuccess() {
         Menu request_body = new Menu();
 
@@ -189,10 +209,15 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenIds_whenDelete_thenSuccess() {
-        doReturn(true).when(service).removeByIds(anyList());
+        doReturn(menuList).when(menuMapper).selectList(any(Wrapper.class));
+        Boolean b = menuService.deleteById(1);
+        assertThat(b, equalTo(false));
+
+        doReturn(new ArrayList<Menu>()).when(menuMapper).selectList(any(Wrapper.class));
+        doReturn(true).when(service).removeById(anyInt());
         doReturn(true).when(roleMenuService).remove(any(Wrapper.class));
 
-        Boolean b = menuService.deleteByIds(Arrays.asList(1L, 2L));
+        b = menuService.deleteById(1);
         assertThat(b, equalTo(true));
     }
 

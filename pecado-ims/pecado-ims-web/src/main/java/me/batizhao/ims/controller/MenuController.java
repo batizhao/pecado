@@ -118,9 +118,8 @@ public class MenuController {
     @DeleteMapping("menu")
     @PreAuthorize("hasRole('ADMIN')")
     @SystemLog
-    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "菜单ID串", required = true) @RequestParam List<Long> ids) {
-        Boolean b = menuService.deleteByIds(ids);
-        return ResponseInfo.ok(b);
+    public ResponseInfo<String> handleDelete(@ApiParam(value = "菜单ID串", required = true) @RequestParam Integer id) {
+        return menuService.deleteById(id) ? ResponseInfo.ok() : ResponseInfo.failed("存在子菜单不允许删除！");
     }
 
     /**

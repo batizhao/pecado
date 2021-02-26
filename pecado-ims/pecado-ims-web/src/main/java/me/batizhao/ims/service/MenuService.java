@@ -65,10 +65,10 @@ public interface MenuService extends IService<Menu> {
 
     /**
      * 删除
-     * @param ids
+     * @param id
      * @return
      */
-    Boolean deleteByIds(List<Long> ids);
+    Boolean deleteById(Integer id);
 
     /**
      * 更新菜单状态
@@ -76,4 +76,13 @@ public interface MenuService extends IService<Menu> {
      * @return Boolean
      */
     Boolean updateStatus(Menu menu);
+
+    /**
+     * 检查是否有子菜单
+     * 有返回 true，无返回 false
+     *
+     * @param id
+     * @return
+     */
+    Boolean checkHasChildren(Integer id);
 }

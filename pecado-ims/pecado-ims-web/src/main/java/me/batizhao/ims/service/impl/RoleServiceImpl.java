@@ -92,7 +92,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public List<Role> findRolesByUserId(Long userId) {
-        List<Role> roleList = roleMapper.findRolesByUserId(userId);
-        return BeanCopyUtil.copyListProperties(roleList, Role::new);
+        return roleMapper.findRolesByUserId(userId);
     }
 }

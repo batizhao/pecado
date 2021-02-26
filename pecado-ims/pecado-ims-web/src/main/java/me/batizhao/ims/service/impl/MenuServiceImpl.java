@@ -78,7 +78,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 //            menuTree.setId(menu.getId());
 //            menuTrees.add(menuTree);
 //        }
-        return TreeUtil.build(BeanCopyUtil.copyListProperties(menus, Menu::new), 0);
+        return TreeUtil.build(menus, 0);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public Menu findMenuById(Integer id) {
         Menu menu = menuMapper.selectById(id);
-        if(menu == null) {
+        if (menu == null) {
             throw new NotFoundException(String.format("没有该记录 '%s'。", id));
         }
         return menu;
@@ -118,9 +118,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public Boolean deleteByIds(List<Long> ids) {
-        this.removeByIds(ids);
-        ids.forEach(i -> roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getMenuId, i)));
+    public Boolean deleteById(Integer id) {
+        if (checkHasChildren(id)) return false;
+
+        this.removeById(id);
+        roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getMenuId, id));
         return true;
     }
 
@@ -130,5 +132,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         LambdaUpdateWrapper<Menu> wrapper = Wrappers.lambdaUpdate();
         wrapper.eq(Menu::getId, menu.getId()).set(Menu::getStatus, menu.getStatus());
         return menuMapper.update(null, wrapper) == 1;
+    }
+
+    @Override
+    public Boolean checkHasChildren(Integer id) {
+        return menuMapper.selectList(Wrappers.<Menu>lambdaQuery().eq(Menu::getPid, id)).size() > 0;
     }
 }

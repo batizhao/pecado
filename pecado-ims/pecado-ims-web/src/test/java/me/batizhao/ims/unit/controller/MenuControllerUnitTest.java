@@ -195,16 +195,31 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenId_whenDeleteMenu_thenSuccess() throws Exception {
-        when(menuService.deleteByIds(anyList())).thenReturn(true);
+        when(menuService.deleteById(anyInt())).thenReturn(true);
 
-        mvc.perform(delete("/menu").param("ids", "1,2").with(csrf()))
+        mvc.perform(delete("/menu").param("id", "1").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data").value(true));
+                .andExpect(jsonPath("$.message").value("ok"));
 
-        verify(menuService).deleteByIds(anyList());
+        verify(menuService).deleteById(anyInt());
+    }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenDeleteMenu_thenFail() throws Exception {
+        when(menuService.deleteById(anyInt())).thenReturn(false);
+
+        mvc.perform(delete("/menu").param("id", "1").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.UNKNOWN_ERROR.getCode()))
+                .andExpect(jsonPath("$.data").value("存在子菜单不允许删除！"));
+
+        verify(menuService).deleteById(anyInt());
     }
 
     @Test
