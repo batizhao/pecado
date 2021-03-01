@@ -1,5 +1,6 @@
 package ${package}.${moduleName}.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @NoArgsConstructor
 @ApiModel(description = "${comments}")
+@TableName("${tableName}")
 public class ${className} implements Serializable {
 
     private static final long serialVersionUID = 1L;

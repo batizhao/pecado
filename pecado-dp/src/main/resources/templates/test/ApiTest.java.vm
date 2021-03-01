@@ -53,8 +53,7 @@ public class ${className}ApiTest extends BaseApiTest {
     @Transactional
     public void givenJson_whenSave${className}_thenSuccess() throws Exception {
         ${className} requestBody = new ${className}()
-                .setName("daxia").setEmail("daxia@gmail.com").setUsername("daxia")
-                .setPassword("123456");
+                .setName("daxia");
 
         mvc.perform(post("/${mappingPath}")
                 .content(objectMapper.writeValueAsString(requestBody))
@@ -71,8 +70,7 @@ public class ${className}ApiTest extends BaseApiTest {
     @Transactional
     public void givenJson_whenUpdate${className}_thenSuccess() throws Exception {
         ${className} requestBody = new ${className}()
-                .setId(8L).setName("daxia").setEmail("daxia@gmail.com").setUsername("daxia")
-                .setPassword("123456");
+                .setId(8L).setName("daxia");
 
         mvc.perform(post("/${mappingPath}")
                 .content(objectMapper.writeValueAsString(requestBody))
