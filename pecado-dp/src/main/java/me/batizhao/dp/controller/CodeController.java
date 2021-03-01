@@ -180,7 +180,6 @@ public class CodeController {
     @ApiOperation(value = "预览代码")
     @GetMapping("/code/preview/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    @SystemLog
     public ResponseInfo<Map<String, String>> handlePreviewCode(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(codeService.previewCode(id));
     }

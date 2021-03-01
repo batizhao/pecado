@@ -1,48 +1,23 @@
 <!DOCTYPE mapper
-        PUBLIC "-//mybatil.org//DTD Mapper 3.0//EN"
-        "http://mybatil.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="me.batizhao.system.mapper.LogMapper">
-    <resultMap type="me.batizhao.system.api.domain.Log" id="baseResultMap">
-        <id column="id" property="id"/>
-        <result column="httpRequestMethod" property="httpRequestMethod"/>
-        <result column="className" property="className"/>
-        <result column="classMethod" property="classMethod"/>
-        <result column="description" property="description"/>
-        <result column="parameter" property="parameter"/>
-        <result column="result" property="result"/>
-        <result column="spend" property="spend"/>
-        <result column="clientId" property="clientId"/>
-        <result column="username" property="username"/>
-        <result column="url" property="url"/>
-        <result column="ip" property="ip"/>
-        <result column="createTime" property="createTime"/>
-    </resultMap>
 
-    <select id="selectLogPage" resultMap="baseResultMap">
-        SELECT
-            l.id,
-            l.httpRequestMethod,
-            l.className,
-            l.classMethod,
-            l.description,
-            l.parameter,
-            l.spend,
-            l.clientId,
-            l.username,
-            l.url,
-            l.ip,
-            l.createTime,
-            l.result
-        FROM
-        log AS l
-        <where>
-            <if test="log.classMethod != null and log.classMethod != ''">
-                and l.classMethod LIKE CONCAT('%',#{log.classMethod},'%')
-            </if>
-        </where>
-        ORDER BY l.id DESC
-    </select>
-
+  <resultMap id="logMap" type="me.batizhao.system.api.domain.Log">
+    <id property="id" column="id"/>
+    <result property="httpRequestMethod" column="httpRequestMethod"/>
+    <result property="className" column="className"/>
+    <result property="classMethod" column="classMethod"/>
+    <result property="description" column="description"/>
+    <result property="parameter" column="parameter"/>
+    <result property="result" column="result"/>
+    <result property="spend" column="spend"/>
+    <result property="clientId" column="clientId"/>
+    <result property="username" column="username"/>
+    <result property="url" column="url"/>
+    <result property="ip" column="ip"/>
+    <result property="createTime" column="createTime"/>
+  </resultMap>
 
 </mapper>

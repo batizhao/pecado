@@ -1,7 +1,9 @@
 package me.batizhao.system.unit.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.mapper.LogMapper;
 import me.batizhao.system.service.LogService;
@@ -18,8 +20,9 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author batizhao
@@ -45,7 +48,7 @@ public class LogServiceUnitTest extends BaseServiceUnitTest {
     private LogService logService;
 
     private List<Log> logList;
-    private IPage<Log> logPageList;
+    private Page<Log> logPageList;
 
     /**
      * Prepare test data.
@@ -61,20 +64,43 @@ public class LogServiceUnitTest extends BaseServiceUnitTest {
     }
 
     @Test
-    void givenNothing_whenFindPageLogs_thenSuccess() {
-        when(logMapper.selectLogPage(any(Page.class), any(Log.class)))
+    public void givenNothing_whenFindAllLog_thenSuccess() {
+        when(logMapper.selectPage(any(Page.class), any(Wrapper.class)))
                 .thenReturn(logPageList);
 
-        IPage<Log> logs = logService.findLogs(new Page<>(), new Log().setUsername("tom"));
+        IPage<Log> logs = logService.findLogs(new Page<>(), new Log());
 
         assertThat(logs.getRecords(), iterableWithSize(2));
-        assertThat(logs.getRecords(), hasItems(hasProperty("classMethod", is("handleMenuTree4Me")),
-                hasProperty("className", is("me.batizhao.ims.web.MenuController"))));
+        assertThat(logs.getRecords(), hasItems(hasProperty("className", equalTo("me.batizhao.ims.web.MenuController")),
+                hasProperty("className", equalTo("me.batizhao.ims.web.UserController"))));
 
-        assertThat(logs.getRecords(), containsInAnyOrder(allOf(hasProperty("classMethod", is("handleMenuTree4Me")),
-                hasProperty("className", is("me.batizhao.ims.web.MenuController"))),
-                allOf(hasProperty("classMethod", is("handleUserInfo")),
-                        hasProperty("className", is("me.batizhao.ims.web.UserController")))));
+        logPageList.setRecords(logList.subList(1, 2));
+        when(logMapper.selectPage(any(Page.class), any(Wrapper.class)))
+                .thenReturn(logPageList);
 
+        logs = logService.findLogs(new Page<>(), new Log().setClassName("lname").setDescription("xxx"));
+        assertThat(logs.getRecords(), iterableWithSize(1));
+        assertThat(logs.getRecords(), hasItems(hasProperty("classMethod", equalTo("handleUserInfo"))));
     }
+
+    @Test
+    public void givenLogId_whenFindLog_thenSuccess() {
+        when(logMapper.selectById(1L))
+                .thenReturn(logList.get(0));
+
+        Log log = logService.findById(1L);
+
+        assertThat(log.getClassMethod(), equalTo("handleMenuTree4Me"));
+    }
+
+    @Test
+    public void givenLogId_whenFindLog_thenNotFound() {
+        when(logMapper.selectById(any()))
+                .thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> logService.findById(1L));
+
+        verify(logMapper).selectById(any());
+    }
+
 }

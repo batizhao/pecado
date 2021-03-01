@@ -254,6 +254,30 @@
             <column name="sort" valueNumeric="2"/>
         </insert>
         <insert tableName="menu">
+            <column name="id" valueNumeric="2101"/>
+            <column name="name" value="删除日志"/>
+            <column name="permission" value="system:log:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="2100"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="2102"/>
+            <column name="name" value="清空日志"/>
+            <column name="permission" value="system:log:clean"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="2100"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="2103"/>
+            <column name="name" value="导出日志"/>
+            <column name="permission" value="system:log:export"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="2100"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+        <insert tableName="menu">
             <column name="id" valueNumeric="2200"/>
             <column name="path" value="/system/dict"/>
             <column name="name" value="字典管理"/>
@@ -302,6 +326,9 @@
             delete from menu where id = 1303;
             delete from menu where id = 2000;
             delete from menu where id = 2100;
+            delete from menu where id = 2101;
+            delete from menu where id = 2102;
+            delete from menu where id = 2103;
             delete from menu where id = 2200;
             delete from menu where id = 2201;
             delete from menu where id = 2202;
@@ -387,6 +414,18 @@
         </insert>
         <insert tableName="role_menu">
             <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2101"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2102"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="2103"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
             <column name="menuId" valueNumeric="2200"/>
         </insert>
         <insert tableName="role_menu">
@@ -417,6 +456,9 @@
             delete from role_menu where roleId = 2 and menuId = 1303;
             delete from role_menu where roleId = 2 and menuId = 2000;
             delete from role_menu where roleId = 2 and menuId = 2100;
+            delete from role_menu where roleId = 2 and menuId = 2101;
+            delete from role_menu where roleId = 2 and menuId = 2102;
+            delete from role_menu where roleId = 2 and menuId = 2103;
             delete from role_menu where roleId = 2 and menuId = 2200;
             delete from role_menu where roleId = 2 and menuId = 2201;
             delete from role_menu where roleId = 2 and menuId = 2202;

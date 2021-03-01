@@ -159,7 +159,7 @@ public class SystemLogAspect {
             //参数值
             Object value = args[i];
 
-            if (isFilterObject(value)) {
+            if (null == value || isFilterObject(value)) {
                 continue;
             }
 
