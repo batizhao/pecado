@@ -103,6 +103,7 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
     }
 
     @Override
+    @Transactional
     public Boolean deleteByIds(List<Long> ids) {
         this.removeByIds(ids);
         ids.forEach(i -> codeMetaService.remove(Wrappers.<CodeMeta>lambdaQuery().eq(CodeMeta::getCodeId, i)));

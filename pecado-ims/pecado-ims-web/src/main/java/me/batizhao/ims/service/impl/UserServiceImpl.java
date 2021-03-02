@@ -102,6 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public Boolean deleteByIds(List<Long> ids) {
         this.removeByIds(ids);
         ids.forEach(i -> {

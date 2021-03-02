@@ -73,6 +73,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
+    @Transactional
     public Boolean deleteByIds(List<Long> ids) {
         this.removeByIds(ids);
         ids.forEach(i -> {

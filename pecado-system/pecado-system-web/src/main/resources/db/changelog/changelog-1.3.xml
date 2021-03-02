@@ -75,6 +75,11 @@
             <column name="code" value="yes_or_no"/>
             <column name="description" value="是|否"/>
         </insert>
+        <insert tableName="dict_type">
+            <column name="name" value="成败"/>
+            <column name="code" value="success_or_fail"/>
+            <column name="description" value="成功|失败"/>
+        </insert>
         <insert tableName="dict_data">
             <column name="code" value="sex"/>
             <column name="label" value="男"/>
@@ -114,6 +119,19 @@
             <column name="value" value="no"/>
             <column name="sort" valueNumeric="2"/>
         </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="success_or_fail"/>
+            <column name="label" value="成功"/>
+            <column name="value" value="success"/>
+            <column name="sort" valueNumeric="1"/>
+            <column name="isDefault" value="yes"/>
+        </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="success_or_fail"/>
+            <column name="label" value="失败"/>
+            <column name="value" value="failure"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
 
         <rollback>
             delete from dict_type where code = 'sex';
@@ -122,6 +140,8 @@
             delete from dict_data where code = 'status';
             delete from dict_type where code = 'yes_or_no';
             delete from dict_data where code = 'yes_or_no';
+            delete from dict_type where code = 'success_or_fail';
+            delete from dict_data where code = 'success_or_fail';
         </rollback>
     </changeSet>
 </databaseChangeLog>

@@ -11,6 +11,7 @@
     <result property="classMethod" column="classMethod"/>
     <result property="description" column="description"/>
     <result property="parameter" column="parameter"/>
+    <result property="type" column="type"/>
     <result property="result" column="result"/>
     <result property="spend" column="spend"/>
     <result property="clientId" column="clientId"/>

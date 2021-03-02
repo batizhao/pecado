@@ -1,9 +1,5 @@
 package me.batizhao.system.api.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -52,11 +48,13 @@ public class Log implements Serializable {
     @ApiModelProperty(value = "操作参数")
     private String parameter;
 
+    @ApiModelProperty(value = "日志类型")
+    private String type;
+
     @ApiModelProperty(value = "操作结果")
     private String result;
 
     @ApiModelProperty(value = "操作时长", example = "100")
-    @NotNull(message = "spend is not blank")
     private Integer spend;
 
     @ApiModelProperty(value = "OAuth客户端", example = "client_app")
@@ -79,9 +77,6 @@ public class Log implements Serializable {
     @NotBlank(message = "ip is not blank")
     private String ip;
 
-    @ApiModelProperty(value = "操作时间")
-    @NotNull(message = "createTime is not blank")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 }

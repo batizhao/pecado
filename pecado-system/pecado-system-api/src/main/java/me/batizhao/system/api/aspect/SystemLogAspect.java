@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -30,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -56,30 +54,27 @@ public class SystemLogAspect {
     @SneakyThrows
     public Object around(ProceedingJoinPoint point, SystemLog systemLog) {
         Log logDTO = getLog(point, systemLog);
+        log.info("@Around System Log is : {}", logDTO);
 
         long startTime = System.currentTimeMillis();
-        Object result = point.proceed();
-        long endTime = System.currentTimeMillis();
+        Object result;
 
-        logDTO.setResult(null != result ? result.toString() : null);
-        logDTO.setSpend((int) (endTime - startTime));
-
-        log.info("@Around System Log is : {}", logDTO);
-//        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
-        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
-
+        try {
+            result = point.proceed();
+            logDTO.setResult(null != result ? result.toString() : null);
+        }
+        catch (Exception e) {
+            logDTO.setType("failure");
+            logDTO.setResult(e.getMessage());
+            throw e;
+        }
+        finally {
+            long endTime = System.currentTimeMillis();
+            logDTO.setSpend((int) (endTime - startTime));
+            SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
+            //rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
+        }
         return result;
-    }
-
-    @AfterThrowing(value = "@annotation(systemLog)", throwing = "throwable")
-    public void afterThrowing(JoinPoint point, SystemLog systemLog, Throwable throwable) {
-        Log logDTO = getLog(point, systemLog);
-        logDTO.setResult(throwable.getMessage());
-        logDTO.setSpend(0);
-
-        log.info("@AfterThrowing System Log is : {}", logDTO);
-//        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
-        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
     }
 
     private Log getLog(JoinPoint point, SystemLog systemLog) {
@@ -109,7 +104,6 @@ public class SystemLogAspect {
         logDTO.setClientId(getClientId());
         logDTO.setUsername(getUsername());
         logDTO.setUrl(request.getRequestURL().toString());
-        logDTO.setCreateTime(LocalDateTime.now());
         return logDTO;
     }
 

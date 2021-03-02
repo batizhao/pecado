@@ -1,13 +1,16 @@
 package me.batizhao.system.unit.service;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.mapper.LogMapper;
 import me.batizhao.system.service.LogService;
 import me.batizhao.system.service.impl.LogServiceImpl;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author batizhao
@@ -65,6 +69,8 @@ public class LogServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenNothing_whenFindAllLog_thenSuccess() {
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), Log.class);
+
         when(logMapper.selectPage(any(Page.class), any(Wrapper.class)))
                 .thenReturn(logPageList);
 
@@ -78,7 +84,7 @@ public class LogServiceUnitTest extends BaseServiceUnitTest {
         when(logMapper.selectPage(any(Page.class), any(Wrapper.class)))
                 .thenReturn(logPageList);
 
-        logs = logService.findLogs(new Page<>(), new Log().setClassName("lname").setDescription("xxx"));
+        logs = logService.findLogs(new Page<>(), new Log().setClassName("lname").setDescription("xxx").setType("success"));
         assertThat(logs.getRecords(), iterableWithSize(1));
         assertThat(logs.getRecords(), hasItems(hasProperty("classMethod", equalTo("handleUserInfo"))));
     }

@@ -32,6 +32,10 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
         if (StringUtils.isNotBlank(log.getDescription())) {
             wrapper.like(Log::getDescription, log.getDescription());
         }
+        if (StringUtils.isNotBlank(log.getType())) {
+            wrapper.like(Log::getType, log.getType());
+        }
+        wrapper.orderByDesc(Log::getCreateTime);
         return logMapper.selectPage(page, wrapper);
     }
 
