@@ -56,7 +56,7 @@ public class DsController {
      */
     @ApiOperation(value = "查询所有数据源")
     @GetMapping("/ds")
-    @PreAuthorize("@pms.hasPermission('dp:ds:admin')")
+    @PreAuthorize("hasRole('USER')")
     @SystemLog
     public ResponseInfo<List<Ds>> handleDss() {
         return ResponseInfo.ok(dsService.list());

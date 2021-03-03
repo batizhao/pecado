@@ -44,7 +44,7 @@ public class MenuController {
      */
     @ApiOperation(value = "查询当前用户菜单")
     @GetMapping("/menu/me")
-    @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
+    @PreAuthorize("isAuthenticated()")
     @SystemLog
     public ResponseInfo<List<Menu>> handleMenuTree4Me() {
         Long userId = SecurityUtils.getUser().getUserId();
@@ -73,7 +73,7 @@ public class MenuController {
      */
     @ApiOperation(value = "查询所有菜单")
     @GetMapping("/menus")
-    @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
+    @PreAuthorize("isAuthenticated()")
     @SystemLog
     public ResponseInfo<List<Menu>> handleMenuTree(Menu menu) {
         return ResponseInfo.ok(menuService.findMenuTree(menu));

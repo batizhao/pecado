@@ -152,6 +152,7 @@ public class UserController {
      */
     @ApiOperation(value = "我的信息")
     @GetMapping("/user/me")
+    @PreAuthorize("isAuthenticated()")
     @SystemLog
     public ResponseInfo<UserInfoVO> handleUserInfo() {
         Long userId = SecurityUtils.getUser().getUserId();
