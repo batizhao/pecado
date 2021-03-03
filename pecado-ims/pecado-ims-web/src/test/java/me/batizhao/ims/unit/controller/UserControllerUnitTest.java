@@ -10,10 +10,9 @@ import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.service.RoleService;
+import me.batizhao.ims.controller.UserController;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
-import me.batizhao.ims.controller.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -63,8 +62,6 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     @MockBean
     private UserService userService;
     @MockBean
-    private RoleService roleService;
-    @MockBean
     private UserRoleService userRoleService;
 
     private List<User> userList;
@@ -96,46 +93,47 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
         User user = userList.get(0);
         when(userService.findByUsername(username)).thenReturn(user);
 
-        user.setRoleList(roleList);
-        when(roleService.findRolesByUserId(user.getId())).thenReturn(roleList);
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setUser(user);
+        userInfoVO.setRoles(roleList.stream().map(Role::getName).collect(Collectors.toList()));
+        when(userService.getUserInfo(user.getId())).thenReturn(userInfoVO);
 
         mvc.perform(get("/user").param("username", username))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.email").value("zhangsan@gmail.com"))
-                .andExpect(jsonPath("$.data.roleList", hasSize(2)))
-                .andExpect(jsonPath("$.data.roleList[1].id").value("2"));
+                .andExpect(jsonPath("$.data.user.email").value("zhangsan@gmail.com"))
+                .andExpect(jsonPath("$.data.roles", hasSize(2)));
 
         verify(userService).findByUsername(anyString());
     }
 
-    @Test
-    @WithMockUser
-    public void givenName_whenFindUser_thenUserListJson() throws Exception {
-        String name = "张三";
-
-        //对数据集进行条件过滤
-        doAnswer(invocation -> {
-            Object arg0 = invocation.getArgument(0);
-
-            userList = userList.stream()
-                    .filter(p -> p.getName().equals(arg0)).collect(Collectors.toList());
-
-            return userList;
-        }).when(userService).findByName(name);
-
-        mvc.perform(get("/user").param("name", name))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", hasSize(1)))
-                .andExpect(jsonPath("$.data[0].username", equalTo("zhangsan")));
-
-        verify(userService).findByName(name);
-    }
+//    @Test
+//    @WithMockUser
+//    public void givenName_whenFindUser_thenUserListJson() throws Exception {
+//        String name = "张三";
+//
+//        //对数据集进行条件过滤
+//        doAnswer(invocation -> {
+//            Object arg0 = invocation.getArgument(0);
+//
+//            userList = userList.stream()
+//                    .filter(p -> p.getName().equals(arg0)).collect(Collectors.toList());
+//
+//            return userList;
+//        }).when(userService).findByName(name);
+//
+//        mvc.perform(get("/user").param("name", name))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data", hasSize(1)))
+//                .andExpect(jsonPath("$.data[0].username", equalTo("zhangsan")));
+//
+//        verify(userService).findByName(name);
+//    }
 
     @Test
     @WithMockUser

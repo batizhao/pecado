@@ -9,11 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.common.security.annotation.Inner;
 import me.batizhao.common.security.util.SecurityUtils;
-import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.system.api.annotation.SystemLog;
@@ -45,8 +43,6 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private RoleService roleService;
-    @Autowired
     private UserRoleService userRoleService;
 
     /**
@@ -57,7 +53,7 @@ public class UserController {
      */
     @ApiOperation(value = "分页查询用户")
     @GetMapping("users")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:user:admin')")
     @SystemLog
     public ResponseInfo<IPage<User>> handleUsers(Page<User> page, User user) {
         return ResponseInfo.ok(userService.findUsers(page, user));
@@ -70,6 +66,7 @@ public class UserController {
      */
     @ApiOperation(value = "通过id查询用户")
     @GetMapping("/user/{id}")
+    @PreAuthorize("@pms.hasPermission('ims:user:admin')")
     @SystemLog
     public ResponseInfo<User> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(userService.findById(id));
@@ -86,28 +83,25 @@ public class UserController {
     @GetMapping(value = "user", params = "username")
     @Inner
     @SystemLog
-    public ResponseInfo<User> handleUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
+    public ResponseInfo<UserInfoVO> handleUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
         User user = userService.findByUsername(username);
-
-        List<Role> roles = roleService.findRolesByUserId(user.getId());
-        user.setRoleList(roles);
-
-        return ResponseInfo.ok(user);
+        UserInfoVO userInfoVO = userService.getUserInfo(user.getId());
+        return ResponseInfo.ok(userInfoVO);
     }
 
-    /**
-     * 根据姓名查询用户
-     * 有可能重复，所以返回用户列表
-     *
-     * @param name 用户姓名
-     * @return 返回用户列表
-     */
-    @ApiOperation(value = "根据姓名查询用户")
-    @GetMapping(value = "user", params = "name")
-    @SystemLog
-    public ResponseInfo<List<User>> handleName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
-        return ResponseInfo.ok(userService.findByName(name));
-    }
+//    /**
+//     * 根据姓名查询用户
+//     * 有可能重复，所以返回用户列表
+//     *
+//     * @param name 用户姓名
+//     * @return 返回用户列表
+//     */
+//    @ApiOperation(value = "根据姓名查询用户")
+//    @GetMapping(value = "user", params = "name")
+//    @SystemLog
+//    public ResponseInfo<List<User>> handleName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
+//        return ResponseInfo.ok(userService.findByName(name));
+//    }
 
     /**
      * 添加或编辑用户
@@ -116,7 +110,7 @@ public class UserController {
      */
     @ApiOperation(value = "添加或编辑用户")
     @PostMapping("/user")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:user:add') or @pms.hasPermission('ims:user:edit')")
     @SystemLog
     public ResponseInfo<User> handleSaveOrUpdate(@Valid @ApiParam(value = "用户" , required = true) @RequestBody User user) {
         return ResponseInfo.ok(userService.saveOrUpdateUser(user));
@@ -130,7 +124,7 @@ public class UserController {
      */
     @ApiOperation(value = "删除用户")
     @DeleteMapping("user")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:user:delete')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "用户ID串", required = true) @RequestParam List<Long> ids) {
         Boolean b = userService.deleteByIds(ids);
@@ -145,7 +139,7 @@ public class UserController {
      */
     @ApiOperation(value = "更新用户状态")
     @PostMapping("/user/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:user:admin')")
     @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "用户" , required = true) @RequestBody User user) {
         return ResponseInfo.ok(userService.updateStatus(user));
@@ -174,7 +168,7 @@ public class UserController {
      */
     @ApiOperation(value = "分配用户角色")
     @PostMapping(value = "/user/role")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:user:admin')")
     @SystemLog
     public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "关联角色", required = true) @RequestBody List<UserRole> userRoleList) {
         return ResponseInfo.ok(userRoleService.updateUserRoles(userRoleList));

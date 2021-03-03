@@ -7,6 +7,7 @@ import me.batizhao.common.security.component.PecadoUserDetailsService;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.feign.UserFeignService;
+import me.batizhao.ims.api.vo.UserInfoVO;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,9 +71,13 @@ public class PecadoUserDetailsServiceUnitTest {
     public void givenUserName_whenFindUser_thenSuccess() {
         String username = "zhangsan";
         User user_test_data = new User().setId(1L).setUsername(username).setPassword("123456");
-        user_test_data.setRoleList(roleList);
 
-        ResponseInfo<User> userResponseInfo = ResponseInfo.ok(user_test_data);
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setUser(user_test_data);
+        userInfoVO.setRoles(roleList.stream().map(Role::getCode).collect(Collectors.toList()));
+        userInfoVO.setPermissions(roleList.stream().map(Role::getCode).collect(Collectors.toList()));
+
+        ResponseInfo<UserInfoVO> userResponseInfo = ResponseInfo.ok(userInfoVO);
 
         when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);
@@ -100,15 +105,18 @@ public class PecadoUserDetailsServiceUnitTest {
 
         verify(userFeignService).loadUserByUsername(anyString(), anyString());
     }
+
     @Test
     public void givenUserName_whenFindUserRoles_thenRoleIsEmpty() {
         String username = "zhangsan";
         User user_test_data = new User().setId(1L).setUsername(username).setPassword("123456");
 
         roleList.clear();
-        user_test_data.setRoleList(roleList);
 
-        ResponseInfo<User> userResponseInfo = ResponseInfo.ok(user_test_data);
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setUser(user_test_data);
+
+        ResponseInfo<UserInfoVO> userResponseInfo = ResponseInfo.ok(userInfoVO);
 
         when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userResponseInfo);

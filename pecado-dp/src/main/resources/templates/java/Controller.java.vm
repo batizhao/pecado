@@ -43,6 +43,7 @@ public class ${className}Controller {
      */
     @ApiOperation(value = "分页查询${comments}")
     @GetMapping("/${mappingPath}s")
+    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:admin')")
     public ResponseInfo<IPage<${className}>> handle${className}s(Page<${className}> page, ${className} ${classname}) {
         return ResponseInfo.ok(${classname}Service.find${className}s(page, ${classname}));
     }
@@ -53,6 +54,7 @@ public class ${className}Controller {
      */
     @ApiOperation(value = "查询所有${comments}")
     @GetMapping("/${mappingPath}")
+    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:admin')")
     public ResponseInfo<List<${className}>> handleAll${className}() {
         return ResponseInfo.ok(${classname}Service.list());
     }
@@ -65,6 +67,7 @@ public class ${className}Controller {
      */
     @ApiOperation(value = "通过id查询${comments}")
     @GetMapping("/${mappingPath}/{${pk.javaField}}")
+    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:admin')")
     public ResponseInfo<${className}> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("${pk.javaField}") @Min(1) ${pk.javaType} ${pk.javaField}) {
         return ResponseInfo.ok(${classname}Service.findById(${pk.javaField}));
     }
@@ -76,7 +79,7 @@ public class ${className}Controller {
      */
     @ApiOperation(value = "添加或编辑${comments}")
     @PostMapping("/${mappingPath}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:add') or @pms.hasPermission('${moduleName}:${classname}:edit')")
     public ResponseInfo<${className}> handleSaveOrUpdate(@Valid @ApiParam(value = "${comments}" , required = true) @RequestBody ${className} ${classname}) {
         return ResponseInfo.ok(${classname}Service.saveOrUpdate${className}(${classname}));
     }
@@ -88,7 +91,7 @@ public class ${className}Controller {
      */
     @ApiOperation(value = "通过id删除${comments}")
     @DeleteMapping("/${mappingPath}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:delete')")
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
         return ResponseInfo.ok(${classname}Service.removeByIds(ids));
     }
@@ -101,7 +104,7 @@ public class ${className}Controller {
      */
     @ApiOperation(value = "更新${comments}状态")
     @PostMapping("/${mappingPath}/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:admin')")
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "${comments}" , required = true) @RequestBody ${className} ${classname}) {
         return ResponseInfo.ok(${classname}Service.updateStatus(${classname}));
     }

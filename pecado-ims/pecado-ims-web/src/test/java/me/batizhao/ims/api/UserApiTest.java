@@ -40,8 +40,8 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.email").value("admin@qq.com"))
-                .andExpect(jsonPath("$.data.roleList", hasSize(2)));
+                .andExpect(jsonPath("$.data.user.email").value("admin@qq.com"))
+                .andExpect(jsonPath("$.data.roles", hasSize(2)));
     }
 
     /**
@@ -99,19 +99,6 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Full authentication is required")));
-    }
-
-    @Test
-    public void givenName_whenFindUser_thenUserListJson() throws Exception {
-        mvc.perform(get("/user").param("name", "孙波波")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", hasSize(2)))
-                .andExpect(jsonPath("$.data[0].username", equalTo("bob")))
-                .andExpect(jsonPath("$.data[1].email", equalTo("bob2@qq.com")));
     }
 
     @Test

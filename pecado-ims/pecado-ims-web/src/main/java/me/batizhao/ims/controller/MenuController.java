@@ -44,7 +44,7 @@ public class MenuController {
      */
     @ApiOperation(value = "查询当前用户菜单")
     @GetMapping("/menu/me")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
     @SystemLog
     public ResponseInfo<List<Menu>> handleMenuTree4Me() {
         Long userId = SecurityUtils.getUser().getUserId();
@@ -59,7 +59,7 @@ public class MenuController {
      */
     @ApiOperation(value = "根据角色查询菜单")
     @GetMapping(value = "menu", params = "roleId")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
     @SystemLog
     public ResponseInfo<List<Menu>> handleMenusByRoleId(@ApiParam(value = "菜单ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
         return ResponseInfo.ok(menuService.findMenusByRoleId(roleId));
@@ -73,7 +73,7 @@ public class MenuController {
      */
     @ApiOperation(value = "查询所有菜单")
     @GetMapping("/menus")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
     @SystemLog
     public ResponseInfo<List<Menu>> handleMenuTree(Menu menu) {
         return ResponseInfo.ok(menuService.findMenuTree(menu));
@@ -86,7 +86,7 @@ public class MenuController {
      */
     @ApiOperation(value = "通过id查询菜单")
     @GetMapping("/menu/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
     @SystemLog
     public ResponseInfo<Menu> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) Integer id) {
         return ResponseInfo.ok(menuService.findMenuById(id));
@@ -101,7 +101,7 @@ public class MenuController {
      */
     @ApiOperation(value = "添加或修改菜单")
     @PostMapping("menu")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:menu:add') or @pms.hasPermission('ims:menu:edit')")
     @SystemLog
     public ResponseInfo<Menu> handleSaveOrUpdate(@Valid @ApiParam(value = "菜单", required = true) @RequestBody Menu menu) {
         Menu Menu = menuService.saveOrUpdateMenu(menu);
@@ -116,7 +116,7 @@ public class MenuController {
      */
     @ApiOperation(value = "删除菜单")
     @DeleteMapping("menu")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:menu:delete')")
     @SystemLog
     public ResponseInfo<String> handleDelete(@ApiParam(value = "菜单ID串", required = true) @RequestParam Integer id) {
         return menuService.deleteById(id) ? ResponseInfo.ok() : ResponseInfo.failed("存在子菜单不允许删除！");
@@ -130,7 +130,7 @@ public class MenuController {
      */
     @ApiOperation(value = "更新菜单状态")
     @PostMapping("/menu/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
     @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "菜单" , required = true) @RequestBody Menu menu) {
         return ResponseInfo.ok(menuService.updateStatus(menu));

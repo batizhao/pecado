@@ -44,6 +44,7 @@ public class DictTypeController {
      */
     @ApiOperation(value = "分页查询字典类型")
     @GetMapping("/dict/types")
+    @PreAuthorize("@pms.hasPermission('system:dict:admin')")
     @SystemLog
     public ResponseInfo<IPage<DictType>> handleDictTypes(Page<DictType> page, DictType dictType) {
         return ResponseInfo.ok(dictTypeService.findDictTypes(page, dictType));
@@ -81,7 +82,7 @@ public class DictTypeController {
      */
     @ApiOperation(value = "添加或修改字典类型")
     @PostMapping("/dict/type")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('system:dict:add') or @pms.hasPermission('system:dict:edit')")
     @SystemLog
     public ResponseInfo<DictType> handleSaveOrUpdate(@Valid @ApiParam(value = "字典类型" , required = true) @RequestBody DictType dictType) {
         return ResponseInfo.ok(dictTypeService.saveOrUpdateDictType(dictType));
@@ -94,7 +95,7 @@ public class DictTypeController {
      */
     @ApiOperation(value = "通过id删除字典类型")
     @DeleteMapping("/dict/type")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('system:dict:delete')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
         return ResponseInfo.ok(dictTypeService.removeByIds(ids));
@@ -108,7 +109,7 @@ public class DictTypeController {
      */
     @ApiOperation(value = "更新字典类型状态")
     @PostMapping("/dict/type/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('system:dict:admin')")
     @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "字典类型" , required = true) @RequestBody DictType dictType) {
         return ResponseInfo.ok(dictTypeService.updateStatus(dictType));

@@ -75,9 +75,9 @@ public class User implements Serializable {
     @ApiModelProperty(value="修改时间")
     private LocalDateTime updateTime;
 
-    /**
-     * 角色列表
-     */
-    @ApiModelProperty(value = "角色列表")
-    private transient List<Role> roleList;
+//    /**
+//     * 角色列表
+//     */
+//    @ApiModelProperty(value = "角色列表")
+//    private transient List<Role> roleList;
 }

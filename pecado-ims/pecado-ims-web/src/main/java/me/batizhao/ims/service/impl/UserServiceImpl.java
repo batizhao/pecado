@@ -77,10 +77,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return user;
     }
 
-    @Override
-    public List<User> findByName(String name) {
-        return userMapper.selectList(Wrappers.<User>lambdaQuery().eq(User::getName, name));
-    }
+//    @Override
+//    public List<User> findByName(String name) {
+//        return userMapper.selectList(Wrappers.<User>lambdaQuery().eq(User::getName, name));
+//    }
 
     @Override
     @Transactional
@@ -130,7 +130,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setUser(user);
         userInfoVO.setRoles(roleService.findRolesByUserId(userId).stream().map(Role::getCode).collect(Collectors.toList()));
-        userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(Menu::getPermission).collect(Collectors.toList()));
+        userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(Menu::getPermission).filter(org.springframework.util.StringUtils::hasText).collect(Collectors.toList()));
         return userInfoVO;
     }
 

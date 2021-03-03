@@ -78,7 +78,7 @@ public class DictDataController {
      */
     @ApiOperation(value = "添加或编辑字典")
     @PostMapping("/dict/data")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('system:dict:add') or @pms.hasPermission('system:dict:edit')")
     @SystemLog
     public ResponseInfo<DictData> handleSaveOrUpdate(@Valid @ApiParam(value = "字典" , required = true) @RequestBody DictData dictData) {
         return ResponseInfo.ok(dictDataService.saveOrUpdateDictData(dictData));
@@ -91,7 +91,7 @@ public class DictDataController {
      */
     @ApiOperation(value = "通过id删除字典")
     @DeleteMapping("/dict/data")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('system:dict:delete')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
         return ResponseInfo.ok(dictDataService.removeByIds(ids));
@@ -105,7 +105,7 @@ public class DictDataController {
      */
     @ApiOperation(value = "更新字典状态")
     @PostMapping("/dict/data/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('system:dict:admin')")
     @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "字典" , required = true) @RequestBody DictData dictData) {
         return ResponseInfo.ok(dictDataService.updateStatus(dictData));

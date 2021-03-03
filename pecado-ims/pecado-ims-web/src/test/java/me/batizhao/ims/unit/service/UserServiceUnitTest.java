@@ -114,35 +114,35 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         verify(userMapper).selectOne(any());
     }
 
-    @Test
-    public void givenName_whenFindUser_thenUserList() {
-        String name = "张三";
+//    @Test
+//    public void givenName_whenFindUser_thenUserList() {
+//        String name = "张三";
+//
+//        when(userMapper.selectList(any())).thenReturn(userList.subList(0,1));
+//
+//        List<User> users = userService.findByName(name);
+//
+//        verify(userMapper).selectList(any());
+//
+//        log.info("users: {}", users);
+//
+//        assertThat(users, hasSize(1));
+//        assertThat(users, hasItems(hasProperty("username", is("zhangsan"))));
+//    }
 
-        when(userMapper.selectList(any())).thenReturn(userList.subList(0,1));
-
-        List<User> users = userService.findByName(name);
-
-        verify(userMapper).selectList(any());
-
-        log.info("users: {}", users);
-
-        assertThat(users, hasSize(1));
-        assertThat(users, hasItems(hasProperty("username", is("zhangsan"))));
-    }
-
-    @Test
-    public void givenName_whenFindUser_thenEmpty() {
-        userList.clear();
-        when(userMapper.selectList(any())).thenReturn(userList);
-
-        List<User> users = userService.findByName("xxxx");
-
-        verify(userMapper).selectList(any());
-
-        log.info("users: {}", users);
-
-        assertThat(users, hasSize(0));
-    }
+//    @Test
+//    public void givenName_whenFindUser_thenEmpty() {
+//        userList.clear();
+//        when(userMapper.selectList(any())).thenReturn(userList);
+//
+//        List<User> users = userService.findByName("xxxx");
+//
+//        verify(userMapper).selectList(any());
+//
+//        log.info("users: {}", users);
+//
+//        assertThat(users, hasSize(0));
+//    }
 
     @Test
     public void givenNothing_whenFindAllUser_thenSuccess() {

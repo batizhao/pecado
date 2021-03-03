@@ -44,6 +44,7 @@ public class DsController {
      */
     @ApiOperation(value = "分页查询数据源")
     @GetMapping("/dss")
+    @PreAuthorize("@pms.hasPermission('dp:ds:admin')")
     @SystemLog
     public ResponseInfo<IPage<Ds>> handleDss(Page<Ds> page, Ds ds) {
         return ResponseInfo.ok(dsService.findDss(page, ds));
@@ -55,6 +56,7 @@ public class DsController {
      */
     @ApiOperation(value = "查询所有数据源")
     @GetMapping("/ds")
+    @PreAuthorize("@pms.hasPermission('dp:ds:admin')")
     @SystemLog
     public ResponseInfo<List<Ds>> handleDss() {
         return ResponseInfo.ok(dsService.list());
@@ -67,6 +69,7 @@ public class DsController {
      */
     @ApiOperation(value = "通过id查询数据源")
     @GetMapping("/ds/{id}")
+    @PreAuthorize("@pms.hasPermission('dp:ds:admin')")
     @SystemLog
     public ResponseInfo<Ds> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Integer id) {
         return ResponseInfo.ok(dsService.findById(id));
@@ -79,7 +82,7 @@ public class DsController {
      */
     @ApiOperation(value = "添加或修改数据源")
     @PostMapping("/ds")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('dp:ds:add') or @pms.hasPermission('dp:ds:edit')")
     @SystemLog
     public ResponseInfo<Ds> handleSaveOrUpdate(@Valid @ApiParam(value = "数据源" , required = true) @RequestBody Ds ds) {
         return ResponseInfo.ok(dsService.saveOrUpdateDs(ds));
@@ -92,7 +95,7 @@ public class DsController {
      */
     @ApiOperation(value = "通过id删除数据源")
     @DeleteMapping("/ds")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('dp:ds:delete')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
         return ResponseInfo.ok(dsService.removeByIds(ids));
@@ -106,7 +109,7 @@ public class DsController {
      */
     @ApiOperation(value = "更新数据源状态")
     @PostMapping("/ds/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('dp:ds:admin')")
     @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "数据源" , required = true) @RequestBody Ds ds) {
         return ResponseInfo.ok(dsService.updateStatus(ds));

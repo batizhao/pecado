@@ -49,7 +49,7 @@ public class RoleController {
      */
     @ApiOperation(value = "分页查询角色")
     @GetMapping("/roles")
-    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
     @SystemLog
     public ResponseInfo<IPage<Role>> handleRoles(Page<Role> page, Role role) {
         return ResponseInfo.ok(roleService.findRoles(page, role));
@@ -63,7 +63,7 @@ public class RoleController {
      */
     @ApiOperation(value = "查询所有角色")
     @GetMapping("/role")
-    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
     @SystemLog
     public ResponseInfo<List<Role>> handleRoles() {
         return ResponseInfo.ok(roleService.list());
@@ -76,7 +76,7 @@ public class RoleController {
      */
     @ApiOperation(value = "通过id查询角色")
     @GetMapping("/role/{id}")
-    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
     @SystemLog
     public ResponseInfo<Role> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(roleService.findById(id));
@@ -91,7 +91,7 @@ public class RoleController {
      */
     @ApiOperation(value = "添加或修改角色")
     @PostMapping("role")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:role:add') or @pms.hasPermission('ims:role:edit')")
     @SystemLog
     public ResponseInfo<Role> handleSaveOrUpdate(@Valid @ApiParam(value = "角色", required = true) @RequestBody Role role) {
         return ResponseInfo.ok(roleService.saveOrUpdateRole(role));
@@ -105,7 +105,7 @@ public class RoleController {
      */
     @ApiOperation(value = "删除角色")
     @DeleteMapping("role")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:role:delete')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "角色ID串", required = true) @RequestParam List<Long> ids) {
         Boolean b = roleService.deleteByIds(ids);
@@ -120,7 +120,7 @@ public class RoleController {
      */
     @ApiOperation(value = "更新角色状态")
     @PostMapping("/role/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
     @SystemLog
     public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "角色" , required = true) @RequestBody Role role) {
         return ResponseInfo.ok(roleService.updateStatus(role));
@@ -135,7 +135,7 @@ public class RoleController {
      */
     @ApiOperation(value = "根据用户ID查询角色")
     @GetMapping(value = "role", params = "userId")
-    @PreAuthorize("hasRole('ADMIN') and #oauth2.hasScope('write')")
+    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
     @SystemLog
     public ResponseInfo<List<Role>> handleRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         List<Role> roles = roleService.findRolesByUserId(userId);
@@ -151,7 +151,7 @@ public class RoleController {
      */
     @ApiOperation(value = "分配角色权限")
     @PostMapping(value = "/role/menu")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
     @SystemLog
     public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "关联菜单", required = true) @RequestBody List<RoleMenu> roleMenuList) {
         return ResponseInfo.ok(roleMenuService.updateRoleMenus(roleMenuList));

@@ -44,6 +44,7 @@ public class LogController {
      */
     @ApiOperation(value = "分页查询日志")
     @GetMapping("/logs")
+    @PreAuthorize("@pms.hasPermission('system:log:admin')")
     public ResponseInfo<IPage<Log>> handleLogs(Page<Log> page, Log log) {
         return ResponseInfo.ok(logService.findLogs(page, log));
     }
@@ -55,6 +56,7 @@ public class LogController {
      */
     @ApiOperation(value = "通过id查询日志")
     @GetMapping("/log/{id}")
+    @PreAuthorize("@pms.hasPermission('system:log:admin')")
     public ResponseInfo<Log> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(logService.findById(id));
     }
@@ -78,7 +80,7 @@ public class LogController {
      */
     @ApiOperation(value = "通过id删除日志")
     @DeleteMapping(value = "/log", params = "ids")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('system:log:delete')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
         return ResponseInfo.ok(logService.removeByIds(ids));
@@ -90,7 +92,7 @@ public class LogController {
      */
     @ApiOperation(value = "清空日志")
     @DeleteMapping("/log")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@pms.hasPermission('system:log:clean')")
     @SystemLog
     public ResponseInfo<Boolean> handleDeleteAllLog() {
         return ResponseInfo.ok(logService.remove(null));
