@@ -24,7 +24,7 @@ node {
 
   stage('Build Docker Image') {
 
-    dir('pecado-dp') {
+    dir('pecado-dp/pecado-dp-platform') {
       image_name = "${registry_addr}/${maintainer_name}/dp:${version}-${build_tag}"
       dp_image = docker.build(image_name)
     }
