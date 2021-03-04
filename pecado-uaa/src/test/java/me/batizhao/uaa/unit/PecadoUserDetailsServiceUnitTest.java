@@ -1,13 +1,13 @@
-package me.batizhao.common.security.unit;
+package me.batizhao.uaa.unit;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
-import me.batizhao.common.security.component.PecadoUserDetailsService;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.ims.api.vo.UserInfoVO;
+import me.batizhao.uaa.security.PecadoUserDetailsService;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;

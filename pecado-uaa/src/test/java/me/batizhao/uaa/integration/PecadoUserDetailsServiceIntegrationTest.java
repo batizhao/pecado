@@ -36,7 +36,7 @@ public class PecadoUserDetailsServiceIntegrationTest extends BaseIntegrationTest
 
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         log.info("authorities: {}", authorities);
-        assertThat(authorities, hasSize(2));
+        assertThat(authorities.size(), greaterThan(2));
 
         List<String> list = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         assertThat(list, hasItems("ROLE_ADMIN", "ROLE_USER"));

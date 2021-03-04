@@ -1,8 +1,9 @@
-package me.batizhao.common.security.component;
+package me.batizhao.uaa.security;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.feign.UserFeignService;
 import me.batizhao.ims.api.vo.UserInfoVO;
