@@ -25,7 +25,7 @@ public class CodeMeta extends Model<CodeMeta> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     * id
      */
     @TableId
     @ApiModelProperty(value="pk")
@@ -145,5 +145,5 @@ public class CodeMeta extends Model<CodeMeta> {
     @ApiModelProperty(value="修改时间")
     private LocalDateTime updateTime;
 
-    
+
 }

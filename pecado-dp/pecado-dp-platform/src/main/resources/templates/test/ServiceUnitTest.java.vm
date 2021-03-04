@@ -82,7 +82,7 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
         assertThat(${classname}s.getRecords(), hasItems(hasProperty("name", equalTo("zhangsan")),
                 hasProperty("name", equalTo("lisi")),
                 hasProperty("name", equalTo("wangwu"))));
-            
+
         ${classname}PageList.setRecords(${classname}List.subList(1, 2));
         when(${classname}Mapper.selectPage(any(Page.class), any(Wrapper.class)))
                 .thenReturn(${classname}PageList);

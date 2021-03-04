@@ -25,7 +25,7 @@ public class Ds extends Model<Ds> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     * id
      */
     @TableId
     @ApiModelProperty(value="id", example = "100")
