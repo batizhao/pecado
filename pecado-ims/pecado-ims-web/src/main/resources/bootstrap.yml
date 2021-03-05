@@ -1,9 +1,3 @@
-info:
-  app:
-    build_time: '@git.build.time@'
-    name: '@project.artifactId@'
-    version: '@project.version@'
-
 spring:
   application:
     name: ims
