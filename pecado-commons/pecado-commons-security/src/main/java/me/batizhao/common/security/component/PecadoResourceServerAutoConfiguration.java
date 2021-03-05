@@ -1,6 +1,5 @@
 package me.batizhao.common.security.component;
 
-import com.alibaba.cloud.sentinel.annotation.SentinelRestTemplate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +17,7 @@ public class PecadoResourceServerAutoConfiguration {
 	@Bean
 	@Primary
 	@LoadBalanced
-	@SentinelRestTemplate
+//	@SentinelRestTemplate
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}

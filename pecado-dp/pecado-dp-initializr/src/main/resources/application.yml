@@ -5,7 +5,7 @@ initializr:
         - name: Web
           id: web
           description: Servlet web application with Spring MVC and Tomcat
-    - name: Tech
+    - name: Pecado
       content:
         - name: Pecado Commons Core
           id: pecado-commons-core
