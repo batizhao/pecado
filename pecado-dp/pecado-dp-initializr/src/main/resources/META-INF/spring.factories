@@ -1,0 +1,17 @@
+io.spring.initializr.generator.project.ProjectGenerationConfiguration=\
+me.batizhao.dp.initializr.extension.build.gradle.GradleProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.build.maven.MavenProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.DependencyProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.observability.ObservabilityProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.solace.SolaceProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.springamqp.SpringAmqpProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.springboot.SpringBootProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.springcloud.SpringCloudProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.springdata.SpringDataProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.springintegration.SpringIntegrationProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.springrestdocs.SpringRestDocsProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.testcontainers.TestcontainersProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.vaadin.VaadinProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.description.DescriptionProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.code.groovy.GroovyProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.code.kotlin.KotlinProjectGenerationConfiguration

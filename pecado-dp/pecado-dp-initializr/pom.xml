@@ -29,6 +29,16 @@
             <groupId>io.spring.initializr</groupId>
             <artifactId>initializr-generator-spring</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.spring.initializr</groupId>
+            <artifactId>initializr-version-resolver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.spring.initializr</groupId>
+            <artifactId>initializr-actuator</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
