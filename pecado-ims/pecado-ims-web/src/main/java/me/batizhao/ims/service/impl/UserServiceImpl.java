@@ -85,11 +85,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public User saveOrUpdateUser(User user) {
-        BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
-        String hashPass = bcryptPasswordEncoder.encode(user.getPassword());
-        user.setPassword(hashPass);
-
         if (user.getId() == null) {
+            BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+            String hashPass = bcryptPasswordEncoder.encode("123456");
+            user.setPassword(hashPass);
+
             user.setCreateTime(LocalDateTime.now());
             user.setUpdateTime(LocalDateTime.now());
             userMapper.insert(user);
