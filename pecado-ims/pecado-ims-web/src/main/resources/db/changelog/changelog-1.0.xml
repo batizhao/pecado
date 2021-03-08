@@ -648,6 +648,40 @@
             <column name="pid" valueNumeric="3200"/>
             <column name="sort" valueNumeric="3"/>
         </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3300"/>
+            <column name="path" value="/dp/form"/>
+            <column name="name" value="表单管理"/>
+            <column name="permission" value="dp:form:admin"/>
+            <column name="description" value="表单管理"/>
+            <column name="icon" value="form"/>
+            <column name="pid" valueNumeric="3000"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3301"/>
+            <column name="name" value="添加表单"/>
+            <column name="permission" value="dp:form:add"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3300"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3302"/>
+            <column name="name" value="编辑表单"/>
+            <column name="permission" value="dp:form:edit"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3300"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3303"/>
+            <column name="name" value="删除表单"/>
+            <column name="permission" value="dp:form:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3300"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
         <rollback>
             delete from menu where id = 3000;
             delete from menu where id = 3100;
@@ -661,6 +695,10 @@
             delete from menu where id = 3201;
             delete from menu where id = 3202;
             delete from menu where id = 3203;
+            delete from menu where id = 3300;
+            delete from menu where id = 3301;
+            delete from menu where id = 3302;
+            delete from menu where id = 3303;
         </rollback>
     </changeSet>
     <changeSet author="batizhao" id="InsertTableRoleMenu-20201013-003">
@@ -712,6 +750,22 @@
             <column name="roleId" valueNumeric="2"/>
             <column name="menuId" valueNumeric="3203"/>
         </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3300"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3301"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3302"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3303"/>
+        </insert>
         <rollback>
             delete from role_menu where roleId = 2 and menuId = 3000;
             delete from role_menu where roleId = 2 and menuId = 3100;
@@ -725,6 +779,10 @@
             delete from role_menu where roleId = 2 and menuId = 3201;
             delete from role_menu where roleId = 2 and menuId = 3202;
             delete from role_menu where roleId = 2 and menuId = 3203;
+            delete from role_menu where roleId = 2 and menuId = 3300;
+            delete from role_menu where roleId = 2 and menuId = 3301;
+            delete from role_menu where roleId = 2 and menuId = 3302;
+            delete from role_menu where roleId = 2 and menuId = 3303;
         </rollback>
     </changeSet>
 
