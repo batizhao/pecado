@@ -29,15 +29,15 @@ public class FormApiTest extends BaseApiTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    public void givenId_whenFindForm_thenSuccess() throws Exception {
-        mvc.perform(get("/form/{id}", 1L)
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
-    }
+//    @Test
+//    public void givenId_whenFindForm_thenSuccess() throws Exception {
+//        mvc.perform(get("/form/{id}", 1L)
+//                .header("Authorization", adminAccessToken))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
+//    }
 
     @Test
     public void givenNothing_whenFindAllForm_thenSuccess() throws Exception {
@@ -82,15 +82,15 @@ public class FormApiTest extends BaseApiTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
     }
 
-    @Test
-    @Transactional
-    public void givenId_whenDeleteForm_thenSuccess() throws Exception {
-        mvc.perform(delete("/form").param("ids", "1,2")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data").value(true));
-    }
+//    @Test
+//    @Transactional
+//    public void givenId_whenDeleteForm_thenSuccess() throws Exception {
+//        mvc.perform(delete("/form").param("ids", "1,2")
+//                .header("Authorization", adminAccessToken))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data").value(true));
+//    }
 }

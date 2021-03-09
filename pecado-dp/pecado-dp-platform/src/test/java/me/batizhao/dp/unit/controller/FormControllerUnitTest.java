@@ -83,23 +83,6 @@ public class FormControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void givenNothing_whenFindAllForm_thenSuccess() throws Exception {
-        when(formService.list()).thenReturn(formList);
-
-        mvc.perform(get("/form"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
-                .andExpect(jsonPath("$.data", hasSize(3)))
-                .andExpect(jsonPath("$.data[0].name", equalTo("zhangsan")));
-
-        verify(formService).list();
-    }
-
-    @Test
-    @WithMockUser
     public void givenId_whenFindForm_thenSuccess() throws Exception {
         Long id = 1L;
 
