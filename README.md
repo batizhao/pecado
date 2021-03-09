@@ -36,8 +36,8 @@
 ## 使用 ArgoCD 部署到 K8s
 
 ```sh 
-$ docker build -t harbor.pecado.com/pecado/uaa:1.1 .
-$ docker push harbor.pecado.com/pecado/uaa:1.1
+$ docker build -t harbor.pecado.com:8888/pecado/uaa:1.1 .
+$ docker push harbor.pecado.com:8888/pecado/uaa:1.1
 $ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 $ argocd app create pecado-uaa --repo git@github.com:batizhao/pecado.git --path pecado-uaa/helm --revision v1.1 --dest-server https://172.31.21.180:8443 --dest-namespace default

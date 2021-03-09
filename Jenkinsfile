@@ -1,6 +1,6 @@
 node {
   def build_tag
-  def registry_addr = "harbor.pecado.com"
+  def registry_addr = "harbor.pecado.com:8888"
   def maintainer_name = "pecado"
   def dp_image, gateway_image, ims_image, system_image, uaa_image
   def version = "1.3"
@@ -52,7 +52,7 @@ node {
   }
 
   stage('Push Docker Image') {
-    docker.withRegistry('https://harbor.pecado.com', 'harbor-jiangsu-auth') {
+    docker.withRegistry('https://harbor.pecado.com:8888', 'harbor-auth') {
       dp_image.push()
       gateway_image.push()
       ims_image.push()
