@@ -49,18 +49,6 @@ public class FormController {
     }
 
     /**
-     * 查询所有表单
-     * @return ResponseInfo
-     */
-    @ApiOperation(value = "查询所有表单")
-    @GetMapping("/form")
-    @PreAuthorize("@pms.hasPermission('dp:form:admin')")
-    public ResponseInfo<List<Form>> handleAllForm() {
-        return ResponseInfo.ok(formService.list());
-    }
-
-
-    /**
      * 通过id查询表单
      * @param id id
      * @return ResponseInfo
