@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.CodeMeta;
-import me.batizhao.dp.domain.GenConfig;
 
 import java.util.List;
 import java.util.Map;

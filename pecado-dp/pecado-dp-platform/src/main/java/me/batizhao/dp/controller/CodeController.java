@@ -12,7 +12,6 @@ import me.batizhao.common.core.constant.PecadoConstants;
 import me.batizhao.common.core.util.ResponseInfo;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.CodeMeta;
-import me.batizhao.dp.domain.GenConfig;
 import me.batizhao.dp.service.CodeMetaService;
 import me.batizhao.dp.service.CodeService;
 import me.batizhao.system.api.annotation.SystemLog;
