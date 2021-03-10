@@ -24,7 +24,13 @@ CREATE TABLE `ds` (
   UNIQUE KEY `url` (`url`)
 ) COMMENT='数据源';
 
+-- root/password
 INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`)
 VALUES
 	(1,'system','jdbc:mysql://localhost:3306/pecado-system?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/','open'),
 	(2,'ims','jdbc:mysql://localhost:3306/pecado-ims?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/','open');
+
+-- root/root
+-- INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`)
+-- VALUES
+-- (1, 'test', 'jdbc:mysql://172.31.21.180:30306/pecado-test?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai', 'root', 'wjGJBWDnD41oIGGltPetOgHWTx39u1N8qfmGSdFovRsfRCPD3xQXh7DY1yCjVYzG', 'open',);
