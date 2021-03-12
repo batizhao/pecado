@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import me.batizhao.common.core.util.TreeNode;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;

@@ -34,6 +34,7 @@ public class ${className}Controller {
 
     @Autowired
     private ${className}Service ${classname}Service;
+#if($template != "tree")
 
     /**
      * 分页查询${comments}
@@ -47,6 +48,7 @@ public class ${className}Controller {
     public ResponseInfo<IPage<${className}>> handle${className}s(Page<${className}> page, ${className} ${classname}) {
         return ResponseInfo.ok(${classname}Service.find${className}s(page, ${classname}));
     }
+#end
 
     /**
      * 查询所有${comments}
@@ -55,8 +57,12 @@ public class ${className}Controller {
     @ApiOperation(value = "查询所有${comments}")
     @GetMapping("/${mappingPath}")
     @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:admin')")
-    public ResponseInfo<List<${className}>> handleAll${className}() {
+    public ResponseInfo<List<${className}>> handleAll${className}(#if($template == "tree")${className} ${classname}#end) {
+#if($template == "tree")
+        return ResponseInfo.ok(${classname}Service.find${className}Tree(${classname}));
+#else
         return ResponseInfo.ok(${classname}Service.list());
+#end
     }
 
 
@@ -86,14 +92,26 @@ public class ${className}Controller {
 
     /**
      * 通过id删除${comments}
+#if($template != "tree")
      * @param ids ID串
+#else
+     * @param id ID
+#end
      * @return ResponseInfo
      */
     @ApiOperation(value = "通过id删除${comments}")
     @DeleteMapping("/${mappingPath}")
     @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:delete')")
+#if($template != "tree")
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
+#else
+    public ResponseInfo<String> handleDelete(@ApiParam(value = "ID", required = true) @RequestParam Integer id) {
+#end
+#if($template != "tree")
         return ResponseInfo.ok(${classname}Service.removeByIds(ids));
+#else
+        return ${classname}Service.deleteById(id) ? ResponseInfo.ok() : ResponseInfo.failed("存在子${comments}不允许删除！");
+#end
     }
 
     /**

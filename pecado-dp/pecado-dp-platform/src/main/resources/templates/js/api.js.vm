@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+#if($template != "tree")
 // 分页查询${comments}
 export function list${className}(query) {
   return request({
@@ -7,10 +8,14 @@ export function list${className}(query) {
     params: query
   })
 }
+#end
 
 // 查询所有${comments}
 export function listAll${className}(query) {
-  return request('/${moduleName}/${mappingPath}')
+  return request({
+    url: '/${moduleName}/${mappingPath}',
+    params: query
+  })
 }
 
 // 查询${comments}详细
@@ -28,8 +33,12 @@ export function addOrUpdate${className}(data) {
 }
 
 // 删除${comments}
-export function delete${className}(${pk.javaField}s) {
+export function delete${className}(#if($template != "tree")${pk.javaField}s#else${pk.javaField}#end) {
+#if($template != "tree")
   return request.delete(`/${moduleName}/${mappingPath}?ids=${${pk.javaField}s}`);
+#else
+  return request.delete(`/${moduleName}/${mappingPath}?id=${${pk.javaField}}`);
+#end
 }
 
 // 角色状态编辑

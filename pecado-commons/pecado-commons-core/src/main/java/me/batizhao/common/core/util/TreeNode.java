@@ -4,7 +4,7 @@
  * @ Apache-2.0
  */
 
-package me.batizhao.ims.api.domain;
+package me.batizhao.common.core.util;
 
 import io.swagger.annotations.ApiModelProperty;
 

@@ -85,6 +85,8 @@ public class CodeGenUtils {
 
     private final String VUE_INDEX_VUE_VM = "index.vue.vm";
 
+    private final String VUE_TREE_INDEX_VUE_VM = "index-tree.vue.vm";
+
     private final String VUE_API_JS_VM = "api.js.vm";
 
     /**
@@ -199,8 +201,8 @@ public class CodeGenUtils {
         VelocityContext context = getVelocityContext(map);
 
         // 获取模板列表
-        for (String template : getTemplates()) {
-            if (!StringUtils.containsAny(template, MENU_SQL_VM, VUE_API_JS_VM, VUE_INDEX_VUE_VM, "index-tree.vue.vm")) {
+        for (String template : getTemplates(code.getTemplate())) {
+            if (!StringUtils.containsAny(template, MENU_SQL_VM, VUE_API_JS_VM, VUE_INDEX_VUE_VM, VUE_TREE_INDEX_VUE_VM)) {
                 // 渲染模板
                 StringWriter sw = new StringWriter();
                 Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
@@ -227,7 +229,7 @@ public class CodeGenUtils {
         VelocityContext context = getVelocityContext(map);
 
         // 获取模板列表
-        for (String template : getTemplates()) {
+        for (String template : getTemplates(code.getTemplate())) {
             // 渲染模板
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
@@ -254,7 +256,7 @@ public class CodeGenUtils {
 
         Map<String, String> dataMap = new LinkedHashMap<>();
         // 获取模板列表
-        for (String template : getTemplates()) {
+        for (String template : getTemplates(code.getTemplate())) {
             // 渲染模板
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
@@ -334,7 +336,7 @@ public class CodeGenUtils {
      *
      * @return
      */
-    private List<String> getTemplates() {
+    private List<String> getTemplates(String template) {
         List<String> templates = new ArrayList<>();
         templates.add("templates/java/Domain.java.vm");
         templates.add("templates/java/Mapper.java.vm");
@@ -352,8 +354,11 @@ public class CodeGenUtils {
         templates.add("templates/sql/menu.sql.vm");
 
 		templates.add("templates/js/api.js.vm");
-		templates.add("templates/vue/index.vue.vm");
-//        templates.add("templates/vue/index-tree.vue.vm");
+		if (template.equals("tree")) {
+            templates.add("templates/vue/index-tree.vue.vm");
+        } else {
+            templates.add("templates/vue/index.vue.vm");
+        }
         return templates;
     }
 
@@ -379,6 +384,7 @@ public class CodeGenUtils {
         map.put("moduleName", code.getModuleName());
         map.put("package", code.getPackageName());
         map.put("parentMenuId", code.getParentMenuId());
+        map.put("template", code.getTemplate());
         return map;
     }
 
@@ -514,7 +520,13 @@ public class CodeGenUtils {
             return code.getClassName().toLowerCase() + "_menu.sql";
         }
 
-        if (template.contains(VUE_INDEX_VUE_VM)) {
+        if (code.getTemplate().equals("crud") && template.contains(VUE_INDEX_VUE_VM)) {
+            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views" + File.separator
+                    + code.getModuleName() + File.separator + code.getClassName().toLowerCase() + File.separator
+                    + "index.vue";
+        }
+
+        if (code.getTemplate().equals("tree") && template.contains(VUE_TREE_INDEX_VUE_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views" + File.separator
                     + code.getModuleName() + File.separator + code.getClassName().toLowerCase() + File.separator
                     + "index.vue";

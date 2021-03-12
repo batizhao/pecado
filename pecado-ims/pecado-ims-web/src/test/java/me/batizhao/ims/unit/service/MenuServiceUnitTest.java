@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.ims.api.domain.Role;
-import me.batizhao.ims.api.domain.TreeNode;
+import me.batizhao.common.core.util.TreeNode;
 import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
@@ -26,7 +26,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 

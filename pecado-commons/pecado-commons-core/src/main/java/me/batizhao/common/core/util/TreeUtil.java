@@ -4,10 +4,9 @@
  * @ Apache-2.0
  */
 
-package me.batizhao.ims.api.util;
+package me.batizhao.common.core.util;
 
 import lombok.experimental.UtilityClass;
-import me.batizhao.ims.api.domain.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
