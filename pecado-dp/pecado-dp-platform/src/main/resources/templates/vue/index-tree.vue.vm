@@ -149,6 +149,15 @@
     <!-- 添加或编辑${comments}对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="上级${comments}">
+          <treeselect
+            v-model="form.pid"
+            :options="${classname}Options"
+            :normalizer="normalizer"
+            :show-count="true"
+            placeholder="选择上级${comments}"
+          />
+        </el-form-item>
 #foreach($column in $columns)
 #set($field=$column.javaField)
 #if($column.save && !$column.primaryKey)
@@ -279,6 +288,7 @@ import Editor from '@/components/Editor';
 export default {
   name: "${className}",
   components: {
+    Treeselect,
 #foreach($column in $columns)
 #if($column.save && !$column.superColumn && !$column.primaryKey && $column.htmlType == "imageUpload")
     ImageUpload,
@@ -333,6 +343,7 @@ export default {
 #foreach ($column in $columns)
 #if($column.search)
         $column.javaField: null#if($velocityCount != $columns.size()),#end
+
 #end
 #end
       },
@@ -351,6 +362,7 @@ export default {
         $column.javaField: [
           { required: true, message: "$comment不能为空", trigger: #if($column.htmlType == "select")"change"#else"blur"#end }
         ]#if($velocityCount != $columns.size()),#end
+
 #end
 #end
       }
@@ -398,7 +410,7 @@ export default {
           row.status = row.status === "open" ? "close" : "open";
         });
     },
-    /** 转换菜单数据结构 */
+    /** 转换${comments}数据结构 */
     normalizer(node) {
       if (node.children && !node.children.length) {
         delete node.children;
@@ -409,13 +421,13 @@ export default {
         children: node.children
       };
     },
-    /** 查询菜单下拉树结构 */
+    /** 查询${comments}下拉树结构 */
     getTreeselect() {
       listAll${className}().then(response => {
         this.${classname}Options = [];
         const ${classname} = { id: 0, name: '主类目', children: [] };
         ${classname}.children = this.handleTree(response.data, "id");
-        this.${className}Options.push(menu);
+        this.${classname}Options.push(${classname});
       });
     },
 #foreach ($column in $columns)
@@ -444,7 +456,6 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.current = 1;
       this.getList();
     },
     /** 重置按钮操作 */
