@@ -189,6 +189,8 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.id", notNullValue()))
                 .andExpect(jsonPath("$.data.username", equalTo("daxia")));
+
+        verify(systemLogAspect).around(any(ProceedingJoinPoint.class), any(SystemLog.class));
     }
 
     /**
@@ -226,8 +228,6 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Required request body is missing")));
-
-        verify(systemLogAspect).around(any(ProceedingJoinPoint.class), any(SystemLog.class));
     }
 
     @Test
