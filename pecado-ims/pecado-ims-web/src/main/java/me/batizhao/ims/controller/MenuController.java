@@ -45,7 +45,6 @@ public class MenuController {
     @ApiOperation(value = "查询当前用户菜单")
     @GetMapping("/menu/me")
     @PreAuthorize("isAuthenticated()")
-    @SystemLog
     public ResponseInfo<List<Menu>> handleMenuTree4Me() {
         Long userId = SecurityUtils.getUser().getUserId();
         return ResponseInfo.ok(menuService.findMenuTreeByUserId(userId));
@@ -60,7 +59,6 @@ public class MenuController {
     @ApiOperation(value = "根据角色查询菜单")
     @GetMapping(value = "menu", params = "roleId")
     @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
-    @SystemLog
     public ResponseInfo<List<Menu>> handleMenusByRoleId(@ApiParam(value = "菜单ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
         return ResponseInfo.ok(menuService.findMenusByRoleId(roleId));
     }
@@ -74,7 +72,6 @@ public class MenuController {
     @ApiOperation(value = "查询所有菜单")
     @GetMapping("/menus")
     @PreAuthorize("isAuthenticated()")
-    @SystemLog
     public ResponseInfo<List<Menu>> handleMenuTree(Menu menu) {
         return ResponseInfo.ok(menuService.findMenuTree(menu));
     }
@@ -87,7 +84,6 @@ public class MenuController {
     @ApiOperation(value = "通过id查询菜单")
     @GetMapping("/menu/{id}")
     @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
-    @SystemLog
     public ResponseInfo<Menu> handleMenu(@ApiParam(value = "菜单ID", required = true) @PathVariable("id") @Min(1) Integer id) {
         return ResponseInfo.ok(menuService.findMenuById(id));
     }

@@ -50,7 +50,6 @@ public class RoleController {
     @ApiOperation(value = "分页查询角色")
     @GetMapping("/roles")
     @PreAuthorize("@pms.hasPermission('ims:role:admin')")
-    @SystemLog
     public ResponseInfo<IPage<Role>> handleRoles(Page<Role> page, Role role) {
         return ResponseInfo.ok(roleService.findRoles(page, role));
     }
@@ -64,7 +63,6 @@ public class RoleController {
     @ApiOperation(value = "查询所有角色")
     @GetMapping("/role")
     @PreAuthorize("@pms.hasPermission('ims:role:admin')")
-    @SystemLog
     public ResponseInfo<List<Role>> handleRoles() {
         return ResponseInfo.ok(roleService.list());
     }
@@ -77,7 +75,6 @@ public class RoleController {
     @ApiOperation(value = "通过id查询角色")
     @GetMapping("/role/{id}")
     @PreAuthorize("@pms.hasPermission('ims:role:admin')")
-    @SystemLog
     public ResponseInfo<Role> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(roleService.findById(id));
     }
@@ -136,7 +133,6 @@ public class RoleController {
     @ApiOperation(value = "根据用户ID查询角色")
     @GetMapping(value = "role", params = "userId")
     @PreAuthorize("@pms.hasPermission('ims:role:admin')")
-    @SystemLog
     public ResponseInfo<List<Role>> handleRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         List<Role> roles = roleService.findRolesByUserId(userId);
         return ResponseInfo.ok(roles);

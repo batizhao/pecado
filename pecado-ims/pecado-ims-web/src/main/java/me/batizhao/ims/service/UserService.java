@@ -51,6 +51,15 @@ public interface UserService extends IService<User> {
 	User saveOrUpdateUser(User user);
 
 	/**
+	 * 更新用户密码
+	 * @param userId
+	 * @param oldPassword
+	 * @param newPassword
+	 * @return
+	 */
+	Boolean updatePassword(Long userId, String oldPassword, String newPassword);
+
+	/**
 	 * 删除
 	 * @param ids
 	 * @return

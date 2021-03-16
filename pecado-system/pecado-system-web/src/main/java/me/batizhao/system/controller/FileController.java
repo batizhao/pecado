@@ -43,7 +43,6 @@ public class FileController {
      */
     @ApiOperation(value = "插入文件")
     @PostMapping("/file/upload")
-    @SystemLog
     public ResponseInfo<File> handleSave(@RequestParam("file") MultipartFile file) {
         return ResponseInfo.ok(fileService.upload(file));
     }

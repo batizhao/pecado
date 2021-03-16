@@ -103,6 +103,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional
+    public Boolean updatePassword(Long userId, String oldPassword, String newPassword) {
+        User user = this.findById(userId);
+
+        BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (!bcryptPasswordEncoder.matches(oldPassword, user.getPassword()))
+            throw new RuntimeException("旧密码不正确");
+
+        if (bcryptPasswordEncoder.matches(newPassword, user.getPassword()))
+            throw new RuntimeException("新旧密码相同");
+
+        String hashPass = bcryptPasswordEncoder.encode(newPassword);
+        user.setPassword(hashPass);
+        user.setUpdateTime(LocalDateTime.now());
+        return userMapper.updateById(user) == 1;
+    }
+
+    @Override
+    @Transactional
     public Boolean deleteByIds(List<Long> ids) {
         this.removeByIds(ids);
         ids.forEach(i -> {

@@ -54,7 +54,6 @@ public class UserController {
     @ApiOperation(value = "分页查询用户")
     @GetMapping("users")
     @PreAuthorize("@pms.hasPermission('ims:user:admin')")
-    @SystemLog
     public ResponseInfo<IPage<User>> handleUsers(Page<User> page, User user) {
         return ResponseInfo.ok(userService.findUsers(page, user));
     }
@@ -66,8 +65,7 @@ public class UserController {
      */
     @ApiOperation(value = "通过id查询用户")
     @GetMapping("/user/{id}")
-    @PreAuthorize("@pms.hasPermission('ims:user:admin')")
-    @SystemLog
+    @PreAuthorize("isAuthenticated()")
     public ResponseInfo<User> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(userService.findById(id));
     }
@@ -88,20 +86,6 @@ public class UserController {
         UserInfoVO userInfoVO = userService.getUserInfo(user.getId());
         return ResponseInfo.ok(userInfoVO);
     }
-
-//    /**
-//     * 根据姓名查询用户
-//     * 有可能重复，所以返回用户列表
-//     *
-//     * @param name 用户姓名
-//     * @return 返回用户列表
-//     */
-//    @ApiOperation(value = "根据姓名查询用户")
-//    @GetMapping(value = "user", params = "name")
-//    @SystemLog
-//    public ResponseInfo<List<User>> handleName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") @Size(min = 2) String name) {
-//        return ResponseInfo.ok(userService.findByName(name));
-//    }
 
     /**
      * 添加或编辑用户
@@ -153,11 +137,42 @@ public class UserController {
     @ApiOperation(value = "我的信息")
     @GetMapping("/user/me")
     @PreAuthorize("isAuthenticated()")
-    @SystemLog
     public ResponseInfo<UserInfoVO> handleUserInfo() {
         Long userId = SecurityUtils.getUser().getUserId();
         UserInfoVO userInfoVO = userService.getUserInfo(userId);
         return ResponseInfo.ok(userInfoVO);
+    }
+
+    /**
+     * 更换我的头像
+     *
+     * @param user 用户
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "更换我的头像")
+    @PostMapping("/user/avatar")
+    @PreAuthorize("isAuthenticated()")
+    @SystemLog
+    public ResponseInfo<User> handleUpdateAvatar(@ApiParam(value = "用户" , required = true) @RequestBody User user) {
+        Long userId = SecurityUtils.getUser().getUserId();
+        return ResponseInfo.ok(userService.saveOrUpdateUser(user.setId(userId)));
+    }
+
+    /**
+     * 更新我的密码
+     *
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @return ResponseInfo
+     */
+    @ApiOperation(value = "更新我的密码")
+    @PostMapping("/user/password")
+    @PreAuthorize("isAuthenticated()")
+    @SystemLog
+    public ResponseInfo<Boolean> handleUpdatePassword(@ApiParam(value = "旧密码" , required = true) @Size(min = 6) @RequestParam String oldPassword,
+                                                      @ApiParam(value = "新密码" , required = true) @Size(min = 6) @RequestParam String newPassword) {
+        Long userId = SecurityUtils.getUser().getUserId();
+        return ResponseInfo.ok(userService.updatePassword(userId, oldPassword, newPassword));
     }
 
     /**
