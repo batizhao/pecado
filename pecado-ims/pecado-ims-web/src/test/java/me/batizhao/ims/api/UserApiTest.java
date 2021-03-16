@@ -4,13 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.api.domain.User;
+import me.batizhao.system.api.annotation.SystemLog;
+import me.batizhao.system.api.aspect.SystemLogAspect;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,6 +37,9 @@ public class UserApiTest extends BaseApiTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @SpyBean
+    private SystemLogAspect systemLogAspect;
 
     @Test
     public void givenUserName_whenFindUser_thenSuccess() throws Exception {
@@ -217,6 +226,8 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data", containsString("Required request body is missing")));
+
+        verify(systemLogAspect).around(any(ProceedingJoinPoint.class), any(SystemLog.class));
     }
 
     @Test
