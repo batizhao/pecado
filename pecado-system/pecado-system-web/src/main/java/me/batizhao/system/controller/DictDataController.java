@@ -37,24 +37,12 @@ public class DictDataController {
     private DictDataService dictDataService;
 
     /**
-     * 查询所有
-     * @return ResponseInfo
-     */
-    @ApiOperation(value = "查询所有字典")
-    @GetMapping("/dict/data")
-    @SystemLog
-    public ResponseInfo<List<DictData>> handleDictData() {
-        return ResponseInfo.ok(dictDataService.list());
-    }
-
-    /**
      * 通过id查询字典
      * @param id id
      * @return ResponseInfo
      */
     @ApiOperation(value = "通过id查询字典")
     @GetMapping("/dict/data/{id}")
-    @SystemLog
     public ResponseInfo<DictData> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return ResponseInfo.ok(dictDataService.findById(id));
     }
@@ -66,7 +54,6 @@ public class DictDataController {
      */
     @ApiOperation(value = "通过code查询字典")
     @GetMapping(value = "/dict/data", params = "code")
-    @SystemLog
     public ResponseInfo<List<DictData>> handleCode(@ApiParam(value = "code", required = true) @RequestParam @Size(min = 1) String code) {
         return ResponseInfo.ok(dictDataService.list(Wrappers.<DictData>lambdaQuery().eq(DictData::getCode, code)));
     }

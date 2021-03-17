@@ -61,23 +61,6 @@ public class DictDataControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void givenNothing_whenFindAllDictData_thenSuccess() throws Exception {
-        when(dictDataService.list()).thenReturn(dictDataList);
-
-        mvc.perform(get("/dict/data"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(content().string(stringContainsInOrder("zhangsan", "lisi", "wangwu")))
-                .andExpect(jsonPath("$.data", hasSize(3)))
-                .andExpect(jsonPath("$.data[0].label", equalTo("zhangsan")));
-
-        verify(dictDataService).list();
-    }
-
-    @Test
-    @WithMockUser
     public void givenId_whenFindDictData_thenSuccess() throws Exception {
         Long id = 1L;
 

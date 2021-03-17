@@ -40,16 +40,6 @@ public class DictDataApiTest extends BaseApiTest {
     }
 
     @Test
-    public void givenNothing_whenFindAllDictData_thenSuccess() throws Exception {
-        mvc.perform(get("/dict/data")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
-    }
-
-    @Test
     @Transactional
     public void givenJson_whenSaveDictData_thenSuccess() throws Exception {
         DictData requestBody = new DictData()
