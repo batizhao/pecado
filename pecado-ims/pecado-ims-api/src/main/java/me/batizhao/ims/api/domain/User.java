@@ -48,6 +48,18 @@ public class User implements Serializable {
     private String name;
 
     /**
+     * 用户性别
+     */
+    @ApiModelProperty(value="用户性别")
+    private String sex;
+
+    /**
+     * 手机号码
+     */
+    @ApiModelProperty(value="手机号码")
+    private String mobileNumber;
+
+    /**
      * @mock @url
      */
     @ApiModelProperty(value = "用户头像", example = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png")

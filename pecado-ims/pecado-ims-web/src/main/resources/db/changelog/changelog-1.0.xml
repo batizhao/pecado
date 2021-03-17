@@ -97,6 +97,8 @@
             <column name="name" type="VARCHAR(100)" remarks="用户姓名">
                 <constraints nullable="false"/>
             </column>
+            <column name="sex" type="VARCHAR(32)" remarks="用户性别" defaultValue="male"/>
+            <column name="mobileNumber" type="VARCHAR(20)" remarks="手机号码" defaultValue=""/>
             <column name="avatar" type="VARCHAR(255)" remarks="用户头像"
                     defaultValue="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"/>
             <column name="unreadCount" type="INT" remarks="未读消息数量" defaultValue="0"/>
