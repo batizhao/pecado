@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import me.batizhao.common.core.util.TreeNode;
+import me.batizhao.ims.api.vo.MetaVO;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -22,6 +23,11 @@ import java.time.LocalDateTime;
 public class Menu extends TreeNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public Menu(Integer id, Integer pid) {
+        this.id = id;
+        this.pid = pid;
+    }
 
     @ApiModelProperty(value = "路径", example = "/user/common")
     private String path;
@@ -63,8 +69,10 @@ public class Menu extends TreeNode implements Serializable {
     @ApiModelProperty(value="修改时间")
     private LocalDateTime updateTime;
 
-    public Menu(Integer id, Integer pid) {
-        this.id = id;
-        this.pid = pid;
-    }
+    /**
+     * 路由元数据
+     */
+    @ApiModelProperty(value="路由元数据")
+    private transient MetaVO meta;
+
 }

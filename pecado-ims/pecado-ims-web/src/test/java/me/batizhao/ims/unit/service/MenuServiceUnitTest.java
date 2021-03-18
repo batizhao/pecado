@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.common.core.exception.NotFoundException;
-import me.batizhao.ims.api.domain.Role;
 import me.batizhao.common.core.util.TreeNode;
 import me.batizhao.ims.api.domain.Menu;
+import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleMenuService;
@@ -92,6 +92,7 @@ public class MenuServiceUnitTest extends BaseServiceUnitTest {
 
         assertThat(menus, hasSize(4));
         assertThat(menus, hasItems(hasProperty("name", is("工作台"))));
+        assertThat(menus.get(0).getMeta(), hasProperty("title", is("工作台")));
     }
 
     @Test

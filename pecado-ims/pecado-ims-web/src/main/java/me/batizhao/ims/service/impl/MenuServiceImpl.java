@@ -9,6 +9,7 @@ import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.util.TreeUtil;
 import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.ims.api.domain.RoleMenu;
+import me.batizhao.ims.api.vo.MetaVO;
 import me.batizhao.ims.mapper.MenuMapper;
 import me.batizhao.ims.service.MenuService;
 import me.batizhao.ims.service.RoleMenuService;
@@ -41,7 +42,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> findMenusByRoleId(Long roleId) {
-        return menuMapper.findMenusByRoleId(roleId);
+        List<Menu> menus = menuMapper.findMenusByRoleId(roleId);
+        for (Menu menu : menus) {
+            menu.setMeta(new MetaVO(menu.getName(), menu.getIcon(), true));
+        }
+        return menus;
     }
 
     @Override
@@ -53,9 +58,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> findMenuTreeByUserId(Long userId) {
-        Set<Menu> all = new HashSet<>();
-        roleService.findRolesByUserId(userId).forEach(role -> all.addAll(findMenusByRoleId(role.getId())));
-        return filterMenu(all, null);
+        return filterMenu(this.findMenusByUserId(userId), null);
     }
 
     @Override
@@ -84,7 +87,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public List<Menu> filterMenu(Set<Menu> all, Integer parentId) {
         List<Menu> menuTreeList = all.stream()
                 .filter(menu -> MenuTypeEnum.MENU.getType().equals(menu.getType()))
-//                .map(Menu::new)
                 .sorted(Comparator.comparingInt(Menu::getSort))
                 .collect(Collectors.toList());
 
@@ -117,6 +119,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
+    @Transactional
     public Boolean deleteById(Integer id) {
         if (checkHasChildren(id)) return false;
 
