@@ -118,6 +118,18 @@ public class Code extends Model<Code> {
     private String path;
 
     /**
+     * 关联子表的表名
+     */
+    @ApiModelProperty(value="关联子表的表名")
+    private String subTableName;
+
+    /**
+     * 子表关联的属性名
+     */
+    @ApiModelProperty(value="子表关联的属性名")
+    private String subTableFkName;
+
+    /**
      * 附加选项
      */
     @ApiModelProperty(value="附加选项")

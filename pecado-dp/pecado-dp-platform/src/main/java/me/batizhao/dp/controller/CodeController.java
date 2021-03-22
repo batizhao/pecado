@@ -27,6 +27,7 @@ import javax.validation.constraints.Min;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 生成代码
@@ -55,7 +56,6 @@ public class CodeController {
     @ApiOperation(value = "分页查询代码")
     @GetMapping("/codes")
     @PreAuthorize("@pms.hasPermission('dp:code:admin')")
-    @SystemLog
     public ResponseInfo<IPage<Code>> handleCodes(Page<Code> page, Code code) {
         return ResponseInfo.ok(codeService.findCodes(page, code));
     }
@@ -69,11 +69,12 @@ public class CodeController {
     @ApiOperation(value = "通过id查询代码")
     @GetMapping("/code/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:admin')")
-    @SystemLog
     public ResponseInfo<Map<String, Object>> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         Code code = codeService.findById(id);
         List<CodeMeta> codeMetas = codeMetaService.findByCodeId(id);
-        List<Code> codes = codeService.list();
+        List<Code> codes = codeService.list()
+                .stream().filter(c -> !c.getTableName().equals(code.getTableName()))
+                .collect(Collectors.toList());;
 
         Map<String, Object> map = new HashMap<>();
         map.put("code", code);
