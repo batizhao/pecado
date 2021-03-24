@@ -100,7 +100,7 @@ public class CodeGenUtils {
         code.setClassAuthor("batizhao");
         code.setModuleName("system");
         code.setPackageName("me.batizhao");
-        code.setTemplate("crud");
+        code.setTemplate(GenConstants.TPL_CRUD);
         code.setMappingPath(StringUtils.uncapitalize(code.getClassName()));
         code.setCreateTime(LocalDateTime.now());
         code.setUpdateTime(LocalDateTime.now());
@@ -193,9 +193,9 @@ public class CodeGenUtils {
      * 生成代码到路径
      */
     @SneakyThrows
-    public void generateCode(Code code, List<CodeMeta> codeMetas) {
+    public void generateCode(Code code) {
         // 封装模板数据
-        Map<String, Object> map = getStringObjectMap(code, codeMetas);
+        Map<String, Object> map = prepareContext(code);
 
         // 设置velocity资源加载器
         VelocityContext context = getVelocityContext(map);
@@ -215,15 +215,34 @@ public class CodeGenUtils {
                 }
             }
         }
+
+//        if (code.getSubCode() != null) {
+//            map = prepareContext(code.getSubCode());
+//            context = getVelocityContext(map);
+//            for (String template : getTemplates(code.getSubCode().getTemplate())) {
+//                if (!StringUtils.containsAny(template, MENU_SQL_VM, VUE_API_JS_VM, VUE_INDEX_VUE_VM, VUE_TREE_INDEX_VUE_VM)) {
+//                    // 渲染模板
+//                    StringWriter sw = new StringWriter();
+//                    Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
+//                    tpl.merge(context, sw);
+//                    try {
+//                        String path = getGenPath(code.getSubCode(), template);
+//                        FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetUtil.UTF_8);
+//                    } catch (IOException e) {
+//                        throw new RuntimeException("渲染模板失败，表名：" + code.getSubCode().getTableName());
+//                    }
+//                }
+//            }
+//        }
     }
 
     /**
      * 生成代码然后下载
      */
     @SneakyThrows
-    public void generateCode(Code code, List<CodeMeta> codeMetas, ZipOutputStream zip) {
+    public void generateCode(Code code, ZipOutputStream zip) {
         // 封装模板数据
-        Map<String, Object> map = getStringObjectMap(code, codeMetas);
+        Map<String, Object> map = prepareContext(code);
 
         // 设置velocity资源加载器
         VelocityContext context = getVelocityContext(map);
@@ -241,15 +260,31 @@ public class CodeGenUtils {
             IoUtil.close(sw);
             zip.closeEntry();
         }
+
+//        if (code.getSubCode() != null) {
+//            map = prepareContext(code.getSubCode());
+//            context = getVelocityContext(map);
+//            for (String template : getTemplates(code.getSubCode().getTemplate())) {
+//                StringWriter sw = new StringWriter();
+//                Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
+//                tpl.merge(context, sw);
+//
+//                // 添加到zip
+//                zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(code.getSubCode(), template))));
+//                IoUtil.write(zip, StandardCharsets.UTF_8, false, sw.toString());
+//                IoUtil.close(sw);
+//                zip.closeEntry();
+//            }
+//        }
     }
 
     /**
      * 预览代码
      */
     @SneakyThrows
-    public Map<String, String> previewCode(Code code, List<CodeMeta> codeMetas) {
+    public Map<String, String> previewCode(Code code) {
         // 封装模板数据
-        Map<String, Object> map = getStringObjectMap(code, codeMetas);
+        Map<String, Object> map = prepareContext(code);
 
         // 设置velocity资源加载器
         VelocityContext context = getVelocityContext(map);
@@ -261,8 +296,19 @@ public class CodeGenUtils {
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
             tpl.merge(context, sw);
-            dataMap.put(template, sw.toString());
+            dataMap.put(template.substring(template.lastIndexOf("/")+1, template.indexOf(".vm")), sw.toString());
         }
+
+//        if (code.getSubCode() != null) {
+//            map = prepareContext(code.getSubCode());
+//            context = getVelocityContext(map);
+//            for (String template : getTemplates(code.getSubCode().getTemplate())) {
+//                StringWriter sw = new StringWriter();
+//                Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
+//                tpl.merge(context, sw);
+//                dataMap.put(code.getSubCode().getClassName() + template.substring(template.lastIndexOf("/")+1, template.indexOf(".vm")), sw.toString());
+//            }
+//        }
 
         return dataMap;
     }
@@ -343,18 +389,14 @@ public class CodeGenUtils {
         templates.add("templates/java/Service.java.vm");
         templates.add("templates/java/ServiceImpl.java.vm");
         templates.add("templates/java/Controller.java.vm");
-
         templates.add("templates/xml/Mapper.xml.vm");
-
         templates.add("templates/test/MapperUnitTest.java.vm");
         templates.add("templates/test/ServiceUnitTest.java.vm");
         templates.add("templates/test/ControllerUnitTest.java.vm");
         templates.add("templates/test/ApiTest.java.vm");
-
         templates.add("templates/sql/menu.sql.vm");
-
 		templates.add("templates/js/api.js.vm");
-		if (template.equals("tree")) {
+		if (template.equals(GenConstants.TPL_TREE)) {
             templates.add("templates/vue/index-tree.vue.vm");
         } else {
             templates.add("templates/vue/index.vue.vm");
@@ -366,18 +408,17 @@ public class CodeGenUtils {
         Properties prop = new Properties();
         prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         Velocity.init(prop);
-        VelocityContext context = new VelocityContext(map);
-        return context;
+        return new VelocityContext(map);
     }
 
-    private Map<String, Object> getStringObjectMap(Code code, List<CodeMeta> codeMetas) {
-        Map<String, Object> map = new HashMap<>(11);
+    private Map<String, Object> prepareContext(Code code) {
+        Map<String, Object> map = new HashMap<>(16);
         map.put("tableName", code.getTableName());
-        map.put("pk", codeMetas.get(0));
+        map.put("pk", code.getCodeMetaList().get(0));
         map.put("className", code.getClassName());
         map.put("classname", StringUtils.uncapitalize(code.getClassName()));
         map.put("mappingPath", code.getMappingPath());
-        map.put("columns", codeMetas);
+        map.put("columns", code.getCodeMetaList());
         map.put("date", DateUtil.today());
         map.put("comments", code.getClassComment());
         map.put("author", code.getClassAuthor());
@@ -385,6 +426,9 @@ public class CodeGenUtils {
         map.put("package", code.getPackageName());
         map.put("parentMenuId", code.getParentMenuId());
         map.put("template", code.getTemplate());
+        map.put("relationTable", code.getRelationCode());
+        map.put("subTableFkName", code.getSubTableFkName());
+        map.put("subMappingPath", code.getSubCode() != null ? code.getSubCode().getMappingPath() : "");
         return map;
     }
 
@@ -520,21 +564,21 @@ public class CodeGenUtils {
             return code.getClassName().toLowerCase() + "_menu.sql";
         }
 
-        if (code.getTemplate().equals("crud") && template.contains(VUE_INDEX_VUE_VM)) {
+        if (template.contains(VUE_INDEX_VUE_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views" + File.separator
-                    + code.getModuleName() + File.separator + code.getClassName().toLowerCase() + File.separator
+                    + code.getModuleName() + File.separator + code.getMappingPath() + File.separator
                     + "index.vue";
         }
 
-        if (code.getTemplate().equals("tree") && template.contains(VUE_TREE_INDEX_VUE_VM)) {
+        if (code.getTemplate().equals(GenConstants.TPL_TREE) && template.contains(VUE_TREE_INDEX_VUE_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views" + File.separator
-                    + code.getModuleName() + File.separator + code.getClassName().toLowerCase() + File.separator
+                    + code.getModuleName() + File.separator + code.getMappingPath() + File.separator
                     + "index.vue";
         }
 
         if (template.contains(VUE_API_JS_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "api" + File.separator
-                    + code.getModuleName() + File.separator + code.getClassName().toLowerCase() + ".js";
+                    + code.getModuleName() + File.separator + code.getMappingPath() + ".js";
         }
 
         return null;

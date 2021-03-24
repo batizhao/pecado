@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import me.batizhao.common.core.constant.GenConstants;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.CodeMeta;
@@ -148,9 +149,7 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
         ZipOutputStream zip = new ZipOutputStream(outputStream);
 
         for (Long i : ids) {
-            Code code = this.findById(i);
-            List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
-            CodeGenUtils.generateCode(code, codeMetas, zip);
+            CodeGenUtils.generateCode(prepareCodeMeta(i), zip);
         }
 
         IoUtil.close(zip);
@@ -159,18 +158,13 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
 
     @Override
     public Boolean generateCode(Long id) {
-        Code code = this.findById(id);
-        List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
-        CodeGenUtils.generateCode(code, codeMetas);
-
+        CodeGenUtils.generateCode(prepareCodeMeta(id));
         return true;
     }
 
     @Override
     public Map<String, String> previewCode(Long id) {
-        Code code = this.findById(id);
-        List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
-        return CodeGenUtils.previewCode(code, codeMetas);
+        return CodeGenUtils.previewCode(prepareCodeMeta(id));
     }
 
     @Override
@@ -207,5 +201,20 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements Co
         }
 
         return true;
+    }
+
+    private Code prepareCodeMeta(Long id) {
+        Code code = findById(id);
+        List<CodeMeta> codeMetas = codeMetaService.findByCodeId(code.getId());
+        code.setCodeMetaList(codeMetas);
+
+        if (code.getTemplate().equals(GenConstants.TPL_ONE_TO_MANY) && code.getSubTableId() != null) {
+            Code subCode = findById(code.getSubTableId());
+//            subCode.setCodeMetaList(codeMetaService.findByCodeId(subCode.getId()));
+            code.setSubCode(subCode);
+        }
+
+        code.setRelationCode(codeMapper.selectList(Wrappers.<Code>query().lambda().eq(Code::getSubTableId, code.getId())));
+        return code;
     }
 }

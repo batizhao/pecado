@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -118,10 +117,10 @@ public class Code extends Model<Code> {
     private String path;
 
     /**
-     * 关联子表的表名
+     * 关联子表的code.id
      */
-    @ApiModelProperty(value="关联子表的表名")
-    private String subTableName;
+    @ApiModelProperty(value="关联子表的code.id")
+    private Long subTableId;
 
     /**
      * 子表关联的属性名
@@ -152,5 +151,17 @@ public class Code extends Model<Code> {
      */
     @ApiModelProperty(value="表元数据")
     private transient List<CodeMeta> codeMetaList;
+
+    /**
+     * 子表元数据
+     */
+    @ApiModelProperty(value="子表元数据")
+    private transient Code subCode;
+
+    /**
+     * 关联表元数据
+     */
+    @ApiModelProperty(value="关联表元数据")
+    private transient List<Code> relationCode;
 
 }

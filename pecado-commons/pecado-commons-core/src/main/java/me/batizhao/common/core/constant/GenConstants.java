@@ -14,7 +14,7 @@ public class GenConstants
     public static final String TPL_TREE = "tree";
 
     /** 主子表（增删改查） */
-    public static final String TPL_SUB = "sub";
+    public static final String TPL_ONE_TO_MANY = "onetomany";
 
     /** 树编码字段 */
     public static final String TREE_CODE = "treeCode";
@@ -114,7 +114,4 @@ public class GenConstants
 
     /** 模糊查询 */
     public static final String QUERY_LIKE = "LIKE";
-
-    /** 需要 */
-    public static final String REQUIRE = "1";
 }

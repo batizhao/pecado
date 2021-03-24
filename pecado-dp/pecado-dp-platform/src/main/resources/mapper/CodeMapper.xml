@@ -18,7 +18,7 @@
 		<result property="parentMenuId" column="parentMenuId"/>
 		<result property="type" column="type"/>
 		<result property="path" column="path"/>
-		<result property="subTableName" column="subTableName"/>
+		<result property="subTableId" column="subTableId"/>
 		<result property="subTableFkName" column="subTableFkName"/>
 		<result property="options" column="options"/>
 		<result property="createTime" column="createTime"/>
