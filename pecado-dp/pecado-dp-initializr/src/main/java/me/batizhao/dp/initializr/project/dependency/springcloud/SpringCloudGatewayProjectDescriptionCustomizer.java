@@ -34,7 +34,7 @@ public class SpringCloudGatewayProjectDescriptionCustomizer implements ProjectDe
 	public void customize(MutableProjectDescription description) {
 		Collection<String> dependencyIds = description.getRequestedDependencies().keySet();
 		if (dependencyIds.contains("cloud-gateway") && dependencyIds.contains("web")) {
-			description.removeDependency("web");
+//			description.removeDependency("web");
 			if (!description.getRequestedDependencies().containsKey("webflux")) {
 				description.addDependency("webflux",
 						Dependency.withCoordinates("org.springframework.boot", "spring-boot-starter-webflux"));

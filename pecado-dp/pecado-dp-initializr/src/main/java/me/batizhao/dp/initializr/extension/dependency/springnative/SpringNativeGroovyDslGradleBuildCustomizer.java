@@ -42,9 +42,9 @@ class SpringNativeGroovyDslGradleBuildCustomizer extends SpringNativeGradleBuild
 		super.customize(build);
 
 		// Hibernate enhance plugin
-		if (build.dependencies().has("data-jpa")) {
-			configureHibernateEnhancePlugin(build);
-		}
+//		if (build.dependencies().has("data-jpa")) {
+//			configureHibernateEnhancePlugin(build);
+//		}
 	}
 
 	@Override
@@ -55,17 +55,17 @@ class SpringNativeGroovyDslGradleBuildCustomizer extends SpringNativeGradleBuild
 		});
 	}
 
-	private void configureHibernateEnhancePlugin(GradleBuild build) {
-		build.settings().mapPlugin("org.hibernate.orm",
-				Dependency.withCoordinates("org.hibernate", "hibernate-gradle-plugin")
-						.version(this.hibernateVersion.get()).build());
-		build.plugins().add("org.hibernate.orm");
-		build.tasks().customize("hibernate", (task) -> task.nested("enhance", (enhance) -> {
-			enhance.attribute("enableLazyInitialization", "true");
-			enhance.attribute("enableDirtyTracking", "true");
-			enhance.attribute("enableAssociationManagement", "true");
-			enhance.attribute("enableExtendedEnhancement", "false");
-		}));
-	}
+//	private void configureHibernateEnhancePlugin(GradleBuild build) {
+//		build.settings().mapPlugin("org.hibernate.orm",
+//				Dependency.withCoordinates("org.hibernate", "hibernate-gradle-plugin")
+//						.version(this.hibernateVersion.get()).build());
+//		build.plugins().add("org.hibernate.orm");
+//		build.tasks().customize("hibernate", (task) -> task.nested("enhance", (enhance) -> {
+//			enhance.attribute("enableLazyInitialization", "true");
+//			enhance.attribute("enableDirtyTracking", "true");
+//			enhance.attribute("enableAssociationManagement", "true");
+//			enhance.attribute("enableExtendedEnhancement", "false");
+//		}));
+//	}
 
 }
