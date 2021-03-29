@@ -1,6 +1,6 @@
 io.spring.initializr.generator.project.ProjectGenerationConfiguration=\
-me.batizhao.dp.initializr.extension.build.gradle.GradleProjectGenerationConfiguration,\
-me.batizhao.dp.initializr.extension.build.maven.MavenProjectGenerationConfiguration,\
+io.spring.start.site.extension.build.gradle.GradleProjectGenerationConfiguration,\
+io.spring.start.site.extension.build.maven.MavenProjectGenerationConfiguration,\
 me.batizhao.dp.initializr.extension.dependency.DependencyProjectGenerationConfiguration,\
 me.batizhao.dp.initializr.extension.dependency.observability.ObservabilityProjectGenerationConfiguration,\
 me.batizhao.dp.initializr.extension.dependency.solace.SolaceProjectGenerationConfiguration,\
@@ -9,9 +9,10 @@ me.batizhao.dp.initializr.extension.dependency.springboot.SpringBootProjectGener
 me.batizhao.dp.initializr.extension.dependency.springcloud.SpringCloudProjectGenerationConfiguration,\
 me.batizhao.dp.initializr.extension.dependency.springdata.SpringDataProjectGenerationConfiguration,\
 me.batizhao.dp.initializr.extension.dependency.springintegration.SpringIntegrationProjectGenerationConfiguration,\
+me.batizhao.dp.initializr.extension.dependency.springnative.SpringNativeProjectGenerationConfiguration,\
 me.batizhao.dp.initializr.extension.dependency.springrestdocs.SpringRestDocsProjectGenerationConfiguration,\
 me.batizhao.dp.initializr.extension.dependency.testcontainers.TestcontainersProjectGenerationConfiguration,\
 me.batizhao.dp.initializr.extension.dependency.vaadin.VaadinProjectGenerationConfiguration,\
-me.batizhao.dp.initializr.extension.description.DescriptionProjectGenerationConfiguration,\
-me.batizhao.dp.initializr.extension.code.groovy.GroovyProjectGenerationConfiguration,\
-me.batizhao.dp.initializr.extension.code.kotlin.KotlinProjectGenerationConfiguration
+io.spring.start.site.extension.description.DescriptionProjectGenerationConfiguration,\
+io.spring.start.site.extension.code.groovy.GroovyProjectGenerationConfiguration,\
+io.spring.start.site.extension.code.kotlin.KotlinProjectGenerationConfiguration

@@ -7,6 +7,8 @@ import me.batizhao.dp.initializr.support.CacheableDependencyManagementVersionRes
 import me.batizhao.dp.initializr.support.StartInitializrMetadataUpdateStrategy;
 import me.batizhao.dp.initializr.web.HomeController;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.server.ErrorPage;
@@ -24,7 +26,8 @@ import java.nio.file.Files;
  * @author batizhao
  * @since 2016/9/28
  */
-@SpringBootApplication
+@EnableAutoConfiguration
+@SpringBootConfiguration
 @Import(ProjectDescriptionCustomizerConfiguration.class)
 @EnableCaching
 @EnableAsync
@@ -37,14 +40,6 @@ public class PecadoDevInitializrApplication {
     @Bean
     public HomeController homeController() {
         return new HomeController();
-    }
-
-    @Bean
-    public ErrorPageRegistrar errorPageRegistrar() {
-        return (registry) -> {
-            registry.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404.html"));
-            registry.addErrorPages(new ErrorPage("/error/index.html"));
-        };
     }
 
     @Bean

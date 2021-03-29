@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Bean;
 class MavenProjectGenerationConfiguration {
 
 	@Bean
-	MavenBuildSystemHelpDocumentCustomizer mavenBuildSystemHelpDocumentCustomizer(ProjectDescription description) {
+    MavenBuildSystemHelpDocumentCustomizer mavenBuildSystemHelpDocumentCustomizer(ProjectDescription description) {
 		return new MavenBuildSystemHelpDocumentCustomizer(description);
 	}
 
