@@ -100,8 +100,7 @@ public class MenuController {
     @PreAuthorize("@pms.hasPermission('ims:menu:add') or @pms.hasPermission('ims:menu:edit')")
     @SystemLog
     public ResponseInfo<Menu> handleSaveOrUpdate(@Valid @ApiParam(value = "菜单", required = true) @RequestBody Menu menu) {
-        Menu Menu = menuService.saveOrUpdateMenu(menu);
-        return ResponseInfo.ok(Menu);
+        return ResponseInfo.ok(menuService.saveOrUpdateMenu(menu));
     }
 
     /**

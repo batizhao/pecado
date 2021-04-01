@@ -1,7 +1,7 @@
-DROP DATABASE `pecado-dp`;
-DROP DATABASE `pecado-ims`;
-DROP DATABASE `pecado-system`;
-DROP DATABASE `pecado-test`;
+-- DROP DATABASE `pecado-dp`;
+-- DROP DATABASE `pecado-ims`;
+-- DROP DATABASE `pecado-system`;
+-- DROP DATABASE `pecado-test`;
 
 CREATE DATABASE IF NOT EXISTS `pecado-dp`;
 CREATE DATABASE IF NOT EXISTS `pecado-ims`;
@@ -33,4 +33,4 @@ VALUES
 -- root/root
 -- INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`)
 -- VALUES
--- (1, 'test', 'jdbc:mysql://172.31.21.180:30306/pecado-test?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai', 'root', 'wjGJBWDnD41oIGGltPetOgHWTx39u1N8qfmGSdFovRsfRCPD3xQXh7DY1yCjVYzG', 'open',);
+-- (1, 'test', 'jdbc:mysql://172.31.21.180:30306/pecado-test?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai', 'root', 'wjGJBWDnD41oIGGltPetOgHWTx39u1N8qfmGSdFovRsfRCPD3xQXh7DY1yCjVYzG', 'open');

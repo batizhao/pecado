@@ -28,7 +28,7 @@
 * 顺序启动 Nacos、~~RocketMQ~~、~~Seata~~
 * 导入 Nacos 配置
 * 执行  db/db.sql
-* mvn clean install
+* mvn clean install -Dmaven.test.skip=true
 * 加入 ```127.0.0.1  pecado-nacos``` 到 hosts
 * 启动 5 个微服务
 * 启动  [pecado-ui](https://github.com/batizhao/pecado-ui)
@@ -40,7 +40,7 @@ $ docker build -t harbor.pecado.com:8888/pecado/uaa:1.1 .
 $ docker push harbor.pecado.com:8888/pecado/uaa:1.1
 $ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
-$ argocd app create pecado-uaa --repo git@github.com:batizhao/pecado.git --path pecado-uaa/helm --revision v1.1 --dest-server https://172.31.21.180:8443 --dest-namespace default
+$ argocd app create pecado-uaa --repo git@github.com:batizhao/impala.git --path pecado/pecado-uaa --revision master --dest-server https://172.31.21.180:8443 --dest-namespace default
 
 application 'pecado-uaa' created
 

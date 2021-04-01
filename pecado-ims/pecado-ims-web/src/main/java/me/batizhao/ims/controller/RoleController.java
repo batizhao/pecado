@@ -105,8 +105,7 @@ public class RoleController {
     @PreAuthorize("@pms.hasPermission('ims:role:delete')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "角色ID串", required = true) @RequestParam List<Long> ids) {
-        Boolean b = roleService.deleteByIds(ids);
-        return ResponseInfo.ok(b);
+        return ResponseInfo.ok(roleService.deleteByIds(ids));
     }
 
     /**
@@ -134,8 +133,7 @@ public class RoleController {
     @GetMapping(value = "role", params = "userId")
     @PreAuthorize("@pms.hasPermission('ims:role:admin')")
     public ResponseInfo<List<Role>> handleRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
-        List<Role> roles = roleService.findRolesByUserId(userId);
-        return ResponseInfo.ok(roles);
+        return ResponseInfo.ok(roleService.findRolesByUserId(userId));
     }
 
     /**

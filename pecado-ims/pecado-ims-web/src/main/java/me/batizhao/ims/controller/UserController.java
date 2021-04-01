@@ -83,8 +83,7 @@ public class UserController {
     @SystemLog
     public ResponseInfo<UserInfoVO> handleUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
         User user = userService.findByUsername(username);
-        UserInfoVO userInfoVO = userService.getUserInfo(user.getId());
-        return ResponseInfo.ok(userInfoVO);
+        return ResponseInfo.ok(userService.getUserInfo(user.getId()));
     }
 
     /**
@@ -111,8 +110,7 @@ public class UserController {
     @PreAuthorize("@pms.hasPermission('ims:user:delete')")
     @SystemLog
     public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "用户ID串", required = true) @RequestParam List<Long> ids) {
-        Boolean b = userService.deleteByIds(ids);
-        return ResponseInfo.ok(b);
+        return ResponseInfo.ok(userService.deleteByIds(ids));
     }
 
     /**
@@ -139,8 +137,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseInfo<UserInfoVO> handleUserInfo() {
         Long userId = SecurityUtils.getUser().getUserId();
-        UserInfoVO userInfoVO = userService.getUserInfo(userId);
-        return ResponseInfo.ok(userInfoVO);
+        return ResponseInfo.ok(userService.getUserInfo(userId));
     }
 
     /**
