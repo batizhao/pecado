@@ -47,7 +47,7 @@
             <column name="path" type="VARCHAR(128)" defaultValue="/" remarks="生成路径（不填默认项目路径）"/>
             <column name="subTableId" type="BIGINT" remarks="关联子表的code.id"/>
             <column name="subTableFkName" type="VARCHAR(32)" defaultValue="" remarks="子表关联的属性名"/>
-            <column name="options" type="VARCHAR(500)" remarks="附加选项" />
+            <column name="options" type="CLOB" remarks="表单元数据" />
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
@@ -127,7 +127,7 @@
             <column name="name" type="VARCHAR(255)" remarks="表单名称">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="metadata" type="CLOB" remarks="表单元数据"/>
+            <column name="metadata" type="CLOB" remarks="表单元数据" />
             <column name="description" type="VARCHAR(255)" remarks="表单描述" defaultValue="" />
             <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
                 <constraints nullable="false" />

@@ -129,9 +129,9 @@ public class Code extends Model<Code> {
     private String subTableFkName;
 
     /**
-     * 附加选项
+     * 表单元数据
      */
-    @ApiModelProperty(value="附加选项")
+    @ApiModelProperty(value="表单元数据")
     private String options;
 
     /**
