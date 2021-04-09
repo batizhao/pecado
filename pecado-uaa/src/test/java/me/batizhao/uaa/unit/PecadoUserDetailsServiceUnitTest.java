@@ -2,7 +2,7 @@ package me.batizhao.uaa.unit;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.feign.UserFeignService;
@@ -77,10 +77,10 @@ public class PecadoUserDetailsServiceUnitTest {
         userInfoVO.setRoles(roleList.stream().map(Role::getCode).collect(Collectors.toList()));
         userInfoVO.setPermissions(roleList.stream().map(Role::getCode).collect(Collectors.toList()));
 
-        ResponseInfo<UserInfoVO> userResponseInfo = ResponseInfo.ok(userInfoVO);
+        R<UserInfoVO> userR = R.ok(userInfoVO);
 
         when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
-                .thenReturn(userResponseInfo);
+                .thenReturn(userR);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
@@ -97,9 +97,9 @@ public class PecadoUserDetailsServiceUnitTest {
 
     @Test
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
-        ResponseInfo<User> userResponseInfo = ResponseInfo.ok();
+        R<User> userR = R.ok();
 
-        doReturn(userResponseInfo).when(userFeignService).loadUserByUsername(anyString(), anyString());
+        doReturn(userR).when(userFeignService).loadUserByUsername(anyString(), anyString());
 
         assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
 
@@ -116,10 +116,10 @@ public class PecadoUserDetailsServiceUnitTest {
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setUser(user_test_data);
 
-        ResponseInfo<UserInfoVO> userResponseInfo = ResponseInfo.ok(userInfoVO);
+        R<UserInfoVO> userR = R.ok(userInfoVO);
 
         when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
-                .thenReturn(userResponseInfo);
+                .thenReturn(userR);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 

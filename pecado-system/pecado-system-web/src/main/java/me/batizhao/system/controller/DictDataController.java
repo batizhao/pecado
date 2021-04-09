@@ -5,7 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.domain.DictData;
 import me.batizhao.system.service.DictDataService;
@@ -39,63 +39,63 @@ public class DictDataController {
     /**
      * 通过id查询字典
      * @param id id
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "通过id查询字典")
     @GetMapping("/dict/data/{id}")
-    public ResponseInfo<DictData> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
-        return ResponseInfo.ok(dictDataService.findById(id));
+    public R<DictData> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return R.ok(dictDataService.findById(id));
     }
 
     /**
      * 通过code查询字典
      * @param code code
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "通过code查询字典")
     @GetMapping(value = "/dict/data", params = "code")
-    public ResponseInfo<List<DictData>> handleCode(@ApiParam(value = "code", required = true) @RequestParam @Size(min = 1) String code) {
-        return ResponseInfo.ok(dictDataService.list(Wrappers.<DictData>lambdaQuery().eq(DictData::getCode, code)));
+    public R<List<DictData>> handleCode(@ApiParam(value = "code", required = true) @RequestParam @Size(min = 1) String code) {
+        return R.ok(dictDataService.list(Wrappers.<DictData>lambdaQuery().eq(DictData::getCode, code)));
     }
 
     /**
      * 添加或编辑字典
      * @param dictData 字典
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "添加或编辑字典")
     @PostMapping("/dict/data")
     @PreAuthorize("@pms.hasPermission('system:dict:add') or @pms.hasPermission('system:dict:edit')")
     @SystemLog
-    public ResponseInfo<DictData> handleSaveOrUpdate(@Valid @ApiParam(value = "字典" , required = true) @RequestBody DictData dictData) {
-        return ResponseInfo.ok(dictDataService.saveOrUpdateDictData(dictData));
+    public R<DictData> handleSaveOrUpdate(@Valid @ApiParam(value = "字典" , required = true) @RequestBody DictData dictData) {
+        return R.ok(dictDataService.saveOrUpdateDictData(dictData));
     }
 
     /**
      * 通过id删除字典
      * @param ids ID串
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "通过id删除字典")
     @DeleteMapping("/dict/data")
     @PreAuthorize("@pms.hasPermission('system:dict:delete')")
     @SystemLog
-    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
-        return ResponseInfo.ok(dictDataService.removeByIds(ids));
+    public R<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
+        return R.ok(dictDataService.removeByIds(ids));
     }
 
     /**
      * 更新字典状态
      *
      * @param dictData 字典
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "更新字典状态")
     @PostMapping("/dict/data/status")
     @PreAuthorize("@pms.hasPermission('system:dict:admin')")
     @SystemLog
-    public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "字典" , required = true) @RequestBody DictData dictData) {
-        return ResponseInfo.ok(dictDataService.updateStatus(dictData));
+    public R<Boolean> handleUpdateStatus(@ApiParam(value = "字典" , required = true) @RequestBody DictData dictData) {
+        return R.ok(dictDataService.updateStatus(dictData));
     }
 
 }

@@ -2,7 +2,7 @@ package me.batizhao.uaa.security;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.feign.UserFeignService;
@@ -33,7 +33,7 @@ public class PecadoUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        ResponseInfo<UserInfoVO> userData = userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN);
+        R<UserInfoVO> userData = userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN);
 
         if (userData == null || null == userData.getData()) {
             throw new UsernameNotFoundException(String.format("没有该用户 '%s'。", username));

@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.PecadoConstants;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.CodeMeta;
 import me.batizhao.dp.service.CodeMetaService;
@@ -51,25 +51,25 @@ public class CodeController {
      * 分页查询代码
      * @param page 分页对象
      * @param code 生成代码
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "分页查询代码")
     @GetMapping("/codes")
     @PreAuthorize("@pms.hasPermission('dp:code:admin')")
-    public ResponseInfo<IPage<Code>> handleCodes(Page<Code> page, Code code) {
-        return ResponseInfo.ok(codeService.findCodes(page, code));
+    public R<IPage<Code>> handleCodes(Page<Code> page, Code code) {
+        return R.ok(codeService.findCodes(page, code));
     }
 
 
     /**
      * 通过id查询生成代码
      * @param id id
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "通过id查询代码")
     @GetMapping("/code/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:admin')")
-    public ResponseInfo<Map<String, Object>> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+    public R<Map<String, Object>> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         Code code = codeService.findById(id);
         List<CodeMeta> codeMetas = codeMetaService.findByCodeId(id);
         List<Code> codes = codeService.list()
@@ -80,33 +80,33 @@ public class CodeController {
         map.put("code", code);
         map.put("codeMetas", codeMetas);
         map.put("codes", codes);
-        return ResponseInfo.ok(map);
+        return R.ok(map);
     }
 
     /**
      * 修改生成代码
      * @param code 生成代码
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "修改生成代码")
     @PostMapping("/code")
     @PreAuthorize("@pms.hasPermission('dp:code:edit')")
     @SystemLog
-    public ResponseInfo<Code> handleUpdate(@Valid @ApiParam(value = "生成代码" , required = true) @RequestBody Code code) {
-        return ResponseInfo.ok(codeService.saveOrUpdateCode(code));
+    public R<Code> handleUpdate(@Valid @ApiParam(value = "生成代码" , required = true) @RequestBody Code code) {
+        return R.ok(codeService.saveOrUpdateCode(code));
     }
 
     /**
      * 通过id删除生成代码
      * @param ids ID串
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "通过id删除生成代码")
     @DeleteMapping("/code")
     @PreAuthorize("@pms.hasPermission('dp:code:delete')")
     @SystemLog
-    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
-        return ResponseInfo.ok(codeService.deleteByIds(ids));
+    public R<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
+        return R.ok(codeService.deleteByIds(ids));
     }
 
     /**
@@ -115,14 +115,14 @@ public class CodeController {
      * @param page   分页对象
      * @param code   生成代码
      * @param dsName 数据源
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "查询数据源下的所有表")
     @GetMapping("/code/tables")
     @PreAuthorize("@pms.hasPermission('dp:code:admin')")
     @SystemLog
-    public ResponseInfo<IPage<Code>> handleCodeTables(Page<Code> page, Code code, String dsName) {
-        return ResponseInfo.ok(codeService.findTables(page, code, dsName));
+    public R<IPage<Code>> handleCodeTables(Page<Code> page, Code code, String dsName) {
+        return R.ok(codeService.findTables(page, code, dsName));
     }
 
     /**
@@ -134,8 +134,8 @@ public class CodeController {
     @PostMapping("/code/table")
     @PreAuthorize("@pms.hasPermission('dp:code:import')")
     @SystemLog
-    public ResponseInfo<Boolean> handleImportTables(@RequestBody List<Code> codes) {
-        return ResponseInfo.ok(codeService.importTables(codes));
+    public R<Boolean> handleImportTables(@RequestBody List<Code> codes) {
+        return R.ok(codeService.importTables(codes));
     }
 
     /**
@@ -168,8 +168,8 @@ public class CodeController {
     @PostMapping("/code/path/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:gen')")
     @SystemLog
-    public ResponseInfo<Boolean> handleGenerateCode4Path(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
-        return ResponseInfo.ok(codeService.generateCode(id));
+    public R<Boolean> handleGenerateCode4Path(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return R.ok(codeService.generateCode(id));
     }
 
     /**
@@ -180,8 +180,8 @@ public class CodeController {
     @ApiOperation(value = "预览代码")
     @GetMapping("/code/preview/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:preview')")
-    public ResponseInfo<Map<String, String>> handlePreviewCode(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
-        return ResponseInfo.ok(codeService.previewCode(id));
+    public R<Map<String, String>> handlePreviewCode(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return R.ok(codeService.previewCode(id));
     }
 
     /**
@@ -193,7 +193,7 @@ public class CodeController {
     @PostMapping("/code/sync/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:sync')")
     @SystemLog
-    public ResponseInfo<Boolean> handleSyncCodeMeta(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
-        return ResponseInfo.ok(codeService.syncCodeMeta(id));
+    public R<Boolean> handleSyncCodeMeta(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return R.ok(codeService.syncCodeMeta(id));
     }
 }

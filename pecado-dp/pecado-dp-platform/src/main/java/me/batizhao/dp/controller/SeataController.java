@@ -1,16 +1,5 @@
 package me.batizhao.dp.controller;
 
-import io.swagger.annotations.Api;
-import me.batizhao.common.core.constant.MQConstants;
-import me.batizhao.common.core.constant.SecurityConstants;
-import me.batizhao.common.core.util.ResponseInfo;
-import me.batizhao.dp.service.CodeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
-
 /**
  * 分布式事务测试
  *
@@ -42,23 +31,23 @@ public class SeataController {
 //
 //    /**
 //     * 没有分布式事务框架支持，提交成功
-//     * @return ResponseInfo
+//     * @return R
 //     */
 //    @GetMapping("/no/success")
-//    public ResponseInfo<Boolean> handleNoTransactionThenSuccess() {
+//    public R<Boolean> handleNoTransactionThenSuccess() {
 //        systemLogFeignService.saveLog(logDTO, SecurityConstants.FROM_IN);
 //        systemLogFeignService.saveLog(logDTO2, SecurityConstants.FROM_IN);
 //
-//        return ResponseInfo.ok(true);
+//        return R.ok(true);
 //    }
 //
 //    /**
 //     * 没有分布式事务框架支持，提交部分成功
-//     * @return ResponseInfo
+//     * @return R
 //     */
 //    @GetMapping("/no/fail")
-//    public ResponseInfo<Boolean> handleNoTransactionThenFail() {
-//        ResponseInfo<Boolean> b = systemLogFeignService.saveLog(logDTO, SecurityConstants.FROM_IN);
+//    public R<Boolean> handleNoTransactionThenFail() {
+//        R<Boolean> b = systemLogFeignService.saveLog(logDTO, SecurityConstants.FROM_IN);
 //
 //        //故意抛出异常
 //        if(b.getData())
@@ -66,41 +55,41 @@ public class SeataController {
 //
 //        systemLogFeignService.saveLog(logDTO2, SecurityConstants.FROM_IN);
 //
-//        return ResponseInfo.ok(true);
+//        return R.ok(true);
 //    }
 
     /**
      * 有分布式事务框架支持，提交全部成功
-     * @return ResponseInfo
+     * @return R
      */
 //    @GetMapping("/seata/commit")
 //    @GlobalTransactional
-//    public ResponseInfo<Boolean> handleTransactionThenSuccess() {
+//    public R<Boolean> handleTransactionThenSuccess() {
 //        systemLogFeignService.saveLog(logDTO, SecurityConstants.FROM_IN);
 //        systemLogFeignService.saveLog(logDTO2, SecurityConstants.FROM_IN);
 //
 //        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO3);
 //
-//        return ResponseInfo.ok(true);
+//        return R.ok(true);
 //    }
 
     /**
      * 有分布式事务框架支持，提交全部回滚
      * 这里如果要保证强一致性，需要使用事务消息实现
-     * @return ResponseInfo
+     * @return R
      * @link me.batizhao.dp.integration.MessageIntegrationTest#givenLog_whenSendTransactionMessage_thenSeeResult
      */
 //    @GetMapping("/seata/rollback")
 //    @GlobalTransactional
-//    public ResponseInfo<Boolean> handleTransactionThenFail() {
+//    public R<Boolean> handleTransactionThenFail() {
 //        systemLogFeignService.saveLog(logDTO, SecurityConstants.FROM_IN);
-//        ResponseInfo<Boolean> b = systemLogFeignService.saveLog(logDTO2, SecurityConstants.FROM_IN);
+//        R<Boolean> b = systemLogFeignService.saveLog(logDTO2, SecurityConstants.FROM_IN);
 //
 //        if(b.getData())
 //            throw new RuntimeException("handleSeataTransactionThenFail");
 //
 //        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO3);
-//        return ResponseInfo.ok(false);
+//        return R.ok(false);
 //    }
 
 }

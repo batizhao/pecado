@@ -29,7 +29,7 @@ import feign.InvocationHandlerFactory;
 import feign.MethodMetadata;
 import feign.Target;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
 import java.lang.reflect.InvocationHandler;
@@ -137,9 +137,9 @@ public class PecadoSentinelInvocationHandler implements InvocationHandler {
 					}
 					else {
 						// 若是R类型 执行自动降级返回R
-						if (ResponseInfo.class == method.getReturnType()) {
+						if (R.class == method.getReturnType()) {
 							log.error("feign 服务间调用异常", ex);
-							return ResponseInfo.failed(ex.getLocalizedMessage());
+							return R.failed(ex.getLocalizedMessage());
 						}
 						else {
 							throw ex;

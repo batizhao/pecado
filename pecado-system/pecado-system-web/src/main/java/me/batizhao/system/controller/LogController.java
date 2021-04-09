@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.common.security.annotation.Inner;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.domain.Log;
@@ -40,61 +40,61 @@ public class LogController {
      * 分页查询日志
      * @param page 分页对象
      * @param log 日志
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "分页查询日志")
     @GetMapping("/logs")
     @PreAuthorize("@pms.hasPermission('system:log:admin')")
-    public ResponseInfo<IPage<Log>> handleLogs(Page<Log> page, Log log) {
-        return ResponseInfo.ok(logService.findLogs(page, log));
+    public R<IPage<Log>> handleLogs(Page<Log> page, Log log) {
+        return R.ok(logService.findLogs(page, log));
     }
 
     /**
      * 通过id查询日志
      * @param id id
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "通过id查询日志")
     @GetMapping("/log/{id}")
     @PreAuthorize("@pms.hasPermission('system:log:admin')")
-    public ResponseInfo<Log> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
-        return ResponseInfo.ok(logService.findById(id));
+    public R<Log> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return R.ok(logService.findById(id));
     }
 
     /**
      * 添加日志
      * @param log 日志
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "添加日志")
     @PostMapping("/log")
     @Inner
-    public ResponseInfo<Boolean> handleSaveOrUpdate(@Valid @ApiParam(value = "日志" , required = true) @RequestBody Log log) {
-        return ResponseInfo.ok(logService.save(log));
+    public R<Boolean> handleSaveOrUpdate(@Valid @ApiParam(value = "日志" , required = true) @RequestBody Log log) {
+        return R.ok(logService.save(log));
     }
 
     /**
      * 通过id删除日志
      * @param ids ID串
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "通过id删除日志")
     @DeleteMapping(value = "/log", params = "ids")
     @PreAuthorize("@pms.hasPermission('system:log:delete')")
     @SystemLog
-    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
-        return ResponseInfo.ok(logService.removeByIds(ids));
+    public R<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
+        return R.ok(logService.removeByIds(ids));
     }
 
     /**
      * 清空日志
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "清空日志")
     @DeleteMapping("/log")
     @PreAuthorize("@pms.hasPermission('system:log:clean')")
     @SystemLog
-    public ResponseInfo<Boolean> handleDeleteAllLog() {
-        return ResponseInfo.ok(logService.remove(null));
+    public R<Boolean> handleDeleteAllLog() {
+        return R.ok(logService.remove(null));
     }
 }

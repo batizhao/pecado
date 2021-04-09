@@ -1,7 +1,7 @@
 package me.batizhao.common.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.common.core.util.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
-        ResponseInfo<String> message = new ResponseInfo<String>().setCode(ResultEnum.PERMISSION_FORBIDDEN_ERROR.getCode())
+        R<String> message = new R<String>().setCode(ResultEnum.PERMISSION_FORBIDDEN_ERROR.getCode())
                 .setMessage(ResultEnum.PERMISSION_FORBIDDEN_ERROR.getMessage())
                 .setData(accessDeniedException.getMessage());
 

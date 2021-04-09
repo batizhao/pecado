@@ -3,7 +3,7 @@ package me.batizhao.uaa.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -37,7 +37,7 @@ public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoi
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        ResponseInfo<String> message = new ResponseInfo<String>().setCode(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getCode())
+        R<String> message = new R<String>().setCode(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getCode())
                 .setMessage(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getMessage())
                 .setData(authException.getMessage());
 

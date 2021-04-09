@@ -6,7 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.common.security.annotation.Inner;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.domain.User;
@@ -49,25 +49,25 @@ public class UserController {
      * 分页查询
      * @param page 分页对象
      * @param user 用户
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "分页查询用户")
     @GetMapping("users")
     @PreAuthorize("@pms.hasPermission('ims:user:admin')")
-    public ResponseInfo<IPage<User>> handleUsers(Page<User> page, User user) {
-        return ResponseInfo.ok(userService.findUsers(page, user));
+    public R<IPage<User>> handleUsers(Page<User> page, User user) {
+        return R.ok(userService.findUsers(page, user));
     }
 
     /**
      * 通过id查询用户
      * @param id id
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "通过id查询用户")
     @GetMapping("/user/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseInfo<User> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
-        return ResponseInfo.ok(userService.findById(id));
+    public R<User> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+        return R.ok(userService.findById(id));
     }
 
     /**
@@ -81,22 +81,22 @@ public class UserController {
     @GetMapping(value = "user", params = "username")
     @Inner
     @SystemLog
-    public ResponseInfo<UserInfoVO> handleUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
+    public R<UserInfoVO> handleUsername(@ApiParam(value = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
         User user = userService.findByUsername(username);
-        return ResponseInfo.ok(userService.getUserInfo(user.getId()));
+        return R.ok(userService.getUserInfo(user.getId()));
     }
 
     /**
      * 添加或编辑用户
      * @param user 用户
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "添加或编辑用户")
     @PostMapping("/user")
     @PreAuthorize("@pms.hasPermission('ims:user:add') or @pms.hasPermission('ims:user:edit')")
     @SystemLog
-    public ResponseInfo<User> handleSaveOrUpdate(@Valid @ApiParam(value = "用户" , required = true) @RequestBody User user) {
-        return ResponseInfo.ok(userService.saveOrUpdateUser(user));
+    public R<User> handleSaveOrUpdate(@Valid @ApiParam(value = "用户" , required = true) @RequestBody User user) {
+        return R.ok(userService.saveOrUpdateUser(user));
     }
 
     /**
@@ -109,22 +109,22 @@ public class UserController {
     @DeleteMapping("user")
     @PreAuthorize("@pms.hasPermission('ims:user:delete')")
     @SystemLog
-    public ResponseInfo<Boolean> handleDelete(@ApiParam(value = "用户ID串", required = true) @RequestParam List<Long> ids) {
-        return ResponseInfo.ok(userService.deleteByIds(ids));
+    public R<Boolean> handleDelete(@ApiParam(value = "用户ID串", required = true) @RequestParam List<Long> ids) {
+        return R.ok(userService.deleteByIds(ids));
     }
 
     /**
      * 更新用户状态
      *
      * @param user 用户
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "更新用户状态")
     @PostMapping("/user/status")
     @PreAuthorize("@pms.hasPermission('ims:user:admin')")
     @SystemLog
-    public ResponseInfo<Boolean> handleUpdateStatus(@ApiParam(value = "用户" , required = true) @RequestBody User user) {
-        return ResponseInfo.ok(userService.updateStatus(user));
+    public R<Boolean> handleUpdateStatus(@ApiParam(value = "用户" , required = true) @RequestBody User user) {
+        return R.ok(userService.updateStatus(user));
     }
 
     /**
@@ -135,24 +135,24 @@ public class UserController {
     @ApiOperation(value = "我的信息")
     @GetMapping("/user/me")
     @PreAuthorize("isAuthenticated()")
-    public ResponseInfo<UserInfoVO> handleUserInfo() {
+    public R<UserInfoVO> handleUserInfo() {
         Long userId = SecurityUtils.getUser().getUserId();
-        return ResponseInfo.ok(userService.getUserInfo(userId));
+        return R.ok(userService.getUserInfo(userId));
     }
 
     /**
      * 更换我的头像
      *
      * @param user 用户
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "更换我的头像")
     @PostMapping("/user/avatar")
     @PreAuthorize("isAuthenticated()")
     @SystemLog
-    public ResponseInfo<User> handleUpdateAvatar(@ApiParam(value = "用户" , required = true) @RequestBody User user) {
+    public R<User> handleUpdateAvatar(@ApiParam(value = "用户" , required = true) @RequestBody User user) {
         Long userId = SecurityUtils.getUser().getUserId();
-        return ResponseInfo.ok(userService.saveOrUpdateUser(user.setId(userId)));
+        return R.ok(userService.saveOrUpdateUser(user.setId(userId)));
     }
 
     /**
@@ -160,16 +160,16 @@ public class UserController {
      *
      * @param oldPassword 旧密码
      * @param newPassword 新密码
-     * @return ResponseInfo
+     * @return R
      */
     @ApiOperation(value = "更新我的密码")
     @PostMapping("/user/password")
     @PreAuthorize("isAuthenticated()")
     @SystemLog
-    public ResponseInfo<Boolean> handleUpdatePassword(@ApiParam(value = "旧密码" , required = true) @Size(min = 6) @RequestParam String oldPassword,
-                                                      @ApiParam(value = "新密码" , required = true) @Size(min = 6) @RequestParam String newPassword) {
+    public R<Boolean> handleUpdatePassword(@ApiParam(value = "旧密码" , required = true) @Size(min = 6) @RequestParam String oldPassword,
+                                           @ApiParam(value = "新密码" , required = true) @Size(min = 6) @RequestParam String newPassword) {
         Long userId = SecurityUtils.getUser().getUserId();
-        return ResponseInfo.ok(userService.updatePassword(userId, oldPassword, newPassword));
+        return R.ok(userService.updatePassword(userId, oldPassword, newPassword));
     }
 
     /**
@@ -183,8 +183,8 @@ public class UserController {
     @PostMapping(value = "/user/role")
     @PreAuthorize("@pms.hasPermission('ims:user:admin')")
     @SystemLog
-    public ResponseInfo<Boolean> handleAddUserRoles(@ApiParam(value = "关联角色", required = true) @RequestBody List<UserRole> userRoleList) {
-        return ResponseInfo.ok(userRoleService.updateUserRoles(userRoleList));
+    public R<Boolean> handleAddUserRoles(@ApiParam(value = "关联角色", required = true) @RequestBody List<UserRole> userRoleList) {
+        return R.ok(userRoleService.updateUserRoles(userRoleList));
     }
 
 }

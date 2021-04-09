@@ -1,7 +1,7 @@
 package me.batizhao.system.api.feign;
 
 import me.batizhao.common.core.constant.SecurityConstants;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.api.feign.factory.SystemLogServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface SystemLogFeignService {
 
     @PostMapping(value = "/log")
-    ResponseInfo<Boolean> saveLog(Log log,
-                                  @RequestHeader(SecurityConstants.FROM) String from);
+    R<Boolean> saveLog(Log log,
+                       @RequestHeader(SecurityConstants.FROM) String from);
 
 }

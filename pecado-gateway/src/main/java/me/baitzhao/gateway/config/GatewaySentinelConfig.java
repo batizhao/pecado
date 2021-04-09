@@ -2,7 +2,7 @@ package me.baitzhao.gateway.config;
 
 import com.alibaba.csp.sentinel.adapter.gateway.sc.callback.BlockRequestHandler;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class GatewaySentinelConfig {
     @Bean
     public BlockRequestHandler blockRequestHandler() {
         return (serverWebExchange, throwable) -> {
-            ResponseInfo<String> message = new ResponseInfo<String>().setCode(ResultEnum.TOO_MANY_REQUEST.getCode())
+            R<String> message = new R<String>().setCode(ResultEnum.TOO_MANY_REQUEST.getCode())
                     .setMessage(ResultEnum.TOO_MANY_REQUEST.getMessage())
                     .setData(throwable.getMessage());
 
