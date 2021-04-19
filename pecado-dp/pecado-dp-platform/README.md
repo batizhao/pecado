@@ -52,148 +52,78 @@
   
       private static final long serialVersionUID = 1L;
   
-      /**
-       * 主键
-       */
       @TableId
       @ApiModelProperty(value="id")
       private Long id;
   
-      /**
-       * 数据源
-       */
       @ApiModelProperty(value="数据源")
       private String dsName;
   
-      /**
-       * 表名
-       */
       @ApiModelProperty(value="表名")
       private String tableName;
   
-      /**
-       * 表说明
-       */
       @ApiModelProperty(value="表说明")
       private String tableComment;
   
-      /**
-       * 引擎
-       */
       @ApiModelProperty(value="引擎")
       private String engine;
   
-      /**
-       * 类名
-       */
       @ApiModelProperty(value="类名")
       private String className;
   
-      /**
-       * 类注释
-       */
       @ApiModelProperty(value="类注释")
       private String classComment;
   
-      /**
-       * 作者
-       */
       @ApiModelProperty(value="作者")
       private String classAuthor;
   
-      /**
-       * 包名
-       */
       @ApiModelProperty(value="包名")
       private String packageName;
   
-      /**
-       * 所属模块/微服务/系统名，英文
-       */
       @ApiModelProperty(value="所属模块/微服务/系统名，英文")
       private String moduleName;
   
-      /**
-       * API后端路由
-       */
       @ApiModelProperty(value="API后端路由")
       private String mappingPath;
   
-      /**
-       * 模板类型
-       */
       @ApiModelProperty(value="模板类型")
       private String template;
   
-      /**
-       * 父菜单ID
-       */
       @ApiModelProperty(value="父菜单ID")
       private Long parentMenuId;
   
-      /**
-       * 生成代码方式（zip压缩包 path自定义路径）
-       */
       @ApiModelProperty(value="生成代码方式（zip压缩包 path自定义路径）")
       private String type;
   
-      /**
-       * 生成路径（不填默认项目路径）
-       */
       @ApiModelProperty(value="生成路径（不填默认项目路径）")
       private String path;
   
-      /**
-       * 关联子表的code.id
-       */
       @ApiModelProperty(value="关联子表的code.id")
       private Long subTableId;
   
-      /**
-       * 子表关联的属性名
-       */
       @ApiModelProperty(value="子表关联的属性名")
       private String subTableFkName;
   
-      /**
-       * 附加选项
-       */
       @ApiModelProperty(value="附加选项")
       private String options;
   
-      /**
-       * 创建时间
-       */
       @ApiModelProperty(value="创建时间")
       private LocalDateTime createTime;
   
-      /**
-       * 创建时间
-       */
       @ApiModelProperty(value="修改时间")
       private LocalDateTime updateTime;
   
-      /**
-       * 表元数据
-       */
       @ApiModelProperty(value="表元数据")
       private transient List<CodeMeta> codeMetaList;
   
-      /**
-       * 子表元数据
-       */
       @ApiModelProperty(value="子表元数据")
       private transient Code subCode;
   
-      /**
-       * 关联表元数据
-       */
       @ApiModelProperty(value="关联表元数据")
       private transient List<Code> relationCode;
-  
   }
   ```
-
+  
 * subTableFkName 一对多表关联属性
 
 * subMappingPath 子表路由
@@ -211,129 +141,69 @@
   
       private static final long serialVersionUID = 1L;
   
-      /**
-       * id
-       */
       @TableId
       @ApiModelProperty(value="pk")
       private Long id;
   
-      /**
-       * code表ID
-       */
       @ApiModelProperty(value="code表ID")
       private Long codeId;
   
-      /**
-       * 列名
-       */
       @ApiModelProperty(value="列名")
       private String columnName;
   
-      /**
-       * 列注释
-       */
       @ApiModelProperty(value="列注释")
       private String columnComment;
   
-      /**
-       * 列类型
-       */
       @ApiModelProperty(value="列类型")
       private String columnType;
   
-      /**
-       * Java类型
-       */
       @ApiModelProperty(value="Java类型")
       private String javaType;
   
-      /**
-       * Java属性名
-       */
       @ApiModelProperty(value="Java属性名")
       private String javaField;
   
-      /**
-       * 是否主键
-       */
       @ApiModelProperty(value="是否主键")
       private Boolean primaryKey;
   
-      /**
-       * 是否自增
-       */
       @ApiModelProperty(value="是否自增")
       private Boolean increment;
   
-      /**
-       * 是否必须
-       */
       @ApiModelProperty(value="是否必须")
       private Boolean required;
   
-      /**
-       * 是否可插入
-       */
       @ApiModelProperty(value="是否可插入")
       private Boolean save;
   
-      /**
-       * 是否可编辑
-       */
       @ApiModelProperty(value="是否可编辑")
       private Boolean edit;
   
-      /**
-       * 是否在列表显示
-       */
       @ApiModelProperty(value="是否在列表显示")
       private Boolean display;
   
-      /**
-       * 是否可查询
-       */
       @ApiModelProperty(value="是否可查询")
       private Boolean search;
   
-      /**
-       * 查询方式（等于、不等于、大于、小于、范围）
-       */
       @ApiModelProperty(value="查询方式（等于、不等于、大于、小于、范围）")
       private String searchType;
   
-      /**
-       * 显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）
-       */
       @ApiModelProperty(value="显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）")
       private String htmlType;
   
-      /**
-       * 字典类型
-       */
       @ApiModelProperty(value="字典类型")
       private String dictType;
   
-      /**
-       * 排序
-       */
       @ApiModelProperty(value="排序")
       private Integer sort;
   
-      /**
-       * 创建时间
-       */
       @ApiModelProperty(value="创建时间")
       private LocalDateTime createTime;
   
-      /**
-       * 修改时间
-       */
       @ApiModelProperty(value="修改时间")
       private LocalDateTime updateTime;
   }
   ```
-
+  
 * parentMenuId 父菜单 Id
 
 ### 类
@@ -356,8 +226,37 @@
   public class ${className}#if($template == "tree") extends TreeNode#end
   ```
 
+### 表单
 
+* form 生成表单类型，两种方式（visual可视化，meta元数据）
+* options 可视化表单JSON串
 
+## 表单可视化设计
 
+### 动态数据
 
+三种方式：
+
+* [赋值变量](https://www.yuque.com/ln7ccx/ntgo8q/rilith#zZXRi)
+* [方法函数](https://www.yuque.com/ln7ccx/ntgo8q/rilith#9mnBV)
+* [数据源](https://www.yuque.com/ln7ccx/ntgo8q/rilith#b4pEX)
+
+前两种需要自己实现 dynamicData 或者 remoteFuncs 里的数据获取。
+
+以使用赋值变量获取字典中的 status 为例：
+
+```json
+data() {
+  return {
+    dynamicData: {
+      statusOptions : [], //在设计器中输入的那个赋值变量名称
+    },
+  };
+},
+mounted () {
+  this.listDictDataByCode("status").then(response => {
+    this.dynamicData.statusOptions = response.data;
+  });
+},
+```
 
