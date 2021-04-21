@@ -266,7 +266,7 @@ public class UserApiTest extends BaseApiTest {
         mvc.perform(delete("/user").param("ids", "1")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().is5xxServerError())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.UNKNOWN_ERROR.getCode()))
                 .andExpect(jsonPath("$.data", containsString("管理员不允许操作")));
