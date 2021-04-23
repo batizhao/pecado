@@ -235,7 +235,7 @@ public class UserApiTest extends BaseApiTest {
     public void givenJson_whenUpdateUser_thenSucceedJson() throws Exception {
         User requestBody = new User()
                 .setId(8L).setName("daxia").setEmail("daxia@gmail.com").setUsername("daxia")
-                .setPassword("123456");
+                .setPassword("123456").setUuid("xxxx");
 
         mvc.perform(post("/user")
                 .content(objectMapper.writeValueAsString(requestBody))
