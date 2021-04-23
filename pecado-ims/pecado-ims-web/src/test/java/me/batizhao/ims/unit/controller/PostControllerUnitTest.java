@@ -69,7 +69,7 @@ public class PostControllerUnitTest extends BaseControllerUnitTest {
     public void givenNothing_whenFindPosts_thenSuccess() throws Exception {
         when(postService.findPosts(any(Page.class), any(Post.class))).thenReturn(postPageList);
 
-        mvc.perform(get("/ims/posts"))
+        mvc.perform(get("/posts"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -86,7 +86,7 @@ public class PostControllerUnitTest extends BaseControllerUnitTest {
     public void givenNothing_whenFindAllPost_thenSuccess() throws Exception {
         when(postService.list()).thenReturn(postList);
 
-        mvc.perform(get("/ims/post"))
+        mvc.perform(get("/post"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -105,7 +105,7 @@ public class PostControllerUnitTest extends BaseControllerUnitTest {
 
         when(postService.findById(id)).thenReturn(postList.get(0));
 
-        mvc.perform(get("/ims/post/{id}", id))
+        mvc.perform(get("/post/{id}", id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -123,7 +123,7 @@ public class PostControllerUnitTest extends BaseControllerUnitTest {
         when(postService.saveOrUpdatePost(any(Post.class)))
                 .thenReturn(postList.get(0));
 
-        mvc.perform(post("/ims/post").with(csrf())
+        mvc.perform(post("/post").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -143,7 +143,7 @@ public class PostControllerUnitTest extends BaseControllerUnitTest {
         when(postService.saveOrUpdatePost(any(Post.class)))
                 .thenReturn(postList.get(1));
 
-        mvc.perform(post("/ims/post").with(csrf())
+        mvc.perform(post("/post").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -160,7 +160,7 @@ public class PostControllerUnitTest extends BaseControllerUnitTest {
     public void givenId_whenDeletePost_thenSuccess() throws Exception {
         when(postService.deleteByIds(anyList())).thenReturn(true);
 
-        mvc.perform(delete("/ims/post").param("ids", "1,2").with(csrf()))
+        mvc.perform(delete("/post").param("ids", "1,2").with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -177,7 +177,7 @@ public class PostControllerUnitTest extends BaseControllerUnitTest {
 
         when(postService.updateStatus(any(Post.class))).thenReturn(true);
 
-        mvc.perform(post("/ims/post/status").with(csrf())
+        mvc.perform(post("/post/status").with(csrf())
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
