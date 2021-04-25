@@ -26,7 +26,6 @@ public class Department extends TreeNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     /**
      * 第三方ID
      */
