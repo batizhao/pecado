@@ -169,4 +169,84 @@
         </rollback>
     </changeSet>
 
+    <changeSet author="batizhao" id="InsertTableMenu-20210425-001">
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1500"/>
+            <column name="path" value="/ims/department"/>
+            <column name="name" value="部门管理"/>
+            <column name="permission" value="ims:department:admin"/>
+            <column name="icon" value="post"/>
+            <column name="pid" valueNumeric="1000"/>
+            <column name="sort" valueNumeric="5"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1501"/>
+            <column name="name" value="添加部门"/>
+            <column name="permission" value="ims:department:add"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1500"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1502"/>
+            <column name="name" value="编辑部门"/>
+            <column name="permission" value="ims:department:edit"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1500"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="1503"/>
+            <column name="name" value="删除部门"/>
+            <column name="permission" value="ims:department:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="1500"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+        <rollback>
+            delete from menu where id = 1500;
+            delete from menu where id = 1501;
+            delete from menu where id = 1502;
+            delete from menu where id = 1503;
+        </rollback>
+    </changeSet>
+    <changeSet author="batizhao" id="InsertTableRoleMenu-20210425-002">
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1500"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1501"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1502"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="1503"/>
+        </insert>
+        <rollback>
+            delete from role_menu where roleId = 2 and menuId = 1500;
+            delete from role_menu where roleId = 2 and menuId = 1501;
+            delete from role_menu where roleId = 2 and menuId = 1502;
+            delete from role_menu where roleId = 2 and menuId = 1503;
+        </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="InsertTableDepartment-20210425-003">
+        <insert tableName="department">
+            <column name="id" valueNumeric="1"/>
+            <column name="pid" valueNumeric="0"/>
+            <column name="uuid" value="5fa11b2d-7ed3-4413-8abd-208fdfff0bda"/>
+            <column name="name" value="根部门"/>
+            <column name="fullName" value="根部门"/>
+            <column name="sort" valueNumeric="0"/>
+        </insert>
+        <rollback>
+            delete from department where id = 1;
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
