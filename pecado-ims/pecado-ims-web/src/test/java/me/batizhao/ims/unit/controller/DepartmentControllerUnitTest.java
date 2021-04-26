@@ -5,6 +5,7 @@ import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.controller.DepartmentController;
 import me.batizhao.ims.domain.Department;
 import me.batizhao.ims.service.DepartmentService;
+import me.batizhao.ims.service.RoleMenuService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.text.StringContainsInOrder.stringContainsInOrder;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -44,6 +43,8 @@ public class DepartmentControllerUnitTest extends BaseControllerUnitTest {
 
     @MockBean
     DepartmentService departmentService;
+    @MockBean
+    private RoleMenuService roleMenuService;
 
     private List<Department> departmentList;
 

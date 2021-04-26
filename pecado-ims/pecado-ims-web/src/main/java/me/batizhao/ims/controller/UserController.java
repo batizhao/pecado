@@ -12,7 +12,9 @@ import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.api.vo.UserInfoVO;
+import me.batizhao.ims.domain.UserDepartment;
 import me.batizhao.ims.domain.UserPost;
+import me.batizhao.ims.service.UserDepartmentService;
 import me.batizhao.ims.service.UserPostService;
 import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
@@ -48,6 +50,8 @@ public class UserController {
     private UserRoleService userRoleService;
     @Autowired
     private UserPostService userPostService;
+    @Autowired
+    private UserDepartmentService userDepartmentService;
 
     /**
      * 分页查询
@@ -206,5 +210,19 @@ public class UserController {
         return R.ok(userPostService.updateUserPosts(userPosts));
     }
 
+    /**
+     * 分配用户部门
+     * 返回 true or false
+     *
+     * @param userDepartments 部门清单
+     * @return R<Boolean>
+     */
+    @ApiOperation(value = "分配用户部门")
+    @PostMapping(value = "/user/department")
+    @PreAuthorize("@pms.hasPermission('ims:user:admin')")
+    @SystemLog
+    public R<Boolean> handleAddUserDepartments(@ApiParam(value = "关联部门", required = true) @RequestBody List<UserDepartment> userDepartments) {
+        return R.ok(userDepartmentService.updateUserDepartments(userDepartments));
+    }
 
 }

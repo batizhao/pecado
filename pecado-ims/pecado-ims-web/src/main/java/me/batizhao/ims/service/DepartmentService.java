@@ -55,4 +55,12 @@ public interface DepartmentService extends IService<Department> {
      * @return
      */
     Boolean checkHasChildren(Integer id);
+
+    /**
+     * 通过用户 ID 查相关的部门
+     * @param userId
+     * @return
+     */
+    List<Department> findDepartmentsByUserId(Long userId);
+
 }

@@ -8,8 +8,10 @@ import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.common.core.util.TreeUtil;
 import me.batizhao.ims.domain.Department;
+import me.batizhao.ims.domain.UserDepartment;
 import me.batizhao.ims.mapper.DepartmentMapper;
 import me.batizhao.ims.service.DepartmentService;
+import me.batizhao.ims.service.UserDepartmentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     @Autowired
     private DepartmentMapper departmentMapper;
+    @Autowired
+    private UserDepartmentService userDepartmentService;
 
     @Override
     public List<Department> findDepartmentTree(Department department) {
@@ -82,6 +86,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         if (checkHasChildren(id)) return false;
         checkDepartmentIsRoot(id);
         this.removeById(id);
+        userDepartmentService.remove(Wrappers.<UserDepartment>lambdaQuery().eq(UserDepartment::getDepartmentId, id));
         return true;
     }
 
@@ -103,4 +108,10 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     public Boolean checkHasChildren(Integer id) {
         return departmentMapper.selectList(Wrappers.<Department>lambdaQuery().eq(Department::getPid, id)).size() > 0;
     }
+
+    @Override
+    public List<Department> findDepartmentsByUserId(Long userId) {
+        return departmentMapper.findDepartmentsByUserId(userId);
+    }
+
 }

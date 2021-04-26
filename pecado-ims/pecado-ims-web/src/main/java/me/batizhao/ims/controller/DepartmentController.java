@@ -96,4 +96,19 @@ public class DepartmentController {
         return R.ok(departmentService.updateStatus(department));
     }
 
+    /**
+     * 根据用户ID查询部门
+     * 返回部门集合
+     *
+     * @param userId 用户id
+     * @return R<List<Department>>
+     */
+    @ApiOperation(value = "根据用户ID查询部门")
+    @GetMapping(value = "/department", params = "userId")
+    @PreAuthorize("@pms.hasPermission('ims:department:admin')")
+    public R<List<Department>> handleDepartmentsByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
+        return R.ok(departmentService.findDepartmentsByUserId(userId));
+    }
+
+
 }
