@@ -8,8 +8,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.R;
+import me.batizhao.ims.api.domain.RoleMenu;
 import me.batizhao.ims.domain.Department;
+import me.batizhao.ims.domain.DepartmentLeader;
+import me.batizhao.ims.service.DepartmentLeaderService;
 import me.batizhao.ims.service.DepartmentService;
+import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +39,8 @@ public class DepartmentController {
 
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private DepartmentLeaderService departmentLeaderService;
 
     /**
      * 查询所有部门
@@ -110,5 +116,18 @@ public class DepartmentController {
         return R.ok(departmentService.findDepartmentsByUserId(userId));
     }
 
-
+    /**
+     * 分配部门领导
+     * 返回 true or false
+     *
+     * @param departmentLeaders 部门领导关联
+     * @return true or false
+     */
+    @ApiOperation(value = "分配部门领导")
+    @PostMapping(value = "/department/leader")
+    @PreAuthorize("@pms.hasPermission('ims:department:admin')")
+    @SystemLog
+    public R<Boolean> handleAddDepartmentLeaders(@ApiParam(value = "关联菜单", required = true) @RequestBody List<DepartmentLeader> departmentLeaders) {
+        return R.ok(departmentLeaderService.updateDepartmentLeaders(departmentLeaders));
+    }
 }

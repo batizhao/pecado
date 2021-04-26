@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.ims.controller.DepartmentController;
 import me.batizhao.ims.domain.Department;
+import me.batizhao.ims.service.DepartmentLeaderService;
 import me.batizhao.ims.service.DepartmentService;
-import me.batizhao.ims.service.RoleMenuService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +42,9 @@ public class DepartmentControllerUnitTest extends BaseControllerUnitTest {
     private MockMvc mvc;
 
     @MockBean
-    DepartmentService departmentService;
+    private DepartmentService departmentService;
     @MockBean
-    private RoleMenuService roleMenuService;
+    private DepartmentLeaderService departmentLeaderService;
 
     private List<Department> departmentList;
 

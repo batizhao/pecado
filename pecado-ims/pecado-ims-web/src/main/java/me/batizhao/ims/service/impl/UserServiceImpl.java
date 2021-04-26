@@ -160,4 +160,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userInfoVO;
     }
 
+    @Override
+    public List<User> findLeadersByDepartmentId(Long departmentId) {
+        return userMapper.selectLeadersByDepartmentId(departmentId);
+    }
 }

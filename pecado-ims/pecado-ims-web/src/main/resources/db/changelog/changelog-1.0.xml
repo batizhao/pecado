@@ -16,7 +16,7 @@
             </column>
             <column name="permission" type="VARCHAR(64)" defaultValue="" remarks="权限名"/>
             <column name="icon" type="VARCHAR(32)" defaultValue="#" remarks="图标"/>
-            <column name="type" type="CHAR(1)" defaultValue="M" remarks="类型（L左侧 T顶部 B按钮）">
+            <column name="type" type="CHAR(1)" defaultValue="M" remarks="类型（M菜单 B按钮）">
                 <constraints nullable="false"/>
             </column>
             <column name="sort" type="INT" defaultValue="1" remarks="排序">
