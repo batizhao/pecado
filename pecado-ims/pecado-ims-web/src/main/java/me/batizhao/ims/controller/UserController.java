@@ -67,6 +67,19 @@ public class UserController {
     }
 
     /**
+     * 查询用户
+     * 返回用户集合
+     *
+     * @return R<List<User>>
+     */
+    @ApiOperation(value = "查询用户")
+    @GetMapping("user")
+    @PreAuthorize("@pms.hasPermission('ims:user:admin')")
+    public R<List<User>> handleUsers(User user) {
+        return R.ok(userService.findUsers(user));
+    }
+
+    /**
      * 通过id查询用户
      * @param id id
      * @return R
