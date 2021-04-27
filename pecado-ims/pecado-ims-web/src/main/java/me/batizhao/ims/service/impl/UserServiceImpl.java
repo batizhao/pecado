@@ -172,7 +172,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<User> findLeadersByDepartmentId(Long departmentId) {
-        return userMapper.selectLeadersByDepartmentId(departmentId);
+    public List<User> findLeadersByDepartmentId(Long departmentId, String type) {
+        return userMapper.selectLeadersByDepartmentId(departmentId, type);
     }
 }
