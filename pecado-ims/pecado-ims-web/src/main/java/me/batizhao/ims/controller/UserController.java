@@ -57,13 +57,14 @@ public class UserController {
      * 分页查询
      * @param page 分页对象
      * @param user 用户
+     * @param departmentId 部门ID
      * @return R
      */
     @ApiOperation(value = "分页查询用户")
     @GetMapping("users")
     @PreAuthorize("@pms.hasPermission('ims:user:admin')")
-    public R<IPage<User>> handleUsers(Page<User> page, User user) {
-        return R.ok(userService.findUsers(page, user));
+    public R<IPage<User>> handleUsers(Page<User> page, User user, Long departmentId) {
+        return R.ok(userService.findUsers(page, user, departmentId));
     }
 
     /**
