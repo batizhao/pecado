@@ -3,21 +3,21 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
 
-<changeSet author="batizhao" id="CreateTableDict-20210205-001">
+    <changeSet author="batizhao" id="CreateTableDict-20210205-001">
         <createTable tableName="dict_type" remarks="字典类型表">
             <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="name" type="VARCHAR(32)" remarks="名称">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="code" type="VARCHAR(32)" remarks="代码">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
-            <column name="description" type="VARCHAR(255)" remarks="描述" defaultValue="" />
+            <column name="description" type="VARCHAR(255)" remarks="描述" defaultValue=""/>
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
@@ -33,20 +33,20 @@
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="code" type="VARCHAR(32)" remarks="代码">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="label" type="VARCHAR(32)" remarks="标签">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="value" type="VARCHAR(32)" remarks="值">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="isDefault" type="VARCHAR(32)" remarks="默认" defaultValue="no">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
-            <column name="sort" type="INT" defaultValue="1" remarks="排序" />
+            <column name="sort" type="INT" defaultValue="1" remarks="排序"/>
             <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
@@ -78,6 +78,11 @@
             <column name="name" value="成败"/>
             <column name="code" value="success_or_fail"/>
             <column name="description" value="成功|失败"/>
+        </insert>
+        <insert tableName="dict_type">
+            <column name="name" value="任务分组"/>
+            <column name="code" value="job_group"/>
+            <column name="description" value="DEFAULT|SYSTEM"/>
         </insert>
         <insert tableName="dict_data">
             <column name="code" value="sex"/>
@@ -131,6 +136,19 @@
             <column name="value" value="failure"/>
             <column name="sort" valueNumeric="2"/>
         </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="job_group"/>
+            <column name="label" value="默认"/>
+            <column name="value" value="DEFAULT"/>
+            <column name="sort" valueNumeric="1"/>
+            <column name="isDefault" value="yes"/>
+        </insert>
+        <insert tableName="dict_data">
+            <column name="code" value="job_group"/>
+            <column name="label" value="系统"/>
+            <column name="value" value="SYSTEM"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
 
         <rollback>
             delete from dict_type where code = 'sex';
@@ -141,6 +159,8 @@
             delete from dict_data where code = 'yes_or_no';
             delete from dict_type where code = 'success_or_fail';
             delete from dict_data where code = 'success_or_fail';
+            delete from dict_type where code = 'job_group';
+            delete from dict_data where code = 'job_group';
         </rollback>
     </changeSet>
 </databaseChangeLog>

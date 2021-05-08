@@ -1,14 +1,15 @@
 package me.batizhao.system.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.batizhao.common.core.constant.ScheduleConstants;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.system.api.domain.DictType;
+import me.batizhao.system.domain.SysJob;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -24,14 +25,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author batizhao
  * @since 2020-02-11
  */
-public class DictTypeApiTest extends BaseApiTest {
+public class JobApiTest extends BaseApiTest {
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
-    public void givenId_whenFindDictType_thenSuccess() throws Exception {
-        mvc.perform(get("/dict/type/{id}", 1L)
+    public void givenId_whenFindJob_thenSuccess() throws Exception {
+        mvc.perform(get("/job/{id}", 1L)
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -40,8 +41,8 @@ public class DictTypeApiTest extends BaseApiTest {
     }
 
     @Test
-    public void givenNothing_whenFindAllDictType_thenSuccess() throws Exception {
-        mvc.perform(get("/dict/types")
+    public void givenNothing_whenFindAllJob_thenSuccess() throws Exception {
+        mvc.perform(get("/jobs")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -51,11 +52,12 @@ public class DictTypeApiTest extends BaseApiTest {
 
     @Test
     @Transactional
-    public void givenJson_whenSaveDictType_thenSuccess() throws Exception {
-        DictType requestBody = new DictType()
-                .setName("daxia").setCode("daxia@gmail.com");
+    public void givenJson_whenSaveJob_thenSuccess() throws Exception {
+        SysJob requestBody = new SysJob()
+                .setName("daxia").setCronExpression("0/30 * * * * ?").setInvokeTarget("xxx")
+                .setMisfirePolicy("nothing").setStatus(ScheduleConstants.Status.CLOSE.getValue());
 
-        mvc.perform(post("/dict/type")
+        mvc.perform(post("/job")
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
@@ -68,11 +70,12 @@ public class DictTypeApiTest extends BaseApiTest {
 
     @Test
     @Transactional
-    public void givenJson_whenUpdateDictType_thenSuccess() throws Exception {
-        DictType requestBody = new DictType()
-                .setId(8L).setName("daxia").setCode("daxia@gmail.com");
+    public void givenJson_whenUpdateJob_thenSuccess() throws Exception {
+        SysJob requestBody = new SysJob()
+                .setId(1L).setName("daxia").setCronExpression("0/30 * * * * ?").setInvokeTarget("xxx")
+                .setMisfirePolicy("nothing").setStatus(ScheduleConstants.Status.CLOSE.getValue());
 
-        mvc.perform(post("/dict/type")
+        mvc.perform(post("/job")
                 .content(objectMapper.writeValueAsString(requestBody))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminAccessToken))
@@ -84,8 +87,8 @@ public class DictTypeApiTest extends BaseApiTest {
 
     @Test
     @Transactional
-    public void givenId_whenDeleteDictType_thenSuccess() throws Exception {
-        mvc.perform(delete("/dict/type").param("codes", "1,2")
+    public void givenId_whenDeleteJob_thenSuccess() throws Exception {
+        mvc.perform(delete("/job").param("ids", "1,2")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())

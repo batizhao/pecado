@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.system.api.domain.DictType;
 import me.batizhao.system.mapper.DictTypeMapper;
+import me.batizhao.system.service.DictDataService;
 import me.batizhao.system.service.DictTypeService;
 import me.batizhao.system.service.impl.DictTypeServiceImpl;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
@@ -49,6 +50,8 @@ public class DictTypeServiceUnitTest extends BaseServiceUnitTest {
 
     @MockBean
     private DictTypeMapper dictTypeMapper;
+    @MockBean
+    private DictDataService dictDataService;
 
     @Autowired
     private DictTypeService dictTypeService;
