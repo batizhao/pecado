@@ -31,8 +31,7 @@ public class PecadoBlockExceptionHandler implements BlockExceptionHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
 
-        R<String> message = new R<String>().setCode(ResultEnum.TOO_MANY_REQUEST.getCode())
-                .setMessage(ResultEnum.TOO_MANY_REQUEST.getMessage())
+        R<String> message = new R<String>(ResultEnum.TOO_MANY_REQUEST.getCode())
                 .setData(e.getMessage());
 
         log.error("Sentinel Block Exception", e);

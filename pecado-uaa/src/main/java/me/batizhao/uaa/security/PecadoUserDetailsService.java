@@ -36,7 +36,7 @@ public class PecadoUserDetailsService implements UserDetailsService {
         R<UserInfoVO> userData = userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN);
 
         if (userData == null || null == userData.getData()) {
-            throw new UsernameNotFoundException(String.format("没有该用户 '%s'。", username));
+            throw new UsernameNotFoundException(String.format("Record not found '%s'。", username));
         }
 
         UserInfoVO userInfoVO = userData.getData();

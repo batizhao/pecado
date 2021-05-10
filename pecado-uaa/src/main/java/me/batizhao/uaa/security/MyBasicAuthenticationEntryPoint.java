@@ -37,8 +37,7 @@ public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoi
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        R<String> message = new R<String>().setCode(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getCode())
-                .setMessage(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getMessage())
+        R<String> message = new R<String>(ResultEnum.PERMISSION_UNAUTHORIZED_ERROR.getCode())
                 .setData(authException.getMessage());
 
         log.error("Basic Authentication Exception Handler for 401.", authException);

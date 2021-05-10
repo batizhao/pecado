@@ -34,8 +34,7 @@ public class WebExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public R<String> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("Http Request Method Not Supported Exception!", e);
-        return new R<String>().setCode(ResultEnum.PARAMETER_INVALID.getCode())
-                .setMessage(ResultEnum.PARAMETER_INVALID.getMessage())
+        return new R<String>(ResultEnum.PARAMETER_INVALID.getCode())
                 .setData(e.getMessage());
     }
 
@@ -56,8 +55,7 @@ public class WebExceptionHandler {
                 .collect(Collectors.toList());
 
         log.error("Method Argument Not Valid Exception, errors is {}", errors, e);
-        return new R<List<String>>().setCode(ResultEnum.PARAMETER_INVALID.getCode())
-                .setMessage(ResultEnum.PARAMETER_INVALID.getMessage())
+        return new R<List<String>>(ResultEnum.PARAMETER_INVALID.getCode())
                 .setData(errors);
     }
 
@@ -77,8 +75,7 @@ public class WebExceptionHandler {
                 .collect(Collectors.toList());
 
         log.error("ConstraintViolationException, errors is {}", errors, e);
-        return new R<List<String>>().setCode(ResultEnum.PARAMETER_INVALID.getCode())
-                .setMessage(ResultEnum.PARAMETER_INVALID.getMessage())
+        return new R<List<String>>(ResultEnum.PARAMETER_INVALID.getCode())
                 .setData(errors);
     }
 
@@ -92,8 +89,7 @@ public class WebExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public R<String> handleBadRequestException(Exception e) {
         log.error("BadRequestException!", e);
-        return new R<String>().setCode(ResultEnum.PARAMETER_INVALID.getCode())
-                .setMessage(ResultEnum.PARAMETER_INVALID.getMessage())
+        return new R<String>(ResultEnum.PARAMETER_INVALID.getCode())
                 .setData(e.getMessage());
     }
 
@@ -106,8 +102,7 @@ public class WebExceptionHandler {
     @ExceptionHandler
     public R<String> handleNotFoundException(NotFoundException e) {
         log.error("NotFoundException!", e);
-        return new R<String>().setCode(ResultEnum.RESOURCE_NOT_FOUND.getCode())
-                .setMessage(ResultEnum.RESOURCE_NOT_FOUND.getMessage())
+        return new R<String>(ResultEnum.RESOURCE_NOT_FOUND.getCode())
                 .setData(e.getMessage());
     }
 
@@ -115,8 +110,7 @@ public class WebExceptionHandler {
     @ResponseStatus
     public R<String> handleStorageException(StorageException e) {
         log.error("StorageException!", e);
-        return new R<String>().setCode(ResultEnum.SYSTEM_STORAGE_ERROR.getCode())
-                .setMessage(ResultEnum.SYSTEM_STORAGE_ERROR.getMessage())
+        return new R<String>(ResultEnum.SYSTEM_STORAGE_ERROR.getCode())
                 .setData(e.getMessage());
     }
 
@@ -124,8 +118,7 @@ public class WebExceptionHandler {
     @ResponseStatus
     public R<String> handleDataSourceException(DataSourceException e) {
         log.error("DataSourceException!", e);
-        return new R<String>().setCode(ResultEnum.DP_DS_ERROR.getCode())
-                .setMessage(ResultEnum.DP_DS_ERROR.getMessage())
+        return new R<String>(ResultEnum.DP_DS_ERROR.getCode())
                 .setData(e.getMessage());
     }
 
@@ -133,8 +126,7 @@ public class WebExceptionHandler {
     @ResponseStatus
     public R<String> handleMessagingException(MessagingException e) {
         log.error("MessagingException!", e);
-        return new R<String>().setCode(ResultEnum.MQ_MESSAGE_ERROR.getCode())
-                .setMessage(ResultEnum.MQ_MESSAGE_ERROR.getMessage())
+        return new R<String>(ResultEnum.MQ_MESSAGE_ERROR.getCode())
                 .setData(e.getMessage());
     }
 

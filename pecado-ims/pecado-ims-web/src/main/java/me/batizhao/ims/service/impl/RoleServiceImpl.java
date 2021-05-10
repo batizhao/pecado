@@ -51,7 +51,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role role = roleMapper.selectById(id);
 
         if(role == null) {
-            throw new NotFoundException(String.format("没有该记录 '%s'。", id));
+            throw new NotFoundException(String.format("Record not found '%s'。", id));
         }
 
         return role;

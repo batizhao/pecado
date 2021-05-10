@@ -25,8 +25,7 @@ public class GatewaySentinelConfig {
     @Bean
     public BlockRequestHandler blockRequestHandler() {
         return (serverWebExchange, throwable) -> {
-            R<String> message = new R<String>().setCode(ResultEnum.TOO_MANY_REQUEST.getCode())
-                    .setMessage(ResultEnum.TOO_MANY_REQUEST.getMessage())
+            R<String> message = new R<String>(ResultEnum.TOO_MANY_REQUEST.getCode())
                     .setData(throwable.getMessage());
 
             log.error("Sentinel Gateway Block Exception", throwable);
