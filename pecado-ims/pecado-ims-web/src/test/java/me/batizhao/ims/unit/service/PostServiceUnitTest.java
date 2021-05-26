@@ -59,7 +59,7 @@ public class PostServiceUnitTest extends BaseServiceUnitTest {
     @Autowired
     private PostService postService;
 
-    @SpyBean
+    @MockBean
     private ServiceImpl service;
 
     private List<Post> postList;
