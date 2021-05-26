@@ -1,11 +1,16 @@
 package me.batizhao.ims.controller;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.constant.PecadoConstants;
 import me.batizhao.common.core.util.R;
 import me.batizhao.common.security.annotation.Inner;
 import me.batizhao.common.security.util.SecurityUtils;
@@ -20,13 +25,18 @@ import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.ims.service.UserService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -252,6 +262,48 @@ public class UserController {
     public R<List<User>> handleLeadersByDepartmentId(@ApiParam(value = "部门ID", required = true) @RequestParam("departmentId") @Min(1) Long departmentId,
                                                      @ApiParam(value = "领导类型") @RequestParam("type") String type) {
         return R.ok(userService.findLeadersByDepartmentId(departmentId, type));
+    }
+
+    /**
+     * 导入
+     * 返回状态标记
+     *
+     * @param file Excel文件
+     * @param updateSupport 覆盖更新
+     */
+    @ApiOperation(value = "导入")
+    @PostMapping(value = "/user/import")
+    @PreAuthorize("@pms.hasPermission('ims:user:import')")
+    public R<String> handleImport(MultipartFile file, boolean updateSupport) throws IOException {
+        ExcelReader reader = ExcelUtil.getReader(file.getInputStream());
+        List<User> users = reader.readAll(User.class);
+        return R.ok(userService.importUsers(users, updateSupport));
+    }
+
+    /**
+     * 导出
+     * 返回Excel流
+     *
+     * @param user 过滤条件
+     */
+    @ApiOperation(value = "导出")
+    @PostMapping(value = "/user/export")
+    @PreAuthorize("@pms.hasPermission('ims:user:export')")
+    public void handleExport(Page<User> page, User user, Long departmentId, HttpServletResponse response) throws IOException {
+        List<User> users = userService.findUsers(page, user, departmentId).getRecords();
+
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        writer.write(users, true);
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                String.format("attachment; filename=%s.xlsx", PecadoConstants.BACK_END_PROJECT));
+
+        ServletOutputStream out = response.getOutputStream();
+
+        writer.flush(out, true);
+        writer.close();
+        IoUtil.close(out);
     }
 
 }

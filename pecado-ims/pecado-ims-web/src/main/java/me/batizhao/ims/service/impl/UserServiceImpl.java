@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,6 +55,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<User> findUsers(User user) {
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
+        if (StringUtils.isNotBlank(user.getUsername())) {
+            wrapper.like(User::getUsername, user.getUsername());
+        }
         if (StringUtils.isNotBlank(user.getName())) {
             wrapper.like(User::getName, user.getName());
         }
@@ -64,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User findById(Long id) {
         User user = userMapper.selectById(id);
 
-        if(user == null) {
+        if (user == null) {
             throw new NotFoundException(String.format("Record not found '%s'。", id));
         }
 
@@ -75,7 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User findByUsername(String username) {
         User user = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
 
-        if(user == null) {
+        if (user == null) {
             throw new NotFoundException(String.format("Record not found '%s'。", username));
         }
 
@@ -154,7 +158,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserInfoVO getUserInfo(Long userId) {
         User user = userMapper.selectById(userId);
 
-        if(user == null) {
+        if (user == null) {
             throw new NotFoundException(String.format("Record not found '%s'。", userId));
         }
 
@@ -168,5 +172,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<User> findLeadersByDepartmentId(Long departmentId, String type) {
         return userMapper.selectLeadersByDepartmentId(departmentId, type);
+    }
+
+    @Override
+    public String importUsers(List<User> users, boolean updateSupport) {
+        if (CollectionUtils.isEmpty(users)) {
+            throw new PecadoException("Data cannot be empty.");
+        }
+
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+        for (User user : users) {
+            try {
+                // 验证是否存在这个用户
+                User u = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()));
+                if (u == null) {
+                    String hashPass = bcryptPasswordEncoder.encode("123456");
+                    user.setPassword(hashPass);
+
+                    user.setUuid(UUID.randomUUID().toString());
+                    user.setCreateTime(LocalDateTime.now());
+                    user.setUpdateTime(LocalDateTime.now());
+                    this.save(user);
+                    successNum++;
+                    successMsg.append("<br/>" + successNum + "、User [" + user.getUsername() + "] Import succeeded.");
+                } else if (updateSupport) {
+                    user.setUpdateTime(LocalDateTime.now());
+                    this.updateById(user);
+                    successNum++;
+                    successMsg.append("<br/>" + successNum + "、User [" + user.getUsername() + "] Update succeeded.");
+                } else {
+                    failureNum++;
+                    failureMsg.append("<br/>" + failureNum + "、User [" + user.getUsername() + "] Already exists.");
+                }
+            } catch (Exception e) {
+                failureNum++;
+                String msg = "<br/>" + failureNum + "、User [" + user.getUsername() + "] Import failed：";
+                failureMsg.append(msg + e.getMessage());
+                log.error(msg, e);
+            }
+        }
+        if (failureNum > 0) {
+            failureMsg.insert(0, "Import failed! Total " + failureNum + " incorrect format of data, error as follows: ");
+            throw new PecadoException(failureMsg.toString());
+        } else {
+            successMsg.insert(0, "Congratulations, all data have been imported successfully！Total " + successNum + " records, The data are as follows:");
+        }
+        return successMsg.toString();
     }
 }

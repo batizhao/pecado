@@ -26,21 +26,22 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<spring-boot.version>2.4.4</spring-boot.version>
-		<spring-cloud-alibaba.version>2020.0.RC1</spring-cloud-alibaba.version>
+		<spring-boot.version>2.4.6</spring-boot.version>
+		<spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
 		<spring-cloud.version>2020.0.2</spring-cloud.version>
 		<spring-cloud-contract.version>3.0.2</spring-cloud-contract.version>
-		<spring-cloud-security.version>2.2.4.RELEASE</spring-cloud-security.version>
+		<spring-cloud-security.version>2.2.5.RELEASE</spring-cloud-security.version>
 
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<commons-configuration.version>2.7</commons-configuration.version>
 		<dynamic-datasource.version>3.3.1</dynamic-datasource.version>
-		<hutool.version>5.5.9</hutool.version>
+		<hutool.version>5.6.5</hutool.version>
 		<jasypt.version>3.0.3</jasypt.version>
-		<liquibase.version>4.3.1</liquibase.version>
-		<mybatis-plus.version>3.4.2</mybatis-plus.version>
+		<liquibase.version>4.3.5</liquibase.version>
+		<mybatis-plus.version>3.4.3</mybatis-plus.version>
 		<mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
 		<mockito.version>3.7.0</mockito.version>
+		<poi.version>5.0.0</poi.version>
 		<rocketmq.version>2.1.1</rocketmq.version>
 		<seata.version>1.4.0</seata.version>
 		<springfox.version>3.0.0</springfox.version>
@@ -152,6 +153,11 @@
 				<groupId>cn.hutool</groupId>
 				<artifactId>hutool-all</artifactId>
 				<version>${hutool.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${poi.version}</version>
 			</dependency>
 
 			<dependency>
