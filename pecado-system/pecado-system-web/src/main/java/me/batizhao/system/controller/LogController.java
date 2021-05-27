@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiParam;
 import me.batizhao.common.core.constant.PecadoConstants;
 import me.batizhao.common.core.util.R;
 import me.batizhao.common.security.annotation.Inner;
-import me.batizhao.ims.api.domain.User;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.service.LogService;
