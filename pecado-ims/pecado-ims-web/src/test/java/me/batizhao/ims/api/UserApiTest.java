@@ -131,17 +131,17 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(jsonPath("$.data", containsString("Full authentication is required")));
     }
 
-    @Test
-    public void givenNothing_whenFindAllUser_thenUserListJson() throws Exception {
-        mvc.perform(get("/users")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.records", hasSize(6)))
-                .andExpect(jsonPath("$.data.records[0].username", equalTo("admin")));
-    }
+//    @Test
+//    public void givenNothing_whenFindAllUser_thenUserListJson() throws Exception {
+//        mvc.perform(get("/users")
+//                .header("Authorization", adminAccessToken))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data.records", hasSize(6)))
+//                .andExpect(jsonPath("$.data.records[0].username", equalTo("admin")));
+//    }
 
     @Test
     public void givenExpiredToken_whenGetSecureRequest_thenUnauthorized() throws Exception {

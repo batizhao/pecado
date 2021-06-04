@@ -28,7 +28,7 @@ public class ImsServiceFallbackImpl implements ImsFeignService {
     }
 
     @Override
-    public R<List<Role>> findRolesByUserId(Long userId, String from) {
+    public R<List<Role>> findRolesByUserId(Long userId) {
         log.error("feign 查询用户角色信息失败: {}", userId, throwable);
         return null;
     }

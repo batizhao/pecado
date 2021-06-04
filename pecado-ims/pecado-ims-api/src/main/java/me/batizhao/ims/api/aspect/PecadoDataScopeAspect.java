@@ -1,6 +1,5 @@
 package me.batizhao.ims.api.aspect;
 
-import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.domain.BaseEntity;
 import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.common.core.util.R;
@@ -80,7 +79,7 @@ public class PecadoDataScopeAspect {
         }
         PecadoUser user = SecurityUtils.getUser();
         if (null != user) {
-            R<List<Role>> roleData = imsFeignService.findRolesByUserId(user.getUserId(), SecurityConstants.FROM_IN);
+            R<List<Role>> roleData = imsFeignService.findRolesByUserId(user.getUserId());
 
             if (roleData == null || CollectionUtils.isEmpty(roleData.getData())) {
                 throw new PecadoException(String.format("The user's role does not exist [%d]。", user.getUserId()));

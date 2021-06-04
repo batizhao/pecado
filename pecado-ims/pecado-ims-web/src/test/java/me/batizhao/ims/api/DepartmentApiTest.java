@@ -39,15 +39,15 @@ public class DepartmentApiTest extends BaseApiTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
     }
 
-    @Test
-    public void givenNothing_whenFindAllDepartment_thenSuccess() throws Exception {
-        mvc.perform(get("/department")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
-    }
+//    @Test
+//    public void givenNothing_whenFindAllDepartment_thenSuccess() throws Exception {
+//        mvc.perform(get("/department")
+//                .header("Authorization", adminAccessToken))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()));
+//    }
 
     @Test
     @Transactional

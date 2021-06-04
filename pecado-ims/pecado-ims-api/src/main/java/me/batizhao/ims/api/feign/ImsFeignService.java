@@ -24,7 +24,6 @@ public interface ImsFeignService {
                                      @RequestHeader(SecurityConstants.FROM) String from);
 
     @GetMapping(value = "/role", params = "userId")
-    R<List<Role>> findRolesByUserId(@RequestParam("userId") Long userId,
-                                    @RequestHeader(SecurityConstants.FROM) String from);
+    R<List<Role>> findRolesByUserId(@RequestParam("userId") Long userId);
 
 }
