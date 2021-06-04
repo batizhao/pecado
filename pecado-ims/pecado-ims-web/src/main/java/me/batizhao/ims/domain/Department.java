@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import me.batizhao.common.core.util.TreeNode;
+import me.batizhao.common.core.domain.TreeNode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -67,18 +67,6 @@ public class Department extends TreeNode implements Serializable {
      */
     @ApiModelProperty(value="类型（C公司 D部门）")
     private String type;
-                        
-    /**
-     * 创建时间
-     */
-    @ApiModelProperty(value="创建时间")
-    private LocalDateTime createTime;
-                        
-    /**
-     * 修改时间
-     */
-    @ApiModelProperty(value="修改时间")
-    private LocalDateTime updateTime;
             
     public Department(Integer id, Integer pid) {
         this.id = id;

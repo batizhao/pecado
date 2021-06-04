@@ -21,6 +21,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.security.annotation.Inner;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -41,13 +42,14 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @AllArgsConstructor
 public class PecadoSecurityInnerAspect implements Ordered {
+
     private final HttpServletRequest request;
 
     @SneakyThrows
     @Around("@annotation(inner)")
     public Object around(ProceedingJoinPoint point, Inner inner) {
-        String from = request.getHeader(SecurityConstants.FROM);
-        if (inner.value() && !(SecurityConstants.FROM_IN).equals(from)) {
+        String header = request.getHeader(SecurityConstants.FROM);
+        if (inner.value() && !StringUtils.equals(SecurityConstants.FROM_IN, header)) {
             log.warn("访问接口 {} 没有权限", point.getSignature().getName());
             throw new AccessDeniedException("Access is denied");
         }

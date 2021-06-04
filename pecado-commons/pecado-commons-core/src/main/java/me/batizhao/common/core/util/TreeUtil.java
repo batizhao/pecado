@@ -7,6 +7,7 @@
 package me.batizhao.common.core.util;
 
 import lombok.experimental.UtilityClass;
+import me.batizhao.common.core.domain.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;

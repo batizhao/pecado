@@ -107,7 +107,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             PecadoUser user = (PecadoUser) authentication.getUserAuthentication().getPrincipal();
             additionalInfo.put(SecurityConstants.DETAILS_USER_ID, user.getUserId());
             additionalInfo.put(SecurityConstants.DETAILS_USERNAME, user.getUsername());
-            additionalInfo.put(SecurityConstants.DETAILS_DEPT_ID, user.getDeptId());
+            additionalInfo.put(SecurityConstants.DETAILS_DEPT_ID, user.getDeptIds());
+            additionalInfo.put(SecurityConstants.DETAILS_ROLE_ID, user.getRoleIds());
             additionalInfo.put("code", ResultEnum.SUCCESS.getCode());
             additionalInfo.put("message", "ok");
             ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);

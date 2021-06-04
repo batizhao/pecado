@@ -6,7 +6,7 @@ import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.domain.Menu;
-import me.batizhao.common.core.util.TreeNode;
+import me.batizhao.common.core.domain.TreeNode;
 import me.batizhao.ims.controller.MenuController;
 import me.batizhao.ims.service.MenuService;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -68,7 +69,7 @@ public class MenuControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenNothing_whenFindMenuTree4Me_thenSuccess() throws Exception {
-        PecadoUser pecadoUser = new PecadoUser(1L, 2L, "zhangsan", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        PecadoUser pecadoUser = new PecadoUser(1L, Collections.singletonList(2), Collections.singletonList(1L), "zhangsan", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 
         List<Menu> trees = new ArrayList<>();
         Menu menu = menuList.get(0);

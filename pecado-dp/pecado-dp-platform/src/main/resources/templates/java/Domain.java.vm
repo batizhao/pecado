@@ -6,10 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import me.batizhao.common.core.util.TreeNode;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * ${comments} 实体对象

@@ -7,11 +7,14 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
+import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.common.core.util.BeanCopyUtil;
 import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.RoleDepartment;
 import me.batizhao.ims.api.domain.RoleMenu;
 import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.mapper.RoleMapper;
+import me.batizhao.ims.service.RoleDepartmentService;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
@@ -36,6 +39,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private UserRoleService userRoleService;
     @Autowired
     private RoleMenuService roleMenuService;
+    @Autowired
+    private RoleDepartmentService roleDepartmentService;
 
     @Override
     public IPage<Role> findRoles(Page<Role> page, Role role) {
@@ -77,8 +82,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public Boolean deleteByIds(List<Long> ids) {
         this.removeByIds(ids);
         ids.forEach(i -> {
+            checkRoleIsSystem(i);
             userRoleService.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getRoleId, i));
             roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRoleId, i));
+            roleDepartmentService.remove(Wrappers.<RoleDepartment>lambdaQuery().eq(RoleDepartment::getRoleId, i));
         });
         return true;
     }
@@ -94,5 +101,22 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<Role> findRolesByUserId(Long userId) {
         return roleMapper.findRolesByUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public Boolean updateDataScope(Role role) {
+        checkRoleIsSystem(role.getId());
+        roleMapper.updateById(role);
+        if (role.getDataScope().equals("custom")) {
+            return roleDepartmentService.updateRoleDepartments(role.getRoleDepartments());
+        }
+        return true;
+    }
+
+    private void checkRoleIsSystem(Long id) {
+        if (id.equals(1L) || id.equals(2L)) {
+            throw new PecadoException("Operation not allowed!");
+        }
     }
 }

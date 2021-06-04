@@ -27,6 +27,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -161,7 +162,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenNothing_whenFindAllUser_thenUserListJson() throws Exception {
-        when(userService.findUsers(any(Page.class), any(User.class), any())).thenReturn(userPageList);
+        when(userService.findUsers(any(User.class), any(Page.class), any())).thenReturn(userPageList);
 
         mvc.perform(get("/users"))
                 .andDo(print())
@@ -172,7 +173,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.records", hasSize(3)))
                 .andExpect(jsonPath("$.data.records[0].username", equalTo("zhangsan")));
 
-        verify(userService).findUsers(any(Page.class), any(User.class), any());
+        verify(userService).findUsers(any(User.class), any(Page.class), any());
     }
 
     @Test
@@ -267,7 +268,7 @@ public class UserControllerUnitTest extends BaseControllerUnitTest {
     @Test
     @WithMockUser
     public void givenNothing_whenGetUserInfo_thenSuccess() throws Exception {
-        PecadoUser pecadoUser = new PecadoUser(1L, 2L, "zhangsan", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        PecadoUser pecadoUser = new PecadoUser(1L, Collections.singletonList(2), Collections.singletonList(1L), "zhangsan", "N_A", true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 
         try (MockedStatic<SecurityUtils> mockStatic = mockStatic(SecurityUtils.class)) {
             mockStatic.when(SecurityUtils::getUser).thenReturn(pecadoUser);

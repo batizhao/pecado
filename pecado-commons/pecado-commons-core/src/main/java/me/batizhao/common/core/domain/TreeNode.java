@@ -4,7 +4,7 @@
  * @ Apache-2.0
  */
 
-package me.batizhao.common.core.util;
+package me.batizhao.common.core.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author lengleng
  * @date 2017年11月9日23:33:45
  */
-public class TreeNode {
+public class TreeNode extends BaseEntity {
 
     @ApiModelProperty(value = "ID", example = "100")
     protected Integer id;

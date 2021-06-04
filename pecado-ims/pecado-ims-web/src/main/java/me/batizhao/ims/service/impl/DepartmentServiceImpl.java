@@ -1,12 +1,12 @@
 package me.batizhao.ims.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.common.core.util.TreeUtil;
+import me.batizhao.ims.api.annotation.DataScope;
 import me.batizhao.ims.domain.Department;
 import me.batizhao.ims.domain.DepartmentLeader;
 import me.batizhao.ims.domain.DepartmentRelation;
@@ -16,7 +16,6 @@ import me.batizhao.ims.service.DepartmentLeaderService;
 import me.batizhao.ims.service.DepartmentRelationService;
 import me.batizhao.ims.service.DepartmentService;
 import me.batizhao.ims.service.UserDepartmentService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,17 +45,9 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     private DepartmentLeaderService departmentLeaderService;
 
     @Override
+    @DataScope(deptAlias = "d")
     public List<Department> findDepartmentTree(Department department) {
-        LambdaQueryWrapper<Department> wrapper = Wrappers.lambdaQuery();
-        if (null != department && StringUtils.isNotBlank(department.getName())) {
-            wrapper.like(Department::getName, department.getName());
-        }
-        if (null != department && StringUtils.isNotBlank(department.getFullName())) {
-            wrapper.like(Department::getFullName, department.getFullName());
-        }
-        wrapper.orderByAsc(Department::getSort);
-
-        List<Department> departments = departmentMapper.selectList(wrapper);
+        List<Department> departments = departmentMapper.selectDepartments(department);
         int min = departments.size() > 0 ? Collections.min(departments.stream().map(Department::getPid).collect(Collectors.toList())) : 0;
         return TreeUtil.build(departments, min);
     }
@@ -124,6 +115,11 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Override
     public List<Department> findDepartmentsByUserId(Long userId) {
         return departmentMapper.findDepartmentsByUserId(userId);
+    }
+
+    @Override
+    public List<Department> findDepartmentsByRoleId(Long roleId) {
+        return departmentMapper.findDepartmentsByRoleId(roleId);
     }
 
 }

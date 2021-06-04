@@ -55,4 +55,11 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     List<Role> findRolesByUserId(Long userId);
+
+    /**
+     * 更新数据权限
+     * @param role
+     * @return
+     */
+    Boolean updateDataScope(Role role);
 }

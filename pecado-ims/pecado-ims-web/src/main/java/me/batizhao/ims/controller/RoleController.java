@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.R;
+import me.batizhao.common.security.annotation.Inner;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.RoleMenu;
 import me.batizhao.ims.service.RoleMenuService;
@@ -131,7 +132,7 @@ public class RoleController {
      */
     @ApiOperation(value = "根据用户ID查询角色")
     @GetMapping(value = "role", params = "userId")
-    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
+    @Inner(value = false)
     public R<List<Role>> handleRolesByUserId(@ApiParam(value = "用户ID", required = true) @RequestParam("userId") @Min(1) Long userId) {
         return R.ok(roleService.findRolesByUserId(userId));
     }
@@ -149,6 +150,21 @@ public class RoleController {
     @SystemLog
     public R<Boolean> handleAddUserRoles(@ApiParam(value = "关联菜单", required = true) @RequestBody List<RoleMenu> roleMenuList) {
         return R.ok(roleMenuService.updateRoleMenus(roleMenuList));
+    }
+
+    /**
+     * 分配数据权限
+     * 返回 true or false
+     *
+     * @param role 角色（包含数据范围roleDepartments）
+     * @return R<Boolean>
+     */
+    @ApiOperation(value = "分配数据权限")
+    @PostMapping(value = "/role/department")
+    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
+    @SystemLog
+    public R<Boolean> handleUpdateDataScope(@ApiParam(value = "角色", required = true) @RequestBody Role role) {
+        return R.ok(roleService.updateDataScope(role));
     }
 
 }

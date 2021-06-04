@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import me.batizhao.common.core.util.TreeNode;
+import me.batizhao.common.core.domain.TreeNode;
 import me.batizhao.ims.api.vo.MetaVO;
 
 import javax.validation.constraints.NotBlank;
@@ -56,18 +56,6 @@ public class Menu extends TreeNode implements Serializable {
      */
     @ApiModelProperty(value="状态")
     private String status;
-
-    /**
-     * 创建时间
-     */
-    @ApiModelProperty(value="创建时间")
-    private LocalDateTime createTime;
-
-    /**
-     * 修改时间
-     */
-    @ApiModelProperty(value="修改时间")
-    private LocalDateTime updateTime;
 
     /**
      * 路由元数据

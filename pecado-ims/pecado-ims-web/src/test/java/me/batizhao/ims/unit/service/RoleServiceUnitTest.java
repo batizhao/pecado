@@ -9,8 +9,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
+import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.mapper.RoleMapper;
+import me.batizhao.ims.service.RoleDepartmentService;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
 import me.batizhao.ims.service.UserRoleService;
@@ -57,6 +59,8 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
     private UserRoleService userRoleService;
     @MockBean
     private RoleMenuService roleMenuService;
+    @MockBean
+    private RoleDepartmentService roleDepartmentService;
 
     @Autowired
     private RoleService roleService;
@@ -146,8 +150,11 @@ public class RoleServiceUnitTest extends BaseServiceUnitTest {
         doReturn(true).when(service).removeByIds(anyList());
         doReturn(true).when(userRoleService).remove(any(Wrapper.class));
         doReturn(true).when(roleMenuService).remove(any(Wrapper.class));
+        doReturn(true).when(roleDepartmentService).remove(any(Wrapper.class));
 
-        Boolean b = roleService.deleteByIds(Arrays.asList(1L, 2L));
+        assertThrows(PecadoException.class, () -> roleService.deleteByIds(Arrays.asList(1L, 2L)));
+
+        Boolean b = roleService.deleteByIds(Arrays.asList(3L));
         assertThat(b, equalTo(true));
     }
 

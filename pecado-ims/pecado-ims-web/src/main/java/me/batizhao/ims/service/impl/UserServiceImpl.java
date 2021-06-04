@@ -8,16 +8,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.exception.PecadoException;
+import me.batizhao.ims.api.annotation.DataScope;
 import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.api.vo.UserInfoVO;
+import me.batizhao.ims.domain.Department;
 import me.batizhao.ims.mapper.UserMapper;
-import me.batizhao.ims.service.MenuService;
-import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.service.UserRoleService;
-import me.batizhao.ims.service.UserService;
+import me.batizhao.ims.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,10 +43,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private MenuService menuService;
     @Autowired
+    private DepartmentService departmentService;
+    @Autowired
     private UserRoleService userRoleService;
 
     @Override
-    public IPage<User> findUsers(Page<User> page, User user, Long departmentId) {
+    @DataScope(deptAlias = "ud", userAlias = "u")
+    public IPage<User> findUsers(User user, Page<User> page, Long departmentId) {
         if (departmentId == null) departmentId = 1L;
         return userMapper.selectUsers(page, user, departmentId);
     }
@@ -164,6 +166,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setUser(user);
+        userInfoVO.setDeptIds(departmentService.findDepartmentsByUserId(userId).stream().map(Department::getId).collect(Collectors.toList()));
+        userInfoVO.setRoleIds(roleService.findRolesByUserId(userId).stream().map(Role::getId).collect(Collectors.toList()));
         userInfoVO.setRoles(roleService.findRolesByUserId(userId).stream().map(Role::getCode).collect(Collectors.toList()));
         userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(Menu::getPermission).filter(org.springframework.util.StringUtils::hasText).collect(Collectors.toList()));
         return userInfoVO;

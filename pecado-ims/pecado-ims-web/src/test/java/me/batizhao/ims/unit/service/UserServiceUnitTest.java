@@ -13,10 +13,7 @@ import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.ims.mapper.UserMapper;
-import me.batizhao.ims.service.MenuService;
-import me.batizhao.ims.service.RoleService;
-import me.batizhao.ims.service.UserRoleService;
-import me.batizhao.ims.service.UserService;
+import me.batizhao.ims.service.*;
 import me.batizhao.ims.service.impl.UserServiceImpl;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,6 +59,8 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     private RoleService roleService;
     @MockBean
     private MenuService menuService;
+    @MockBean
+    private DepartmentService departmentService;
     @MockBean
     private UserRoleService userRoleService;
 
@@ -148,7 +147,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         when(userMapper.selectUsers(any(Page.class), any(User.class), anyLong()))
                 .thenReturn(userPageList);
 
-        IPage<User> users = userService.findUsers(new Page<>(), new User().setUsername("tom"), null);
+        IPage<User> users = userService.findUsers(new User().setUsername("tom"), new Page<>(), null);
 
         assertThat(users.getRecords(), iterableWithSize(3));
         assertThat(users.getRecords(), hasItems(hasProperty("username", is("zhangsan")),
@@ -251,7 +250,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
     @Test
     public void givenUsername_whenGetUserInfo_thenNotFound() {
-        doReturn(null).when(userMapper).selectOne(any());
+        doReturn(null).when(userMapper).selectById(any());
 
         assertThrows(NotFoundException.class, () -> userService.getUserInfo(1L));
     }

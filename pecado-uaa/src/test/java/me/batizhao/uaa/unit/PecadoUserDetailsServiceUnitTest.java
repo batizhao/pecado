@@ -5,7 +5,7 @@ import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.R;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.User;
-import me.batizhao.ims.api.feign.UserFeignService;
+import me.batizhao.ims.api.feign.ImsFeignService;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import me.batizhao.uaa.security.PecadoUserDetailsService;
 import org.hamcrest.MatcherAssert;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.*;
 public class PecadoUserDetailsServiceUnitTest {
 
     @MockBean
-    private UserFeignService userFeignService;
+    private ImsFeignService imsFeignService;
 
     @TestConfiguration
     static class TestContextConfiguration {
@@ -79,7 +79,7 @@ public class PecadoUserDetailsServiceUnitTest {
 
         R<UserInfoVO> userR = R.ok(userInfoVO);
 
-        when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
+        when(imsFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userR);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -99,11 +99,11 @@ public class PecadoUserDetailsServiceUnitTest {
     public void givenUserName_whenFindUser_thenUsernameNotFoundException() {
         R<User> userR = R.ok();
 
-        doReturn(userR).when(userFeignService).loadUserByUsername(anyString(), anyString());
+        doReturn(userR).when(imsFeignService).loadUserByUsername(anyString(), anyString());
 
         assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("xxxx"));
 
-        verify(userFeignService).loadUserByUsername(anyString(), anyString());
+        verify(imsFeignService).loadUserByUsername(anyString(), anyString());
     }
 
     @Test
@@ -118,12 +118,12 @@ public class PecadoUserDetailsServiceUnitTest {
 
         R<UserInfoVO> userR = R.ok(userInfoVO);
 
-        when(userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
+        when(imsFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN))
                 .thenReturn(userR);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        verify(userFeignService).loadUserByUsername(anyString(), anyString());
+        verify(imsFeignService).loadUserByUsername(anyString(), anyString());
 
         log.debug("userDetails: {}", userDetails);
         MatcherAssert.assertThat(userDetails.getUsername(), Matchers.equalTo(username));

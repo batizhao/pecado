@@ -5,7 +5,7 @@ import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.R;
 import me.batizhao.common.security.component.PecadoUser;
 import me.batizhao.ims.api.domain.User;
-import me.batizhao.ims.api.feign.UserFeignService;
+import me.batizhao.ims.api.feign.ImsFeignService;
 import me.batizhao.ims.api.vo.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,11 +29,11 @@ import java.util.Set;
 public class PecadoUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserFeignService userFeignService;
+    private ImsFeignService imsFeignService;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        R<UserInfoVO> userData = userFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN);
+        R<UserInfoVO> userData = imsFeignService.loadUserByUsername(username, SecurityConstants.FROM_IN);
 
         if (userData == null || null == userData.getData()) {
             throw new UsernameNotFoundException(String.format("Record not found '%s'。", username));
@@ -54,8 +54,7 @@ public class PecadoUserDetailsService implements UserDetailsService {
         Collection<? extends GrantedAuthority> authorities = AuthorityUtils
                 .createAuthorityList(authSet.toArray(new String[0]));
 
-        //TODO: The second param to user.getDeptId
-        return new PecadoUser(user.getId(), user.getId(), user.getUsername(), user.getPassword(),
+        return new PecadoUser(user.getId(), userInfoVO.getDeptIds(), userInfoVO.getRoleIds(), user.getUsername(), user.getPassword(),
                 true,
                 true,
                 true,
