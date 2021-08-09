@@ -18,6 +18,7 @@
 		<module>pecado-ims</module>
 		<module>pecado-system</module>
         <module>pecado-uaa</module>
+        <module>pecado-oa</module>
     </modules>
 
 	<properties>

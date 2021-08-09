@@ -1,0 +1,41 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+
+    <changeSet author="batizhao" id="CreateTable-20210806-001">
+        <createTable tableName="comment" remarks="审批表">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR(32)" remarks="标题" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="VARCHAR(255)" remarks="意见" defaultValue=""/>
+            <column name="dept" type="VARCHAR(64)" remarks="发单部门" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="datetime" remarks="发单日期" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(64)" remarks="项目名称" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+            <column name="investment" type="DECIMAL(10,2)" remarks="投资金额" defaultValue="0.00">
+                <constraints nullable="false"/>
+            </column>
+            <column name="plan" type="DECIMAL(10,2)" remarks="年初计划" defaultValue="0.00">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="comment"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
