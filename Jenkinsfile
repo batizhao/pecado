@@ -2,7 +2,7 @@ node {
   def build_tag
   def registry_addr = "harbor.pecado.com:8888"
   def maintainer_name = "pecado"
-  def dp_image, gateway_image, ims_image, system_image, uaa_image
+  def dp_image, gateway_image, ims_image, system_image, uaa_image, oa_image
   def version = "1.3"
 
   stage('Git Clone') {
@@ -49,6 +49,11 @@ node {
       uaa_image = docker.build(image_name)
     }
 
+    dir('pecado-oa') {
+      image_name = "${registry_addr}/${maintainer_name}/oa:${version}-${build_tag}"
+      oa_image = docker.build(image_name)
+    }
+
   }
 
   stage('Push Docker Image') {
@@ -58,6 +63,7 @@ node {
       ims_image.push()
       system_image.push()
       uaa_image.push()
+      oa_image.push()
     }
   }
 }
