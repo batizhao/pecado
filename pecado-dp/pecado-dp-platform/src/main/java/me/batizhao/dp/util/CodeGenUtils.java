@@ -35,7 +35,7 @@ import me.batizhao.dp.domain.CodeMeta;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
 import java.io.IOException;

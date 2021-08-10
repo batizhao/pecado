@@ -1,4 +1,4 @@
-<el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
 #foreach($column in $columns)
 #if($column.search)
 #set($dictType=$column.dictType)
