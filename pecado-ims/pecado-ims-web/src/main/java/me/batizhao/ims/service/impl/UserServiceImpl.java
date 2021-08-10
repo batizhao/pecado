@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.exception.PecadoException;
+import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.annotation.DataScope;
 import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.ims.api.domain.Role;
@@ -176,6 +177,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<User> findLeadersByDepartmentId(Long departmentId, String type) {
         return userMapper.selectLeadersByDepartmentId(departmentId, type);
+    }
+
+    @Override
+    public List<User> findLeaders() {
+        Integer deptId = SecurityUtils.getUser().getDeptIds().get(0);
+        return this.findLeadersByDepartmentId(deptId.longValue(), null);
     }
 
     @Override
