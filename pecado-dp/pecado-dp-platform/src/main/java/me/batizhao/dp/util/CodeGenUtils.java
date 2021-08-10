@@ -19,27 +19,23 @@ package me.batizhao.dp.util;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.extra.template.Template;
+import cn.hutool.extra.template.TemplateConfig;
+import cn.hutool.extra.template.TemplateEngine;
+import cn.hutool.extra.template.TemplateUtil;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.GenConstants;
 import me.batizhao.common.core.constant.PecadoConstants;
 import me.batizhao.common.core.exception.PecadoException;
+import me.batizhao.dp.config.GenConfig;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.CodeMeta;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
-import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,15 +58,21 @@ import java.util.zip.ZipOutputStream;
 @UtilityClass
 public class CodeGenUtils {
 
-    private final String ENTITY_JAVA_VM = "Domain.java.vm";
+    private final String ENTITY_JAVA_VM = "java/Domain.java.vm";
 
-    private final String MAPPER_JAVA_VM = "Mapper.java.vm";
+    private final String ENTITY_DTO_JAVA_VM = "java/DomainDTO.java.vm";
 
-    private final String SERVICE_JAVA_VM = "Service.java.vm";
+    private final String ENTITY_FORM_JAVA_VM = "java/DomainForm.java.vm";
 
-    private final String SERVICE_IMPL_JAVA_VM = "ServiceImpl.java.vm";
+    private final String MAPPER_JAVA_VM = "java/Mapper.java.vm";
 
-    private final String CONTROLLER_JAVA_VM = "Controller.java.vm";
+    private final String SERVICE_JAVA_VM = "java/Service.java.vm";
+
+    private final String SERVICE_IMPL_JAVA_VM = "java/ServiceImpl.java.vm";
+
+    private final String CONTROLLER_JAVA_VM = "java/Controller.java.vm";
+
+    private final String CONTROLLER_BASE_JAVA_VM = "java/BaseController.java.vm";
 
     private final String MAPPER_XML_VM = "Mapper.xml.vm";
 
@@ -90,6 +92,12 @@ public class CodeGenUtils {
 
     private final String VUE_API_JS_VM = "api.js.vm";
 
+    private final String JSP_COMMENT = "comment.jsp.vm";
+    private final String JSP_INDEX = "index.jsp.vm";
+    private final String JSP_INPUT = "input.jsp.vm";
+    private final String JSP_STATISTICAL = "statistical.jsp.vm";
+    private final String JSP_VIEW = "view.jsp.vm";
+
     /**
      * 初始化数据
      *
@@ -98,9 +106,9 @@ public class CodeGenUtils {
     public static void initData(Code code) {
         code.setClassName(columnToJava(code.getTableName()));
         code.setClassComment(replaceText(code.getTableComment()));
-        code.setClassAuthor("batizhao");
-        code.setModuleName("system");
-        code.setPackageName("me.batizhao");
+        code.setClassAuthor(GenConfig.getAuthor());
+        code.setModuleName(GenConfig.getModuleName());
+        code.setPackageName(GenConfig.getPackageName());
         code.setTemplate(GenConstants.TPL_CRUD);
         code.setMappingPath(StringUtils.uncapitalize(code.getClassName()));
         code.setCreateTime(LocalDateTime.now());
@@ -198,16 +206,15 @@ public class CodeGenUtils {
         // 封装模板数据
         Map<String, Object> map = prepareContext(code);
 
-        // 设置velocity资源加载器
-        VelocityContext context = getVelocityContext(map);
+        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("/templates/" + GenConfig.getProjectKey(), TemplateConfig.ResourceMode.CLASSPATH));
 
         // 获取模板列表
         for (String template : getTemplates(code.getTemplate())) {
             if (!StringUtils.containsAny(template, MENU_SQL_VM, VUE_API_JS_VM, VUE_INDEX_VUE_VM, VUE_TREE_INDEX_VUE_VM)) {
                 // 渲染模板
                 StringWriter sw = new StringWriter();
-                Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
-                tpl.merge(context, sw);
+                Template tpl = engine.getTemplate(template);
+                tpl.render(map, sw);
                 try {
                     String path = getGenPath(code, template);
                     FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetUtil.UTF_8);
@@ -226,15 +233,14 @@ public class CodeGenUtils {
         // 封装模板数据
         Map<String, Object> map = prepareContext(code);
 
-        // 设置velocity资源加载器
-        VelocityContext context = getVelocityContext(map);
+        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("/templates/" + GenConfig.getProjectKey(), TemplateConfig.ResourceMode.CLASSPATH));
 
         // 获取模板列表
         for (String template : getTemplates(code.getTemplate())) {
             // 渲染模板
             StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
-            tpl.merge(context, sw);
+            Template tpl = engine.getTemplate(template);
+            tpl.render(map, sw);
 
             // 添加到zip
             zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(code, template))));
@@ -252,16 +258,15 @@ public class CodeGenUtils {
         // 封装模板数据
         Map<String, Object> map = prepareContext(code);
 
-        // 设置velocity资源加载器
-        VelocityContext context = getVelocityContext(map);
+        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("/templates/" + GenConfig.getProjectKey(), TemplateConfig.ResourceMode.CLASSPATH));
 
         Map<String, String> dataMap = new LinkedHashMap<>();
         // 获取模板列表
         for (String template : getTemplates(code.getTemplate())) {
             // 渲染模板
             StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, CharsetUtil.UTF_8);
-            tpl.merge(context, sw);
+            Template tpl = engine.getTemplate(template);
+            tpl.render(map, sw);
             dataMap.put(template.substring(template.lastIndexOf("/")+1, template.indexOf(".vm")), sw.toString());
         }
         return dataMap;
@@ -338,39 +343,25 @@ public class CodeGenUtils {
      */
     private List<String> getTemplates(String template) {
         List<String> templates = new ArrayList<>();
-        templates.add("templates/java/Domain.java.vm");
-        templates.add("templates/java/Mapper.java.vm");
-        templates.add("templates/java/Service.java.vm");
-        templates.add("templates/java/ServiceImpl.java.vm");
-        templates.add("templates/java/Controller.java.vm");
-        templates.add("templates/xml/Mapper.xml.vm");
-        templates.add("templates/test/MapperUnitTest.java.vm");
-        templates.add("templates/test/ServiceUnitTest.java.vm");
-        templates.add("templates/test/ControllerUnitTest.java.vm");
-        templates.add("templates/test/ApiTest.java.vm");
-        templates.add("templates/sql/menu.sql.vm");
-		templates.add("templates/js/api.js.vm");
+        if (StringUtils.isNotBlank(GenConfig.getTemplates())) {
+            templates = Arrays.asList(GenConfig.getTemplates().split(","));
+            templates = new ArrayList<>(templates);
+        }
+
 		if (template.equals(GenConstants.TPL_TREE)) {
-            templates.add("templates/vue/index-tree.vue.vm");
-        } else {
-            templates.add("templates/vue/index.vue.vm");
+            templates.add("vue/index-tree.vue.vm");
+            templates.remove("vue/index.vue.vm");
         }
         return templates;
     }
 
-    private VelocityContext getVelocityContext(Map<String, Object> map) {
-        Properties prop = new Properties();
-        prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-        Velocity.init(prop);
-        return new VelocityContext(map);
-    }
-
     private Map<String, Object> prepareContext(Code code) {
-        Map<String, Object> map = new HashMap<>(16);
+        Map<String, Object> map = new HashMap<>(18);
         map.put("tableName", code.getTableName());
         map.put("pk", code.getCodeMetaList().get(0));
         map.put("className", code.getClassName());
         map.put("classname", StringUtils.uncapitalize(code.getClassName()));
+        map.put("classNameLower", StringUtils.lowerCase(code.getClassName()));
         map.put("mappingPath", code.getMappingPath());
         map.put("columns", code.getCodeMetaList());
         map.put("date", DateUtil.today());
@@ -393,55 +384,6 @@ public class CodeGenUtils {
      */
     public String columnToJava(String columnName) {
         return WordUtils.capitalizeFully(columnName, new char[]{'_'}).replace("_", "");
-    }
-
-    /**
-     * 表名转换成Java类名
-     */
-    private String tableToJava(String tableName, String tablePrefix) {
-        if (StringUtils.isNotBlank(tablePrefix)) {
-            tableName = tableName.replaceFirst(tablePrefix, "");
-        }
-        return columnToJava(tableName);
-    }
-
-    /**
-     * 设置主键列信息
-     *
-     * @param table 业务表信息
-     */
-//    public void setPkColumn(List<CodeMeta> codeMetas)
-//    {
-//        for (CodeMeta column : codeMetas)
-//        {
-//            if (column.getPrimaryKey())
-//            {
-//                table.setPkColumn(column);
-//                break;
-//            }
-//        }
-//        if (org.apache.commons.lang3.StringUtils.isNull(table.getPkColumn()))
-//        {
-//            table.setPkColumn(table.getColumns().get(0));
-//        }
-//    }
-
-    /**
-     * 获取配置信息
-     */
-    private Configuration getConfig() {
-        try {
-            FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
-                    new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
-                            .configure(new Parameters().properties()
-                                    .setFileName("generator.properties")
-                                    .setThrowExceptionOnMissing(true)
-                                    .setListDelimiterHandler(new DefaultListDelimiterHandler(';'))
-                                    .setIncludesAllowed(false));
-            return builder.getConfiguration();
-        } catch (ConfigurationException e) {
-            throw new PecadoException("获取配置文件失败，", e);
-        }
     }
 
     /**
@@ -471,16 +413,17 @@ public class CodeGenUtils {
 
         if (StringUtils.isNotBlank(code.getPackageName())) {
             String packagePath = code.getPackageName().replace(".", File.separator) + File.separator + code.getModuleName() + File.separator;
+            if (GenConfig.getProjectKey().equals("jsoa")) packagePath = packagePath + StringUtils.lowerCase(code.getClassName()) + File.separator;
             packageSrcPath += packagePath;
             packageTestPath += packagePath;
         }
 
         if (template.contains(ENTITY_JAVA_VM)) {
-            return packageSrcPath + "domain" + File.separator + code.getClassName() + ".java";
+            return packageSrcPath + GenConfig.getPojoPackageName() + File.separator + code.getClassName() + ".java";
         }
 
         if (template.contains(MAPPER_JAVA_VM)) {
-            return packageSrcPath + "mapper" + File.separator + code.getClassName() + "Mapper.java";
+            return packageSrcPath + GenConfig.getMapperPackageName() + File.separator + code.getClassName() + "Mapper.java";
         }
 
         if (template.contains(MAPPER_UNIT_TEST_JAVA_VM)) {
@@ -501,6 +444,18 @@ public class CodeGenUtils {
 
         if (template.contains(CONTROLLER_JAVA_VM)) {
             return packageSrcPath + "controller" + File.separator + code.getClassName() + "Controller.java";
+        }
+
+        if (template.contains(CONTROLLER_BASE_JAVA_VM)) {
+            return packageSrcPath + "controller" + File.separator + code.getClassName() + "BaseController.java";
+        }
+
+        if (template.contains(ENTITY_DTO_JAVA_VM)) {
+            return packageSrcPath + "controller" + File.separator + code.getClassName() + "DTO.java";
+        }
+
+        if (template.contains(ENTITY_FORM_JAVA_VM)) {
+            return packageSrcPath + "controller" + File.separator + code.getClassName() + "Form.java";
         }
 
         if (template.contains(CONTROLLER_UNIT_TEST_JAVA_VM)) {
@@ -535,6 +490,36 @@ public class CodeGenUtils {
         if (template.contains(VUE_API_JS_VM)) {
             return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "api" + File.separator
                     + code.getModuleName() + File.separator + code.getMappingPath() + ".js";
+        }
+
+        if (template.contains(JSP_INDEX)) {
+            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "main" + File.separator
+                    + "webapp" + File.separator + "jsp" + File.separator + "frontend" + File.separator
+                    + StringUtils.lowerCase(code.getClassName()) + File.separator + "index.jsp";
+        }
+
+        if (template.contains(JSP_COMMENT)) {
+            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "main" + File.separator
+                    + "webapp" + File.separator + "jsp" + File.separator + "frontend" + File.separator
+                    + StringUtils.lowerCase(code.getClassName()) + File.separator + "comment.jsp";
+        }
+
+        if (template.contains(JSP_INPUT)) {
+            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "main" + File.separator
+                    + "webapp" + File.separator + "jsp" + File.separator + "frontend" + File.separator
+                    + StringUtils.lowerCase(code.getClassName()) + File.separator + "input.jsp";
+        }
+
+        if (template.contains(JSP_STATISTICAL)) {
+            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "main" + File.separator
+                    + "webapp" + File.separator + "jsp" + File.separator + "frontend" + File.separator
+                    + StringUtils.lowerCase(code.getClassName()) + File.separator + "statistical.jsp";
+        }
+
+        if (template.contains(JSP_VIEW)) {
+            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "main" + File.separator
+                    + "webapp" + File.separator + "jsp" + File.separator + "frontend" + File.separator
+                    + StringUtils.lowerCase(code.getClassName()) + File.separator + "view.jsp";
         }
 
         return null;
