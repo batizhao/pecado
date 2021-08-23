@@ -7,7 +7,7 @@ import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.feign.ImsFeignService;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.uaa.security.PecadoUserDetailsService;
+import me.batizhao.uaa.service.impl.PecadoUserDetailsService;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;

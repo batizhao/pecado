@@ -70,7 +70,7 @@ public class FormApiTest extends BaseApiTest {
     @Transactional
     public void givenJson_whenUpdateForm_thenSuccess() throws Exception {
         Form requestBody = new Form()
-                .setId(8L).setName("daxia");
+                .setId(8L).setName("daxia").setFormKey("xxxxx123456");
 
         mvc.perform(post("/form")
                 .content(objectMapper.writeValueAsString(requestBody))

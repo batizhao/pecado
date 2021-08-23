@@ -61,4 +61,9 @@ public class SecurityConstants {
 	 * 用户角色字段
 	 */
 	public static final String DETAILS_ROLE_ID = "role_id";
+
+	/**
+	 * 用户权限字段
+	 */
+	public static final String DETAILS_AUTHORITIES = "authorities";
 }

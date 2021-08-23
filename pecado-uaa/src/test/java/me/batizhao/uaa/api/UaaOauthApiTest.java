@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,56 +35,50 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("api")
 public class UaaOauthApiTest {
 
-    public static final String USERNAME = "admin";
-    public static final String PASSWORD = "123456";
-    public static final String CLIENT_ID = "client_app";
-    public static final String CLIENT_SECRET = "123456";
-    public static final String GRANT_TYPE = "password";
+//    public static final String USERNAME = "admin";
+//    public static final String PASSWORD = "123456";
 
     @Autowired
     MockMvc mvc;
 
     /**
-     * MockMvc 不是一个真正的 servlet server，所以，有时会出现和实际运行不一致的情况。
-     * 可以看这个 issues：https://github.com/spring-projects/spring-boot/issues/5574
-     *
-     * curl -i -X POST --user 'client_app:xxxx' localhost:4000/oauth/token\?grant_type=password\&username=admin\&password=123456
-     *
-     * {"code":100004,"message":"认证失败！","data":"Full authentication is required to access this resource"}
+     * 这里需要设置 spring.mvc.locale: zh_CN，否则会调用 spring security core 中的 messages.properties
+     * 返回国际化消息 Bad credentials
+     * 在 postman、curl 等方式中自动会返回中文消息
      *
      * @throws Exception
      */
     @Test
-    public void givenErrorSecret_whenGetAccessToken_thenUnauthorized() throws Exception {
-        mvc.perform(post("/oauth/token")
-                .param("grant_type", GRANT_TYPE).param("username", USERNAME).param("password", PASSWORD)
-                .with(httpBasic(CLIENT_ID, "xxxx")))
+    public void givenNoPassword_whenGetAccessToken_thenOAuthException() throws Exception {
+        mvc.perform(post("/token")
+                .param("username", "admin"))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
+                .andExpect(jsonPath("$.data", containsString("Required request parameter 'password' for method")));
     }
 
-    @Test
-    public void givenNoGrantType_whenGetAccessToken_thenOAuthException() throws Exception {
-        mvc.perform(post("/oauth/token")
-                .param("username", USERNAME).param("password", PASSWORD)
-                .with(httpBasic(CLIENT_ID, CLIENT_SECRET)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_ERROR.getCode()))
-                .andExpect(jsonPath("$.data", containsString("Missing grant type")));
-    }
-
-    @Test
-    public void givenInvalidRefreshToken_whenGetAccessToken_thenOAuthException() throws Exception {
-        String invalidRefreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6";
-        mvc.perform(post("/oauth/token")
-                .param("grant_type", "refresh_token").param("refresh_token", invalidRefreshToken)
-                .with(httpBasic(CLIENT_ID, CLIENT_SECRET)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_ERROR.getCode()))
-                .andExpect(jsonPath("$.data", containsString("Cannot convert access token to JSON")));
-    }
+//    @Test
+//    public void givenNoGrantType_whenGetAccessToken_thenOAuthException() throws Exception {
+//        mvc.perform(post("/token")
+//                .param("username", USERNAME).param("password", PASSWORD))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_ERROR.getCode()))
+//                .andExpect(jsonPath("$.data", containsString("Missing grant type")));
+//    }
+//
+//    @Test
+//    public void givenInvalidRefreshToken_whenGetAccessToken_thenOAuthException() throws Exception {
+//        String invalidRefreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6";
+//        mvc.perform(post("/token")
+//                .param("grant_type", "refresh_token").param("refresh_token", invalidRefreshToken))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_ERROR.getCode()))
+//                .andExpect(jsonPath("$.data", containsString("Cannot convert access token to JSON")));
+//    }
 }

@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -66,7 +65,6 @@ public class Log implements Serializable {
 
     @ApiModelProperty(value = "操作URL", example = "http://192.168.1.1/xxx")
     @NotBlank(message = "url is not blank")
-    @URL
     private String url;
 
     /**

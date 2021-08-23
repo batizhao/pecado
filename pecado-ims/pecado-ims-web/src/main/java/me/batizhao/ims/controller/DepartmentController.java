@@ -1,14 +1,10 @@
 package me.batizhao.ims.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.R;
-import me.batizhao.ims.api.domain.RoleMenu;
 import me.batizhao.ims.domain.Department;
 import me.batizhao.ims.domain.DepartmentLeader;
 import me.batizhao.ims.service.DepartmentLeaderService;

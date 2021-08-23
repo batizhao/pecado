@@ -2,31 +2,40 @@ package me.batizhao.common.security.component;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.security.handler.MyAccessDeniedHandler;
 import me.batizhao.common.security.handler.MyAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.security.jwt.crypto.sign.MacSigner;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+
+import java.security.interfaces.RSAPublicKey;
 
 /**
  * @author batizhao
  * @since 2020-03-20
  */
 @Slf4j
-public class PecadoResourceServerConfigurerAdapter extends ResourceServerConfigurerAdapter {
+public class PecadoResourceServerConfigurerAdapter extends WebSecurityConfigurerAdapter {
+
 	@Autowired
 	private MyAuthenticationEntryPoint authenticationEntryPoint;
 	@Autowired
 	private MyAccessDeniedHandler accessDeniedHandler;
 	@Autowired
 	private PermitAllUrlProperties permitAllUrl;
+
+	@Value("${pecado.jwt.public-key}")
+	RSAPublicKey key;
 
 	/**
 	 * 配置不需要鉴权的接口
@@ -45,28 +54,39 @@ public class PecadoResourceServerConfigurerAdapter extends ResourceServerConfigu
 		permitAllUrl.getRegex().getUrls()
 			.forEach(url -> registry.regexMatchers(url).permitAll());
 
-		registry.anyRequest().authenticated().and().csrf().disable();
-
+		registry
+			.anyRequest().authenticated()
+			.and()
+			.csrf().disable()
+			.oauth2ResourceServer(oauth2 -> oauth2.jwt().jwtAuthenticationConverter(jwtAuthenticationConverter()))
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.exceptionHandling(exceptions -> exceptions
+					.authenticationEntryPoint(authenticationEntryPoint)
+					.accessDeniedHandler(accessDeniedHandler)
+			);
 	}
 
-	@Override
-	public void configure(ResourceServerSecurityConfigurer resources) {
-		DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
-		UserAuthenticationConverter userTokenConverter = new PecadoUserAuthenticationConverter();
-		accessTokenConverter.setUserTokenConverter(userTokenConverter);
+	/**
+	 * 从 JWT 的 scope 中获取的权限 取消 SCOPE_ 的前缀
+	 * 设置从 jwt claim 中哪个字段获取权限
+	 * 如果需要同多个字段中获取权限或者是通过url请求获取的权限，则需要自己提供jwtAuthenticationConverter()这个方法的实现
+	 *
+	 * @return JwtAuthenticationConverter
+	 */
+	private JwtAuthenticationConverter jwtAuthenticationConverter() {
+		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+		JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+		// 去掉 SCOPE_ 的前缀
+		authoritiesConverter.setAuthorityPrefix("");
+		// 从jwt claim 中那个字段获取权限，模式是从 scope 或 scp 字段中获取
+		authoritiesConverter.setAuthoritiesClaimName(SecurityConstants.DETAILS_AUTHORITIES);
+		converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+		return converter;
+	}
 
-		PecadoTokenServices tokenServices = new PecadoTokenServices();
-
-		// 这里的签名key 保持和认证中心一致
-		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setSigningKey("123");
-		converter.setVerifier(new MacSigner("123"));
-		JwtTokenStore jwtTokenStore = new JwtTokenStore(converter);
-		tokenServices.setTokenStore(jwtTokenStore);
-		tokenServices.setJwtAccessTokenConverter(converter);
-		tokenServices.setDefaultAccessTokenConverter(accessTokenConverter);
-
-		resources.authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler).tokenServices( tokenServices );
+	@Bean
+	JwtDecoder jwtDecoder() {
+		return NimbusJwtDecoder.withPublicKey(this.key).build();
 	}
 
 }

@@ -1,4 +1,4 @@
-package me.batizhao.uaa.security;
+package me.batizhao.uaa.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;

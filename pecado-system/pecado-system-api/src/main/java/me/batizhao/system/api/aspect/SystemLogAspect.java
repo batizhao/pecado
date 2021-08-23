@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.SpringContextHolder;
+import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.api.event.SystemLogEvent;
@@ -19,7 +21,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -101,24 +102,10 @@ public class SystemLogAspect {
         logDTO.setClassName(method.getDeclaringClass().getName());
         logDTO.setClassMethod(method.getName());
         logDTO.setParameter(getParameter(method.getParameters(), point.getArgs()));
-        logDTO.setClientId(getClientId());
+        logDTO.setClientId("");
         logDTO.setUsername(getUsername());
         logDTO.setUrl(request.getRequestURL().toString());
         return logDTO;
-    }
-
-    /**
-     * 获取客户端
-     *
-     * @return clientId
-     */
-    private String getClientId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof OAuth2Authentication) {
-            OAuth2Authentication auth2Authentication = (OAuth2Authentication) authentication;
-            return auth2Authentication.getOAuth2Request().getClientId();
-        }
-        return null;
     }
 
     /**
@@ -127,11 +114,11 @@ public class SystemLogAspect {
      * @return username
      */
     private String getUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return null;
+        PecadoUser user = SecurityUtils.getUser();
+        if (user == null) {
+            return "@Inner";
         }
-        return authentication.getName();
+        return user.getUsername();
     }
 
     /**
