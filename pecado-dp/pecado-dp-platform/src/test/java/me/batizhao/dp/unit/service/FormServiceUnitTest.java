@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.dp.domain.Form;
 import me.batizhao.dp.mapper.FormMapper;
+import me.batizhao.dp.service.FormHistoryService;
 import me.batizhao.dp.service.FormService;
 import me.batizhao.dp.service.impl.FormServiceImpl;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
@@ -50,6 +51,8 @@ public class FormServiceUnitTest extends BaseServiceUnitTest {
 
     @MockBean
     private FormMapper formMapper;
+    @MockBean
+    private FormHistoryService formHistoryService;
 
     @Autowired
     private FormService formService;
