@@ -4,8 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.SneakyThrows;
-import me.batizhao.common.core.util.ResponseInfo;
-import me.batizhao.system.domain.File;
+import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.util.R;
+import me.batizhao.system.api.domain.File;
 import me.batizhao.system.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -14,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URLConnection;
 
 /**
  * 文件管理
@@ -29,6 +28,7 @@ import java.nio.file.Paths;
  */
 @Api(tags = "文件管理")
 @RestController
+@Slf4j
 public class FileController {
 
     @Autowired
@@ -42,8 +42,8 @@ public class FileController {
      */
     @ApiOperation(value = "插入文件")
     @PostMapping("/file/upload")
-    public ResponseInfo<File> handleSave(@RequestParam("file") MultipartFile file) {
-        return ResponseInfo.ok(fileService.upload(file));
+    public R<File> handleSave(@RequestParam("file") MultipartFile file) {
+        return R.ok(fileService.upload(file));
     }
 
     /**
@@ -57,15 +57,16 @@ public class FileController {
     @ApiOperation(value = "根据文件名显示图片")
     @GetMapping("/file/image/{name:^.+\\.(?:jpeg|jpg|png|JPEG|JPG|PNG)$}")
     public ResponseEntity<Resource> handleImageByName(@ApiParam(value = "图片名", required = true) @PathVariable("name") String name) {
-        Resource file = fileService.loadAsResource(name);
+        Resource resource = fileService.loadAsResource(name);
 
-        Path path = Paths.get(name);
-        String mimeType = Files.probeContentType(path);
+        java.io.File file = new java.io.File(name);
+        String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+        log.info("resource: {}, file: {}, mimeType: {}", resource, file, mimeType);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, mimeType)
-                .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename=\"" + file.getFilename() + "\"")
-                .body(file);
+                .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 
 }

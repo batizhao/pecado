@@ -5,7 +5,7 @@
     <parent>
         <artifactId>pecado</artifactId>
         <groupId>me.batizhao</groupId>
-        <version>1.2</version>
+        <version>1.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,6 +21,7 @@
         <module>pecado-commons-security</module>
         <module>pecado-commons-sentinel</module>
         <module>pecado-commons-swagger</module>
+        <module>pecado-commons-redis</module>
     </modules>
 
 </project>

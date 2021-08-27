@@ -1,7 +1,7 @@
 package me.batizhao.ims.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import me.batizhao.ims.domain.RoleMenu;
+import me.batizhao.ims.api.domain.RoleMenu;
 
 import java.util.List;
 
@@ -11,5 +11,11 @@ import java.util.List;
  **/
 public interface RoleMenuService extends IService<RoleMenu> {
 
-    Boolean updateRoleMenus(Long id, List<String> menus);
+    /**
+     * 更新角色菜单
+     * @param roleMenuList
+     * @return
+     */
+    Boolean updateRoleMenus(List<RoleMenu> roleMenuList);
+
 }

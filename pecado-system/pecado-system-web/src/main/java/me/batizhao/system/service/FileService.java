@@ -1,7 +1,7 @@
 package me.batizhao.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import me.batizhao.system.domain.File;
+import me.batizhao.system.api.domain.File;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

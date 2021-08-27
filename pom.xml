@@ -5,7 +5,7 @@
 
 	<groupId>me.batizhao</groupId>
 	<artifactId>pecado</artifactId>
-	<version>1.2</version>
+	<version>1.3</version>
 	<packaging>pom</packaging>
 
 	<name>pecado</name>
@@ -18,6 +18,7 @@
 		<module>pecado-ims</module>
 		<module>pecado-system</module>
         <module>pecado-uaa</module>
+        <module>pecado-oa</module>
     </modules>
 
 	<properties>
@@ -26,30 +27,30 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<spring-boot.version>2.4.2</spring-boot.version>
-		<spring-cloud-alibaba.version>2.2.4.RELEASE</spring-cloud-alibaba.version>
-		<spring-cloud.version>2020.0.0</spring-cloud.version>
-		<spring-cloud-contract.version>3.0.0</spring-cloud-contract.version>
-		<spring-cloud-security.version>2.2.4.RELEASE</spring-cloud-security.version>
+		<spring-boot.version>2.5.4</spring-boot.version>
+		<spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
+		<spring-cloud.version>2020.0.3</spring-cloud.version>
+		<spring-cloud-contract.version>3.0.2</spring-cloud-contract.version>
+		<spring-cloud-security.version>2.2.5.RELEASE</spring-cloud-security.version>
 
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
-		<commons-configuration.version>2.7</commons-configuration.version>
-		<dynamic-datasource.version>3.3.1</dynamic-datasource.version>
-		<hutool.version>5.5.7</hutool.version>
+		<dynamic-datasource.version>3.4.1</dynamic-datasource.version>
+		<hutool.version>5.7.9</hutool.version>
 		<jasypt.version>3.0.3</jasypt.version>
-		<mybatis-plus.version>3.4.2</mybatis-plus.version>
-		<mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
-		<mockito.version>3.7.0</mockito.version>
+		<kaptcha.version>2.3.2</kaptcha.version>
+		<mybatis-plus.version>3.4.3.2</mybatis-plus.version>
+		<mybatis-spring-boot.version>2.2.0</mybatis-spring-boot.version>
+		<poi.version>5.0.0</poi.version>
 		<rocketmq.version>2.1.1</rocketmq.version>
 		<seata.version>1.4.0</seata.version>
 		<springfox.version>3.0.0</springfox.version>
 		<swagger-annotations.version>1.6.2</swagger-annotations.version>
-		<velocity.version>1.7</velocity.version>
+		<velocity.version>2.3</velocity.version>
 
-		<jacoco-maven-plugin.verison>0.8.6</jacoco-maven-plugin.verison>
-		<git-commit-id-plugin.version>4.0.0</git-commit-id-plugin.version>
+		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
+		<jacoco-maven-plugin.verison>0.8.7</jacoco-maven-plugin.verison>
+		<liquibase-maven-plugin.version>4.4.3</liquibase-maven-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-		<liquibase-maven-plugin.version>4.2.0</liquibase-maven-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -139,7 +140,7 @@
 
 			<dependency>
 				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity</artifactId>
+				<artifactId>velocity-engine-core</artifactId>
 				<version>${velocity.version}</version>
 			</dependency>
 
@@ -148,16 +149,21 @@
 				<artifactId>hutool-all</artifactId>
 				<version>${hutool.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.penggle</groupId>
+				<artifactId>kaptcha</artifactId>
+				<version>${kaptcha.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
 				<version>${commons-beanutils.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-configuration2</artifactId>
-				<version>${commons-configuration.version}</version>
 			</dependency>
 
 			<dependency>
@@ -165,16 +171,6 @@
 				<artifactId>spring-boot-starter-test</artifactId>
 				<version>${spring-boot.version}</version>
 				<scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>junit</groupId>
-						<artifactId>junit</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.mockito</groupId>
-						<artifactId>mockito-core</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.mybatis.spring.boot</groupId>
@@ -186,24 +182,6 @@
 				<groupId>org.mybatis.spring.boot</groupId>
 				<artifactId>mybatis-spring-boot-autoconfigure</artifactId>
 				<version>${mybatis-spring-boot.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-core</artifactId>
-				<version>${mockito.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-inline</artifactId>
-				<version>${mockito.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-junit-jupiter</artifactId>
-				<version>${mockito.version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -325,9 +303,10 @@
 					</executions>
 					<configuration>
 						<verbose>true</verbose>
-						<dateFormat>yyyyMMdd'T'HHmmss'Z'</dateFormat>
+						<dateFormat>yyyyMMddHHmmss</dateFormat>
+						<failOnNoGitDirectory>false</failOnNoGitDirectory>
 						<generateGitPropertiesFile>true</generateGitPropertiesFile>
-						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+<!--						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>-->
 					</configuration>
 				</plugin>
 			</plugins>

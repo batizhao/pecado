@@ -1,10 +1,8 @@
 package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import me.batizhao.ims.domain.RoleMenu;
-import org.apache.ibatis.annotations.Delete;
+import me.batizhao.ims.api.domain.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @author batizhao
@@ -12,8 +10,5 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
-
-    @Delete("DELETE FROM role_menu WHERE roleId = #{roleId}")
-    int deleteByRoleId(@Param("roleId") Long roleId);
 
 }

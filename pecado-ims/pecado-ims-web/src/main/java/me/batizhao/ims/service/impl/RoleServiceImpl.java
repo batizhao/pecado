@@ -1,12 +1,24 @@
 package me.batizhao.ims.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import me.batizhao.common.core.exception.NotFoundException;
+import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.common.core.util.BeanCopyUtil;
-import me.batizhao.ims.api.vo.RoleVO;
-import me.batizhao.ims.domain.Role;
+import me.batizhao.ims.api.domain.Role;
+import me.batizhao.ims.api.domain.RoleDepartment;
+import me.batizhao.ims.api.domain.RoleMenu;
+import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.mapper.RoleMapper;
+import me.batizhao.ims.service.RoleDepartmentService;
+import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
-import org.springframework.beans.BeanUtils;
+import me.batizhao.ims.service.UserRoleService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,33 +35,88 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private RoleMenuService roleMenuService;
+    @Autowired
+    private RoleDepartmentService roleDepartmentService;
 
     @Override
-    public List<RoleVO> findRolesByUserId(Long userId) {
-        List<Role> roleList = roleMapper.findRolesByUserId(userId);
-        return BeanCopyUtil.copyListProperties(roleList, RoleVO::new);
+    public IPage<Role> findRoles(Page<Role> page, Role role) {
+        LambdaQueryWrapper<Role> wrapper = Wrappers.lambdaQuery();
+        if (StringUtils.isNotBlank(role.getName())) {
+            wrapper.like(Role::getName, role.getName());
+        }
+        return roleMapper.selectPage(page, wrapper);
     }
 
     @Override
-    public List<RoleVO> findRoles() {
-        List<Role> roles = baseMapper.selectList(null);
-        return BeanCopyUtil.copyListProperties(roles, RoleVO::new);
+    public Role findById(Long id) {
+        Role role = roleMapper.selectById(id);
+
+        if(role == null) {
+            throw new NotFoundException(String.format("Record not found '%s'。", id));
+        }
+
+        return role;
     }
 
     @Override
     @Transactional
-    public RoleVO saveOrUpdateRole(Role role) {
-        role.setCreatedTime(LocalDateTime.now());
-
+    public Role saveOrUpdateRole(Role role) {
         if (role.getId() == null) {
+            role.setCreateTime(LocalDateTime.now());
+            role.setUpdateTime(LocalDateTime.now());
             roleMapper.insert(role);
         } else {
+            role.setUpdateTime(LocalDateTime.now());
             roleMapper.updateById(role);
         }
 
-        RoleVO roleVO = new RoleVO();
-        BeanUtils.copyProperties(role, roleVO);
+        return role;
+    }
 
-        return roleVO;
+    @Override
+    @Transactional
+    public Boolean deleteByIds(List<Long> ids) {
+        this.removeByIds(ids);
+        ids.forEach(i -> {
+            checkRoleIsSystem(i);
+            userRoleService.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getRoleId, i));
+            roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRoleId, i));
+            roleDepartmentService.remove(Wrappers.<RoleDepartment>lambdaQuery().eq(RoleDepartment::getRoleId, i));
+        });
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public Boolean updateStatus(Role role) {
+        LambdaUpdateWrapper<Role> wrapper = Wrappers.lambdaUpdate();
+        wrapper.eq(Role::getId, role.getId()).set(Role::getStatus, role.getStatus());
+        return roleMapper.update(null, wrapper) == 1;
+    }
+
+    @Override
+    public List<Role> findRolesByUserId(Long userId) {
+        return roleMapper.findRolesByUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public Boolean updateDataScope(Role role) {
+        checkRoleIsSystem(role.getId());
+        roleMapper.updateById(role);
+        if (role.getDataScope().equals("custom")) {
+            return roleDepartmentService.updateRoleDepartments(role.getRoleDepartments());
+        }
+        return true;
+    }
+
+    private void checkRoleIsSystem(Long id) {
+        if (id.equals(1L) || id.equals(2L)) {
+            throw new PecadoException("Operation not allowed!");
+        }
     }
 }

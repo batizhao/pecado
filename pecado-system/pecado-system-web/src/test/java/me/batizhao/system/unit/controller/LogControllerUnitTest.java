@@ -4,10 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.system.api.dto.LogDTO;
-import me.batizhao.system.domain.Log;
-import me.batizhao.system.service.LogService;
+import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.controller.LogController;
+import me.batizhao.system.service.LogService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,11 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.text.StringContainsInOrder.stringContainsInOrder;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -69,28 +67,7 @@ public class LogControllerUnitTest extends BaseControllerUnitTest {
 
     @Test
     @WithMockUser
-    public void givenUserId_whenFindRole_thenRoleJsonArray() throws Exception {
-        LogDTO logDTO = new LogDTO().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
-                .setClassName("me.batizhao.ims.web.RoleController").setClientId("client_app").setHttpRequestMethod("POST")
-                .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
-
-        when(logService.save(any(Log.class))).thenReturn(true);
-
-        mvc.perform(post("/log").with(csrf())
-                .content(objectMapper.writeValueAsString(logDTO))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", equalTo(true)));
-
-        verify(logService).save(any(Log.class));
-    }
-
-    @Test
-    @WithMockUser
-    public void givenNothing_whenFindAllLogs_thenListJson() throws Exception {
+    public void givenNothing_whenFindLogs_thenSuccess() throws Exception {
         when(logService.findLogs(any(Page.class), any(Log.class))).thenReturn(logPageList);
 
         mvc.perform(get("/logs"))
@@ -103,5 +80,75 @@ public class LogControllerUnitTest extends BaseControllerUnitTest {
                 .andExpect(jsonPath("$.data.records[1].classMethod", equalTo("handleUserInfo")));
 
         verify(logService).findLogs(any(Page.class), any(Log.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenFindLog_thenSuccess() throws Exception {
+        Long id = 1L;
+
+        when(logService.findById(id)).thenReturn(logList.get(0));
+
+        mvc.perform(get("/log/{id}", id))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data.classMethod").value("handleMenuTree4Me"));
+
+        verify(logService).findById(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    public void givenJson_whenSaveLog_thenSuccess() throws Exception {
+        Log requestBody = new Log().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
+                .setClassName("me.batizhao.ims.web.RoleController").setClientId("client_app").setHttpRequestMethod("POST")
+                .setIp("127.0.0.1").setCreateTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
+
+
+        when(logService.save(any(Log.class)))
+                .thenReturn(true);
+
+        mvc.perform(post("/log").with(csrf())
+                .content(objectMapper.writeValueAsString(requestBody))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data", equalTo(true)));
+
+        verify(logService).save(any(Log.class));
+    }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenDeleteLog_thenSuccess() throws Exception {
+        when(logService.removeByIds(anyList())).thenReturn(true);
+
+        mvc.perform(delete("/log").param("ids", "1,2").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(logService).removeByIds(anyList());
+    }
+
+    @Test
+    @WithMockUser
+    public void givenId_whenDeleteAllLog_thenSuccess() throws Exception {
+        when(logService.remove(null)).thenReturn(true);
+
+        mvc.perform(delete("/log").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+                .andExpect(jsonPath("$.data").value(true));
+
+        verify(logService).remove(null);
     }
 }

@@ -4,7 +4,7 @@ import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHan
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.core.util.ResponseInfo;
+import me.batizhao.common.core.util.R;
 import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,8 +31,7 @@ public class PecadoBlockExceptionHandler implements BlockExceptionHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
 
-        ResponseInfo<String> message = new ResponseInfo<String>().setCode(ResultEnum.TOO_MANY_REQUEST.getCode())
-                .setMessage(ResultEnum.TOO_MANY_REQUEST.getMessage())
+        R<String> message = new R<String>(ResultEnum.TOO_MANY_REQUEST.getCode())
                 .setData(e.getMessage());
 
         log.error("Sentinel Block Exception", e);

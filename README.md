@@ -18,6 +18,7 @@
 * JDK 11
 * MySQL8
 * Maven
+* Redis
 * Nacos 注册配置中心
 * RocketMQ 异步消息
 * Seata 分布式事务
@@ -25,22 +26,36 @@
 
 ## 快速开始
 
-* 顺序启动 Nacos、~~RocketMQ~~、~~Seata~~
+* 顺序启动 Nacos、Redis、~~RocketMQ~~、~~Seata~~
+
 * 导入 Nacos 配置
+
 * 执行  db/db.sql
-* mvn clean install
+
+* mvn clean install -Dmaven.test.skip=true
+
 * 加入 ```127.0.0.1  pecado-nacos``` 到 hosts
+
+* 启动之前要修改的配置
+
+  * pecado.upload.location
+  * spring.datasource
+  * spring.redis
+
+  如果开发环境不需要验证码，pecado.captcha.enabled: false，同时，前端注释掉验证码输入框。
+
 * 启动 5 个微服务
+
 * 启动  [pecado-ui](https://github.com/batizhao/pecado-ui)
 
 ## 使用 ArgoCD 部署到 K8s
 
 ```sh 
-$ docker build -t harbor.pecado.com/pecado/uaa:1.1 .
-$ docker push harbor.pecado.com/pecado/uaa:1.1
+$ docker build -t harbor.pecado.com:8888/pecado/uaa:1.1 .
+$ docker push harbor.pecado.com:8888/pecado/uaa:1.1
 $ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
-$ argocd app create pecado-uaa --repo git@github.com:batizhao/pecado.git --path pecado-uaa/helm --revision v1.1 --dest-server https://172.31.21.180:8443 --dest-namespace default
+$ argocd app create pecado-uaa --repo git@github.com:batizhao/impala.git --path pecado/pecado-uaa --revision master --dest-server https://172.31.21.180:8443 --dest-namespace default
 
 application 'pecado-uaa' created
 

@@ -2,6 +2,7 @@ package me.baitzhao.gateway.exception;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.util.R;
 import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
@@ -58,11 +59,11 @@ public class GatewayExceptionHandler extends DefaultErrorWebExceptionHandler {
         Integer code = ResultEnum.GATEWAY_ERROR.getCode();
         //这里 data 是 HTTP 状态码
         int data = HttpStatus.INTERNAL_SERVER_ERROR.value();
-        String message = ResultEnum.GATEWAY_ERROR.getMessage();
+        String message = new R<String>(ResultEnum.GATEWAY_ERROR.getCode()).getMessage();
 
         if(throwable instanceof BlockException) {
             data = HttpStatus.TOO_MANY_REQUESTS.value();
-            message = ResultEnum.TOO_MANY_REQUEST.getMessage();
+            message = new R<String>(ResultEnum.TOO_MANY_REQUEST.getCode()).getMessage();
         } else if (throwable instanceof ResponseStatusException) {
             ResponseStatusException responseStatusException = (ResponseStatusException) throwable;
             data = responseStatusException.getStatus().value();

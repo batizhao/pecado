@@ -6,33 +6,38 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.SpringContextHolder;
+import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.system.api.annotation.SystemLog;
-import me.batizhao.system.api.dto.LogDTO;
+import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.api.event.SystemLogEvent;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  * 这里可以使用 Spring @Async 异步 或者 MQ 两种方法发送消息
+ *
  * @author batizhao
  * @since 2020-04-01
  **/
@@ -49,42 +54,38 @@ public class SystemLogAspect {
     @Around("@annotation(systemLog)")
     @SneakyThrows
     public Object around(ProceedingJoinPoint point, SystemLog systemLog) {
-        LogDTO logDTO = getLogDTO(point, systemLog);
+        Log logDTO = getLog(point, systemLog);
+        log.info("@Around System Log is : {}", logDTO);
 
         long startTime = System.currentTimeMillis();
-        Object result = point.proceed();
-        long endTime = System.currentTimeMillis();
+        Object result;
 
-        logDTO.setResult(result.toString());
-        logDTO.setSpend((int) (endTime - startTime));
-
-
-        log.info("@Around System Log is : {}", logDTO);
-//        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
-        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
-
+        try {
+            result = point.proceed();
+            logDTO.setResult(null != result ? result.toString() : null);
+        }
+        catch (Exception e) {
+            logDTO.setType("failure");
+            logDTO.setResult(e.getMessage());
+            throw e;
+        }
+        finally {
+            long endTime = System.currentTimeMillis();
+            logDTO.setSpend((int) (endTime - startTime));
+            SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
+            //rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
+        }
         return result;
     }
 
-    @AfterThrowing(value = "@annotation(systemLog)", throwing = "throwable")
-    public void afterThrowing(JoinPoint point, SystemLog systemLog, Throwable throwable) {
-        LogDTO logDTO = getLogDTO(point, systemLog);
-        logDTO.setResult(throwable.getMessage());
-        logDTO.setSpend(0);
-
-        log.info("@AfterThrowing System Log is : {}", logDTO);
-//        rocketMQTemplate.syncSend(MQConstants.TOPIC_SYSTEM_LOG_TAG_COMMON, logDTO);
-        SpringContextHolder.publishEvent(new SystemLogEvent(logDTO));
-    }
-
-    private LogDTO getLogDTO(JoinPoint point, SystemLog systemLog) {
+    private Log getLog(JoinPoint point, SystemLog systemLog) {
         Signature signature = point.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
 
-        LogDTO logDTO = new LogDTO();
+        Log logDTO = new Log();
 
-        if (!StringUtils.isEmpty(systemLog.value())) {
+        if (StringUtils.isNotBlank(systemLog.value())) {
             logDTO.setDescription(systemLog.value());
         } else if (method.isAnnotationPresent(ApiOperation.class)) {
             ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
@@ -101,25 +102,10 @@ public class SystemLogAspect {
         logDTO.setClassName(method.getDeclaringClass().getName());
         logDTO.setClassMethod(method.getName());
         logDTO.setParameter(getParameter(method.getParameters(), point.getArgs()));
-        logDTO.setClientId(getClientId());
+        logDTO.setClientId("");
         logDTO.setUsername(getUsername());
         logDTO.setUrl(request.getRequestURL().toString());
-        logDTO.setCreatedTime(LocalDateTime.now());
         return logDTO;
-    }
-
-    /**
-     * 获取客户端
-     *
-     * @return clientId
-     */
-    private String getClientId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof OAuth2Authentication) {
-            OAuth2Authentication auth2Authentication = (OAuth2Authentication) authentication;
-            return auth2Authentication.getOAuth2Request().getClientId();
-        }
-        return null;
     }
 
     /**
@@ -128,48 +114,22 @@ public class SystemLogAspect {
      * @return username
      */
     private String getUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return null;
+        PecadoUser user = SecurityUtils.getUser();
+        if (user == null) {
+            return "@Inner";
         }
-        return authentication.getName();
+        return user.getUsername();
     }
 
     /**
      * 获取方法参数
      *
      * @param parameters 参数名
-     * @param args 参数值
+     * @param args       参数值
      * @return
      */
     @SneakyThrows
     private String getParameter(Parameter[] parameters, Object[] args) {
-//        List<Object> argList = new ArrayList<>();
-//        for (int i = 0; i < parameters.length; i++) {
-//            //将RequestBody注解修饰的参数作为请求参数
-//            RequestBody requestBody = parameters[i].getAnnotation(RequestBody.class);
-//            if (requestBody != null) {
-//                argList.add(args[i]);
-//            }
-//            //将RequestParam注解修饰的参数作为请求参数
-//            RequestParam requestParam = parameters[i].getAnnotation(RequestParam.class);
-//            if (requestParam != null) {
-//                Map<String, Object> map = new HashMap<>();
-//                String key = parameters[i].getName();
-//                if (!StringUtils.isEmpty(requestParam.value())) {
-//                    key = requestParam.value();
-//                }
-//                map.put(key, args[i]);
-//                argList.add(map);
-//            }
-//        }
-//        if (argList.isEmpty()) {
-//            return null;
-//        } else if (argList.size() == 1) {
-//            return argList.get(0).toString();
-//        } else {
-//            return argList.toString();
-//        }
         if (ArrayUtils.isEmpty(parameters) || ArrayUtils.isEmpty(args)) {
             return "";
         }
@@ -179,18 +139,49 @@ public class SystemLogAspect {
             String name = parameters[i].getName();
             //参数值
             Object value = args[i];
+
+            if (null == value || isFilterObject(value)) {
+                continue;
+            }
+
             builder.append(name).append("=");
             if (value instanceof String) {
                 builder.append(value);
             } else {
                 builder.append(objectMapper.writeValueAsString(value));
             }
-            if (i < args.length -1) {
+            if (i < args.length - 1) {
                 builder.append(", ");
             }
         }
 
         return builder.toString();
+    }
+
+    /**
+     * 判断是否需要过滤的对象。
+     *
+     * @param o 对象信息。
+     * @return 如果是需要过滤的对象，则返回true；否则返回false。
+     */
+    @SuppressWarnings("rawtypes")
+    private boolean isFilterObject(final Object o) {
+        Class<?> clazz = o.getClass();
+        if (clazz.isArray()) {
+            return clazz.getComponentType().isAssignableFrom(MultipartFile.class);
+        } else if (Collection.class.isAssignableFrom(clazz)) {
+            Collection collection = (Collection) o;
+            for (Iterator iter = collection.iterator(); iter.hasNext(); ) {
+                return iter.next() instanceof MultipartFile;
+            }
+        } else if (Map.class.isAssignableFrom(clazz)) {
+            Map map = (Map) o;
+            for (Iterator iter = map.entrySet().iterator(); iter.hasNext(); ) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                return entry.getValue() instanceof MultipartFile;
+            }
+        }
+        return o instanceof MultipartFile || o instanceof HttpServletRequest || o instanceof HttpServletResponse;
     }
 
 }

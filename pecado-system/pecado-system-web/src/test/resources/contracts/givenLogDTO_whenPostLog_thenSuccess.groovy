@@ -17,7 +17,7 @@ Contract.make {
             classMethod: $(consumer(anyNonBlankString()), producer('save')),
             description: $(consumer(anyNonBlankString()), producer('插入日志')),
             parameter: $(consumer(optional(anyNonBlankString())), producer('{userId=1}')),
-            result: $(consumer(optional(anyNonBlankString())), producer('ResponseInfo(code=0, message=ok)')),
+            result: $(consumer(optional(anyNonBlankString())), producer('R(code=0, message=ok)')),
             spend: $(consumer(anyPositiveInt()), producer('100')),
             clientId: $(consumer(anyUuid()), producer('client_app')),
             username: $(consumer(anyOf('admin', 'tom')), producer('admin')),

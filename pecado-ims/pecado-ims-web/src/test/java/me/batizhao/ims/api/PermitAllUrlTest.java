@@ -35,7 +35,7 @@ public class PermitAllUrlTest extends BaseApiTest {
 
         List<String> regex = permitAllUrlProperties.getRegex().getUrls();
         log.info("regex path: {}", regex);
-        assertThat(regex.size(), is(1));
+        assertThat(regex.size(), is(2));
         assertThat(regex, hasItems("\\/user\\?username\\=\\w+"));
     }
 }

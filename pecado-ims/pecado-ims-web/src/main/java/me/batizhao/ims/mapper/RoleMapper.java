@@ -1,7 +1,7 @@
 package me.batizhao.ims.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import me.batizhao.ims.domain.Role;
+import me.batizhao.ims.api.domain.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -20,7 +20,7 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @param id
      * @return
      */
-    @Select("SELECT A.id, A.name, A.code FROM role A LEFT JOIN user_role B ON A.id = B.roleId WHERE B.userId = #{id}")
+    @Select("SELECT A.id, A.name, A.code, A.dataScope FROM role A LEFT JOIN user_role B ON A.id = B.roleId WHERE B.userId = #{id}")
     List<Role> findRolesByUserId(@Param("id") Long id);
 
 //    /**

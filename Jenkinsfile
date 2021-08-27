@@ -1,9 +1,9 @@
 node {
   def build_tag
-  def registry_addr = "harbor.pecado.com"
+  def registry_addr = "harbor.pecado.com:8888"
   def maintainer_name = "pecado"
-  def dp_image, gateway_image, ims_image, system_image, uaa_image
-  def version = "1.2"
+  def dp_image, gateway_image, ims_image, system_image, uaa_image, oa_image
+  def version = "1.3"
 
   stage('Git Clone') {
     git branch: 'dev', credentialsId: 'github', url: 'git@github.com:batizhao/pecado.git'
@@ -24,7 +24,7 @@ node {
 
   stage('Build Docker Image') {
 
-    dir('pecado-dp') {
+    dir('pecado-dp/pecado-dp-platform') {
       image_name = "${registry_addr}/${maintainer_name}/dp:${version}-${build_tag}"
       dp_image = docker.build(image_name)
     }
@@ -49,15 +49,21 @@ node {
       uaa_image = docker.build(image_name)
     }
 
+    dir('pecado-oa') {
+      image_name = "${registry_addr}/${maintainer_name}/oa:${version}-${build_tag}"
+      oa_image = docker.build(image_name)
+    }
+
   }
 
   stage('Push Docker Image') {
-    docker.withRegistry('https://harbor.pecado.com', 'harbor-jiangsu-auth') {
+    docker.withRegistry('https://harbor.pecado.com:8888', 'harbor-auth') {
       dp_image.push()
       gateway_image.push()
       ims_image.push()
       system_image.push()
       uaa_image.push()
+      oa_image.push()
     }
   }
 }

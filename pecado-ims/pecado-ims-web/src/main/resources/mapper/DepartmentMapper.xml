@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="me.batizhao.ims.mapper.DepartmentMapper">
+
+  <resultMap id="departmentMap" type="me.batizhao.ims.domain.Department">
+    <id property="id" column="id"/>
+    <result property="uuid" column="uuid"/>
+    <result property="pid" column="pid"/>
+    <result property="name" column="name"/>
+    <result property="fullName" column="fullName"/>
+    <result property="sort" column="sort"/>
+    <result property="code" column="code"/>
+    <result property="status" column="status"/>
+    <result property="type" column="type"/>
+    <result property="createTime" column="createTime"/>
+    <result property="updateTime" column="updateTime"/>
+  </resultMap>
+
+  <select id="selectDepartments" resultMap="departmentMap">
+    SELECT d.*
+    FROM (
+      SELECT id,uuid,name,fullName,sort,code,status,type,pid,createTime,updateTime,id AS departmentId
+      FROM department) d
+    <where>
+      <if test="department.fullName != null and department.fullName != ''">
+        AND d.fullName LIKE CONCAT('%',#{department.fullName},'%')
+      </if>
+      <if test="department.name != null and department.name != ''">
+        AND d.name LIKE CONCAT('%',#{department.name},'%')
+      </if>
+      ${department.dataPermission}
+    </where>
+    ORDER BY d.sort ASC
+  </select>
+
+</mapper>

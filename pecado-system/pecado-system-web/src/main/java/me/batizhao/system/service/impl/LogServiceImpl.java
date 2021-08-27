@@ -1,11 +1,15 @@
 package me.batizhao.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import me.batizhao.system.domain.Log;
+import me.batizhao.common.core.exception.NotFoundException;
+import me.batizhao.system.api.domain.Log;
 import me.batizhao.system.mapper.LogMapper;
 import me.batizhao.system.service.LogService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,28 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
 
     @Override
     public IPage<Log> findLogs(Page<Log> page, Log log) {
-        return logMapper.selectLogPage(page, log);
+        LambdaQueryWrapper<Log> wrapper = Wrappers.lambdaQuery();
+        if (StringUtils.isNotBlank(log.getClassName())) {
+            wrapper.like(Log::getClassName, log.getClassName());
+        }
+        if (StringUtils.isNotBlank(log.getDescription())) {
+            wrapper.like(Log::getDescription, log.getDescription());
+        }
+        if (StringUtils.isNotBlank(log.getType())) {
+            wrapper.like(Log::getType, log.getType());
+        }
+        wrapper.orderByDesc(Log::getCreateTime);
+        return logMapper.selectPage(page, wrapper);
+    }
+
+    @Override
+    public Log findById(Long id) {
+        Log log = logMapper.selectById(id);
+
+        if(log == null) {
+            throw new NotFoundException(String.format("Record not found '%s'。", id));
+        }
+
+        return log;
     }
 }

@@ -1,0 +1,34 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+
+<changeSet author="batizhao" id="CreateTableSeataUndoLog-20201203-001">
+        <createTable remarks="AT transaction mode undo table" tableName="undo_log">
+            <column name="branch_id" remarks="branch transaction id" type="BIGINT(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="xid" remarks="global transaction id" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="context" remarks="undo_log context,such as serialization" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rollback_info" remarks="rollback info" type="LONGBLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_status" remarks="0:normal status,1:defense status" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_created" remarks="create datetime" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_modified" remarks="modify datetime" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="batizhao" id="CreateTableSeataUndoLog-20201203-002">
+        <addUniqueConstraint columnNames="xid, branch_id" constraintName="ux_undo_log" tableName="undo_log"/>
+    </changeSet>
+</databaseChangeLog>

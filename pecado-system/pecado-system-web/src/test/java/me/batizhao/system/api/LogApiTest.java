@@ -3,7 +3,7 @@ package me.batizhao.system.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.system.api.dto.LogDTO;
+import me.batizhao.system.api.domain.Log;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,9 +30,9 @@ public class LogApiTest extends BaseApiTest {
     @Test
     @Transactional
     public void givenLogDTO_whenPostLog_thenSuccess() throws Exception {
-        LogDTO logDTO = new LogDTO().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
+        Log logDTO = new Log().setDescription("根据用户ID查询角色").setSpend(20).setClassMethod("findRolesByUserId")
                 .setClassName("me.batizhao.ims.web.RoleController").setClientId("client_app").setHttpRequestMethod("POST")
-                .setIp("127.0.0.1").setCreatedTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
+                .setIp("127.0.0.1").setCreateTime(LocalDateTime.now()).setUrl("http://localhost:5000/role").setUsername("test");
 
         mvc.perform(post("/log")
                 .header(SecurityConstants.FROM, SecurityConstants.FROM_IN)

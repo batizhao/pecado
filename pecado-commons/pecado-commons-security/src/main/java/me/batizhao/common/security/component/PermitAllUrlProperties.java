@@ -34,7 +34,6 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
 	private Ant ant = new Ant();
 	private Regex regex = new Regex();
 	private ApplicationContext applicationContext;
-	private StringBuilder sb = new StringBuilder();
 
 	@Override
 	public void afterPropertiesSet() {
@@ -46,10 +45,12 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
 
 			Inner method = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), Inner.class);
 			if (method != null) {
+				assert info.getPatternsCondition() != null;
 				Set<String> inner = info.getPatternsCondition().getPatterns();
 				for (String url : inner) {
 					Set<NameValueExpression<String>> params = info.getParamsCondition().getExpressions();
 					if (!params.isEmpty()) {
+						StringBuilder sb = new StringBuilder();
 						for (NameValueExpression<String> param : params) {
 							url = sb.append("\\")
 									.append(url)

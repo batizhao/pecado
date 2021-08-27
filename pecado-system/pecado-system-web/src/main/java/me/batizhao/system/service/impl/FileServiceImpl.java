@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.StorageException;
 import me.batizhao.system.config.FileUploadProperties;
-import me.batizhao.system.domain.File;
+import me.batizhao.system.api.domain.File;
 import me.batizhao.system.mapper.FileMapper;
 import me.batizhao.system.service.FileService;
 import me.batizhao.system.util.FileNameAndPathUtils;
@@ -68,7 +68,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         //只返回文件名给前端，不包括路径
         return new File().setFileName(hexFileName).setName(filename)
                 .setSize(file.getSize()).setUrl(this.rootLocation.toString())
-                .setCreatedTime(LocalDateTime.now());
+                .setCreateTime(LocalDateTime.now());
     }
 
     @Override

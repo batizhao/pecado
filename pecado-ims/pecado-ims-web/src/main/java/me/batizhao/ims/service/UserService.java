@@ -3,9 +3,8 @@ package me.batizhao.ims.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.domain.User;
 
 import java.util.List;
 
@@ -15,19 +14,97 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
 
-	UserVO findByUsername(String username);
+	/**
+	 * 分页查询
+	 * @param page 分页对象
+	 * @param user 用户
+	 * @return IPage<User>
+	 */
+	IPage<User> findUsers(User user, Page<User> page, Long departmentId);
 
-	List<UserVO> findByName(String name);
+	/**
+	 * 查询用户
+	 * @param user
+	 * @return
+	 */
+	List<User> findUsers(User user);
 
-	IPage<UserVO> findUsers(Page<UserVO> page, User user);
+	/**
+	 * 通过id查询用户
+	 * @param id id
+	 * @return User
+	 */
+	User findById(Long id);
 
-	UserVO findById(Long id);
+	/**
+	 * 通过 username 查询用户
+	 * @param username
+	 * @return
+	 */
+	User findByUsername(String username);
 
-	int deleteByUsername(String username);
+	/**
+	 * 通过 name 查询用户
+	 * @param name
+	 * @return
+	 */
+//	List<User> findByName(String name);
 
-	UserVO saveOrUpdateUser(User user);
+	/**
+	 * 添加或编辑用户
+	 * @param user 用户
+	 * @return User
+	 */
+	User saveOrUpdateUser(User user);
 
-    UserInfoVO getUserInfo(String username);
+	/**
+	 * 更新用户密码
+	 * @param userId
+	 * @param oldPassword
+	 * @param newPassword
+	 * @return
+	 */
+	Boolean updatePassword(Long userId, String oldPassword, String newPassword);
 
-	Boolean updateUserStatusById(Long id, Integer locked);
+	/**
+	 * 删除
+	 * @param ids
+	 * @return
+	 */
+	Boolean deleteByIds(List<Long> ids);
+
+	/**
+	 * 更新用户状态
+	 * @param user 用户
+	 * @return Boolean
+	 */
+	Boolean updateStatus(User user);
+
+	/**
+	 * 通过id查询用户信息
+	 * @param userId
+	 * @return
+	 */
+    UserInfoVO getUserInfo(Long userId);
+
+	/**
+	 * 根据部门ID查询领导
+	 * @param departmentId
+	 * @param type
+	 * @return
+	 */
+	List<User> findLeadersByDepartmentId(Long departmentId, String type);
+
+	/**
+	 * 查询登录用户的部门领导
+	 * @return
+	 */
+	List<User> findLeaders();
+
+	/**
+	 * 导入
+	 * @param users
+	 * @return
+	 */
+	String importUsers(List<User> users, boolean updateSupport);
 }

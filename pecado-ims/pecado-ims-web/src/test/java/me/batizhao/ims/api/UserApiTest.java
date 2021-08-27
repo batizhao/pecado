@@ -3,14 +3,20 @@ package me.batizhao.ims.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.ims.domain.User;
+import me.batizhao.ims.api.domain.User;
+import me.batizhao.system.api.annotation.SystemLog;
+import me.batizhao.system.api.aspect.SystemLogAspect;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,6 +38,9 @@ public class UserApiTest extends BaseApiTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @SpyBean
+    private SystemLogAspect systemLogAspect;
+
     @Test
     public void givenUserName_whenFindUser_thenSuccess() throws Exception {
         mvc.perform(get("/user?username=admin")
@@ -40,8 +49,8 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.email").value("admin@qq.com"))
-                .andExpect(jsonPath("$.data.roleList", hasSize(2)));
+                .andExpect(jsonPath("$.data.user.email").value("admin@qq.com"))
+                .andExpect(jsonPath("$.data.roles", hasSize(2)));
     }
 
     /**
@@ -102,19 +111,6 @@ public class UserApiTest extends BaseApiTest {
     }
 
     @Test
-    public void givenName_whenFindUser_thenUserListJson() throws Exception {
-        mvc.perform(get("/user").param("name", "孙波波")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", hasSize(2)))
-                .andExpect(jsonPath("$.data[0].username", equalTo("bob")))
-                .andExpect(jsonPath("$.data[1].email", equalTo("bob2@qq.com")));
-    }
-
-    @Test
     public void givenId_whenFindUser_thenUserJson() throws Exception {
         mvc.perform(get("/user/{id}", 1L)
                 .header("Authorization", adminAccessToken))
@@ -135,40 +131,34 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(jsonPath("$.data", containsString("Full authentication is required")));
     }
 
-    @Test
-    public void givenNothing_whenFindAllUser_thenUserListJson() throws Exception {
-        mvc.perform(get("/users")
-                .header("Authorization", adminAccessToken))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.records", hasSize(6)))
-                .andExpect(jsonPath("$.data.records[0].username", equalTo("admin")));
-    }
+//    @Test
+//    public void givenNothing_whenFindAllUser_thenUserListJson() throws Exception {
+//        mvc.perform(get("/users")
+//                .header("Authorization", adminAccessToken))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
+//                .andExpect(jsonPath("$.data.records", hasSize(6)))
+//                .andExpect(jsonPath("$.data.records[0].username", equalTo("admin")));
+//    }
 
     @Test
     public void givenExpiredToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
-        String accessToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlIjowLCJ1c2VyX2lkIjoxLCJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1OTY3ODU2NDAsImRlcHRfaWQiOjEsIm1lc3NhZ2UiOiJvayIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwianRpIjoiNTJkYTA2YzktMWRiMi00NzdmLWJkZjItY2VhOTY1ZTJjNTM1IiwiY2xpZW50X2lkIjoiY2xpZW50X2FwcCIsInVzZXJuYW1lIjoiYWRtaW4ifQ.wVqtJm7__YO8pnh79JMKt1YO5GuIryDj7mCqkLPMSvA";
-        mvc.perform(get("/users")
+        String accessToken = "Bearer eyJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjpbMSwyXSwiZXhwIjoxNjI5NDMwMjA5LCJkZXB0X2lkIjpbMV0sImlhdCI6MTYyOTQyNjYwOSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiIsImRwOmNvZGU6YWRtaW4iLCJkcDpjb2RlOmRlbGV0ZSIsImRwOmNvZGU6ZWRpdCIsImRwOmNvZGU6Z2VuIiwiZHA6Y29kZTppbXBvcnQiLCJkcDpjb2RlOnByZXZpZXciLCJkcDpjb2RlOnN5bmMiLCJkcDpkczphZGQiLCJkcDpkczphZG1pbiIsImRwOmRzOmRlbGV0ZSIsImRwOmRzOmVkaXQiLCJkcDpmb3JtOmFkZCIsImRwOmZvcm06YWRtaW4iLCJkcDpmb3JtOmRlbGV0ZSIsImRwOmZvcm06ZWRpdCIsImltczpkZXBhcnRtZW50OmFkZCIsImltczpkZXBhcnRtZW50OmFkbWluIiwiaW1zOmRlcGFydG1lbnQ6ZGVsZXRlIiwiaW1zOmRlcGFydG1lbnQ6ZWRpdCIsImltczptZW51OmFkZCIsImltczptZW51OmFkbWluIiwiaW1zOm1lbnU6ZGVsZXRlIiwiaW1zOm1lbnU6ZWRpdCIsImltczpwb3N0OmFkZCIsImltczpwb3N0OmFkbWluIiwiaW1zOnBvc3Q6ZGVsZXRlIiwiaW1zOnBvc3Q6ZWRpdCIsImltczpyb2xlOmFkZCIsImltczpyb2xlOmFkbWluIiwiaW1zOnJvbGU6ZGVsZXRlIiwiaW1zOnJvbGU6ZWRpdCIsImltczp1c2VyOmFkZCIsImltczp1c2VyOmFkbWluIiwiaW1zOnVzZXI6ZGVsZXRlIiwiaW1zOnVzZXI6ZWRpdCIsImltczp1c2VyOmV4cG9ydCIsImltczp1c2VyOmltcG9ydCIsIm9hOmNvbW1lbnQ6YWRkIiwib2E6Y29tbWVudDphZG1pbiIsIm9hOnRhc2s6YWRtaW4iLCJzeXN0ZW06ZGljdDphZGQiLCJzeXN0ZW06ZGljdDphZG1pbiIsInN5c3RlbTpkaWN0OmRlbGV0ZSIsInN5c3RlbTpkaWN0OmVkaXQiLCJzeXN0ZW06am9iOmFkZCIsInN5c3RlbTpqb2I6YWRtaW4iLCJzeXN0ZW06am9iOmRlbGV0ZSIsInN5c3RlbTpqb2I6ZWRpdCIsInN5c3RlbTpsb2c6YWRtaW4iLCJzeXN0ZW06bG9nOmNsZWFuIiwic3lzdGVtOmxvZzpkZWxldGUiLCJzeXN0ZW06bG9nOmV4cG9ydCJdLCJ1c2VybmFtZSI6ImFkbWluIn0.hEqDwa3NvDwI88ugkEhBX_RTM5JgN2DHQLiPMbOGC1fzVonGY_skAb8ZV-W12cTv3ADMRYLdc2SQP5ClGaHnuCxDjL6NJ5AMwx1ANmLsTNNB8xbmYyPEaMaBj0xPEOs5qp3c0ZoduEPwL0M8xNALCUFlbV0gNu5qWF1RMVvUAoYHFff3_bR7k3GjsIcbGzWELMMhwnTN08ipmBC7_rymZytGdIYIIr0Znjd9b6uiaVOfmk_-maR1wmPENjpSKgV_zJd7RQnX02CIUlsF1jy_trio41tnesF0KeR4gwqQLav5v-KontHBmZbmIuD46pdypLxtwpxPggSF7PAw_3sL1g";
+        mvc.perform(get("/ims/users")
                 .header("Authorization", accessToken))
                 .andDo(print())
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
-                .andExpect(jsonPath("$.data", containsString("Access token expired")));
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void givenInvalidToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
         String accessToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
-        mvc.perform(get("/user")
+        mvc.perform(get("/ims/user")
                 .header("Authorization", accessToken))
                 .andDo(print())
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_INVALID.getCode()))
-                .andExpect(jsonPath("$.data", containsString("Cannot convert access token")));
+                .andExpect(status().isUnauthorized());
     }
 
     /**
@@ -181,7 +171,7 @@ public class UserApiTest extends BaseApiTest {
     public void givenJson_whenSaveUser_thenSucceedJson() throws Exception {
         User requestBody = new User()
                 .setName("daxia").setEmail("daxia@gmail.com").setUsername("daxia")
-                .setPassword("123456");
+                .setPassword("123456").setUuid("XXXX");
 
         mvc.perform(post("/user")
                 .content(objectMapper.writeValueAsString(requestBody))
@@ -193,6 +183,8 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
                 .andExpect(jsonPath("$.data.id", notNullValue()))
                 .andExpect(jsonPath("$.data.username", equalTo("daxia")));
+
+        verify(systemLogAspect).around(any(ProceedingJoinPoint.class), any(SystemLog.class));
     }
 
     /**
@@ -237,7 +229,7 @@ public class UserApiTest extends BaseApiTest {
     public void givenJson_whenUpdateUser_thenSucceedJson() throws Exception {
         User requestBody = new User()
                 .setId(8L).setName("daxia").setEmail("daxia@gmail.com").setUsername("daxia")
-                .setPassword("123456");
+                .setPassword("123456").setUuid("xxxx");
 
         mvc.perform(post("/user")
                 .content(objectMapper.writeValueAsString(requestBody))
@@ -253,7 +245,7 @@ public class UserApiTest extends BaseApiTest {
     @Test
     @Transactional
     public void givenId_whenDeleteUser_thenSucceed() throws Exception {
-        mvc.perform(delete("/user").param("ids", "1,2")
+        mvc.perform(delete("/user").param("ids", "2,3")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -262,20 +254,16 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(jsonPath("$.data").value(true));
     }
 
-    /**
-     * 测试参数检验失败的情况
-     *
-     * @throws Exception
-     */
     @Test
-    public void givenInValidId_whenDeleteUser_thenValidateFail() throws Exception {
-        mvc.perform(delete("/user").param("ids", "-1")
+    @Transactional
+    public void givenId_whenDeleteUser_thenIsAdminError() throws Exception {
+        mvc.perform(delete("/user").param("ids", "1")
                 .header("Authorization", adminAccessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().is5xxServerError())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data").value(false));
+                .andExpect(jsonPath("$.code").value(ResultEnum.UNKNOWN_ERROR.getCode()))
+                .andExpect(jsonPath("$.data", containsString("Operation not allowed!")));
     }
 
     /**
@@ -324,6 +312,6 @@ public class UserApiTest extends BaseApiTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data.userVO.username").value("admin"));
+                .andExpect(jsonPath("$.data.user.username").value("admin"));
     }
 }

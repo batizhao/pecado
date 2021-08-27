@@ -1,14 +1,13 @@
 package me.batizhao.ims.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import me.batizhao.ims.domain.UserRole;
+import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.mapper.UserRoleMapper;
 import me.batizhao.ims.service.UserRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,18 +17,10 @@ import java.util.List;
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 
-    @Autowired
-    private UserRoleMapper userRoleMapper;
-
     @Override
     @Transactional
-    public Boolean updateUserRoles(Long id, List<String> roles) {
-        userRoleMapper.deleteByUserId(id);
-
-        List<UserRole> userRoles = new ArrayList<>();
-        roles.forEach(item -> {
-            userRoles.add(new UserRole().setUserId(id).setRoleId(Long.parseLong(item)));
-        });
+    public Boolean updateUserRoles(List<UserRole> userRoles) {
+        this.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userRoles.get(0).getUserId()));
         return saveBatch(userRoles);
     }
 }

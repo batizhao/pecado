@@ -20,7 +20,6 @@ import me.batizhao.common.security.component.PecadoResourceServerAutoConfigurati
 import me.batizhao.common.security.component.PecadoSecurityBeanDefinitionRegistrar;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 import java.lang.annotation.*;
 
@@ -32,7 +31,6 @@ import java.lang.annotation.*;
  */
 @Documented
 @Inherited
-@EnableResourceServer
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @EnableGlobalMethodSecurity(prePostEnabled = true)

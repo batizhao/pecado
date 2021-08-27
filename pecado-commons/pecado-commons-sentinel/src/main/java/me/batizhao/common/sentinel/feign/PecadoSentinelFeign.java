@@ -23,9 +23,11 @@ import feign.InvocationHandlerFactory;
 import feign.Target;
 import org.springframework.beans.BeansException;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.FeignContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -38,6 +40,8 @@ import java.util.Map;
  * 支持自动降级注入
  * 这里因为 Alibaba 中的 feign.hystrix.FallbackFactory 在 Spring Cloud 新版本中已经不存在
  * 重写 {@link com.alibaba.cloud.sentinel.feign.SentinelFeign}
+ *
+ * 2021.3.4 Fixed: Requested bean is currently in creation: Is there an unresolvable circular reference
  *
  * @author lengleng
  * @date 2020/6/9
@@ -76,27 +80,25 @@ public final class PecadoSentinelFeign {
 			super.invocationHandlerFactory(new InvocationHandlerFactory() {
 				@Override
 				public InvocationHandler create(Target target, Map<Method, MethodHandler> dispatch) {
-					// using reflect get fallback and fallbackFactory properties from
-					// FeignClientFactoryBean because FeignClientFactoryBean is a package
-					// level class, we can not use it in our package
-					Object feignClientFactoryBean = PecadoSentinelFeign.Builder.this.applicationContext
-							.getBean("&" + target.type().getName());
 
-					Class fallback = (Class) getFieldValue(feignClientFactoryBean, "fallback");
-					Class fallbackFactory = (Class) getFieldValue(feignClientFactoryBean, "fallbackFactory");
-					String beanName = (String) getFieldValue(feignClientFactoryBean, "contextId");
+					// 查找 FeignClient 上的 降级策略
+					FeignClient feignClient = AnnotationUtils.findAnnotation(target.type(), FeignClient.class);
+					Class fallback = feignClient.fallback();
+					Class fallbackFactory = feignClient.fallbackFactory();
+
+					String beanName = feignClient.contextId();
 					if (!StringUtils.hasText(beanName)) {
-						beanName = (String) getFieldValue(feignClientFactoryBean, "name");
+						beanName = feignClient.name();
 					}
 
 					Object fallbackInstance;
 					FallbackFactory fallbackFactoryInstance;
-					// check fallback and fallbackFactory properties
 					if (void.class != fallback) {
 						fallbackInstance = getFromContext(beanName, "fallback", fallback, target.type());
 						return new PecadoSentinelInvocationHandler(target, dispatch,
 								new FallbackFactory.Default(fallbackInstance));
 					}
+
 					if (void.class != fallbackFactory) {
 						fallbackFactoryInstance = (FallbackFactory) getFromContext(beanName, "fallbackFactory",
 								fallbackFactory, FallbackFactory.class);

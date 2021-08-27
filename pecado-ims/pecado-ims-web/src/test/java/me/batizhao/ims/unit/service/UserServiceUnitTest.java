@@ -1,17 +1,21 @@
 package me.batizhao.ims.unit.service;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.NotFoundException;
-import me.batizhao.common.core.util.BeanCopyUtil;
+import me.batizhao.common.core.exception.PecadoException;
+import me.batizhao.ims.api.domain.User;
 import me.batizhao.ims.api.vo.UserInfoVO;
-import me.batizhao.ims.api.vo.UserVO;
-import me.batizhao.ims.domain.User;
 import me.batizhao.ims.mapper.UserMapper;
-import me.batizhao.ims.service.UserService;
+import me.batizhao.ims.service.*;
 import me.batizhao.ims.service.impl.UserServiceImpl;
-import org.junit.jupiter.api.Assertions;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,12 +55,23 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
 
     @MockBean
     private UserMapper userMapper;
+    @MockBean
+    private RoleService roleService;
+    @MockBean
+    private MenuService menuService;
+    @MockBean
+    private DepartmentService departmentService;
+    @MockBean
+    private UserRoleService userRoleService;
 
     @Autowired
     private UserService userService;
 
+    @MockBean
+    private ServiceImpl service;
+
     private List<User> userList;
-    private IPage<UserVO> userPageList;
+    private Page<User> userPageList;
 
     /**
      * Prepare test data.
@@ -67,9 +83,8 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         userList.add(new User().setId(2L).setEmail("lisi@gmail.com").setUsername("lisi").setName("李四").setPassword("123456"));
         userList.add(new User().setId(3L).setEmail("wangwu@gmail.com").setUsername("wangwu").setName("王五").setPassword("123456"));
 
-        List<UserVO> userVOList = BeanCopyUtil.copyListProperties(userList, UserVO::new);
         userPageList = new Page<>();
-        userPageList.setRecords(userVOList);
+        userPageList.setRecords(userList);
     }
 
     @Test
@@ -79,7 +94,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         when(userMapper.selectOne(any()))
                 .thenReturn(userList.get(0));
 
-        UserVO user = userService.findByUsername(username);
+        User user = userService.findByUsername(username);
 
         assertThat(user.getUsername(), equalTo(username));
         assertThat(user.getEmail(), equalTo("zhangsan@gmail.com"));
@@ -97,55 +112,54 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         verify(userMapper).selectOne(any());
     }
 
-    @Test
-    public void givenName_whenFindUser_thenUserList() {
-        String name = "张三";
+//    @Test
+//    public void givenName_whenFindUser_thenUserList() {
+//        String name = "张三";
+//
+//        when(userMapper.selectList(any())).thenReturn(userList.subList(0,1));
+//
+//        List<User> users = userService.findByName(name);
+//
+//        verify(userMapper).selectList(any());
+//
+//        log.info("users: {}", users);
+//
+//        assertThat(users, hasSize(1));
+//        assertThat(users, hasItems(hasProperty("username", is("zhangsan"))));
+//    }
 
-        when(userMapper.selectList(any())).thenReturn(userList.subList(0,1));
-
-        List<UserVO> users = userService.findByName(name);
-
-        verify(userMapper).selectList(any());
-
-        log.info("users: {}", users);
-
-        assertThat(users, hasSize(1));
-        assertThat(users, hasItems(hasProperty("username", is("zhangsan"))));
-    }
-
-    @Test
-    public void givenName_whenFindUser_thenEmpty() {
-        userList.clear();
-        when(userMapper.selectList(any())).thenReturn(userList);
-
-        List<UserVO> users = userService.findByName("xxxx");
-
-        verify(userMapper).selectList(any());
-
-        log.info("users: {}", users);
-
-        assertThat(users, hasSize(0));
-    }
+//    @Test
+//    public void givenName_whenFindUser_thenEmpty() {
+//        userList.clear();
+//        when(userMapper.selectList(any())).thenReturn(userList);
+//
+//        List<User> users = userService.findByName("xxxx");
+//
+//        verify(userMapper).selectList(any());
+//
+//        log.info("users: {}", users);
+//
+//        assertThat(users, hasSize(0));
+//    }
 
     @Test
     public void givenNothing_whenFindAllUser_thenSuccess() {
-        when(userMapper.selectUserPage(any(Page.class), any(User.class)))
+        when(userMapper.selectUsers(any(Page.class), any(User.class), anyLong()))
                 .thenReturn(userPageList);
 
-        IPage<UserVO> users = userService.findUsers(new Page<>(), new User().setUsername("tom"));
+        IPage<User> users = userService.findUsers(new User().setUsername("tom"), new Page<>(), null);
 
         assertThat(users.getRecords(), iterableWithSize(3));
         assertThat(users.getRecords(), hasItems(hasProperty("username", is("zhangsan")),
-                                      hasProperty("email", is("lisi@gmail.com")),
-                                      hasProperty("email", is("wangwu@gmail.com"))));
+                hasProperty("email", is("lisi@gmail.com")),
+                hasProperty("email", is("wangwu@gmail.com"))));
 
         assertThat(users.getRecords(), containsInAnyOrder(allOf(hasProperty("email", is("zhangsan@gmail.com")),
-                                                      hasProperty("username", is("zhangsan"))),
-                                                allOf(hasProperty("email", is("lisi@gmail.com")),
-                                                      hasProperty("username", is("lisi"))),
-                                                allOf(hasProperty("email", is("wangwu@gmail.com")),
-                                                      hasProperty("username", is("wangwu")))));
-
+                hasProperty("username", is("zhangsan"))),
+                allOf(hasProperty("email", is("lisi@gmail.com")),
+                        hasProperty("username", is("lisi"))),
+                allOf(hasProperty("email", is("wangwu@gmail.com")),
+                        hasProperty("username", is("wangwu")))));
     }
 
     @Test
@@ -153,7 +167,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         when(userMapper.selectById(1L))
                 .thenReturn(userList.get(0));
 
-        UserVO user = userService.findById(1L);
+        User user = userService.findById(1L);
 
         assertThat(user.getUsername(), equalTo("zhangsan"));
         assertThat(user.getEmail(), equalTo("zhangsan@gmail.com"));
@@ -172,18 +186,6 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     }
 
     @Test
-    public void givenUserName_whenDeleteUser_thenSuccess() {
-        String username = "zhangsan";
-
-        when(userMapper.delete(any()))
-                .thenReturn(1);
-
-        int result = userService.deleteByUsername(username);
-
-        assertThat(result, equalTo(1));
-    }
-
-    @Test
     public void givenUserJson_whenSaveOrUpdateUser_thenSuccess() {
         User user_test_data = new User().setEmail("zhaoliu@gmail.com").setUsername("zhaoliu").setPassword("xxx").setName("xxx");
 
@@ -195,7 +197,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         assertThat(bool, equalTo(true));
 
         user_test_data.setPassword(hashPass);
-        user_test_data.setCreatedTime(LocalDateTime.now());
+        user_test_data.setCreateTime(LocalDateTime.now());
         log.info("user_test_data: {}", user_test_data);
 
         //这里注意 saveOrUpdate 是第三方的方法，所以用了 spy 对 UserService 做了个 mock
@@ -206,7 +208,7 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
         // insert 不带 id
         doReturn(1).when(userMapper).insert(any());
 
-        UserVO user = userService.saveOrUpdateUser(user_test_data);
+        User user = userService.saveOrUpdateUser(user_test_data);
         log.info("user: {}", user);
 
         verify(userMapper).insert(any());
@@ -221,31 +223,49 @@ public class UserServiceUnitTest extends BaseServiceUnitTest {
     }
 
     @Test
+    public void givenIds_whenDelete_thenSuccess() {
+        doReturn(true).when(service).removeByIds(anyList());
+        doReturn(true).when(userRoleService).remove(any(Wrapper.class));
+
+        Boolean b = userService.deleteByIds(Arrays.asList(2L, 3L));
+        assertThat(b, equalTo(true));
+    }
+
+    @Test
+    public void givenIds_whenDelete_thenException() {
+        doReturn(true).when(service).removeByIds(anyList());
+        doReturn(true).when(userRoleService).remove(any(Wrapper.class));
+
+        assertThrows(PecadoException.class, () -> userService.deleteByIds(Arrays.asList(1L, 3L)));
+    }
+
+    @Test
     public void givenUsername_whenGetUserInfo_thenSuccess() {
-        doReturn(userList.get(0)).when(userMapper).selectOne(any());
+        doReturn(userList.get(0)).when(userMapper).selectById(anyLong());
 
-        UserInfoVO uiv = userService.getUserInfo("xxx");
+        UserInfoVO uiv = userService.getUserInfo(1L);
 
-        assertThat(uiv.getUserVO().getEmail(), equalTo("zhangsan@gmail.com"));
+        assertThat(uiv.getUser().getEmail(), equalTo("zhangsan@gmail.com"));
     }
 
     @Test
     public void givenUsername_whenGetUserInfo_thenNotFound() {
-        doReturn(null).when(userMapper).selectOne(any());
+        doReturn(null).when(userMapper).selectById(any());
 
-        assertThrows(NotFoundException.class, () -> userService.getUserInfo("xxxx"));
+        assertThrows(NotFoundException.class, () -> userService.getUserInfo(1L));
     }
 
     @Test
-    public void givenUserId_whenUpdateUserStatus_thenSuccess() {
-        when(userMapper.updateUserStatusById(1L, 1))
-                .thenReturn(1);
+    public void givenUser_whenUpdateStatus_thenSuccess() {
+        //Fix can not find lambda cache for this entity
+        TableInfoHelper.initTableInfo(new MapperBuilderAssistant(new MybatisConfiguration(), ""), User.class);
 
-        assertThat(userService.updateUserStatusById(1L, 1), equalTo(true));
+        doReturn(1).when(userMapper).update(any(), any(Wrapper.class));
+        assertThat(userService.updateStatus(userList.get(0)), equalTo(true));
 
-        when(userMapper.updateUserStatusById(1L, 1))
-                .thenReturn(0);
+        doReturn(0).when(userMapper).update(any(), any(Wrapper.class));
+        assertThat(userService.updateStatus(userList.get(0)), equalTo(false));
 
-        assertThat(userService.updateUserStatusById(1L, 1), equalTo(false));
+        verify(userMapper, times(2)).update(any(), any(LambdaUpdateWrapper.class));
     }
 }

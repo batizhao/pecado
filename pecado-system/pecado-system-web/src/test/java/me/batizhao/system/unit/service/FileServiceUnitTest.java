@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.exception.StorageException;
 import me.batizhao.system.config.FileUploadProperties;
-import me.batizhao.system.domain.File;
+import me.batizhao.system.api.domain.File;
 import me.batizhao.system.mapper.FileMapper;
 import me.batizhao.system.service.FileService;
 import me.batizhao.system.service.impl.FileServiceImpl;
@@ -130,7 +130,7 @@ public class FileServiceUnitTest extends BaseServiceUnitTest {
 
         File file = new File().setFileName("hexFileName").setName("filename")
                 .setSize(100L).setUrl("xxx/test2.txt")
-                .setCreatedTime(LocalDateTime.now());
+                .setCreateTime(LocalDateTime.now());
 
         doReturn(file).when(fileService).upload(any(MockMultipartFile.class));
         doReturn(true).when(service).save(any(File.class));
