@@ -1,7 +1,9 @@
 package me.batizhao.uaa.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.ResultEnum;
+import me.batizhao.ims.api.domain.LoginDTO;
 import me.batizhao.uaa.PecadoUaaApplication;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -35,28 +37,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("api")
 public class UaaOauthApiTest {
 
-//    public static final String USERNAME = "admin";
-//    public static final String PASSWORD = "123456";
-
     @Autowired
     MockMvc mvc;
 
-    /**
-     * 这里需要设置 spring.mvc.locale: zh_CN，否则会调用 spring security core 中的 messages.properties
-     * 返回国际化消息 Bad credentials
-     * 在 postman、curl 等方式中自动会返回中文消息
-     *
-     * @throws Exception
-     */
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
-    public void givenNoPassword_whenGetAccessToken_thenOAuthException() throws Exception {
+    public void givenNoPassword_whenGetAccessToken_thenError() throws Exception {
+        LoginDTO loginDTO = new LoginDTO().setUsername("admin");
         mvc.perform(post("/token")
-                .param("username", "admin"))
+                .content(objectMapper.writeValueAsString(loginDTO))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
-                .andExpect(jsonPath("$.data", containsString("Required request parameter 'password' for method")));
+                .andExpect(jsonPath("$.data[0]", containsString("password is not blank")));
     }
 
 //    @Test

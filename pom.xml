@@ -5,7 +5,7 @@
 
 	<groupId>me.batizhao</groupId>
 	<artifactId>pecado</artifactId>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.3</version>
 	<packaging>pom</packaging>
 
 	<name>pecado</name>
@@ -37,6 +37,7 @@
 		<dynamic-datasource.version>3.4.1</dynamic-datasource.version>
 		<hutool.version>5.7.9</hutool.version>
 		<jasypt.version>3.0.3</jasypt.version>
+		<kaptcha.version>2.3.2</kaptcha.version>
 		<mybatis-plus.version>3.4.3.2</mybatis-plus.version>
 		<mybatis-spring-boot.version>2.2.0</mybatis-spring-boot.version>
 		<poi.version>5.0.0</poi.version>
@@ -152,6 +153,11 @@
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-ooxml</artifactId>
 				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.penggle</groupId>
+				<artifactId>kaptcha</artifactId>
+				<version>${kaptcha.version}</version>
 			</dependency>
 
 			<dependency>

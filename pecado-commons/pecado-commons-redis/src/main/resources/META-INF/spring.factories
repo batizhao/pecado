@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  me.batizhao.common.redis.config.RedisAutoConfiguration, \
+  me.batizhao.common.redis.util.RedisUtil
+
