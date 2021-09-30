@@ -44,10 +44,18 @@
             <column name="parentMenuId" type="BIGINT" remarks="父菜单ID"/>
             <column name="form" type="VARCHAR(16)" defaultValue="meta" remarks="生成表单方式（meta元数据 visual可视化）"/>
             <column name="type" type="VARCHAR(16)" defaultValue="zip" remarks="生成代码方式（zip压缩包 path自定义路径）"/>
-            <column name="path" type="VARCHAR(128)" defaultValue="/" remarks="生成路径（不填默认项目路径）"/>
+            <column name="path" type="VARCHAR(128)" defaultValue="/" remarks="后端代码路径（不填默认项目路径）"/>
+            <column name="frontPath" type="VARCHAR(128)" defaultValue="/" remarks="前端代码路径"/>
             <column name="subTableId" type="BIGINT" remarks="关联子表的code.id"/>
             <column name="subTableFkName" type="VARCHAR(32)" defaultValue="" remarks="子表关联的属性名"/>
             <column name="formKey" type="varchar(64)" remarks="表单元数据" />
+            <column name="workflow" type="VARCHAR(8)" remarks="整合工作流引擎" defaultValue="no">
+                <constraints nullable="false" />
+            </column>
+            <column name="workflowKey" type="VARCHAR(32)" remarks="流程Key" defaultValue="" />
+            <column name="testcase" type="VARCHAR(8)" remarks="生成测试用例" defaultValue="no">
+                <constraints nullable="false" />
+            </column>
             <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
