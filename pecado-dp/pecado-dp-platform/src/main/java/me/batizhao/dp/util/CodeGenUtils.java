@@ -210,17 +210,21 @@ public class CodeGenUtils {
 
         // 获取模板列表
         for (String template : getTemplates(code.getTemplate())) {
-            if (!StringUtils.containsAny(template, MENU_SQL_VM, VUE_API_JS_VM, VUE_INDEX_VUE_VM, VUE_TREE_INDEX_VUE_VM)) {
-                // 渲染模板
-                StringWriter sw = new StringWriter();
-                Template tpl = engine.getTemplate(template);
-                tpl.render(map, sw);
-                try {
-                    String path = getGenPath(code, template);
-                    FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetUtil.UTF_8);
-                } catch (IOException e) {
-                    throw new PecadoException("渲染模板失败，表名：" + code.getTableName());
+            // 如果测试用例关闭，有可能返回null
+            if (getFileName(code, template) == null) continue;
+
+            // 渲染模板
+            StringWriter sw = new StringWriter();
+            Template tpl = engine.getTemplate(template);
+            tpl.render(map, sw);
+            try {
+                String path = getGenPath(code, template);
+                if (StringUtils.containsAny(template, VUE_API_JS_VM, VUE_INDEX_VUE_VM, VUE_TREE_INDEX_VUE_VM)) {
+                    path = getGenFrontPath(code, template);
                 }
+                FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetUtil.UTF_8);
+            } catch (IOException e) {
+                throw new PecadoException("渲染模板失败，表名：" + code.getTableName());
             }
         }
     }
@@ -237,6 +241,9 @@ public class CodeGenUtils {
 
         // 获取模板列表
         for (String template : getTemplates(code.getTemplate())) {
+            // 如果测试用例关闭，有可能返回null
+            if (getFileName(code, template) == null) continue;
+
             // 渲染模板
             StringWriter sw = new StringWriter();
             Template tpl = engine.getTemplate(template);
@@ -356,7 +363,7 @@ public class CodeGenUtils {
     }
 
     private Map<String, Object> prepareContext(Code code) {
-        Map<String, Object> map = new HashMap<>(18);
+        Map<String, Object> map = new HashMap<>(21);
         map.put("tableName", code.getTableName());
         map.put("pk", code.getCodeMetaList().get(0));
         map.put("className", code.getClassName());
@@ -376,6 +383,8 @@ public class CodeGenUtils {
         map.put("subMappingPath", code.getSubCode() != null ? code.getSubCode().getMappingPath() : "");
         map.put("form", code.getForm());
         map.put("formKey", code.getFormKey());
+        map.put("workflow", code.getWorkflow());
+        map.put("workflowKey", code.getWorkflowKey());
         return map;
     }
 
@@ -396,7 +405,22 @@ public class CodeGenUtils {
     private String getGenPath(Code code, String template) {
         String genPath = code.getPath();
         if (StringUtils.equals(genPath, "/")) {
-            return System.getProperty("user.dir") + File.separator + "src" + File.separator + getFileName(code, template);
+            return System.getProperty("user.dir") + File.separator + getFileName(code, template);
+        }
+        return genPath + File.separator + getFileName(code, template);
+    }
+
+    /**
+     * 获取前端代码生成地址
+     *
+     * @param code
+     * @param template
+     * @return 生成地址
+     */
+    private String getGenFrontPath(Code code, String template) {
+        String genPath = code.getFrontPath();
+        if (StringUtils.equals(genPath, "/")) {
+            return System.getProperty("user.dir") + File.separator + getFileName(code, template);
         }
         return genPath + File.separator + getFileName(code, template);
     }
@@ -405,7 +429,7 @@ public class CodeGenUtils {
      * 获取文件名
      */
     private String getFileName(Code code, String template) {
-        String packageRootPath = PecadoConstants.BACK_END_PROJECT + File.separator + "src" + File.separator;
+        String packageRootPath = "src" + File.separator;
 
         String packageSrcPath = packageRootPath + "main" + File.separator + "java" + File.separator;
 
@@ -426,20 +450,12 @@ public class CodeGenUtils {
             return packageSrcPath + GenConfig.getMapperPackageName() + File.separator + code.getClassName() + "Mapper.java";
         }
 
-        if (template.contains(MAPPER_UNIT_TEST_JAVA_VM)) {
-            return packageTestPath + "unit" + File.separator + "mapper" + File.separator + code.getClassName() + "MapperUnitTest.java";
-        }
-
         if (template.contains(SERVICE_JAVA_VM)) {
             return packageSrcPath + "service" + File.separator + code.getClassName() + "Service.java";
         }
 
         if (template.contains(SERVICE_IMPL_JAVA_VM)) {
             return packageSrcPath + "service" + File.separator + "impl" + File.separator + code.getClassName() + "ServiceImpl.java";
-        }
-
-        if (template.contains(SERVICE_UNIT_TEST_JAVA_VM)) {
-            return packageTestPath + "unit" + File.separator + "service" + File.separator + code.getClassName() + "ServiceUnitTest.java";
         }
 
         if (template.contains(CONTROLLER_JAVA_VM)) {
@@ -458,16 +474,8 @@ public class CodeGenUtils {
             return packageSrcPath + "controller" + File.separator + code.getClassName() + "Form.java";
         }
 
-        if (template.contains(CONTROLLER_UNIT_TEST_JAVA_VM)) {
-            return packageTestPath + "unit" + File.separator + "controller" + File.separator + code.getClassName() + "ControllerUnitTest.java";
-        }
-
-        if (template.contains(API_TEST_JAVA_VM)) {
-            return packageTestPath + "api" + File.separator + code.getClassName() + "ApiTest.java";
-        }
-
         if (template.contains(MAPPER_XML_VM)) {
-            return PecadoConstants.BACK_END_PROJECT + File.separator + "src" + File.separator + "main" + File.separator
+            return "src" + File.separator + "main" + File.separator
                     + "resources" + File.separator + "mapper" + File.separator + code.getClassName() + "Mapper.xml";
         }
 
@@ -475,20 +483,39 @@ public class CodeGenUtils {
             return code.getClassName().toLowerCase() + "_menu.sql";
         }
 
+        if (code.getTestcase().equals("yes")) {
+            if (template.contains(MAPPER_UNIT_TEST_JAVA_VM)) {
+                return packageTestPath + "unit" + File.separator + "mapper" + File.separator + code.getClassName() + "MapperUnitTest.java";
+            }
+
+            if (template.contains(SERVICE_UNIT_TEST_JAVA_VM)) {
+                return packageTestPath + "unit" + File.separator + "service" + File.separator + code.getClassName() + "ServiceUnitTest.java";
+            }
+
+            if (template.contains(CONTROLLER_UNIT_TEST_JAVA_VM)) {
+                return packageTestPath + "unit" + File.separator + "controller" + File.separator + code.getClassName() + "ControllerUnitTest.java";
+            }
+
+            if (template.contains(API_TEST_JAVA_VM)) {
+                return packageTestPath + "api" + File.separator + code.getClassName() + "ApiTest.java";
+            }
+        }
+
+
         if (template.contains(VUE_INDEX_VUE_VM)) {
-            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views" + File.separator
+            return "src" + File.separator + "views" + File.separator
                     + code.getModuleName() + File.separator + code.getMappingPath() + File.separator
                     + "index.vue";
         }
 
         if (code.getTemplate().equals(GenConstants.TPL_TREE) && template.contains(VUE_TREE_INDEX_VUE_VM)) {
-            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "views" + File.separator
+            return "src" + File.separator + "views" + File.separator
                     + code.getModuleName() + File.separator + code.getMappingPath() + File.separator
                     + "index.vue";
         }
 
         if (template.contains(VUE_API_JS_VM)) {
-            return PecadoConstants.FRONT_END_PROJECT + File.separator + "src" + File.separator + "api" + File.separator
+            return "src" + File.separator + "api" + File.separator
                     + code.getModuleName() + File.separator + code.getMappingPath() + ".js";
         }
 
