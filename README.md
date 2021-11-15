@@ -1,6 +1,9 @@
 # Pecado
 
 这是一个 Spring Cloud 微服务项目。
+是 [Stalber](https://github.com/batizhao/stalber) 项目的微服务化，拥有一致的 API。
+
+## 服务
 
 * Pecado-dp 开发平台
 * Pecado-gateway 网关
@@ -8,8 +11,6 @@
 * Pecado-system 系统管理
 * Pecado-uaa 认证中心
 * Pecado-oa 整合流程平台业务演示
-
-* 关于测试的[说明](https://github.com/batizhao/pecado/blob/master/docs/test.md)
 
 ## 环境
 
@@ -46,7 +47,7 @@
   
 * 启动 5 个微服务
 
-* 启动  [pecado-ui](https://github.com/batizhao/pecado-ui)
+* 启动  [pecado-web-ui](https://github.com/batizhao/pecado-vue-ui)
 
 ## 使用 ArgoCD 部署到 K8s
 
