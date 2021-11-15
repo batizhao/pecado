@@ -623,4 +623,57 @@
             <column name="menuId" valueNumeric="4400"/>
         </insert>
     </changeSet>
+
+    <changeSet author="batizhao" id="InsertTableMenu-20211012-001">
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3400"/>
+            <column name="path" value="/dp/template"/>
+            <column name="name" value="模板配置"/>
+            <column name="permission" value="dp:codeTemplate:admin"/>
+            <column name="icon" value="code"/>
+            <column name="pid" valueNumeric="3000"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3401"/>
+            <column name="name" value="添加模板"/>
+            <column name="permission" value="dp:codeTemplate:add"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3400"/>
+            <column name="sort" valueNumeric="1"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3402"/>
+            <column name="name" value="删除模板"/>
+            <column name="permission" value="dp:codeTemplate:delete"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3400"/>
+            <column name="sort" valueNumeric="2"/>
+        </insert>
+        <insert tableName="menu">
+            <column name="id" valueNumeric="3403"/>
+            <column name="name" value="编辑模板"/>
+            <column name="permission" value="dp:codeTemplate:edit"/>
+            <column name="type" value="B"/>
+            <column name="pid" valueNumeric="3400"/>
+            <column name="sort" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3400"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3401"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3402"/>
+        </insert>
+        <insert tableName="role_menu">
+            <column name="roleId" valueNumeric="2"/>
+            <column name="menuId" valueNumeric="3403"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

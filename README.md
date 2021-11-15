@@ -7,10 +7,8 @@
 * Pecado-ims 权限管理
 * Pecado-system 系统管理
 * Pecado-uaa 认证中心
+* Pecado-oa 整合流程平台业务演示
 
-一开始的主要目标是完成微服务框架下的自动化测试。
-
-* 衍生自 [Paper](https://github.com/batizhao/paper)
 * 关于测试的[说明](https://github.com/batizhao/pecado/blob/master/docs/test.md)
 
 ## 环境
@@ -36,14 +34,16 @@
 
 * 加入 ```127.0.0.1  pecado-nacos``` 到 hosts
 
-* 启动之前要修改的配置
+* 启动之前要修改的配置，详细说明看[这里](https://github.com/batizhao/stalber)
 
-  * pecado.upload.location
   * spring.datasource
   * spring.redis
+  * pecado.terrace
+  * pecado.code.template-url
+  * pecado.storage
 
   如果开发环境不需要验证码，pecado.captcha.enabled: false，同时，前端注释掉验证码输入框。
-
+  
 * 启动 5 个微服务
 
 * 启动  [pecado-ui](https://github.com/batizhao/pecado-ui)

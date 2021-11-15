@@ -55,7 +55,7 @@ public class FileControllerUnitTest extends BaseControllerUnitTest {
 
         when(fileService.upload(any(MultipartFile.class))).thenReturn(file);
 
-        mvc.perform(multipart("/file/upload").file(mockMultipartFile).with(csrf()))
+        mvc.perform(multipart("/system/file/upload").file(mockMultipartFile).with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -69,22 +69,22 @@ public class FileControllerUnitTest extends BaseControllerUnitTest {
     @WithMockUser
     public void givenImageFileName_whenLoadResource_thenSuccess() throws Exception {
         Resource file = new ClassPathResource("test.jpg");
-        when(fileService.loadAsResource(anyString())).thenReturn(file);
+        when(fileService.load(anyString())).thenReturn(file);
 
-        mvc.perform(get("/file/image/test.jpg"))
+        mvc.perform(get("/system/file/image/test.jpg"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.IMAGE_JPEG_VALUE));
 
-        verify(fileService).loadAsResource(anyString());
+        verify(fileService).load(anyString());
     }
 
     @Test
     @WithMockUser
     public void givenPngFileName_whenLoadResource_thenFail() throws Exception {
         Resource file = new ClassPathResource("test.png");
-        when(fileService.loadAsResource(anyString())).thenReturn(file);
+        when(fileService.load(anyString())).thenReturn(file);
 
-        mvc.perform(get("/file/image/test.png"))
+        mvc.perform(get("/system/file/image/test.png"))
                 .andDo(print())
                 .andExpect(status().is5xxServerError())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -96,9 +96,9 @@ public class FileControllerUnitTest extends BaseControllerUnitTest {
     @WithMockUser
     public void givenTxtFileName_whenLoadResource_thenFail() throws Exception {
         Resource file = new ClassPathResource("test.txt");
-        when(fileService.loadAsResource(anyString())).thenReturn(file);
+        when(fileService.load(anyString())).thenReturn(file);
 
-        mvc.perform(get("/file/image/test.txt"))
+        mvc.perform(get("/system/file/image/test.txt"))
                 .andExpect(status().isNotFound());
     }
 

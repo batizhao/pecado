@@ -17,34 +17,22 @@
 package me.batizhao.dp.util;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.extra.template.Template;
-import cn.hutool.extra.template.TemplateConfig;
-import cn.hutool.extra.template.TemplateEngine;
-import cn.hutool.extra.template.TemplateUtil;
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.GenConstants;
 import me.batizhao.common.core.constant.PecadoConstants;
-import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.dp.config.GenConfig;
 import me.batizhao.dp.domain.Code;
 import me.batizhao.dp.domain.CodeMeta;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 代码生成器 工具类 copy
@@ -58,45 +46,45 @@ import java.util.zip.ZipOutputStream;
 @UtilityClass
 public class CodeGenUtils {
 
-    private final String ENTITY_JAVA_VM = "java/Domain.java.vm";
+    private final String ENTITY_JAVA_VM = "Domain.java";
 
-    private final String ENTITY_DTO_JAVA_VM = "java/DomainDTO.java.vm";
+    private final String ENTITY_DTO_JAVA_VM = "DomainDTO.java";
 
-    private final String ENTITY_FORM_JAVA_VM = "java/DomainForm.java.vm";
+    private final String ENTITY_FORM_JAVA_VM = "DomainForm.java";
 
-    private final String MAPPER_JAVA_VM = "java/Mapper.java.vm";
+    private final String MAPPER_JAVA_VM = "Mapper.java";
 
-    private final String SERVICE_JAVA_VM = "java/Service.java.vm";
+    private final String SERVICE_JAVA_VM = "Service.java";
 
-    private final String SERVICE_IMPL_JAVA_VM = "java/ServiceImpl.java.vm";
+    private final String SERVICE_IMPL_JAVA_VM = "ServiceImpl.java";
 
-    private final String CONTROLLER_JAVA_VM = "java/Controller.java.vm";
+    private final String CONTROLLER_JAVA_VM = "Controller.java";
 
-    private final String CONTROLLER_BASE_JAVA_VM = "java/BaseController.java.vm";
+    private final String CONTROLLER_BASE_JAVA_VM = "BaseController.java";
 
-    private final String MAPPER_XML_VM = "Mapper.xml.vm";
+    private final String MAPPER_XML_VM = "Mapper.xml";
 
-    private final String CONTROLLER_UNIT_TEST_JAVA_VM = "ControllerUnitTest.java.vm";
+    private final String CONTROLLER_UNIT_TEST_JAVA_VM = "ControllerUnitTest.java";
 
-    private final String SERVICE_UNIT_TEST_JAVA_VM = "ServiceUnitTest.java.vm";
+    private final String SERVICE_UNIT_TEST_JAVA_VM = "ServiceUnitTest.java";
 
-    private final String MAPPER_UNIT_TEST_JAVA_VM = "MapperUnitTest.java.vm";
+    private final String MAPPER_UNIT_TEST_JAVA_VM = "MapperUnitTest.java";
 
-    private final String API_TEST_JAVA_VM = "ApiTest.java.vm";
+    private final String API_TEST_JAVA_VM = "ApiTest.java";
 
-    private final String MENU_SQL_VM = "menu.sql.vm";
+    private final String MENU_SQL_VM = "menu.sql";
 
-    private final String VUE_INDEX_VUE_VM = "index.vue.vm";
+    private final String VUE_INDEX_VUE_VM = "index.vue";
 
-    private final String VUE_TREE_INDEX_VUE_VM = "index-tree.vue.vm";
+    private final String VUE_TREE_INDEX_VUE_VM = "index-tree.vue";
 
-    private final String VUE_API_JS_VM = "api.js.vm";
+    private final String VUE_API_JS_VM = "api.js";
 
-    private final String JSP_COMMENT = "comment.jsp.vm";
-    private final String JSP_INDEX = "index.jsp.vm";
-    private final String JSP_INPUT = "input.jsp.vm";
-    private final String JSP_STATISTICAL = "statistical.jsp.vm";
-    private final String JSP_VIEW = "view.jsp.vm";
+    private final String JSP_COMMENT = "comment.jsp";
+    private final String JSP_INDEX = "index.jsp";
+    private final String JSP_INPUT = "input.jsp";
+    private final String JSP_STATISTICAL = "statistical.jsp";
+    private final String JSP_VIEW = "view.jsp";
 
     /**
      * 初始化数据
@@ -199,87 +187,6 @@ public class CodeGenUtils {
     }
 
     /**
-     * 生成代码到路径
-     */
-    @SneakyThrows
-    public void generateCode(Code code) {
-        // 封装模板数据
-        Map<String, Object> map = prepareContext(code);
-
-        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("/templates/" + GenConfig.getProjectKey(), TemplateConfig.ResourceMode.CLASSPATH));
-
-        // 获取模板列表
-        for (String template : getTemplates(code.getTemplate())) {
-            // 如果测试用例关闭，有可能返回null
-            if (getFileName(code, template) == null) continue;
-
-            // 渲染模板
-            StringWriter sw = new StringWriter();
-            Template tpl = engine.getTemplate(template);
-            tpl.render(map, sw);
-            try {
-                String path = getGenPath(code, template);
-                if (StringUtils.containsAny(template, VUE_API_JS_VM, VUE_INDEX_VUE_VM, VUE_TREE_INDEX_VUE_VM)) {
-                    path = getGenFrontPath(code, template);
-                }
-                FileUtils.writeStringToFile(new File(path), sw.toString(), CharsetUtil.UTF_8);
-            } catch (IOException e) {
-                throw new PecadoException("渲染模板失败，表名：" + code.getTableName());
-            }
-        }
-    }
-
-    /**
-     * 生成代码然后下载
-     */
-    @SneakyThrows
-    public void generateCode(Code code, ZipOutputStream zip) {
-        // 封装模板数据
-        Map<String, Object> map = prepareContext(code);
-
-        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("/templates/" + GenConfig.getProjectKey(), TemplateConfig.ResourceMode.CLASSPATH));
-
-        // 获取模板列表
-        for (String template : getTemplates(code.getTemplate())) {
-            // 如果测试用例关闭，有可能返回null
-            if (getFileName(code, template) == null) continue;
-
-            // 渲染模板
-            StringWriter sw = new StringWriter();
-            Template tpl = engine.getTemplate(template);
-            tpl.render(map, sw);
-
-            // 添加到zip
-            zip.putNextEntry(new ZipEntry(Objects.requireNonNull(getFileName(code, template))));
-            IoUtil.write(zip, StandardCharsets.UTF_8, false, sw.toString());
-            IoUtil.close(sw);
-            zip.closeEntry();
-        }
-    }
-
-    /**
-     * 预览代码
-     */
-    @SneakyThrows
-    public Map<String, String> previewCode(Code code) {
-        // 封装模板数据
-        Map<String, Object> map = prepareContext(code);
-
-        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("/templates/" + GenConfig.getProjectKey(), TemplateConfig.ResourceMode.CLASSPATH));
-
-        Map<String, String> dataMap = new LinkedHashMap<>();
-        // 获取模板列表
-        for (String template : getTemplates(code.getTemplate())) {
-            // 渲染模板
-            StringWriter sw = new StringWriter();
-            Template tpl = engine.getTemplate(template);
-            tpl.render(map, sw);
-            dataMap.put(template.substring(template.lastIndexOf("/")+1, template.indexOf(".vm")), sw.toString());
-        }
-        return dataMap;
-    }
-
-    /**
      * 关键字替换
      *
      * @param text 需要被替换的名字
@@ -343,26 +250,7 @@ public class CodeGenUtils {
         }
     }
 
-    /**
-     * 配置
-     *
-     * @return
-     */
-    private List<String> getTemplates(String template) {
-        List<String> templates = new ArrayList<>();
-        if (StringUtils.isNotBlank(GenConfig.getTemplates())) {
-            templates = Arrays.asList(GenConfig.getTemplates().split(","));
-            templates = new ArrayList<>(templates);
-        }
-
-		if (template.equals(GenConstants.TPL_TREE)) {
-            templates.add("vue/index-tree.vue.vm");
-            templates.remove("vue/index.vue.vm");
-        }
-        return templates;
-    }
-
-    private Map<String, Object> prepareContext(Code code) {
+    public Map<String, Object> prepareContext(Code code) {
         Map<String, Object> map = new HashMap<>(21);
         map.put("tableName", code.getTableName());
         map.put("pk", code.getCodeMetaList().get(0));
@@ -396,39 +284,9 @@ public class CodeGenUtils {
     }
 
     /**
-     * 获取代码生成地址
-     *
-     * @param code
-     * @param template
-     * @return 生成地址
-     */
-    private String getGenPath(Code code, String template) {
-        String genPath = code.getPath();
-        if (StringUtils.equals(genPath, "/")) {
-            return System.getProperty("user.dir") + File.separator + getFileName(code, template);
-        }
-        return genPath + File.separator + getFileName(code, template);
-    }
-
-    /**
-     * 获取前端代码生成地址
-     *
-     * @param code
-     * @param template
-     * @return 生成地址
-     */
-    private String getGenFrontPath(Code code, String template) {
-        String genPath = code.getFrontPath();
-        if (StringUtils.equals(genPath, "/")) {
-            return System.getProperty("user.dir") + File.separator + getFileName(code, template);
-        }
-        return genPath + File.separator + getFileName(code, template);
-    }
-
-    /**
      * 获取文件名
      */
-    private String getFileName(Code code, String template) {
+    public String getFileName(Code code, String template) {
         String packageRootPath = "src" + File.separator;
 
         String packageSrcPath = packageRootPath + "main" + File.separator + "java" + File.separator;
@@ -480,7 +338,7 @@ public class CodeGenUtils {
         }
 
         if (template.contains(MENU_SQL_VM)) {
-            return code.getClassName().toLowerCase() + "_menu.sql";
+            return "db" + File.separator + code.getClassName().toLowerCase() + "_menu.sql";
         }
 
         if (code.getTestcase().equals("yes")) {
