@@ -31,3 +31,6 @@ target/
 logs/
 out/
 arthas-output/
+
+release.properties
+pom.xml.releaseBackup
