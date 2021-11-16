@@ -30,5 +30,5 @@ public interface FileService extends IService<File> {
      * @param filename 文件名
      * @return
      */
-    Resource loadAsResource(String filename);
+    Resource load(String filename);
 }

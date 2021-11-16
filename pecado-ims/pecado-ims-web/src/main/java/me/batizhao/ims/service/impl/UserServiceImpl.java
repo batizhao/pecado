@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.swagger.models.auth.In;
 import me.batizhao.common.core.exception.NotFoundException;
 import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.common.security.util.SecurityUtils;
@@ -167,22 +168,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setUser(user);
-        userInfoVO.setDeptIds(departmentService.findDepartmentsByUserId(userId).stream().map(Department::getId).collect(Collectors.toList()));
-        userInfoVO.setRoleIds(roleService.findRolesByUserId(userId).stream().map(Role::getId).collect(Collectors.toList()));
+        userInfoVO.setDeptIds(departmentService.findDepartmentsByUserId(userId).stream().map(Department::getId).map(String::valueOf).collect(Collectors.toList()));
+        userInfoVO.setRoleIds(roleService.findRolesByUserId(userId).stream().map(Role::getId).map(String::valueOf).collect(Collectors.toList()));
         userInfoVO.setRoles(roleService.findRolesByUserId(userId).stream().map(Role::getCode).collect(Collectors.toList()));
         userInfoVO.setPermissions(menuService.findMenusByUserId(userId).stream().map(Menu::getPermission).filter(org.springframework.util.StringUtils::hasText).collect(Collectors.toList()));
         return userInfoVO;
     }
 
     @Override
-    public List<User> findLeadersByDepartmentId(Long departmentId, String type) {
+    public List<User> findLeadersByDepartmentId(Integer departmentId, String type) {
         return userMapper.selectLeadersByDepartmentId(departmentId, type);
     }
 
     @Override
     public List<User> findLeaders() {
-        Integer deptId = SecurityUtils.getUser().getDeptIds().get(0);
-        return this.findLeadersByDepartmentId(deptId.longValue(), null);
+        List<String> depts = SecurityUtils.getUser().getDeptIds();
+        return this.findLeadersByDepartmentId(Integer.valueOf(depts.get(0)), null);
     }
 
     @Override

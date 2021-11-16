@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -29,8 +30,6 @@ import java.util.List;
 @EnableConfigurationProperties(SwaggerProperties.class)
 @ConditionalOnProperty(name = "pecado.swagger.enabled", havingValue = "true")
 public class PecadoSwaggerAutoConfiguration {
-
-    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private static final List<String> DEFAULT_EXCLUDE_PATH = Arrays.asList("/error", "/actuator/**");
 
@@ -69,7 +68,7 @@ public class PecadoSwaggerAutoConfiguration {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
+        return new ApiKey("JWT", HttpHeaders.AUTHORIZATION, "header");
     }
 
     private SecurityContext securityContext() {

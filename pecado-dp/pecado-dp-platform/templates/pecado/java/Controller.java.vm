@@ -156,6 +156,8 @@ public class ${className}Controller {
 #end
     }
 
+#foreach ($column in $columns)
+#if($column.columnName == "status")
     /**
      * 更新${comments}状态
      *
@@ -172,5 +174,6 @@ public class ${className}Controller {
     public R<Boolean> handleUpdateStatus(@ApiParam(value = "${comments}" , required = true) @RequestBody ${className} ${classname}) {
         return R.ok(${classname}Service.updateStatus(${classname}));
     }
-
+#end
+#end
 }
