@@ -21,6 +21,13 @@
         <module>pecado-oa</module>
     </modules>
 
+	<scm>
+		<url>scm:git:git@github.com:batizhao/pecado.git</url>
+		<connection>scm:git:git@github.com:batizhao/pecado.git</connection>
+		<developerConnection>scm:git:git@github.com:batizhao/pecado.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
 	<properties>
 		<java.version>11</java.version>
 		<maven.compiler.source>11</maven.compiler.source>
