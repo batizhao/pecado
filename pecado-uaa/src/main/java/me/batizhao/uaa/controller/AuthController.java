@@ -3,6 +3,7 @@ package me.batizhao.uaa.controller;
 import io.swagger.annotations.Api;
 import me.batizhao.common.core.util.R;
 import me.batizhao.ims.api.domain.LoginDTO;
+import me.batizhao.uaa.domain.TokenVO;
 import me.batizhao.uaa.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +30,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/token")
-    public R<String> handleLogin(@Valid @RequestBody LoginDTO loginDTO) {
+    public R<TokenVO> handleLogin(@Valid @RequestBody LoginDTO loginDTO) {
         return R.ok(authService.login(loginDTO.getUsername(), loginDTO.getPassword(),
                 loginDTO.getCode(), loginDTO.getUuid()));
     }
