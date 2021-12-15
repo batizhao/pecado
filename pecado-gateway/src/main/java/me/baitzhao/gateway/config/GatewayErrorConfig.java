@@ -2,8 +2,8 @@ package me.baitzhao.gateway.config;
 
 import me.baitzhao.gateway.exception.GatewayExceptionHandler;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
@@ -25,39 +25,39 @@ import java.util.List;
  * @author batizhao
  * @since 2020-04-15
  **/
-@Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({ServerProperties.class, ResourceProperties.class})
+//@Configuration(proxyBeanMethods = false)
+//@EnableConfigurationProperties({ServerProperties.class})
 public class GatewayErrorConfig {
 
-    private final ServerProperties serverProperties;
-    private final ApplicationContext applicationContext;
-    private final ResourceProperties resourceProperties;
-    private final List<ViewResolver> viewResolvers;
-    private final ServerCodecConfigurer serverCodecConfigurer;
-
-    public GatewayErrorConfig(ServerProperties serverProperties,
-                              ResourceProperties resourceProperties,
-                              ObjectProvider<List<ViewResolver>> viewResolversProvider,
-                              ServerCodecConfigurer serverCodecConfigurer,
-                              ApplicationContext applicationContext) {
-        this.serverProperties = serverProperties;
-        this.applicationContext = applicationContext;
-        this.resourceProperties = resourceProperties;
-        this.viewResolvers = viewResolversProvider.getIfAvailable(Collections::emptyList);
-        this.serverCodecConfigurer = serverCodecConfigurer;
-    }
-
-    @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    public ErrorWebExceptionHandler errorWebExceptionHandler(ErrorAttributes errorAttributes) {
-        GatewayExceptionHandler exceptionHandler = new GatewayExceptionHandler(errorAttributes,
-                this.resourceProperties,
-                this.serverProperties.getError(),
-                this.applicationContext);
-        exceptionHandler.setViewResolvers(this.viewResolvers);
-        exceptionHandler.setMessageWriters(this.serverCodecConfigurer.getWriters());
-        exceptionHandler.setMessageReaders(this.serverCodecConfigurer.getReaders());
-        return exceptionHandler;
-    }
+//    private final ServerProperties serverProperties;
+//    private final ApplicationContext applicationContext;
+//    private final WebProperties.Resources resources;
+//    private final List<ViewResolver> viewResolvers;
+//    private final ServerCodecConfigurer serverCodecConfigurer;
+//
+//    public GatewayErrorConfig(ServerProperties serverProperties,
+//                              WebProperties.Resources resources,
+//                              ObjectProvider<List<ViewResolver>> viewResolversProvider,
+//                              ServerCodecConfigurer serverCodecConfigurer,
+//                              ApplicationContext applicationContext) {
+//        this.serverProperties = serverProperties;
+//        this.applicationContext = applicationContext;
+//        this.resources = resources;
+//        this.viewResolvers = viewResolversProvider.getIfAvailable(Collections::emptyList);
+//        this.serverCodecConfigurer = serverCodecConfigurer;
+//    }
+//
+//    @Bean
+//    @Order(Ordered.HIGHEST_PRECEDENCE)
+//    public ErrorWebExceptionHandler errorWebExceptionHandler(ErrorAttributes errorAttributes) {
+//        GatewayExceptionHandler exceptionHandler = new GatewayExceptionHandler(errorAttributes,
+//                this.resources,
+//                this.serverProperties.getError(),
+//                this.applicationContext);
+//        exceptionHandler.setViewResolvers(this.viewResolvers);
+//        exceptionHandler.setMessageWriters(this.serverCodecConfigurer.getWriters());
+//        exceptionHandler.setMessageReaders(this.serverCodecConfigurer.getReaders());
+//        return exceptionHandler;
+//    }
 
 }

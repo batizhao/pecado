@@ -17,7 +17,6 @@
         <module>pecado-commons-feign</module>
         <module>pecado-commons-mybatis</module>
         <module>pecado-commons-security</module>
-        <module>pecado-commons-sentinel</module>
         <module>pecado-commons-swagger</module>
         <module>pecado-commons-redis</module>
     </modules>

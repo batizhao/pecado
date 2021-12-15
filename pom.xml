@@ -33,30 +33,30 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<spring-boot.version>2.5.6</spring-boot.version>
+		<spring-boot.version>2.6.1</spring-boot.version>
 		<spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
-		<spring-cloud.version>2020.0.4</spring-cloud.version>
-		<spring-cloud-contract.version>3.0.2</spring-cloud-contract.version>
+		<spring-cloud.version>2021.0.0</spring-cloud.version>
+		<spring-cloud-contract.version>3.1.0</spring-cloud-contract.version>
 		<spring-cloud-security.version>2.2.5.RELEASE</spring-cloud-security.version>
 
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
-		<dynamic-datasource.version>3.4.1</dynamic-datasource.version>
-		<hutool.version>5.7.15</hutool.version>
-		<jasypt.version>3.0.3</jasypt.version>
+		<dynamic-datasource.version>3.5.0</dynamic-datasource.version>
+		<hutool.version>5.7.16</hutool.version>
+		<jasypt.version>3.0.4</jasypt.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
-		<mybatis-plus.version>3.4.3.2</mybatis-plus.version>
+		<mybatis-plus.version>3.4.3.4</mybatis-plus.version>
 		<mybatis-spring-boot.version>2.2.0</mybatis-spring-boot.version>
 		<okhttp3.version>4.9.2</okhttp3.version>
-		<poi.version>5.0.0</poi.version>
+		<poi.version>5.1.0</poi.version>
 		<rocketmq.version>2.1.1</rocketmq.version>
 		<seata.version>1.4.0</seata.version>
 		<springfox.version>3.0.0</springfox.version>
-		<swagger-annotations.version>1.6.2</swagger-annotations.version>
+		<swagger-annotations.version>1.6.3</swagger-annotations.version>
 		<velocity.version>2.3</velocity.version>
 
 		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
 		<jacoco-maven-plugin.verison>0.8.7</jacoco-maven-plugin.verison>
-		<liquibase-maven-plugin.version>4.4.3</liquibase-maven-plugin.version>
+		<liquibase-maven-plugin.version>4.6.2</liquibase-maven-plugin.version>
 		<maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 	</properties>
@@ -123,11 +123,6 @@
 			</dependency>
 			<dependency>
 				<groupId>me.batizhao</groupId>
-				<artifactId>pecado-commons-sentinel</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>me.batizhao</groupId>
 				<artifactId>pecado-commons-swagger</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -145,13 +140,13 @@
 			<dependency>
 				<groupId>me.batizhao</groupId>
 				<artifactId>spring-boot-starter-terrace</artifactId>
-				<version>1.1.2</version>
+				<version>1.1.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>me.batizhao</groupId>
 				<artifactId>spring-boot-starter-oss</artifactId>
-				<version>1.0</version>
+				<version>1.1</version>
 				<exclusions>
 					<exclusion>
 						<groupId>com.squareup.okhttp3</groupId>

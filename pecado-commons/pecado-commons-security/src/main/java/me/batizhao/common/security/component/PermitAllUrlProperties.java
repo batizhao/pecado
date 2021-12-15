@@ -45,8 +45,8 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
 
 			Inner method = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), Inner.class);
 			if (method != null) {
-				assert info.getPatternsCondition() != null;
-				Set<String> inner = info.getPatternsCondition().getPatterns();
+				assert info.getPathPatternsCondition() != null;
+				Set<String> inner = info.getPathPatternsCondition().getPatternValues();
 				for (String url : inner) {
 					Set<NameValueExpression<String>> params = info.getParamsCondition().getExpressions();
 					if (!params.isEmpty()) {

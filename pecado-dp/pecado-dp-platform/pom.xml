@@ -22,10 +22,10 @@
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-security</artifactId>
         </dependency>
-        <dependency>
-            <groupId>me.batizhao</groupId>
-            <artifactId>pecado-commons-sentinel</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>me.batizhao</groupId>-->
+<!--            <artifactId>pecado-commons-sentinel</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-feign</artifactId>

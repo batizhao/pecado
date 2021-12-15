@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.R;
 import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties.Resources;
 import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
@@ -31,8 +31,8 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Slf4j
 public class GatewayExceptionHandler extends DefaultErrorWebExceptionHandler {
 
-    public GatewayExceptionHandler(ErrorAttributes errorAttributes, ResourceProperties resourceProperties, ErrorProperties errorProperties, ApplicationContext applicationContext) {
-        super(errorAttributes, resourceProperties, errorProperties, applicationContext);
+    public GatewayExceptionHandler(ErrorAttributes errorAttributes, Resources resources, ErrorProperties errorProperties, ApplicationContext applicationContext) {
+        super(errorAttributes, resources, errorProperties, applicationContext);
     }
 
     @Override
