@@ -2,9 +2,9 @@ package me.batizhao.dp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.R;
 import me.batizhao.dp.domain.Ds;
@@ -27,7 +27,7 @@ import java.util.List;
  * @author batizhao
  * @since 2020-10-19
  */
-@Api(tags = "数据源管理")
+@Tag(name = "数据源管理")
 @RestController
 @Slf4j
 @Validated
@@ -42,7 +42,7 @@ public class DsController {
      * @param ds 数据源
      * @return R
      */
-    @ApiOperation(value = "分页查询数据源")
+    @Operation(description = "分页查询数据源")
     @GetMapping("/dss")
     @PreAuthorize("@pms.hasPermission('dp:ds:admin')")
     @SystemLog
@@ -54,7 +54,7 @@ public class DsController {
      * 查询所有数据源
      * @return R
      */
-    @ApiOperation(value = "查询所有数据源")
+    @Operation(description = "查询所有数据源")
     @GetMapping("/ds")
     @PreAuthorize("hasRole('USER')")
     @SystemLog
@@ -67,11 +67,11 @@ public class DsController {
      * @param id id
      * @return R
      */
-    @ApiOperation(value = "通过id查询数据源")
+    @Operation(description = "通过id查询数据源")
     @GetMapping("/ds/{id}")
     @PreAuthorize("@pms.hasPermission('dp:ds:admin')")
     @SystemLog
-    public R<Ds> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Integer id) {
+    public R<Ds> handleId(@Parameter(name = "ID" , required = true) @PathVariable("id") @Min(1) Integer id) {
         return R.ok(dsService.findById(id));
     }
 
@@ -80,11 +80,11 @@ public class DsController {
      * @param ds 数据源
      * @return R
      */
-    @ApiOperation(value = "添加或修改数据源")
+    @Operation(description = "添加或修改数据源")
     @PostMapping("/ds")
     @PreAuthorize("@pms.hasPermission('dp:ds:add') or @pms.hasPermission('dp:ds:edit')")
     @SystemLog
-    public R<Ds> handleSaveOrUpdate(@Valid @ApiParam(value = "数据源" , required = true) @RequestBody Ds ds) {
+    public R<Ds> handleSaveOrUpdate(@Valid @Parameter(name = "数据源" , required = true) @RequestBody Ds ds) {
         return R.ok(dsService.saveOrUpdateDs(ds));
     }
 
@@ -93,11 +93,11 @@ public class DsController {
      * @param ids ID串
      * @return R
      */
-    @ApiOperation(value = "通过id删除数据源")
+    @Operation(description = "通过id删除数据源")
     @DeleteMapping("/ds")
     @PreAuthorize("@pms.hasPermission('dp:ds:delete')")
     @SystemLog
-    public R<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
+    public R<Boolean> handleDelete(@Parameter(name = "ID串" , required = true) @RequestParam List<Long> ids) {
         return R.ok(dsService.removeByIds(ids));
     }
 
@@ -107,11 +107,11 @@ public class DsController {
      * @param ds 数据源
      * @return R
      */
-    @ApiOperation(value = "更新数据源状态")
+    @Operation(description = "更新数据源状态")
     @PostMapping("/ds/status")
     @PreAuthorize("@pms.hasPermission('dp:ds:admin')")
     @SystemLog
-    public R<Boolean> handleUpdateStatus(@ApiParam(value = "数据源" , required = true) @RequestBody Ds ds) {
+    public R<Boolean> handleUpdateStatus(@Parameter(name = "数据源" , required = true) @RequestBody Ds ds) {
         return R.ok(dsService.updateStatus(ds));
     }
 

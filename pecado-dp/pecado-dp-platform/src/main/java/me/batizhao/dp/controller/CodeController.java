@@ -3,9 +3,9 @@ package me.batizhao.dp.controller;
 import cn.hutool.core.io.IoUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.PecadoConstants;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  * @author batizhao
  * @date 2020/10/10
  */
-@Api(tags = "生成代码管理")
+@Tag(name = "生成代码管理")
 @RestController
 @Slf4j
 @Validated
@@ -53,7 +53,7 @@ public class CodeController {
      * @param code 生成代码
      * @return R
      */
-    @ApiOperation(value = "分页查询代码")
+    @Operation(description = "分页查询代码")
     @GetMapping("/codes")
     @PreAuthorize("@pms.hasPermission('dp:code:admin')")
     public R<IPage<Code>> handleCodes(Page<Code> page, Code code) {
@@ -66,10 +66,10 @@ public class CodeController {
      * @param id id
      * @return R
      */
-    @ApiOperation(value = "通过id查询代码")
+    @Operation(description = "通过id查询代码")
     @GetMapping("/code/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:admin')")
-    public R<Map<String, Object>> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+    public R<Map<String, Object>> handleId(@Parameter(name = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         Code code = codeService.findById(id);
         List<CodeMeta> codeMetas = codeMetaService.findByCodeId(id);
         List<Code> codes = codeService.list()
@@ -88,11 +88,11 @@ public class CodeController {
      * @param code 生成代码
      * @return R
      */
-    @ApiOperation(value = "修改生成代码")
+    @Operation(description = "修改生成代码")
     @PostMapping("/code")
     @PreAuthorize("@pms.hasPermission('dp:code:edit')")
     @SystemLog
-    public R<Code> handleUpdate(@Valid @ApiParam(value = "生成代码" , required = true) @RequestBody Code code) {
+    public R<Code> handleUpdate(@Valid @Parameter(name = "生成代码" , required = true) @RequestBody Code code) {
         return R.ok(codeService.saveOrUpdateCode(code));
     }
 
@@ -101,11 +101,11 @@ public class CodeController {
      * @param ids ID串
      * @return R
      */
-    @ApiOperation(value = "通过id删除生成代码")
+    @Operation(description = "通过id删除生成代码")
     @DeleteMapping("/code")
     @PreAuthorize("@pms.hasPermission('dp:code:delete')")
     @SystemLog
-    public R<Boolean> handleDelete(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids) {
+    public R<Boolean> handleDelete(@Parameter(name = "ID串" , required = true) @RequestParam List<Long> ids) {
         return R.ok(codeService.deleteByIds(ids));
     }
 
@@ -117,7 +117,7 @@ public class CodeController {
      * @param dsName 数据源
      * @return R
      */
-    @ApiOperation(value = "查询数据源下的所有表")
+    @Operation(description = "查询数据源下的所有表")
     @GetMapping("/code/tables")
     @PreAuthorize("@pms.hasPermission('dp:code:admin')")
     @SystemLog
@@ -130,7 +130,7 @@ public class CodeController {
      * @param codes 表元数据
      * @return
      */
-    @ApiOperation(value = "导入选中的表")
+    @Operation(description = "导入选中的表")
     @PostMapping("/code/table")
     @PreAuthorize("@pms.hasPermission('dp:code:import')")
     @SystemLog
@@ -144,11 +144,11 @@ public class CodeController {
      * @param response
      */
     @SneakyThrows
-    @ApiOperation(value = "生成代码zip")
+    @Operation(description = "生成代码zip")
     @PostMapping(value = "/code/zip")
     @PreAuthorize("@pms.hasPermission('dp:code:gen')")
     @SystemLog
-    public void handleGenerateCode4Zip(@ApiParam(value = "ID串" , required = true) @RequestParam List<Long> ids, HttpServletResponse response) {
+    public void handleGenerateCode4Zip(@Parameter(name = "ID串" , required = true) @RequestParam List<Long> ids, HttpServletResponse response) {
         byte[] data = codeService.downloadCode(ids);
         response.reset();
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
@@ -164,11 +164,11 @@ public class CodeController {
      * @param id Code Id
      * @return
      */
-    @ApiOperation(value = "生成代码path")
+    @Operation(description = "生成代码path")
     @PostMapping("/code/path/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:gen')")
     @SystemLog
-    public R<Boolean> handleGenerateCode4Path(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+    public R<Boolean> handleGenerateCode4Path(@Parameter(name = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return R.ok(codeService.generateCode(id));
     }
 
@@ -177,10 +177,10 @@ public class CodeController {
      * @param id Code Id
      * @return
      */
-    @ApiOperation(value = "预览代码")
+    @Operation(description = "预览代码")
     @GetMapping("/code/preview/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:preview')")
-    public R<Map<String, String>> handlePreviewCode(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+    public R<Map<String, String>> handlePreviewCode(@Parameter(name = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return R.ok(codeService.previewCode(id));
     }
 
@@ -189,11 +189,11 @@ public class CodeController {
      * @param id Code Id
      * @return
      */
-    @ApiOperation(value = "同步表元数据")
+    @Operation(description = "同步表元数据")
     @PostMapping("/code/sync/{id}")
     @PreAuthorize("@pms.hasPermission('dp:code:sync')")
     @SystemLog
-    public R<Boolean> handleSyncCodeMeta(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+    public R<Boolean> handleSyncCodeMeta(@Parameter(name = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         return R.ok(codeService.syncCodeMeta(id));
     }
 }

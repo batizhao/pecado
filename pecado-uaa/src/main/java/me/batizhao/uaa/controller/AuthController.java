@@ -1,6 +1,6 @@
 package me.batizhao.uaa.controller;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import me.batizhao.common.core.util.R;
 import me.batizhao.ims.api.domain.LoginDTO;
 import me.batizhao.uaa.domain.TokenVO;
@@ -21,7 +21,7 @@ import java.util.Map;
  * @author batizhao
  * @since 2021-04-22
  */
-@Api(tags = "Token管理")
+@Tag(name = "Token管理")
 @RestController
 @Validated
 public class AuthController {

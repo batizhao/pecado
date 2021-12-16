@@ -53,73 +53,73 @@
       private static final long serialVersionUID = 1L;
   
       @TableId
-      @ApiModelProperty(value="id")
+      @Schema(description="id")
       private Long id;
   
-      @ApiModelProperty(value="数据源")
+      @Schema(description="数据源")
       private String dsName;
   
-      @ApiModelProperty(value="表名")
+      @Schema(description="表名")
       private String tableName;
   
-      @ApiModelProperty(value="表说明")
+      @Schema(description="表说明")
       private String tableComment;
   
-      @ApiModelProperty(value="引擎")
+      @Schema(description="引擎")
       private String engine;
   
-      @ApiModelProperty(value="类名")
+      @Schema(description="类名")
       private String className;
   
-      @ApiModelProperty(value="类注释")
+      @Schema(description="类注释")
       private String classComment;
   
-      @ApiModelProperty(value="作者")
+      @Schema(description="作者")
       private String classAuthor;
   
-      @ApiModelProperty(value="包名")
+      @Schema(description="包名")
       private String packageName;
   
-      @ApiModelProperty(value="所属模块/微服务/系统名，英文")
+      @Schema(description="所属模块/微服务/系统名，英文")
       private String moduleName;
   
-      @ApiModelProperty(value="API后端路由")
+      @Schema(description="API后端路由")
       private String mappingPath;
   
-      @ApiModelProperty(value="模板类型")
+      @Schema(description="模板类型")
       private String template;
   
-      @ApiModelProperty(value="父菜单ID")
+      @Schema(description="父菜单ID")
       private Long parentMenuId;
   
-      @ApiModelProperty(value="生成代码方式（zip压缩包 path自定义路径）")
+      @Schema(description="生成代码方式（zip压缩包 path自定义路径）")
       private String type;
   
-      @ApiModelProperty(value="生成路径（不填默认项目路径）")
+      @Schema(description="生成路径（不填默认项目路径）")
       private String path;
   
-      @ApiModelProperty(value="关联子表的code.id")
+      @Schema(description="关联子表的code.id")
       private Long subTableId;
   
-      @ApiModelProperty(value="子表关联的属性名")
+      @Schema(description="子表关联的属性名")
       private String subTableFkName;
   
-      @ApiModelProperty(value="附加选项")
+      @Schema(description="附加选项")
       private String options;
   
-      @ApiModelProperty(value="创建时间")
+      @Schema(description="创建时间")
       private LocalDateTime createTime;
   
-      @ApiModelProperty(value="修改时间")
+      @Schema(description="修改时间")
       private LocalDateTime updateTime;
   
-      @ApiModelProperty(value="表元数据")
+      @Schema(description="表元数据")
       private transient List<CodeMeta> codeMetaList;
   
-      @ApiModelProperty(value="子表元数据")
+      @Schema(description="子表元数据")
       private transient Code subCode;
   
-      @ApiModelProperty(value="关联表元数据")
+      @Schema(description="关联表元数据")
       private transient List<Code> relationCode;
   }
   ```
@@ -142,64 +142,64 @@
       private static final long serialVersionUID = 1L;
   
       @TableId
-      @ApiModelProperty(value="pk")
+      @Schema(description="pk")
       private Long id;
   
-      @ApiModelProperty(value="code表ID")
+      @Schema(description="code表ID")
       private Long codeId;
   
-      @ApiModelProperty(value="列名")
+      @Schema(description="列名")
       private String columnName;
   
-      @ApiModelProperty(value="列注释")
+      @Schema(description="列注释")
       private String columnComment;
   
-      @ApiModelProperty(value="列类型")
+      @Schema(description="列类型")
       private String columnType;
   
-      @ApiModelProperty(value="Java类型")
+      @Schema(description="Java类型")
       private String javaType;
   
-      @ApiModelProperty(value="Java属性名")
+      @Schema(description="Java属性名")
       private String javaField;
   
-      @ApiModelProperty(value="是否主键")
+      @Schema(description="是否主键")
       private Boolean primaryKey;
   
-      @ApiModelProperty(value="是否自增")
+      @Schema(description="是否自增")
       private Boolean increment;
   
-      @ApiModelProperty(value="是否必须")
+      @Schema(description="是否必须")
       private Boolean required;
   
-      @ApiModelProperty(value="是否可插入")
+      @Schema(description="是否可插入")
       private Boolean save;
   
-      @ApiModelProperty(value="是否可编辑")
+      @Schema(description="是否可编辑")
       private Boolean edit;
   
-      @ApiModelProperty(value="是否在列表显示")
+      @Schema(description="是否在列表显示")
       private Boolean display;
   
-      @ApiModelProperty(value="是否可查询")
+      @Schema(description="是否可查询")
       private Boolean search;
   
-      @ApiModelProperty(value="查询方式（等于、不等于、大于、小于、范围）")
+      @Schema(description="查询方式（等于、不等于、大于、小于、范围）")
       private String searchType;
   
-      @ApiModelProperty(value="显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）")
+      @Schema(description="显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）")
       private String htmlType;
   
-      @ApiModelProperty(value="字典类型")
+      @Schema(description="字典类型")
       private String dictType;
   
-      @ApiModelProperty(value="排序")
+      @Schema(description="排序")
       private Integer sort;
   
-      @ApiModelProperty(value="创建时间")
+      @Schema(description="创建时间")
       private LocalDateTime createTime;
   
-      @ApiModelProperty(value="修改时间")
+      @Schema(description="修改时间")
       private LocalDateTime updateTime;
   }
   ```

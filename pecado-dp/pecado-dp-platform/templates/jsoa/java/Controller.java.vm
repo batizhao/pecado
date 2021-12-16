@@ -24,7 +24,7 @@ import java.util.Map;
  * @author ${author}
  * @since ${date}
  */
-@Api(tags = "${comments}管理")
+@Tag(name = "${comments}管理")
 @Controller
 @Slf4j
 @Validated
@@ -45,7 +45,7 @@ public class ${className}Controller extends ${className}BaseController {
         return super.input(request, model);
     }
 
-    @ApiOperation(value = "分页查询用户代码生成测试")
+    @Operation(description = "分页查询用户代码生成测试")
     @GetMapping("/{moduleId}/{type}/{role}/list")
     @ResponseBody
     @Override

@@ -2,9 +2,9 @@ package me.batizhao.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.R;
 import me.batizhao.system.api.annotation.SystemLog;
@@ -27,7 +27,7 @@ import java.util.List;
  * @author batizhao
  * @since 2021-02-07
  */
-@Api(tags = "字典类型管理")
+@Tag(name = "字典类型管理")
 @RestController
 @Slf4j
 @Validated
@@ -42,7 +42,7 @@ public class DictTypeController {
      * @param dictType 字典类型
      * @return R
      */
-    @ApiOperation(value = "分页查询字典类型")
+    @Operation(description = "分页查询字典类型")
     @GetMapping("/dict/types")
     @PreAuthorize("@pms.hasPermission('system:dict:admin')")
     @SystemLog
@@ -54,7 +54,7 @@ public class DictTypeController {
      * 查询所有
      * @return R
      */
-    @ApiOperation(value = "查询所有字典类型")
+    @Operation(description = "查询所有字典类型")
     @GetMapping("/dict/type")
     @SystemLog
     public R<List<DictType>> handleDictType() {
@@ -66,10 +66,10 @@ public class DictTypeController {
      * @param id id
      * @return R
      */
-    @ApiOperation(value = "通过id查询字典类型")
+    @Operation(description = "通过id查询字典类型")
     @GetMapping("/dict/type/{id}")
     @SystemLog
-    public R<DictType> handleId(@ApiParam(value = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
+    public R<DictType> handleId(@Parameter(name = "ID" , required = true) @PathVariable("id") @Min(1) Long id) {
         DictType dictType = dictTypeService.findById(id);
 //        dictType.setDictDataList(dictDataService.list(Wrappers.<DictData>lambdaQuery().eq(DictData::getCode, dictType.getCode())));
         return R.ok(dictType);
@@ -80,11 +80,11 @@ public class DictTypeController {
      * @param dictType 字典类型
      * @return R
      */
-    @ApiOperation(value = "添加或修改字典类型")
+    @Operation(description = "添加或修改字典类型")
     @PostMapping("/dict/type")
     @PreAuthorize("@pms.hasPermission('system:dict:add') or @pms.hasPermission('system:dict:edit')")
     @SystemLog
-    public R<DictType> handleSaveOrUpdate(@Valid @ApiParam(value = "字典类型" , required = true) @RequestBody DictType dictType) {
+    public R<DictType> handleSaveOrUpdate(@Valid @Parameter(name = "字典类型" , required = true) @RequestBody DictType dictType) {
         return R.ok(dictTypeService.saveOrUpdateDictType(dictType));
     }
 
@@ -93,11 +93,11 @@ public class DictTypeController {
      * @param codes code串
      * @return R
      */
-    @ApiOperation(value = "通过id删除字典类型")
+    @Operation(description = "通过id删除字典类型")
     @DeleteMapping("/dict/type")
     @PreAuthorize("@pms.hasPermission('system:dict:delete')")
     @SystemLog
-    public R<Boolean> handleDelete(@ApiParam(value = "code串" , required = true) @RequestParam List<String> codes) {
+    public R<Boolean> handleDelete(@Parameter(name = "code串" , required = true) @RequestParam List<String> codes) {
         return R.ok(dictTypeService.deleteByIds(codes));
     }
 
@@ -107,11 +107,11 @@ public class DictTypeController {
      * @param dictType 字典类型
      * @return R
      */
-    @ApiOperation(value = "更新字典类型状态")
+    @Operation(description = "更新字典类型状态")
     @PostMapping("/dict/type/status")
     @PreAuthorize("@pms.hasPermission('system:dict:admin')")
     @SystemLog
-    public R<Boolean> handleUpdateStatus(@ApiParam(value = "字典类型" , required = true) @RequestBody DictType dictType) {
+    public R<Boolean> handleUpdateStatus(@Parameter(name = "字典类型" , required = true) @RequestBody DictType dictType) {
         return R.ok(dictTypeService.updateStatus(dictType));
     }
 

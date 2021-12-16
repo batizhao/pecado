@@ -1,6 +1,6 @@
 package me.batizhao.ims.api.vo;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
  * @date 2021/3/17
  */
 @Data
-@ApiModel(description = "VUE路由元数据")
+@Schema(description = "VUE路由元数据")
 public class MetaVO {
 
     /**

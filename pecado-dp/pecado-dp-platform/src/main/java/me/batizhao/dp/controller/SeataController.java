@@ -6,7 +6,7 @@ package me.batizhao.dp.controller;
  * @author batizhao
  * @date 2020/10/26
  */
-//@Api(tags = "分布式事务测试")
+//@Tag(name = "分布式事务测试")
 //@RestController
 public class SeataController {
 
