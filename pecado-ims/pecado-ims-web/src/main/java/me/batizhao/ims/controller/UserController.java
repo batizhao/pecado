@@ -112,7 +112,7 @@ public class UserController {
     @Operation(description = "根据用户名查询用户")
     @GetMapping(value = "user", params = "username")
     @Inner
-    @SystemLog
+//    @SystemLog
     public R<UserInfoVO> handleUsername(@Parameter(name = "用户名", required = true) @RequestParam @Size(min = 3) String username) {
         User user = userService.findByUsername(username);
         return R.ok(userService.getUserInfo(user.getId()));

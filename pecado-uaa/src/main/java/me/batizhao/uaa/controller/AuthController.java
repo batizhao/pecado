@@ -3,11 +3,13 @@ package me.batizhao.uaa.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.batizhao.common.core.util.R;
 import me.batizhao.ims.api.domain.LoginDTO;
-import me.batizhao.uaa.domain.TokenVO;
 import me.batizhao.uaa.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -30,7 +32,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/token")
-    public R<TokenVO> handleLogin(@Valid @RequestBody LoginDTO loginDTO) {
+    public R<String> handleLogin(@Valid @RequestBody LoginDTO loginDTO) {
         return R.ok(authService.login(loginDTO.getUsername(), loginDTO.getPassword(),
                 loginDTO.getCode(), loginDTO.getUuid()));
     }

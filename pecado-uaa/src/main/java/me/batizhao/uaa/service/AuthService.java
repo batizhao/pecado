@@ -1,7 +1,5 @@
 package me.batizhao.uaa.service;
 
-import me.batizhao.uaa.domain.TokenVO;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -19,7 +17,7 @@ public interface AuthService {
      * @param uuid
      * @return
      */
-    TokenVO login(String username, String password, String code, String uuid);
+    String login(String username, String password, String code, String uuid);
 
     /**
      * 获取验证码

@@ -18,10 +18,6 @@
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-system-api</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>me.batizhao</groupId>-->
-<!--            <artifactId>pecado-commons-sentinel</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-mybatis</artifactId>
