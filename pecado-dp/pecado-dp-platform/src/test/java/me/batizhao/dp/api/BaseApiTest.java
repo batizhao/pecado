@@ -39,8 +39,6 @@ public abstract class BaseApiTest {
      */
     @Value("${pecado.token.admin}")
     String adminAccessToken;
-    @Value("${pecado.token.user}")
-    String userAccessToken;
 
     @Autowired
     MockMvc mvc;

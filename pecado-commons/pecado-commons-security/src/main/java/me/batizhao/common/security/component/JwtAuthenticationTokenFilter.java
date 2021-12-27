@@ -19,18 +19,16 @@ import java.io.IOException;
  * @date 2021/12/17
  */
 @Component
-public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
-{
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
+
     @Autowired
     private TokenService tokenService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         PecadoUser pecadoUser = tokenService.getUser(request);
-        if (pecadoUser != null && SecurityUtils.getAuthentication() == null)
-        {
+        if (pecadoUser != null && SecurityUtils.getAuthentication() == null) {
             tokenService.verifyToken(pecadoUser);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(pecadoUser, null, pecadoUser.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

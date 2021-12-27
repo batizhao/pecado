@@ -1,7 +1,6 @@
 package me.batizhao.ims.api.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 import me.batizhao.ims.api.domain.User;

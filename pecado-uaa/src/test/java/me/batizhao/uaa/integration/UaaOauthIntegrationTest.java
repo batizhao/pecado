@@ -71,11 +71,13 @@ public class UaaOauthIntegrationTest extends BaseIntegrationTest {
     @Test
     public void givenSecret_whenGetAccessToken_thenSuccess() throws Exception {
         mvc.perform(post("/token")
-                .param("username", "admin").param("password", "123456").param("code", "1234"))
+                        .content("{\"username\":\"admin\",\"password\":\"123456\"}")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", containsString("ey")));
+                .andExpect(jsonPath("$.data", containsString("eyJhbGciOiJSUzI1NiJ9")));
     }
+
 }

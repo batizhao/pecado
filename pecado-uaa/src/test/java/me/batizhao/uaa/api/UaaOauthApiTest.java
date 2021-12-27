@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = PecadoUaaApplication.class)
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @Tag("api")
 public class UaaOauthApiTest {
 
@@ -55,27 +57,4 @@ public class UaaOauthApiTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data[0]", containsString("password is not blank")));
     }
-
-//    @Test
-//    public void givenNoGrantType_whenGetAccessToken_thenOAuthException() throws Exception {
-//        mvc.perform(post("/token")
-//                .param("username", USERNAME).param("password", PASSWORD))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_ERROR.getCode()))
-//                .andExpect(jsonPath("$.data", containsString("Missing grant type")));
-//    }
-//
-//    @Test
-//    public void givenInvalidRefreshToken_whenGetAccessToken_thenOAuthException() throws Exception {
-//        String invalidRefreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6";
-//        mvc.perform(post("/token")
-//                .param("grant_type", "refresh_token").param("refresh_token", invalidRefreshToken))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.code").value(ResultEnum.OAUTH2_TOKEN_ERROR.getCode()))
-//                .andExpect(jsonPath("$.data", containsString("Cannot convert access token to JSON")));
-//    }
 }
