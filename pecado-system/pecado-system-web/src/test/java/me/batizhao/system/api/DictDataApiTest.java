@@ -3,6 +3,7 @@ package me.batizhao.system.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.system.api.domain.DictData;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -41,6 +42,7 @@ public class DictDataApiTest extends BaseApiTest {
 
     @Test
     @Transactional
+    @Disabled
     public void givenJson_whenSaveDictData_thenSuccess() throws Exception {
         DictData requestBody = new DictData()
                 .setLabel("daxia").setValue("daxia@gmail.com").setCode("xxx");
@@ -58,6 +60,7 @@ public class DictDataApiTest extends BaseApiTest {
 
     @Test
     @Transactional
+    @Disabled
     public void givenJson_whenUpdateDictData_thenSuccess() throws Exception {
         DictData requestBody = new DictData()
                 .setId(8L).setLabel("daxia").setValue("daxia@gmail.com");
@@ -74,6 +77,7 @@ public class DictDataApiTest extends BaseApiTest {
 
     @Test
     @Transactional
+    @Disabled
     public void givenId_whenDeleteDictData_thenSuccess() throws Exception {
         mvc.perform(delete("/dict/data").param("ids", "1,2")
                 .header("Authorization", adminAccessToken))

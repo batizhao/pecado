@@ -1,7 +1,7 @@
 package me.batizhao.uaa.integration;
 
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.core.domain.PecadoUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

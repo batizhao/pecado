@@ -57,4 +57,5 @@ public class UaaOauthApiTest {
                 .andExpect(jsonPath("$.code").value(ResultEnum.PARAMETER_INVALID.getCode()))
                 .andExpect(jsonPath("$.data[0]", containsString("password is not blank")));
     }
+
 }

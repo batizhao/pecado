@@ -19,16 +19,9 @@
 package me.batizhao.common.security.util;
 
 import lombok.experimental.UtilityClass;
-import me.batizhao.common.core.constant.SecurityConstants;
-import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.core.domain.PecadoUser;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.util.StringUtils;
-
-import java.util.List;
 
 /**
  * 安全工具类

@@ -1,4 +1,4 @@
-package me.batizhao.common.security.component;
+package me.batizhao.common.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;

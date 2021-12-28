@@ -1,7 +1,6 @@
 package me.batizhao.ims.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.util.ResultEnum;
@@ -9,12 +8,12 @@ import me.batizhao.ims.api.domain.User;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.aspect.SystemLogAspect;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.*;
@@ -157,6 +156,7 @@ public class UserApiTest extends BaseApiTest {
     }
 
     @Test
+    @Disabled
     public void givenInvalidToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
         String accessToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
         mvc.perform(get("/ims/user")
@@ -288,21 +288,6 @@ public class UserApiTest extends BaseApiTest {
 
     @Test
     public void givenInvalidRole_whenGetSecureRequest_thenForbidden() throws Exception {
-        MvcResult result = mvc.perform(post("/uaa/token")
-                        .content("{\"username\":\"tom\",\"password\":\"123456\"}")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(ResultEnum.SUCCESS.getCode()))
-                .andExpect(jsonPath("$.data", containsString("eyJhbGciOiJSUzI1NiJ9")))
-                .andReturn();
-
-        String response = result.getResponse().getContentAsString();
-        String userAccessToken = SecurityConstants.TOKEN_PREFIX + JsonPath.parse(response).read("$.data");
-
-        log.info("*** userAccessToken *** : {}", userAccessToken);
-
         mvc.perform(delete("/user").param("ids", "1,2")
                 .header("Authorization", userAccessToken))
                 .andDo(print())

@@ -3,7 +3,7 @@ package me.batizhao.ims.api.aspect;
 import me.batizhao.common.core.domain.BaseEntity;
 import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.common.core.util.R;
-import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.core.domain.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.annotation.DataScope;
 import me.batizhao.ims.api.domain.Role;

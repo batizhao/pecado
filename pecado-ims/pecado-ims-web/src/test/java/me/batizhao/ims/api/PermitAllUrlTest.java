@@ -30,8 +30,8 @@ public class PermitAllUrlTest extends BaseApiTest {
     void whenGetNacosYamlAntUrls_thenHaveItems() {
         List<String> ants = permitAllUrlProperties.getAnt().getUrls();
         log.info("ant path: {}", ants);
-        assertThat(ants.size(), is(6));
-        assertThat(ants, hasItems("/actuator/**", "/v2/api-docs"));
+        assertThat(ants.size(), is(8));
+        assertThat(ants, hasItems("/actuator/**", "/v2/api-docs/**"));
 
         List<String> regex = permitAllUrlProperties.getRegex().getUrls();
         log.info("regex path: {}", regex);

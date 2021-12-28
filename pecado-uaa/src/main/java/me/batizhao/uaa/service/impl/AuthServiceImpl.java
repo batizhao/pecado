@@ -12,7 +12,7 @@ import me.batizhao.common.core.constant.PecadoConstants;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.exception.PecadoException;
 import me.batizhao.common.redis.util.RedisUtil;
-import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.core.domain.PecadoUser;
 import me.batizhao.uaa.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

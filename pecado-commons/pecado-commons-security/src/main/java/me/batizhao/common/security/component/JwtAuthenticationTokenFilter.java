@@ -1,5 +1,6 @@
 package me.batizhao.common.security.component;
 
+import me.batizhao.common.core.domain.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

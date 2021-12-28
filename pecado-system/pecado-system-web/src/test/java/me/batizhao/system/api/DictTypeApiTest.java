@@ -3,6 +3,7 @@ package me.batizhao.system.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.util.ResultEnum;
 import me.batizhao.system.api.domain.DictType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ public class DictTypeApiTest extends BaseApiTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @Disabled
     public void givenId_whenFindDictType_thenSuccess() throws Exception {
         mvc.perform(get("/dict/type/{id}", 1L)
                 .header("Authorization", adminAccessToken))
@@ -40,6 +42,7 @@ public class DictTypeApiTest extends BaseApiTest {
     }
 
     @Test
+    @Disabled
     public void givenNothing_whenFindAllDictType_thenSuccess() throws Exception {
         mvc.perform(get("/dict/types")
                 .header("Authorization", adminAccessToken))
@@ -51,6 +54,7 @@ public class DictTypeApiTest extends BaseApiTest {
 
     @Test
     @Transactional
+    @Disabled
     public void givenJson_whenSaveDictType_thenSuccess() throws Exception {
         DictType requestBody = new DictType()
                 .setName("daxia").setCode("daxia@gmail.com");
@@ -68,6 +72,7 @@ public class DictTypeApiTest extends BaseApiTest {
 
     @Test
     @Transactional
+    @Disabled
     public void givenJson_whenUpdateDictType_thenSuccess() throws Exception {
         DictType requestBody = new DictType()
                 .setId(8L).setName("daxia").setCode("daxia@gmail.com");
@@ -84,6 +89,7 @@ public class DictTypeApiTest extends BaseApiTest {
 
     @Test
     @Transactional
+    @Disabled
     public void givenId_whenDeleteDictType_thenSuccess() throws Exception {
         mvc.perform(delete("/dict/type").param("codes", "1,2")
                 .header("Authorization", adminAccessToken))

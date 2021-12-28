@@ -1,6 +1,7 @@
 package me.batizhao.gateway.api;
 
 import me.batizhao.common.core.util.ResultEnum;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 public class GatewayApiTest extends BaseApiTest {
 
     @Test
+    @Disabled
     void givenNoExistUrl_whenCallGateway_then404() {
         webClient.get().uri("/api/xxxx").exchange().expectStatus().isNotFound()
                 .expectHeader()

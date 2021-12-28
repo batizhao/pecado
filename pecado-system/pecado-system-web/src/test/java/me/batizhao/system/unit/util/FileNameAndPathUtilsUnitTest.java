@@ -1,14 +1,13 @@
 package me.batizhao.system.unit.util;
 
 import lombok.extern.slf4j.Slf4j;
-import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.core.domain.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.system.util.FileNameAndPathUtils;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -18,7 +17,6 @@ import java.util.HashSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.times;
 
 /**
  * @author batizhao

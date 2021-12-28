@@ -3,7 +3,7 @@ package me.batizhao.ims.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.batizhao.common.core.constant.MenuTypeEnum;
 import me.batizhao.common.core.util.ResultEnum;
-import me.batizhao.common.security.component.PecadoUser;
+import me.batizhao.common.core.domain.PecadoUser;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.domain.Menu;
 import me.batizhao.common.core.domain.TreeNode;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
