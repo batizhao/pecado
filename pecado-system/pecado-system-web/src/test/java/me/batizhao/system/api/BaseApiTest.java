@@ -2,12 +2,15 @@ package me.batizhao.system.api;
 
 import me.batizhao.common.core.exception.WebExceptionHandler;
 import me.batizhao.system.PecadoSystemApplication;
+import me.batizhao.system.api.annotation.SystemLog;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(WebExceptionHandler.class)
 @ActiveProfiles("test")
 @Tag("api")
+@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SystemLog.class))
 public abstract class BaseApiTest {
 
     /**
