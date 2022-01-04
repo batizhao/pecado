@@ -8,7 +8,6 @@ import me.batizhao.ims.api.domain.User;
 import me.batizhao.system.api.annotation.SystemLog;
 import me.batizhao.system.api.aspect.SystemLogAspect;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -156,7 +155,6 @@ public class UserApiTest extends BaseApiTest {
     }
 
     @Test
-    @Disabled
     public void givenInvalidToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
         String accessToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
         mvc.perform(get("/ims/user")
