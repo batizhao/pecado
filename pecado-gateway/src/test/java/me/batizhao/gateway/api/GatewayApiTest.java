@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static org.hamcrest.Matchers.containsString;
+
 /**
  * @author batizhao
  * @since 2020-04-24
@@ -12,27 +14,28 @@ import org.springframework.http.MediaType;
 public class GatewayApiTest extends BaseApiTest {
 
     @Test
-    @Disabled
     void givenNoExistUrl_whenCallGateway_then404() {
         webClient.get().uri("/api/xxxx").exchange().expectStatus().isNotFound()
                 .expectHeader()
                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$.code").isEqualTo(ResultEnum.GATEWAY_ERROR.getCode())
-                .jsonPath("$.data").isEqualTo(404)
-                .jsonPath("$.message").isEqualTo("404 NOT_FOUND");
+                .consumeWith(System.out::println)
+                .jsonPath("$.code").isEqualTo(ResultEnum.UNKNOWN_ERROR.getCode())
+                .jsonPath("$.data").value(containsString("404 NOT_FOUND"))
+                .jsonPath("$.message").isEqualTo("出错了！");
     }
 
-//    @Test
-//    void givenExistServiceUrl_whenCallGateway_then503() {
-//        webClient.get().uri("/api/ims/users").exchange().expectStatus().is5xxServerError()
-//                .expectHeader()
-//                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-//                .expectBody()
-//                .jsonPath("$.code").isEqualTo(ResultEnum.GATEWAY_ERROR.getCode())
-//                .jsonPath("$.data").isEqualTo(503)
-//                .jsonPath("$.message").value(containsString("503 SERVICE_UNAVAILABLE"));
-//    }
+    @Test
+    void givenExistServiceUrl_whenCallGateway_then503() {
+        webClient.get().uri("/api/ims/users").exchange().expectStatus().is5xxServerError()
+                .expectHeader()
+                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(System.out::println)
+                .jsonPath("$.code").isEqualTo(ResultEnum.UNKNOWN_ERROR.getCode())
+                .jsonPath("$.data").value(containsString("503 SERVICE_UNAVAILABLE"))
+                .jsonPath("$.message").isEqualTo("出错了！");
+    }
 
     @Test
     public void actuatorManagementPort() {
