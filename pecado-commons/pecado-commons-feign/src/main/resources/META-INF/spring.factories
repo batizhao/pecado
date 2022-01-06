@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  me.batizhao.common.feign.PecadoFeignAutoConfiguration
+  me.batizhao.common.feign.PecadoFeignAutoConfiguration, \
+  com.alibaba.cloud.sentinel.SentinelWebAutoConfiguration

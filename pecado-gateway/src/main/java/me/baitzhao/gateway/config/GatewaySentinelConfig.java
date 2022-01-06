@@ -4,7 +4,9 @@ import com.alibaba.csp.sentinel.adapter.gateway.sc.callback.BlockRequestHandler;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.R;
 import me.batizhao.common.core.util.ResultEnum;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -17,8 +19,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
  * @author batizhao
  * @since 2020-04-13
  **/
-//@Configuration
-//@ConditionalOnProperty("spring.cloud.sentinel.transport.dashboard")
+@Configuration
+@ConditionalOnProperty("spring.cloud.sentinel.transport.dashboard")
 @Slf4j
 public class GatewaySentinelConfig {
 
@@ -26,7 +28,7 @@ public class GatewaySentinelConfig {
     public BlockRequestHandler blockRequestHandler() {
         return (serverWebExchange, throwable) -> {
             R<String> message = new R<String>(ResultEnum.TOO_MANY_REQUEST.getCode())
-                    .setData(throwable.getMessage());
+                    .setData("您的请求被限流了...");
 
             log.error("Sentinel Gateway Block Exception", throwable);
 

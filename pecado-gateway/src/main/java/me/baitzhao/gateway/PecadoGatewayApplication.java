@@ -1,13 +1,7 @@
 package me.baitzhao.gateway;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteDefinition;
@@ -41,5 +35,19 @@ public class PecadoGatewayApplication {
         });
         return groups;
     }
+
+    //自定义限流异常页面
+//    @PostConstruct
+//    public void initBlockHandlers(){
+//        BlockRequestHandler blockRequestHandler = (serverWebExchange, throwable) -> {
+//            R<String> message = new R<String>(ResultEnum.TOO_MANY_REQUEST.getCode())
+//                    .setData("您的请求被限流了...");
+//
+//            return ServerResponse.status(HttpStatus.TOO_MANY_REQUESTS)
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .body(BodyInserters.fromValue(message));
+//        };
+//        GatewayCallbackManager.setBlockHandler(blockRequestHandler);
+//    }
 
 }

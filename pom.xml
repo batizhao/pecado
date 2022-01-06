@@ -41,11 +41,11 @@
 
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<dynamic-datasource.version>3.5.0</dynamic-datasource.version>
-		<hutool.version>5.7.16</hutool.version>
+		<hutool.version>5.7.18</hutool.version>
 		<jasypt.version>3.0.4</jasypt.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
-		<mybatis-plus.version>3.4.3.4</mybatis-plus.version>
-		<mybatis-spring-boot.version>2.2.0</mybatis-spring-boot.version>
+		<mybatis-plus.version>3.5.0</mybatis-plus.version>
+		<mybatis-spring-boot.version>2.2.1</mybatis-spring-boot.version>
 		<okhttp3.version>4.9.2</okhttp3.version>
 		<poi.version>5.1.0</poi.version>
 		<rocketmq.version>2.1.1</rocketmq.version>

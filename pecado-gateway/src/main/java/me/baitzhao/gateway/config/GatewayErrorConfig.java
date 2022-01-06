@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class GatewayErrorConfig {
 
-    @Bean
-    public GatewayExceptionHandler gatewayExceptionHandler(ObjectMapper objectMapper) {
-        return new GatewayExceptionHandler(objectMapper);
-    }
+//    @Bean
+//    public GatewayExceptionHandler gatewayExceptionHandler(ObjectMapper objectMapper) {
+//        return new GatewayExceptionHandler(objectMapper);
+//    }
 
 }
