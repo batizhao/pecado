@@ -20,9 +20,9 @@ public class GatewayApiTest extends BaseApiTest {
                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 .expectBody()
                 .consumeWith(System.out::println)
-                .jsonPath("$.code").isEqualTo(ResultEnum.UNKNOWN_ERROR.getCode())
+                .jsonPath("$.code").isEqualTo(ResultEnum.GATEWAY_ERROR.getCode())
                 .jsonPath("$.data").value(containsString("404 NOT_FOUND"))
-                .jsonPath("$.message").isEqualTo("出错了！");
+                .jsonPath("$.message").isEqualTo("网关异常！");
     }
 
     @Test
@@ -32,9 +32,9 @@ public class GatewayApiTest extends BaseApiTest {
                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 .expectBody()
                 .consumeWith(System.out::println)
-                .jsonPath("$.code").isEqualTo(ResultEnum.UNKNOWN_ERROR.getCode())
+                .jsonPath("$.code").isEqualTo(ResultEnum.GATEWAY_ERROR.getCode())
                 .jsonPath("$.data").value(containsString("503 SERVICE_UNAVAILABLE"))
-                .jsonPath("$.message").isEqualTo("出错了！");
+                .jsonPath("$.message").isEqualTo("网关异常！");
     }
 
     @Test

@@ -13,11 +13,11 @@ import org.springframework.context.annotation.Configuration;
  * @since 2020-04-15
  **/
 @Configuration(proxyBeanMethods = false)
-public class GatewayErrorConfig {
+public class GatewayConfig {
 
-//    @Bean
-//    public GatewayExceptionHandler gatewayExceptionHandler(ObjectMapper objectMapper) {
-//        return new GatewayExceptionHandler(objectMapper);
-//    }
+    @Bean
+    public GatewayExceptionHandler gatewayExceptionHandler(ObjectMapper objectMapper) {
+        return new GatewayExceptionHandler(objectMapper);
+    }
 
 }

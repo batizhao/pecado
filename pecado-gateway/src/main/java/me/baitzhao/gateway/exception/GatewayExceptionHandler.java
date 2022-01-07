@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.core.util.R;
+import me.batizhao.common.core.util.ResultEnum;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -44,7 +45,9 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         return response.writeWith(Mono.fromSupplier(() -> {
             DataBufferFactory bufferFactory = response.bufferFactory();
             try {
-                return bufferFactory.wrap(objectMapper.writeValueAsBytes(R.failed(ex.getMessage())));
+                R<String> message = new R<String>(ResultEnum.GATEWAY_ERROR.getCode())
+                        .setData(ex.getMessage());
+                return bufferFactory.wrap(objectMapper.writeValueAsBytes(message));
             }
             catch (JsonProcessingException e) {
                 log.error("Error writing response", ex);

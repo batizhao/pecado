@@ -14,7 +14,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 /**
  * 自定义 Sentinel 限流异常
- * 这个配置在 @code {GatewayExceptionHandler} 打开情况下无效
  *
  * @author batizhao
  * @since 2020-04-13
@@ -28,7 +27,7 @@ public class GatewaySentinelConfig {
     public BlockRequestHandler blockRequestHandler() {
         return (serverWebExchange, throwable) -> {
             R<String> message = new R<String>(ResultEnum.TOO_MANY_REQUEST.getCode())
-                    .setData("您的请求被限流了...");
+                    .setData("访问太频繁，请稍候再试！");
 
             log.error("Sentinel Gateway Block Exception", throwable);
 

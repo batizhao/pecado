@@ -25,6 +25,10 @@ public class PecadoGatewayApplication {
     @Autowired
     RouteDefinitionLocator locator;
 
+    /**
+     * Swagger Api
+     * @return
+     */
     @Bean
     public List<GroupedOpenApi> apis() {
         List<GroupedOpenApi> groups = new ArrayList<>();
@@ -35,19 +39,5 @@ public class PecadoGatewayApplication {
         });
         return groups;
     }
-
-    //自定义限流异常页面
-//    @PostConstruct
-//    public void initBlockHandlers(){
-//        BlockRequestHandler blockRequestHandler = (serverWebExchange, throwable) -> {
-//            R<String> message = new R<String>(ResultEnum.TOO_MANY_REQUEST.getCode())
-//                    .setData("您的请求被限流了...");
-//
-//            return ServerResponse.status(HttpStatus.TOO_MANY_REQUESTS)
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .body(BodyInserters.fromValue(message));
-//        };
-//        GatewayCallbackManager.setBlockHandler(blockRequestHandler);
-//    }
 
 }
