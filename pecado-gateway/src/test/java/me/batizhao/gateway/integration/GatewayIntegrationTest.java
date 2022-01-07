@@ -22,6 +22,7 @@ public class GatewayIntegrationTest extends BaseIntegrationTest {
                 .expectHeader()
                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 .expectBody()
+                .consumeWith(System.out::println)
                 .jsonPath("$.code").isEqualTo(ResultEnum.SUCCESS.getCode())
                 .jsonPath("$.data.records").value(hasSize(6))
                 .jsonPath("$.data.records[0].username").isEqualTo("admin");
@@ -35,6 +36,7 @@ public class GatewayIntegrationTest extends BaseIntegrationTest {
                 .expectHeader()
                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 .expectBody()
+                .consumeWith(System.out::println)
                 .jsonPath("$.code").isEqualTo(ResultEnum.OAUTH2_TOKEN_INVALID.getCode())
                 .jsonPath("$.data").value(containsString("Full authentication is required"));
     }
