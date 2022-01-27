@@ -73,7 +73,6 @@ public class ${className}ServiceUnitTest extends BaseServiceUnitTest {
         ${classname}PageList = new Page<>();
         ${classname}PageList.setRecords(${classname}List);
 #else
-        ${classname}List = new ArrayList<>();
         ${classname}List.add(new ${className}(1, 0).setName("zhangsan"));
         ${classname}List.add(new ${className}(2, 1).setName("lisi"));
         ${classname}List.add(new ${className}(3, 2).setName("wangwu"));
