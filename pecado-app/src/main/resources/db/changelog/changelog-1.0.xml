@@ -1,0 +1,304 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet author="batizhao" id="CreateTableApplication-20220120-001">
+        <createTable remarks="应用分类表" tableName="app_type">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="ID">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(36)" remarks="名称">
+                <constraints nullable="false" />
+            </column>
+            <column name="code" type="VARCHAR(32)" remarks="编码">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="description" type="VARCHAR(255)" remarks="描述" defaultValue=""/>
+            <column name="icon" type="VARCHAR(32)" defaultValue="#" remarks="图标"/>
+            <column name="sort" type="INT" remarks="排序" defaultValue="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
+                <constraints nullable="false" />
+            </column>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="app_type"/>
+        </rollback>
+        <createTable remarks="应用表" tableName="app">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="ID">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(36)" remarks="名称">
+                <constraints nullable="false" />
+            </column>
+            <column name="code" type="VARCHAR(32)" remarks="编码">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="typeId" type="BIGINT" remarks="分类ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)" remarks="描述" defaultValue=""/>
+            <column name="icon" type="VARCHAR(32)" defaultValue="#" remarks="图标"/>
+            <column name="background" type="VARCHAR(32)" remarks="图标背景色" defaultValue="">
+                <constraints nullable="false" />
+            </column>
+            <column name="sort" type="INT" remarks="排序" defaultValue="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
+                <constraints nullable="false" />
+            </column>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="app"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="CreateTableAppTable-20220126-001">
+        <createTable remarks="应用所属表" tableName="app_table">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="ID">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="appId" type="BIGINT" remarks="应用ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dsName" type="VARCHAR(64)" remarks="数据源">
+                <constraints nullable="false" />
+            </column>
+            <column name="tableName" type="VARCHAR(64)" remarks="表名">
+                <constraints nullable="false" />
+            </column>
+            <column name="tableComment" type="VARCHAR(255)" remarks="表注释">
+                <constraints nullable="false" />
+            </column>
+            <column name="columnMetadata" type="JSON" remarks="列元数据">
+                <constraints nullable="false" />
+            </column>
+            <column name="codeMetadata" type="JSON" remarks="代码元数据" />
+            <column name="status" type="ENUM('created', 'nosync', 'synced')" remarks="状态" defaultValue="created">
+                <constraints nullable="false" />
+            </column>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="app_table"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="AlterTableApp-20220218-001">
+        <createTable tableName="app_form" remarks="应用表单">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="表单ID">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="appId" type="BIGINT" remarks="应用ID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)" remarks="表单名称">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="formKey" type="VARCHAR(64)" remarks="表单key">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="submitURL" type="VARCHAR(255)" remarks="表单保存URL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metadata" type="JSON" remarks="表单元数据" />
+            <column name="description" type="VARCHAR(255)" remarks="表单描述" defaultValue="" />
+            <column name="status" type="VARCHAR(32)" remarks="状态" defaultValue="open">
+                <constraints nullable="false" />
+            </column>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="app_form"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="wws" id="CreateTableAppProcess-20220228-001">
+        <createTable remarks="应用流程" tableName="app_process">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="ID">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(36)" remarks="名称">
+                <constraints nullable="false" />
+            </column>
+            <column name="appId" type="BIGINT" remarks="应用Id">
+                <constraints nullable="false" />
+            </column>
+            <column name="processKey" type="VARCHAR(255)" remarks="流程key">
+                <constraints nullable="false" />
+            </column>
+            <column name="version" type="INT" remarks="流程版本号">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="VARCHAR(32)" remarks="状态:open 激活， close 禁用" defaultValue="close">
+                <constraints nullable="false" />
+            </column>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="app_process"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="wws" id="CreateTableAppList-20220302-001">
+        <createTable remarks="应用列表模型" tableName="app_list">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="ID">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="appId" type="BIGINT" remarks="应用Id">
+                <constraints nullable="false" />
+            </column>
+            <column name="code" type="VARCHAR(32)" remarks="编码">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="name" type="varchar(36)" remarks="名称">
+                <constraints nullable="false" />
+            </column>
+            <column name="addr" type="VARCHAR(255)" remarks="数据列表接口请求地址">
+                <constraints nullable="false" />
+            </column>
+            <column name="page" type="INT" remarks="是否分页 0 否 1 是" defaultValue="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="pageSize" type="INT" remarks="页面大小">
+            </column>
+            <column name="lineNum" type="INT" remarks="是否行号 0 否 1 是" defaultValue="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="sideScroll" type="INT" remarks="是否横向滚动 0 否 1 是" defaultValue="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="scrollWidth" type="INT" remarks="滚动宽度">
+            </column>
+            <column name="operField" type="INT" remarks="是否操作列 0 否 1 是" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="fixedOperField" type="INT" remarks="操作列是否固定 0 否 1 是" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="operFieldWidth" type="INT" remarks="操作列宽度">
+            </column>
+            <column name="beforeEvent" type="VARCHAR(255)" remarks="前置事件"/>
+            <column name="afterEvent" type="VARCHAR(255)" remarks="后置事件"/>
+            <column name="type" type="VARCHAR(32)" remarks="页面类型:pc 电脑端， app 移动端" defaultValue="pc">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="VARCHAR(32)" remarks="状态:open 激活， close 禁用" defaultValue="close">
+                <constraints nullable="false" />
+            </column>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="listMetadata" type="JSON" remarks="列表元数据">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="app_list"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="batizhao" id="CreateTable-20220307-001">
+        <createTable tableName="app_form_history" remarks="表单历史记录表">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="formKey" type="VARCHAR(64)" remarks="表单key">
+                <constraints nullable="false" />
+            </column>
+            <column name="metadata" type="JSON" remarks="表单元数据" />
+            <column name="version" type="INT" remarks="版本" defaultValue="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="app_form_history"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="wws" id="UpdateTable-20220425-001">
+        <addColumn tableName="app_process">
+            <column name="formId" type="BIGINT(20)" remarks="关联表单" afterColumn="appId">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="wws" id="CreateAppCommon-20220517-001">
+        <createTable tableName="app_common" remarks="常用应用表">
+            <column autoIncrement="true" name="id" type="BIGINT" remarks="主键">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(32)" remarks="名称">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="icon" type="VARCHAR(200)" remarks="图标">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="path" type="VARCHAR(255)" remarks="跳转路径">
+                <constraints nullable="false" />
+            </column>
+            <column name="linkType" type="INT" remarks="链接类型 0 内部 1 外部" defaultValue="0" />
+            <column name="openType" type="INT" remarks="打开方式 0 非当前窗口  1 当前窗口" defaultValue="1" />
+            <column name="sort" type="INT" remarks="排序" defaultValue="" />
+            <column name="createTime" type="datetime" remarks="创建时间" defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updateTime" type="datetime" remarks="修改时间" defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="app_common"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="wws" id="UpdateTable-20220518-001">
+        <addColumn tableName="app_list">
+            <column name="checkbox" type="INT" remarks="是否复选框" afterColumn="lineNum">
+            </column>
+            <column name="tree" type="INT" remarks="是否树形结构数据" afterColumn="lineNum">
+            </column>
+            <column name="parent" type="VARCHAR(100)" remarks="树形属性：上级指定字段名" afterColumn="tree">
+            </column>
+            <column name="children" type="VARCHAR(100)" remarks="树形属性：下级指定字段名" afterColumn="tree">
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

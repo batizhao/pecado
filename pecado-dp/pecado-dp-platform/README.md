@@ -132,7 +132,7 @@
 
   ```velocity
   #foreach ($column in $columns)
-  	$column.columnName
+  	$column.name
   #end
   ```
 

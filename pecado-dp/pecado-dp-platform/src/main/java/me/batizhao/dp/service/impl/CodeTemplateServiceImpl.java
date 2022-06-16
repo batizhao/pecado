@@ -2,13 +2,11 @@ package me.batizhao.dp.service.impl;
 
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.io.file.FileWriter;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.config.CodeProperties;
 import me.batizhao.common.core.domain.FolderTree;
 import me.batizhao.common.core.util.FolderUtil;
-import me.batizhao.dp.config.CodeProperties;
-import me.batizhao.dp.domain.CodeTemplate;
 import me.batizhao.dp.domain.CodeTemplateDTO;
-import me.batizhao.dp.mapper.CodeTemplateMapper;
 import me.batizhao.dp.service.CodeTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +21,8 @@ import java.util.List;
  * @since 2021-10-12
  */
 @Service
-public class CodeTemplateServiceImpl extends ServiceImpl<CodeTemplateMapper, CodeTemplate> implements CodeTemplateService {
+@Slf4j
+public class CodeTemplateServiceImpl implements CodeTemplateService {
 
     @Autowired
     private CodeProperties codeProperties;
@@ -31,6 +30,7 @@ public class CodeTemplateServiceImpl extends ServiceImpl<CodeTemplateMapper, Cod
     @Override
     public List<FolderTree> findCodeTemplateTree() {
         String templatePath = Paths.get(".", codeProperties.getTemplateUrl()).toAbsolutePath().toString();
+        log.info("####### templatePath: {}", templatePath);
         List<FolderTree> folderTree = FolderUtil.build(new FolderTree(templatePath));
         return FolderUtil.build(folderTree);
     }
