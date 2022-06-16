@@ -97,7 +97,7 @@ public class CodeGenUtils {
         code.setClassAuthor(GenConfig.getAuthor());
         code.setModuleName(GenConfig.getModuleName());
         code.setPackageName(GenConfig.getPackageName());
-        code.setTemplate(GenConstants.TPL_CRUD);
+        code.setTemplate(GenConstants.TPL_SINGLE);
         code.setMappingPath(StringUtils.uncapitalize(code.getClassName()));
         code.setCreateTime(LocalDateTime.now());
         code.setUpdateTime(LocalDateTime.now());

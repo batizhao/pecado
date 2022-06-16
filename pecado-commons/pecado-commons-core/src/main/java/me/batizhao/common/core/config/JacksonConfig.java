@@ -1,7 +1,6 @@
 package me.batizhao.common.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -33,7 +32,7 @@ public class JacksonConfig {
             builder.indentOutput(true);
             builder.timeZone(TimeZone.getTimeZone(ZoneId.systemDefault()));
             builder.simpleDateFormat(NORM_DATETIME_PATTERN);
-            builder.modules(new JavaTimeModule());
+            builder.modules(new PecadoJavaTimeModule());
         };
     }
 
