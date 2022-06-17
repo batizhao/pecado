@@ -10,8 +10,10 @@ import me.batizhao.common.core.util.R;
 import me.batizhao.common.security.annotation.Inner;
 import me.batizhao.ims.api.domain.Role;
 import me.batizhao.ims.api.domain.RoleMenu;
+import me.batizhao.ims.api.domain.UserRole;
 import me.batizhao.ims.service.RoleMenuService;
 import me.batizhao.ims.service.RoleService;
+import me.batizhao.ims.service.UserRoleService;
 import me.batizhao.system.api.annotation.SystemLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,6 +43,8 @@ public class RoleController {
     private RoleService roleService;
     @Autowired
     private RoleMenuService roleMenuService;
+    @Autowired
+    private UserRoleService userRoleService;
 
     /**
      * 分页查询
@@ -148,7 +152,7 @@ public class RoleController {
     @PostMapping(value = "/role/menu")
     @PreAuthorize("@pms.hasPermission('ims:role:admin')")
     @SystemLog
-    public R<Boolean> handleAddUserRoles(@Parameter(name = "关联菜单", required = true) @RequestBody List<RoleMenu> roleMenuList) {
+    public R<Boolean> handleUpdateRoleMenus(@Parameter(name = "关联菜单", required = true) @RequestBody List<RoleMenu> roleMenuList) {
         return R.ok(roleMenuService.updateRoleMenus(roleMenuList));
     }
 
@@ -165,6 +169,21 @@ public class RoleController {
     @SystemLog
     public R<Boolean> handleUpdateDataScope(@Parameter(name = "角色", required = true) @RequestBody Role role) {
         return R.ok(roleService.updateDataScope(role));
+    }
+
+    /**
+     * 分配角色用户
+     * 返回 true or false
+     *
+     * @param userRoleList 用户清单
+     * @return R<Boolean>
+     */
+    @Operation(description = "分配角色用户")
+    @PostMapping(value = "/role/user")
+    @PreAuthorize("@pms.hasPermission('ims:role:admin')")
+    @SystemLog
+    public R<Boolean> handleUpdateRoleUsers(@Parameter(name = "关联用户", required = true) @RequestBody List<UserRole> userRoleList) {
+        return R.ok(userRoleService.updateRoleUsers(userRoleList));
     }
 
 }

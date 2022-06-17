@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -68,6 +69,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public List<User> findUsersByRoleId(Long roleId) {
+        return userMapper.findUsersByRoleId(roleId);
+    }
+
+    @Override
     public User findById(Long id) {
         User user = userMapper.selectById(id);
 
@@ -106,6 +112,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setCreateTime(LocalDateTime.now());
             user.setUpdateTime(LocalDateTime.now());
             userMapper.insert(user);
+
+            // 给默认角色
+            List<UserRole> userRoleList = new ArrayList<>();
+            userRoleList.add(new UserRole().setUserId(user.getId()).setRoleId(1L));
+            userRoleService.updateUserRoles(userRoleList);
         } else {
             user.setUpdateTime(LocalDateTime.now());
             userMapper.updateById(user);

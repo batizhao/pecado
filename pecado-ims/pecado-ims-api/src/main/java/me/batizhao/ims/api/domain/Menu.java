@@ -51,6 +51,12 @@ public class Menu extends TreeNode implements Serializable {
     @Schema(description = "排序", example = "1")
     private Integer sort;
 
+    @Schema(description = "页面模型编码")
+    private String pageModelCode;
+
+    @Schema(description = "应用页面编码")
+    private String appPageCode;
+
     /**
      * 状态
      */
@@ -62,5 +68,17 @@ public class Menu extends TreeNode implements Serializable {
      */
     @Schema(description="路由元数据")
     private transient MetaVO meta;
+
+    /**
+     * 应用ID
+     */
+    @Schema(description = "应用ID")
+    private Long appId;
+
+    /**
+     * 菜单范围
+     */
+    @Schema(description="菜单范围")
+    private String scope;
 
 }

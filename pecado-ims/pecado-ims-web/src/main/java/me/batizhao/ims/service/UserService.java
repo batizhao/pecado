@@ -30,6 +30,13 @@ public interface UserService extends IService<User> {
 	List<User> findUsers(User user);
 
 	/**
+	 * 根据角色ID查询用户
+	 * @param roleId
+	 * @return
+	 */
+	List<User> findUsersByRoleId(Long roleId);
+
+	/**
 	 * 通过id查询用户
 	 * @param id id
 	 * @return User

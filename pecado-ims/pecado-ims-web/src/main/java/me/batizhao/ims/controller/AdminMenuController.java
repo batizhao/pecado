@@ -1,9 +1,10 @@
 package me.batizhao.ims.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.common.core.constant.MenuScopeEnum;
 import me.batizhao.common.core.util.R;
 import me.batizhao.common.security.util.SecurityUtils;
 import me.batizhao.ims.api.domain.Menu;
@@ -20,7 +21,6 @@ import java.util.List;
 
 /**
  * 菜单管理
- * 这里是菜单管理接口的描述
  *
  * @module pecado-ims
  *
@@ -31,55 +31,55 @@ import java.util.List;
 @RestController
 @Slf4j
 @Validated
-public class MenuController {
+public class AdminMenuController {
 
     @Autowired
     private MenuService menuService;
 
     /**
-     * 查询当前用户菜单
+     * 查询当前用户控制台菜单
      * 返回菜单树
      *
      * @return 菜单树
      */
-    @Operation(description = "查询当前用户菜单")
+    @Operation(description = "查询当前用户控制台菜单")
     @GetMapping("/menu/me")
     @PreAuthorize("isAuthenticated()")
     public R<List<Menu>> handleMenuTree4Me() {
         Long userId = SecurityUtils.getUser().getUserId();
-        return R.ok(menuService.findMenuTreeByUserId(userId));
+        return R.ok(menuService.findMenuTreeByUserId(userId, MenuScopeEnum.ADMIN.getType()));
     }
 
     /**
      * 根据角色查询菜单
      * 返回菜单树
      *
-     * @return 菜单树
+     * @return R<List<Menu>>
      */
     @Operation(description = "根据角色查询菜单")
-    @GetMapping(value = "menu", params = "roleId")
+    @GetMapping(value = "/menu", params = "roleId")
     @PreAuthorize("@pms.hasPermission('ims:menu:admin')")
     public R<List<Menu>> handleMenusByRoleId(@Parameter(name = "菜单ID", required = true) @RequestParam("roleId") @Min(1) Long roleId) {
         return R.ok(menuService.findMenusByRoleId(roleId));
     }
 
     /**
-     * 查询所有菜单
+     * 查询所有控制台菜单
      * 返回菜单树
      *
-     * @return 菜单树
+     * @return R<List<Menu>>
      */
-    @Operation(description = "查询所有菜单")
+    @Operation(description = "查询所有控制台菜单")
     @GetMapping("/menus")
     @PreAuthorize("isAuthenticated()")
     public R<List<Menu>> handleMenuTree(Menu menu) {
-        return R.ok(menuService.findMenuTree(menu));
+        return R.ok(menuService.findMenuTree(menu, MenuScopeEnum.ADMIN.getType()));
     }
 
     /**
      * 通过id查询菜单
      * @param id 菜单 ID
-     * @return 菜单对象
+     * @return R<Menu>
      */
     @Operation(description = "通过id查询菜单")
     @GetMapping("/menu/{id}")
@@ -93,10 +93,10 @@ public class MenuController {
      * 根据是否有ID判断是添加还是修改
      *
      * @param menu 菜单属性
-     * @return 菜单对象
+     * @return R<Menu>
      */
     @Operation(description = "添加或修改菜单")
-    @PostMapping("menu")
+    @PostMapping("/menu")
     @PreAuthorize("@pms.hasPermission('ims:menu:add') or @pms.hasPermission('ims:menu:edit')")
     @SystemLog
     public R<Menu> handleSaveOrUpdate(@Valid @Parameter(name = "菜单", required = true) @RequestBody Menu menu) {
@@ -107,10 +107,10 @@ public class MenuController {
      * 删除菜单
      * 根据菜单ID删除菜单
      *
-     * @return 成功或者失败
+     * @return R<String>
      */
     @Operation(description = "删除菜单")
-    @DeleteMapping("menu")
+    @DeleteMapping("/menu")
     @PreAuthorize("@pms.hasPermission('ims:menu:delete')")
     @SystemLog
     public R<String> handleDelete(@Parameter(name = "菜单ID串", required = true) @RequestParam Integer id) {
@@ -121,7 +121,7 @@ public class MenuController {
      * 更新菜单状态
      *
      * @param menu 菜单
-     * @return R
+     * @return R<Boolean>
      */
     @Operation(description = "更新菜单状态")
     @PostMapping("/menu/status")
