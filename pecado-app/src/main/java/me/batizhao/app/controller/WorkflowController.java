@@ -48,7 +48,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @Validated
-public class TaskController {
+public class WorkflowController {
 
     @Autowired
     private AppService appService;
