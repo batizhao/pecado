@@ -1,7 +1,6 @@
 package ${package}.${moduleName}.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -86,7 +85,7 @@ public class ${className}Controller {
      */
     @Operation(description = "添加或编辑${comments}")
     @PostMapping("/${mappingPath}")
-    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:add') or @pms.hasPermission('${moduleName}:${classname}:edit')")
+    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:admin')")
     public R<${className}> handleSaveOrUpdate(@Valid @Parameter(name = "${comments}" , required = true) @RequestBody ${className} ${classname}) {
         return R.ok(${classname}Service.saveOrUpdate${className}(${classname}));
     }
@@ -102,7 +101,7 @@ public class ${className}Controller {
      */
     @Operation(description = "通过id删除${comments}")
     @DeleteMapping("/${mappingPath}")
-    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:delete')")
+    @PreAuthorize("@pms.hasPermission('${moduleName}:${classname}:admin')")
 #if($template != "tree")
     public R<Boolean> handleDelete(@Parameter(name = "ID串" , required = true) @RequestParam List<Long> ids) {
 #else

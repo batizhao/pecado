@@ -1,5 +1,6 @@
 package ${package}.${moduleName}.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -12,9 +13,12 @@ import me.batizhao.common.core.domain.TreeNode;
 #if($workflow == "yes")
 import me.batizhao.terrace.task.Task;
 #end
+import me.batizhao.common.core.util.ListToStringHandler;
+import org.apache.ibatis.type.JdbcType;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * ${comments} 实体对象
@@ -31,7 +35,22 @@ public class ${className}#if($template == "tree") extends TreeNode#end implement
 
     private static final long serialVersionUID = 1L;
 
+#if($template == "tree")
+    public ${className}(Integer id, Integer pid) {
+        this.id = id;
+        this.pid = pid;
+    }
+#end
+#if($workflow == "yes")
+
+    /**
+     * 流程属性
+     */
+    @Schema(description="流程属性")
+    private transient Task task;
+#end
 #foreach ($column in $columns)
+#if(!$appTable.isSuperColumn($column.javaField))
     #if($template == "tree")
         #if($column.javaField == "id" || $column.javaField == "pid")
         #else
@@ -43,28 +62,43 @@ public class ${className}#if($template == "tree") extends TreeNode#end implement
     private $column.javaType $column.javaField;
         #end
     #else
-
     /**
      * $column.comment
      */
     @Schema(description="$column.comment")
+        #if (${column.config})
+            #set ($jf = ${column.javaField})
+            #set ($jf = $jf.substring(0,1).toUpperCase() + ${jf.substring(1)})
+    @TableField(jdbcType = JdbcType.VARCHAR, typeHandler = ListToStringHandler.class)
+    private List<${jf}Data> $column.javaField;
+        #else
     private $column.javaType $column.javaField;
+        #end
+    #end
+
+    #if (${column.config})
+        #set ($jf = ${column.javaField})
+        #set ($jf = $jf.substring(0,1).toUpperCase() + ${jf.substring(1)})
+    /**
+     * ${column.comment}数据
+     */
+    @Data
+    @Accessors(chain = true)
+    @NoArgsConstructor
+    @Schema(description = "${column.comment}数据")
+    public static class ${jf}Data {
+
+        #foreach($configItem in ${column.config})
+
+        /**
+         * ${configItem.comment}
+         */
+        @Schema(description="${configItem.comment}")
+        private ${configItem.type} ${configItem.name};
+        #end
+    }
+
     #end
 #end
-#if($template == "tree")
-
-    public ${className}(Integer id, Integer pid) {
-        this.id = id;
-        this.pid = pid;
-    }
 #end
-#if($workflow == "yes")
-
-/**
- * 流程属性
- */
-@Schema(description="流程属性")
-private transient Task task;
-#end
-
 }

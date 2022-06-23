@@ -41,23 +41,23 @@ public class AuthServiceImpl implements AuthService {
     @Resource
     private AuthenticationManager authenticationManager;
 
-    @Resource(name = "captchaProducer")
+    @Resource(name = "captchaProducer" )
     private Producer captchaProducer;
 
-    @Resource(name = "captchaProducerMath")
+    @Resource(name = "captchaProducerMath" )
     private Producer captchaProducerMath;
 
-    @Value("${pecado.captcha.enabled}")
+    @Value("${pecado.captcha.enabled}" )
     private Boolean captchaEnabled;
 
     // 验证码类型
-    @Value("${pecado.captcha.type}")
+    @Value("${pecado.captcha.type}" )
     private String captchaType;
 
-    @Value("${pecado.jwt.private-key}")
+    @Value("${pecado.jwt.private-key}" )
     RSAPrivateKey key;
 
-    @Value("${pecado.jwt.expire:30}")
+    @Value("${pecado.jwt.expire:30}" )
     private int expire;
 
     @Autowired
@@ -95,8 +95,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             jwt.sign(new RSASSASigner(this.key));
             return jwt;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new IllegalArgumentException(ex);
         }
     }
@@ -109,11 +108,10 @@ public class AuthServiceImpl implements AuthService {
         // 生成验证码
         if ("math".equals(captchaType)) {
             String capText = captchaProducerMath.createText();
-            capStr = capText.substring(0, capText.lastIndexOf("@"));
-            code = capText.substring(capText.lastIndexOf("@") + 1);
+            capStr = capText.substring(0, capText.lastIndexOf("@" ));
+            code = capText.substring(capText.lastIndexOf("@" ) + 1);
             image = captchaProducerMath.createImage(capStr);
-        }
-        else if ("char".equals(captchaType)) {
+        } else if ("char".equals(captchaType)) {
             capStr = code = captchaProducer.createText();
             image = captchaProducer.createImage(capStr);
         }
@@ -135,10 +133,15 @@ public class AuthServiceImpl implements AuthService {
         String captcha = redisUtil.getCacheObject(PecadoConstants.CACHE_KEY_CAPTCHA + uuid);
         redisUtil.deleteObject(uuid);
         if (captcha == null) {
-            throw new PecadoException("验证码失效");
+            throw new PecadoException("验证码失效" );
         }
         if (!code.equalsIgnoreCase(captcha)) {
-            throw new PecadoException("验证码错误");
+            throw new PecadoException("验证码错误" );
         }
+    }
+
+    @Override
+    public boolean logout(String uid) {
+        return redisUtil.deleteObject(SecurityConstants.CACHE_LOGIN_KEY_UID + uid);
     }
 }

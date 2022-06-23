@@ -1,5 +1,6 @@
 package me.batizhao.ims.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -122,4 +123,10 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         return departmentMapper.findDepartmentsByRoleId(roleId);
     }
 
+    @Override
+    public List<Department> findByLevel(String level) {
+        LambdaQueryWrapper<Department> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Department::getLevel, level).orderByAsc(Department::getSort);
+        return departmentMapper.selectList(wrapper);
+    }
 }
