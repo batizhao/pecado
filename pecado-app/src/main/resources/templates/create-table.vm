@@ -1,0 +1,11 @@
+#if(!$columns.isEmpty())
+CREATE TABLE IF NOT EXISTS ${tableName}(
+#foreach($column in $columns)
+#if($column.primary)
+   #set($primaryKey = $column.name)
+#end
+  `${column.name}` #if(${column.type}=="collection"||${column.type}=="file")json#else${column.type}#end#if(${column.length}>0)(${column.length}#if(${column.type}=="decimal"),${column.decimal}#end)#end#if(${column.required}) NOT NULL#end#if(${column.defaultValue}) DEFAULT '${column.defaultValue}'#end#if(${column.increment}) AUTO_INCREMENT#end COMMENT '${column.comment}',
+#end
+  PRIMARY KEY (`$primaryKey`)
+) COMMENT='${tableComment}';
+#end

@@ -43,6 +43,9 @@ public class File implements Serializable {
     @Schema(description = "缩略图 url", example = "/path/xxx.jpg")
     private String thumbUrl;
 
+    @Schema(description = "文件类型")
+    private String type;
+
     @Schema(description = "操作时间")
     @NotNull(message = "createTime is not blank")
     private LocalDateTime createTime;

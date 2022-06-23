@@ -3,6 +3,7 @@ package me.batizhao.common.core.domain;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * 实体对象基类
@@ -23,6 +24,10 @@ public class BaseEntity {
      */
     @Schema(description = "修改时间")
     private LocalDateTime updateTime;
+
+    /** 请求参数 */
+    @Schema(description = "请求参数")
+    private transient Map<String, Object> params;
 
     /**
      * 数据权限
@@ -52,5 +57,13 @@ public class BaseEntity {
 
     public void setDataPermission(String dataPermission) {
         this.dataPermission = dataPermission;
+    }
+
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }

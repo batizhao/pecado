@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +43,7 @@ public class FileController {
      */
     @Operation(description = "插入文件")
     @PostMapping("/file/upload")
+    @PreAuthorize("isAuthenticated()")
     public R<File> handleSave(@RequestParam("file") MultipartFile file) {
         return R.ok(fileService.upload(file));
     }
@@ -66,6 +68,28 @@ public class FileController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, mimeType)
                 .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param name 文件名
+     * @return 返回图片详情
+     */
+    @SneakyThrows
+    @Operation(description = "下载文件")
+    @GetMapping("/file/{name}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Resource> handleFileByName(@Parameter(name = "图片名", required = true) @PathVariable("name") String name) {
+        Resource resource = fileService.load(name);
+
+        java.io.File file = new java.io.File(name);
+        log.info("resource: {}, file: {}", resource, file.getName());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/octet-stream; charset=UTF-8")
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + file.getName() + "\"")
                 .body(resource);
     }
 

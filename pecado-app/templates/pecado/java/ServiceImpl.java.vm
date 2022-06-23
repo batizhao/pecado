@@ -25,7 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * ${comments}接口实现类
@@ -51,14 +53,18 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     public IPage<${className}> find${className}s(Page<${className}> page, ${className} ${classname}) {
         LambdaQueryWrapper<${className}> wrapper = Wrappers.lambdaQuery();
 #foreach ($column in $columns)
-#if($column.search)
+#if($column.search && ${column.type} != "collection" && ${column.type} != "file")
 #if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
     #set($AttrName=$column.javaField)
 #else
     #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
 #end
         if (StringUtils.isNotBlank(${classname}.get${AttrName}())) {
-            wrapper.like(${className}::get${AttrName}, ${classname}.get${AttrName}());
+#if($column.searchType == "BETWEEN")
+            wrapper.between(${className}::get${AttrName}, ${classname}.getParams().get("begin_${column.javaField}"), ${classname}.getParams().get("end_${column.javaField}"));
+#else
+            wrapper.#if($column.searchType == "EQ")eq#elseif($column.searchType == "NE")ne#elseif($column.searchType == "GT")gt#elseif($column.searchType == "GTE")ge#elseif($column.searchType == "LTE")lt#elseif($column.searchType == "LTE")le#elseif($column.searchType == "LIKE")like#end(${className}::get${AttrName}, ${classname}.get${AttrName}());
+#end
         }
 #end
 #end
@@ -68,18 +74,6 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
     @Override
     public List<${className}> find${className}s(${className} ${classname}) {
         LambdaQueryWrapper<${className}> wrapper = Wrappers.lambdaQuery();
-        #foreach ($column in $columns)
-            #if($column.search)
-                #if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
-                    #set($AttrName=$column.javaField)
-                #else
-                    #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
-                #end
-                if (StringUtils.isNotBlank(${classname}.get${AttrName}())) {
-                wrapper.like(${className}::get${AttrName}, ${classname}.get${AttrName}());
-            }
-            #end
-        #end
         return ${classname}Mapper.selectList(wrapper);
     }
 #else

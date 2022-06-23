@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 #if($template == "tree")
 import me.batizhao.common.core.domain.TreeNode;
+#else
+import me.batizhao.common.core.domain.BaseEntity;
 #end
 #if($workflow == "yes")
 import me.batizhao.terrace.task.Task;
@@ -31,7 +33,7 @@ import java.util.List;
 @NoArgsConstructor
 @Schema(description = "${comments}")
 @TableName("${tableName}")
-public class ${className}#if($template == "tree") extends TreeNode#end implements Serializable {
+public class ${className}#if($template == "tree") extends TreeNode#else extends BaseEntity#end implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
