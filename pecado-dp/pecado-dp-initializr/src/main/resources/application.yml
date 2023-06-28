@@ -576,7 +576,7 @@ initializr:
           facets:
             - native
           groupId: mysql
-          artifactId: mysql-connector-java
+          artifactId: mysql-connector-j
           scope: runtime
           starter: false
           links:

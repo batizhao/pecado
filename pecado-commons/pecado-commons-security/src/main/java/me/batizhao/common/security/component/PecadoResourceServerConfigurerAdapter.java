@@ -1,18 +1,20 @@
 package me.batizhao.common.security.component;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.security.handler.MyAccessDeniedHandler;
 import me.batizhao.common.security.handler.MyAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.security.interfaces.RSAPublicKey;
@@ -22,7 +24,8 @@ import java.security.interfaces.RSAPublicKey;
  * @since 2020-03-20
  */
 @Slf4j
-public class PecadoResourceServerConfigurerAdapter extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class PecadoResourceServerConfigurerAdapter {
 
 	@Autowired
 	private MyAuthenticationEntryPoint authenticationEntryPoint;
@@ -39,13 +42,13 @@ public class PecadoResourceServerConfigurerAdapter extends WebSecurityConfigurer
 	/**
 	 * 配置不需要鉴权的接口
 	 *
-	 * @param httpSecurity
+	 * @param http
 	 */
-	@Override
-	@SneakyThrows
-	public void configure(HttpSecurity httpSecurity) {
+	@Bean
+	@Order(Ordered.HIGHEST_PRECEDENCE)
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		ExpressionUrlAuthorizationConfigurer<HttpSecurity>
-			.ExpressionInterceptUrlRegistry registry = httpSecurity.authorizeRequests();
+				.ExpressionInterceptUrlRegistry registry = http.authorizeRequests();
 
 		permitAllUrl.getAnt().getUrls()
 				.forEach(url -> registry.antMatchers(url).permitAll());
@@ -53,7 +56,7 @@ public class PecadoResourceServerConfigurerAdapter extends WebSecurityConfigurer
 		permitAllUrl.getRegex().getUrls()
 			.forEach(url -> registry.regexMatchers(url).permitAll());
 
-		registry
+		return registry
 			.anyRequest().authenticated()
 			.and()
 			.csrf().disable()
@@ -62,7 +65,8 @@ public class PecadoResourceServerConfigurerAdapter extends WebSecurityConfigurer
 			.exceptionHandling(exceptions -> exceptions
 					.authenticationEntryPoint(authenticationEntryPoint)
 					.accessDeniedHandler(accessDeniedHandler)
-			).addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+			).addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+			.build();
 	}
 
 	/**

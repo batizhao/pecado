@@ -10,26 +10,24 @@ CREATE DATABASE IF NOT EXISTS `pecado-test`;
 
 USE `pecado-dp`;
 
-DROP TABLE IF EXISTS ds;
-CREATE TABLE `ds` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(64) NOT NULL COMMENT '名称',
-  `url` varchar(255) NOT NULL COMMENT 'url',
-  `username` varchar(64) NOT NULL COMMENT '用户名',
-  `password` varchar(64) NOT NULL COMMENT '密码',
-  `status` varchar(32) NOT NULL DEFAULT 'open' COMMENT '状态',
-  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `url` (`url`)
-) COMMENT='数据源';
+CREATE TABLE `dp_ds`
+(
+    `id`          int          NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`        varchar(64)  NOT NULL COMMENT '名称',
+    `url`         varchar(255) NOT NULL COMMENT 'url',
+    `username`    varchar(64)  NOT NULL COMMENT '用户名',
+    `password`    varchar(256) NOT NULL COMMENT '密码',
+    `status`      varchar(32)  NOT NULL DEFAULT 'open' COMMENT '状态',
+    `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+) COMMENT ='数据源';
 
 -- root/password
-INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`)
-VALUES
-	(1,'system','jdbc:mysql://localhost:3306/pecado-system?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/','open'),
-	(2,'ims','jdbc:mysql://localhost:3306/pecado-ims?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/','open');
+-- INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`)
+-- VALUES
+-- 	(1,'system','jdbc:mysql://localhost:3306/pecado-system?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/','open'),
+-- 	(2,'ims','jdbc:mysql://localhost:3306/pecado-ims?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai','root','iKNB/cBzVsexgv3M90wY5D+I/nkf91sYKEbFs8nnhMq//jhEXwwbpHZ31yh3P4L/','open');
 
 -- root/root
 -- INSERT INTO `ds` (`id`, `name`, `url`, `username`, `password`, `status`)
@@ -39,39 +37,26 @@ commit;
 
 USE `pecado-system`;
 
-DROP TABLE IF EXISTS job;
-CREATE TABLE `job`
+CREATE TABLE `sys_job`
 (
-    `id`             bigint       NOT NULL AUTO_INCREMENT,
-    `name`           varchar(64)  NOT NULL COMMENT '名称',
-    `jobGroup`       varchar(64)  NOT NULL DEFAULT 'DEFAULT' COMMENT '分组',
-    `invokeTarget`   varchar(255) NOT NULL COMMENT '调用目标',
-    `cronExpression` varchar(64)  NOT NULL DEFAULT '' COMMENT 'cron表达式',
-    `misfirePolicy`  varchar(32)  NOT NULL DEFAULT 'nothing' COMMENT '策略（ignore/fire/nothing）',
-    `concurrent`     varchar(8)   NOT NULL DEFAULT 'no' COMMENT '是否并发（yes/no）',
-    `status`         varchar(32)  NOT NULL DEFAULT 'close' COMMENT '状态',
-    `createTime`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updateTime`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`,`name`,`jobGroup`)
+    `id`              bigint       NOT NULL AUTO_INCREMENT,
+    `name`            varchar(64)  NOT NULL COMMENT '名称',
+    `job_group`       varchar(64)  NOT NULL DEFAULT 'DEFAULT' COMMENT '分组',
+    `invoke_target`   varchar(255) NOT NULL COMMENT '调用目标',
+    `cron_expression` varchar(64)  NOT NULL DEFAULT '' COMMENT 'cron表达式',
+    `misfire_policy`  varchar(32)  NOT NULL DEFAULT 'nothing' COMMENT '策略（ignore/fire/nothing）',
+    `concurrent`      varchar(8)   NOT NULL DEFAULT 'no' COMMENT '是否并发（yes/no）',
+    `status`          varchar(32)  NOT NULL DEFAULT 'close' COMMENT '状态',
+    `create_time`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`,`name`,`job_group`)
 ) COMMENT ='任务调度表';
 
-INSERT INTO `job` (`id`, `name`, `jobGroup`, `invokeTarget`, `cronExpression`, `misfirePolicy`, `concurrent`, `status`)
+INSERT INTO `sys_job` (`id`, `name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`)
 VALUES
-(1, '系统默认（无参）', 'DEFAULT', 'stalberTask.noParams', '0/10 * * * * ?', 'nothing', 'no', 'open'),
-(2, '系统默认（有参）', 'DEFAULT', 'stalberTask.params(\'Hello Stalber\')', '0/20 * * * * ?', 'nothing', 'no', 'open'),
-(3, '系统默认（多参）', 'DEFAULT', 'stalberTask.multipleParams(\'Stalber\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', 'nothing', 'no', 'open');
-
-DROP TABLE IF EXISTS QRTZ_FIRED_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_PAUSED_TRIGGER_GRPS;
-DROP TABLE IF EXISTS QRTZ_SCHEDULER_STATE;
-DROP TABLE IF EXISTS QRTZ_LOCKS;
-DROP TABLE IF EXISTS QRTZ_SIMPLE_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_SIMPROP_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_CRON_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_BLOB_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_JOB_DETAILS;
-DROP TABLE IF EXISTS QRTZ_CALENDARS;
+    (1, '系统默认（无参）', 'DEFAULT', 'stalberTask.noParams', '0/10 * * * * ?', 'nothing', 'no', 'open'),
+    (2, '系统默认（有参）', 'DEFAULT', 'stalberTask.params(\'Hello Stalber\')', '0/20 * * * * ?', 'nothing', 'no', 'open'),
+    (3, '系统默认（多参）', 'DEFAULT', 'stalberTask.multipleParams(\'Stalber\', true, 2000L, 316.50D, 100)', '0/30 * * * * ?', 'nothing', 'no', 'open');
 
 CREATE TABLE QRTZ_JOB_DETAILS
 (

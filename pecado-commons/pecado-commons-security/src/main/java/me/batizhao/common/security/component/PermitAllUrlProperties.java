@@ -1,5 +1,6 @@
 package me.batizhao.common.security.component;
 
+import cn.hutool.extra.spring.SpringUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import me.batizhao.common.security.annotation.Inner;
@@ -37,7 +38,7 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
 
 	@Override
 	public void afterPropertiesSet() {
-		RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
+		RequestMappingHandlerMapping mapping = SpringUtil.getBean("requestMappingHandlerMapping");
 		Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 
 		map.keySet().forEach(info -> {
