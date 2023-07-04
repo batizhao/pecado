@@ -2,9 +2,10 @@ package me.batizhao.common.security.component;
 
 import com.nimbusds.jwt.SignedJWT;
 import lombok.extern.slf4j.Slf4j;
+import me.batizhao.cache.api.CacheService;
+import me.batizhao.common.core.constant.CacheConstants;
 import me.batizhao.common.core.constant.SecurityConstants;
 import me.batizhao.common.core.domain.PecadoUser;
-import me.batizhao.common.redis.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 /**
  * @author batizhao
@@ -24,10 +25,10 @@ import java.util.concurrent.TimeUnit;
 public class TokenService {
 
     @Autowired
-    private RedisUtil redisUtil;
+    private CacheService cacheService;
 
-    @Value("${pecado.jwt.expire:30}")
-    private int expire;
+    @Value("${pecado.jwt.expire}")
+    private Duration expire;
 
     /**
      * 获取用户身份信息
@@ -43,9 +44,9 @@ public class TokenService {
                 SignedJWT signed = SignedJWT.parse(token);
                 uid = signed.getJWTClaimsSet().getStringClaim(SecurityConstants.LOGIN_KEY_UID);
             } catch (ParseException e) {
-                log.info("Error in parsing token：->", e);
+                log.error("Error in parsing token：->", e);
             }
-            return redisUtil.getCacheObject(SecurityConstants.CACHE_LOGIN_KEY_UID + uid);
+            return cacheService.get(CacheConstants.LOGIN_KEY_UID + uid, PecadoUser.class);
         }
         return null;
     }
@@ -57,14 +58,15 @@ public class TokenService {
      */
     private void refreshToken(PecadoUser pecadoUser) {
         pecadoUser.setLoginTime(System.currentTimeMillis());
-        pecadoUser.setExpireTime(pecadoUser.getLoginTime() + expire * 60 * 1000L);
-        redisUtil.setCacheObject(SecurityConstants.CACHE_LOGIN_KEY_UID + pecadoUser.getUid(), pecadoUser, expire, TimeUnit.MINUTES);
+        pecadoUser.setExpireTime(pecadoUser.getLoginTime() + expire.toMillis());
+        cacheService.set(CacheConstants.LOGIN_KEY_UID + pecadoUser.getUid(), pecadoUser, (int)expire.toMinutes());
     }
 
     public void verifyToken(PecadoUser pecadoUser) {
         long expireTime = pecadoUser.getExpireTime();
         long currentTime = System.currentTimeMillis();
-        if (expireTime - currentTime <= 15 * 60 * 1000L) {
+        if (expireTime - currentTime <= 15 * 60 * 1000L)
+        {
             refreshToken(pecadoUser);
         }
     }

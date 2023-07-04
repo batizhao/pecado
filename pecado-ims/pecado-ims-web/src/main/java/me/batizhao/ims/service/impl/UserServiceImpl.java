@@ -78,12 +78,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User findById(Long id) {
         User user = userMapper.selectById(id);
-        user.setPassword(null);
 
-        if (user == null) {
+        if(user == null) {
             throw new NotFoundException(String.format("Record not found '%s'。", id));
         }
 
+        user.setPassword(null);
         return user;
     }
 

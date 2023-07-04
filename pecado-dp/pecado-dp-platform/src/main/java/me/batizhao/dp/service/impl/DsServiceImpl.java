@@ -109,7 +109,6 @@ public class DsServiceImpl extends ServiceImpl<DsMapper, Ds> implements DsServic
         dataSourceProperty.setUrl(ds.getUrl());
         dataSourceProperty.setUsername(ds.getUsername());
         dataSourceProperty.setPassword(ds.getPassword());
-        dataSourceProperty.setDriverClassName(DataSourceConstants.DS_DRIVER);
         dataSourceProperty.setLazy(true);
         DataSource dataSource = hikariDataSourceCreator.createDataSource(dataSourceProperty);
         SpringContextHolder.getBean(DynamicRoutingDataSource.class).addDataSource(dataSourceProperty.getPoolName(),

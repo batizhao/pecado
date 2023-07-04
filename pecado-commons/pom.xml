@@ -18,7 +18,7 @@
         <module>pecado-commons-mybatis</module>
         <module>pecado-commons-security</module>
         <module>pecado-commons-swagger</module>
-        <module>pecado-commons-redis</module>
+<!--        <module>pecado-commons-redis</module>-->
     </modules>
 
 </project>

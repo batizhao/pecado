@@ -30,11 +30,6 @@ public class DataSourceConstants {
 	public static final String DS_NAME = "name";
 
 	/**
-	 * 默认驱动
-	 */
-	public static final String DS_DRIVER = "com.mysql.cj.jdbc.Driver";
-
-	/**
 	 * 默认数据源（master）
 	 */
 	public static final String DS_MASTER = "master";

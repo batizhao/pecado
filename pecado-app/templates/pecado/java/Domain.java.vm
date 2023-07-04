@@ -12,9 +12,6 @@ import me.batizhao.common.core.domain.TreeNode;
 #else
 import me.batizhao.common.core.domain.BaseEntity;
 #end
-#if($workflow == "yes")
-import me.batizhao.terrace.task.Task;
-#end
 import me.batizhao.common.core.util.ListToStringHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -42,14 +39,6 @@ public class ${className}#if($template == "tree") extends TreeNode#else extends 
         this.id = id;
         this.pid = pid;
     }
-#end
-#if($workflow == "yes")
-
-    /**
-     * 流程属性
-     */
-    @Schema(description="流程属性")
-    private transient Task task;
 #end
 #foreach ($column in $columns)
 #if(!$appTable.isSuperColumn($column.javaField))

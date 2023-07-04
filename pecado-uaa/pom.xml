@@ -19,9 +19,17 @@
             <groupId>me.batizhao</groupId>
             <artifactId>pecado-commons-feign</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>me.batizhao</groupId>-->
+<!--            <artifactId>pecado-commons-redis</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>me.batizhao</groupId>
-            <artifactId>pecado-commons-redis</artifactId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>me.batizhao</groupId>
+            <artifactId>spring-boot-starter-uaa</artifactId>
         </dependency>
         <dependency>
             <groupId>me.batizhao</groupId>
@@ -76,11 +84,6 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.penggle</groupId>
-            <artifactId>kaptcha</artifactId>
-            <version>2.3.2</version>
         </dependency>
 
         <dependency>

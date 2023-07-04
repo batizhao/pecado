@@ -50,6 +50,8 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static me.batizhao.common.datasource.component.DataSourceConstants.DS_MASTER;
+
 /**
  * 应用表接口实现类
  *
@@ -242,7 +244,7 @@ public class AppTableServiceImpl extends ServiceImpl<AppTableMapper, AppTable> i
         List<AppTable> c = p.getRecords();
 
         if (StringUtils.isBlank(dsName)) {
-            dsName = "master";
+            dsName = DS_MASTER;
         }
 
         String finalDsName = dsName;

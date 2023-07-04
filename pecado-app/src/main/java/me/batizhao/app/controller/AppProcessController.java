@@ -71,20 +71,6 @@ public class AppProcessController {
     }
 
     /**
-     * 通过应用id与版本号获取需启动的流程信息
-     * @param appId 应用Id
-     * @param version 版本号
-     * @return R
-     */
-    @Operation(description = "通过应用id与版本号获取需启动的流程信息")
-    @GetMapping("/process/{appId}/{version}")
-    @PreAuthorize("@pms.hasPermission('app:process:user')")
-    public R<AppProcess> handleAppProcess(@Parameter(name = "appId" , required = true) @PathVariable("appId") @Min(1) Long appId,
-                                          @Parameter(name = "version" , required = true) @PathVariable("version") int version) {
-        return R.ok(appProcessService.findAppProcess(appId, version));
-    }
-
-    /**
      * 添加或编辑应用流程表
      * @param appProcess 应用流程表
      * @return R

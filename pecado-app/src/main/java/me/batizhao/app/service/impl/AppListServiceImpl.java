@@ -1,6 +1,5 @@
 package me.batizhao.app.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,7 +11,6 @@ import me.batizhao.app.domain.AppList;
 import me.batizhao.app.mapper.AppListMapper;
 import me.batizhao.app.service.AppListService;
 import me.batizhao.common.core.exception.NotFoundException;
-import me.batizhao.common.core.exception.PecadoException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -91,14 +89,9 @@ public class AppListServiceImpl extends ServiceImpl<AppListMapper, AppList> impl
 
     @Override
     public Boolean updateStatus(AppList appList) {
-        List<AppList> list = findAppList(appList);
-        if (CollectionUtil.isEmpty(list)) {
-            LambdaUpdateWrapper<AppList> wrapper = Wrappers.lambdaUpdate();
-            wrapper.eq(AppList::getId, appList.getId()).set(AppList::getStatus, appList.getStatus());
-            return baseMapper.update(null, wrapper) == 1;
-        } else {
-            throw new PecadoException("已存在激活应用列表，请先禁用已经激活的列表！！！");
-        }
+        LambdaUpdateWrapper<AppList> wrapper = Wrappers.lambdaUpdate();
+        wrapper.eq(AppList::getId, appList.getId()).set(AppList::getStatus, appList.getStatus());
+        return baseMapper.update(null, wrapper) == 1;
     }
 
     @Override

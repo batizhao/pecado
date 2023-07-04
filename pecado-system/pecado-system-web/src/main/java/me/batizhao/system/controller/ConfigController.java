@@ -55,7 +55,6 @@ public class ConfigController {
      */
     @Operation(description = "查询系统配置")
     @GetMapping("/config")
-    @PreAuthorize("@pms.hasPermission('system:config:admin')")
     public R<List<Config>> handleConfigs(Config config) {
         return R.ok(configService.findConfigs(config));
     }

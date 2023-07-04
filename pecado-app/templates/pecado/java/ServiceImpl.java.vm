@@ -16,9 +16,6 @@ import me.batizhao.common.core.util.TreeUtil;
 import ${package}.${moduleName}.domain.${className};
 import ${package}.${moduleName}.mapper.${className}Mapper;
 import ${package}.${moduleName}.service.${className}Service;
-#if($workflow == "yes")
-import me.batizhao.terrace.api.TaskService;
-#end
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,10 +40,6 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
 
     @Autowired
     private ${className}Mapper ${classname}Mapper;
-#if($workflow == "yes")
-    @Autowired
-    private TaskService taskService;
-#end
 
 #if($template != "tree")
     @Override
